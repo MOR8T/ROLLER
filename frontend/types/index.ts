@@ -56,3 +56,45 @@ export interface Lead {
   productType: string;
   comment?: string;
 }
+
+export interface HeroSlide {
+  id: string;
+  eyebrow: string;
+  headline: string;
+  subtext: string;
+  image: string;
+  primaryCta: { label: string; href: string };
+  secondaryCta?: { label: string; href: string };
+}
+
+export interface PopularProductSpec {
+  label: string;
+  value: string;
+}
+
+export interface PopularProduct {
+  name: string;
+  type: string;
+  badge: string;
+  description: string;
+  image: string;
+  specs: PopularProductSpec[];
+}
+
+export interface ProjectTeaser {
+  id: string;
+  title: string;
+  location: string;
+  category: string;
+  image: string;
+  caption: string;
+}
+
+export interface NewsTeaser {
+  id: string;
+  title: string;
+  excerpt: string;
+  image: string;
+  date: string;
+  href: string;
+}

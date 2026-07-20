@@ -3,6 +3,7 @@ import { Chakra_Petch, Montserrat } from "next/font/google";
 import "./globals.css";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
+import { WhatsAppFab } from "@/components/layout/whatsapp-fab";
 
 const montserrat = Montserrat({
   variable: "--font-montserrat",
@@ -35,8 +36,9 @@ export default function RootLayout({
     <html lang="ru" className={`${montserrat.variable} ${chakraPetch.variable} h-full antialiased`}>
       <body className="flex min-h-full flex-col bg-background text-foreground">
         <Header />
-        <main className="flex-1">{children}</main>
+        <main id="top" className="flex-1">{children}</main>
         <Footer />
+        <WhatsAppFab />
       </body>
     </html>
   );
