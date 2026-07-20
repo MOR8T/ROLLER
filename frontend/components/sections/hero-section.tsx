@@ -6,7 +6,7 @@ import { serviceHighlights } from "@/data/home";
 
 export function HeroSection() {
   return (
-    <section className="relative isolate overflow-hidden bg-brand-black text-brand-white">
+    <section className="relative isolate -mt-16 overflow-hidden bg-brand-black text-brand-white lg:-mt-20">
       <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_75%_20%,rgba(211,0,26,0.42),transparent_34%),linear-gradient(120deg,rgba(29,29,27,0.95),rgba(29,29,27,0.72)),linear-gradient(135deg,rgba(255,255,255,0.16)_0_1px,transparent_1px_32px)]" />
       <Container className="grid min-h-[680px] items-center gap-10 py-20 lg:grid-cols-[1.05fr_0.95fr] lg:py-28">
         <div className="max-w-3xl">

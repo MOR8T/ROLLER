@@ -1,82 +1,190 @@
 import Link from "next/link";
-import { Camera, Clock, MapPin, Phone, Send } from "lucide-react";
+import {
+  ArrowUp,
+  Camera,
+  Clock,
+  Mail,
+  MapPin,
+  MessageCircle,
+  Phone,
+  Send,
+} from "lucide-react";
 import { Container } from "@/components/ui/container";
+import { ButtonLink } from "@/components/ui/button";
 import { navLinks, siteConfig } from "@/lib/site-config";
 
+/**
+ * Footer
+ *
+ * IMZO/AKFA-inspired industrial chrome:
+ *  - top: subtle red accent strip
+ *  - main grid (mobile-first): brand block, nav column, contacts column, social column
+ *  - bottom bar: copyright + working hours + back-to-top
+ *
+ * All copy in Russian (site default locale). Slogan shows RU + TJ per plan.
+ * Data is sourced from `siteConfig` — no magic values.
+ */
 export function Footer() {
+  const year = new Date().getFullYear();
+
+  const socials = [
+    {
+      href: siteConfig.social.instagram,
+      label: "Instagram ROLLER.TJ",
+      icon: Camera,
+    },
+    {
+      href: siteConfig.social.telegram,
+      label: "Telegram ROLLER.TJ",
+      icon: Send,
+    },
+    {
+      href: siteConfig.whatsappHref,
+      label: "WhatsApp ROLLER.TJ",
+      icon: MessageCircle,
+    },
+  ] as const;
+
   return (
-    <footer className="border-t border-brand-black/10 bg-brand-black text-brand-white">
-      <Container className="grid gap-10 py-14 sm:grid-cols-2 lg:grid-cols-4">
-        <div>
-          <div className="font-heading text-2xl font-bold">
-            ROLLER<span className="text-brand-red">.TJ</span>
-          </div>
-          <p className="mt-4 text-sm text-brand-white/70">{siteConfig.slogan.ru}</p>
+    <footer className="bg-brand-black text-brand-white">
+      {/* Accent strip — IMZO/AKFA industrial signature */}
+      <div className="h-1 w-full bg-brand-red" aria-hidden />
+
+      <Container className="grid gap-10 py-14 sm:grid-cols-2 lg:grid-cols-4 lg:py-16">
+        {/* Brand block */}
+        <div className="max-w-xs">
+          <Link
+            href="/"
+            aria-label={siteConfig.name}
+            className="flex items-center gap-2 transition-colors"
+          >
+            <span
+              aria-hidden
+              className="grid size-9 place-items-center rounded-md bg-brand-red font-heading text-lg font-bold"
+            >
+              R
+            </span>
+            <span className="font-heading text-xl font-bold tracking-tight lg:text-2xl">
+              ROLLER<span className="text-brand-red">.TJ</span>
+            </span>
+          </Link>
+
+          <p className="mt-5 text-sm text-brand-white/70">{siteConfig.slogan.ru}</p>
           <p className="mt-1 text-sm text-brand-white/50">{siteConfig.slogan.tg}</p>
+
+          <p className="mt-6 text-xs font-medium tracking-[0.18em] text-brand-white/45 uppercase">
+            На рынке с {siteConfig.foundedYear} года
+          </p>
         </div>
 
-        <div>
-          <h3 className="font-heading text-sm font-semibold tracking-wide uppercase">Разделы</h3>
-          <ul className="mt-4 space-y-2">
+        {/* Nav column */}
+        <nav aria-label="Подвал" className="text-sm">
+          <h3 className="font-heading text-sm font-semibold tracking-[0.18em] text-brand-white uppercase">
+            Разделы
+          </h3>
+          <ul className="mt-5 space-y-3">
             {navLinks.map((link) => (
               <li key={link.href}>
                 <Link
                   href={link.href}
-                  className="text-sm text-brand-white/70 transition-colors hover:text-brand-white"
+                  className="text-brand-white/70 transition-colors hover:text-brand-red"
                 >
                   {link.label}
                 </Link>
               </li>
             ))}
           </ul>
-        </div>
+        </nav>
 
-        <div>
-          <h3 className="font-heading text-sm font-semibold tracking-wide uppercase">Контакты</h3>
-          <ul className="mt-4 space-y-3 text-sm text-brand-white/70">
-            <li className="flex items-start gap-2">
-              <MapPin className="mt-0.5 size-4 shrink-0" />
-              {siteConfig.address}
+        {/* Contacts column */}
+        <div className="text-sm">
+          <h3 className="font-heading text-sm font-semibold tracking-[0.18em] text-brand-white uppercase">
+            Контакты
+          </h3>
+          <ul className="mt-5 space-y-4 text-brand-white/70">
+            <li className="flex items-start gap-3">
+              <MapPin className="mt-0.5 size-4 shrink-0 text-brand-red" aria-hidden />
+              <span>{siteConfig.address}</span>
             </li>
-            <li className="flex items-center gap-2">
-              <Phone className="size-4 shrink-0" />
-              <a href={siteConfig.phoneHref} className="hover:text-brand-white">
+            <li className="flex items-center gap-3">
+              <Phone className="size-4 shrink-0 text-brand-red" aria-hidden />
+              <a
+                href={siteConfig.phoneHref}
+                className="transition-colors hover:text-brand-white"
+              >
                 {siteConfig.phone}
               </a>
             </li>
-            <li className="flex items-center gap-2">
-              <Clock className="size-4 shrink-0" />
-              {siteConfig.workingHours}
+            <li className="flex items-center gap-3">
+              <Mail className="size-4 shrink-0 text-brand-red" aria-hidden />
+              <a
+                href={`mailto:${siteConfig.email}`}
+                className="break-all transition-colors hover:text-brand-white"
+              >
+                {siteConfig.email}
+              </a>
+            </li>
+            <li className="flex items-center gap-3">
+              <Clock className="size-4 shrink-0 text-brand-red" aria-hidden />
+              <span>{siteConfig.workingHours}</span>
             </li>
           </ul>
         </div>
 
+        {/* Social column */}
         <div>
-          <h3 className="font-heading text-sm font-semibold tracking-wide uppercase">
+          <h3 className="font-heading text-sm font-semibold tracking-[0.18em] text-brand-white uppercase">
             Мы в соцсетях
           </h3>
-          <div className="mt-4 flex gap-3">
-            <a
-              href={siteConfig.social.instagram}
-              aria-label="Instagram"
-              className="rounded-md border border-brand-white/20 p-2 transition-colors hover:border-brand-red hover:text-brand-red"
-            >
-              <Camera className="size-5" />
-            </a>
-            <a
-              href={siteConfig.social.telegram}
-              aria-label="Telegram"
-              className="rounded-md border border-brand-white/20 p-2 transition-colors hover:border-brand-red hover:text-brand-red"
-            >
-              <Send className="size-5" />
-            </a>
+          <p className="mt-5 max-w-xs text-sm text-brand-white/60">
+            Подписывайтесь, чтобы следить за новинками и проектами компании.
+          </p>
+          <div className="mt-5 flex gap-3">
+            {socials.map(({ href, label, icon: Icon }) => (
+              <a
+                key={href}
+                href={href}
+                aria-label={label}
+                className="grid size-10 place-items-center rounded-md border border-brand-white/20 text-brand-white/80 transition-colors hover:border-brand-red hover:text-brand-red"
+              >
+                <Icon className="size-5" />
+              </a>
+            ))}
           </div>
+
+          <ButtonLink
+            href={siteConfig.whatsappHref}
+            size="sm"
+            className="mt-6 w-full max-w-xs rounded-full"
+          >
+            <MessageCircle className="size-4" />
+            Написать в WhatsApp
+          </ButtonLink>
         </div>
       </Container>
 
+      {/* Bottom bar */}
       <div className="border-t border-brand-white/10">
-        <Container className="py-6 text-center text-xs text-brand-white/50">
-          © {new Date().getFullYear()} ROLLER.TJ. Все права защищены.
+        <Container className="flex flex-col items-center gap-3 py-6 text-xs text-brand-white/50 sm:flex-row sm:justify-between">
+          <p>
+            © {year} {siteConfig.name}. Все права защищены.
+          </p>
+          <div className="flex items-center gap-5">
+            <p className="flex items-center gap-2">
+              <Clock className="size-3.5 text-brand-red" aria-hidden />
+              {siteConfig.workingHours}
+            </p>
+            <a
+              href="#top"
+              className="group flex items-center gap-1.5 transition-colors hover:text-brand-white"
+            >
+              <span className="tracking-wide uppercase">Наверх</span>
+              <ArrowUp
+                className="size-3.5 text-brand-red transition-transform group-hover:-translate-y-0.5"
+                aria-hidden
+              />
+            </a>
+          </div>
         </Container>
       </div>
     </footer>
