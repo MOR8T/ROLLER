@@ -5,7 +5,7 @@ import Link from "next/link";
 import { Menu, Phone, X } from "lucide-react";
 import { Container } from "@/components/ui/container";
 import { ButtonLink } from "@/components/ui/button";
-import { navLinks, siteConfig } from "@/lib/site-config";
+import { locales, navLinks, siteConfig } from "@/lib/site-config";
 import { cn } from "@/lib/utils";
 
 export function Header() {
@@ -31,6 +31,22 @@ export function Header() {
         </nav>
 
         <div className="hidden items-center gap-4 lg:flex">
+          <div className="flex rounded-full border border-brand-black/10 p-1">
+            {locales.map((locale) => (
+              <button
+                key={locale}
+                type="button"
+                className={cn(
+                  "rounded-full px-3 py-1 text-xs font-semibold uppercase transition-colors",
+                  locale === "ru"
+                    ? "bg-brand-black text-brand-white"
+                    : "text-brand-black/55 hover:text-brand-red",
+                )}
+              >
+                {locale}
+              </button>
+            ))}
+          </div>
           <a
             href={siteConfig.phoneHref}
             className="flex items-center gap-2 text-sm font-semibold text-brand-black hover:text-brand-red"
@@ -70,6 +86,29 @@ export function Header() {
               {link.label}
             </Link>
           ))}
+          <div className="mt-3 flex rounded-full border border-brand-black/10 p-1">
+            {locales.map((locale) => (
+              <button
+                key={locale}
+                type="button"
+                className={cn(
+                  "flex-1 rounded-full px-3 py-2 text-xs font-semibold uppercase transition-colors",
+                  locale === "ru"
+                    ? "bg-brand-black text-brand-white"
+                    : "text-brand-black/55 hover:text-brand-red",
+                )}
+              >
+                {locale}
+              </button>
+            ))}
+          </div>
+          <a
+            href={siteConfig.phoneHref}
+            className="mt-2 flex items-center gap-2 rounded-md px-3 py-2 text-sm font-semibold text-brand-black hover:bg-brand-black/5"
+          >
+            <Phone className="size-4" />
+            {siteConfig.phone}
+          </a>
           <ButtonLink href={siteConfig.whatsappHref} className="mt-2">
             Написать в WhatsApp
           </ButtonLink>
