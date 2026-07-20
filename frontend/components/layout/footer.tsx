@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import { Container } from "@/components/ui/container";
 import { ButtonLink } from "@/components/ui/button";
+import { BrandLogo } from "@/components/ui/brand-logo";
 import { navLinks, siteConfig } from "@/lib/site-config";
 
 /**
@@ -30,17 +31,17 @@ export function Footer() {
   const socials = [
     {
       href: siteConfig.social.instagram,
-      label: "Instagram ROLLER.TJ",
+      label: "Instagram ROLLER",
       icon: Camera,
     },
     {
       href: siteConfig.social.telegram,
-      label: "Telegram ROLLER.TJ",
+      label: "Telegram ROLLER",
       icon: Send,
     },
     {
       href: siteConfig.whatsappHref,
-      label: "WhatsApp ROLLER.TJ",
+      label: "WhatsApp ROLLER",
       icon: MessageCircle,
     },
   ] as const;
@@ -58,15 +59,10 @@ export function Footer() {
             aria-label={siteConfig.name}
             className="flex items-center gap-2 transition-colors"
           >
-            <span
-              aria-hidden
-              className="grid size-9 place-items-center rounded-md bg-brand-red font-heading text-lg font-bold"
-            >
-              R
-            </span>
-            <span className="font-heading text-xl font-bold tracking-tight lg:text-2xl">
-              ROLLER<span className="text-brand-red">.TJ</span>
-            </span>
+            <BrandLogo
+              isDark={false}
+              className="h-12 w-auto"
+            />
           </Link>
 
           <p className="mt-5 text-sm text-brand-white/70">{siteConfig.slogan.ru}</p>

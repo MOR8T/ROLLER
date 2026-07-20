@@ -18,7 +18,7 @@ export function HeroSection() {
             {siteConfig.slogan.ru}
           </h1>
           <p className="mt-6 max-w-2xl text-lg leading-8 text-brand-white/72 sm:text-xl">
-            ROLLER.TJ создаёт профильные системы, окна, двери и фасадные решения для домов, бизнеса
+            <span><span className="text-brand-red">ROL</span><span className="text-brand-black">LER</span></span> создаёт профильные системы, окна, двери и фасадные решения для домов, бизнеса
             и современных городских объектов в Таджикистане.
           </p>
           <div className="mt-9 flex flex-col gap-3 sm:flex-row">
@@ -41,7 +41,7 @@ export function HeroSection() {
           <div className="aspect-[4/5] overflow-hidden rounded-[2rem] border border-brand-white/15 bg-brand-white/10 p-5 shadow-2xl shadow-brand-black/40 backdrop-blur">
             <div className="flex h-full flex-col justify-between rounded-[1.5rem] bg-[linear-gradient(145deg,rgba(255,255,255,0.24),rgba(255,255,255,0.05)),radial-gradient(circle_at_65%_30%,rgba(255,255,255,0.42),transparent_30%)] p-6">
               <div className="ml-auto w-fit rounded-full bg-brand-red px-4 py-2 font-heading text-sm font-semibold">
-                ROLLER.TJ
+                ROLLER
               </div>
               <div className="space-y-3">
                 <div className="h-32 rounded-3xl border border-brand-white/25 bg-brand-white/20" />

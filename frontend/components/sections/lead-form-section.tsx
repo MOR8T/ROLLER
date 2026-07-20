@@ -27,7 +27,7 @@ export function LeadFormSection() {
     }
 
     const message = [
-      "Здравствуйте! Хочу оставить заявку на сайте ROLLER.TJ.",
+      "Здравствуйте! Хочу оставить заявку на сайте ROLLER.",
       `Имя: ${name}`,
       `Телефон: ${phone}`,
       `Город: ${city}`,

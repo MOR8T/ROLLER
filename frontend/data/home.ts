@@ -154,7 +154,7 @@ export const heroSlides: HeroSlide[] = [
   {
     id: "roller-production",
     eyebrow: "Собственное производство",
-    headline: "Профильные системы ROLLER.TJ",
+    headline: "Профильные системы ROLLER",
     subtext:
       "Окна, двери и фасадные решения из ПВХ и алюминия для жилых, коммерческих и городских объектов в Таджикистане.",
     image: "/hero/hero-main.png",

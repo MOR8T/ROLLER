@@ -37,7 +37,7 @@ export function ContactsSection() {
 
         <div className="min-h-96 overflow-hidden rounded-4xl bg-neutral-100 p-4">
           <iframe
-            title="Карта офиса ROLLER.TJ"
+            title="Карта офиса ROLLER"
             src={siteConfig.mapEmbedUrl}
             className="h-full min-h-80 w-full rounded-3xl border-0"
             allowFullScreen

@@ -35,7 +35,13 @@ export function AboutSection() {
         <div>
           <SectionHeading
             eyebrow="О компании"
-            title="ROLLER.TJ — профильные решения для домов и бизнеса"
+            title={
+              <>
+                <span className="text-brand-red">ROL</span>
+                <span className="text-brand-black">LER</span>
+                {" — профильные решения для домов и бизнеса"}
+              </>
+            }
             description="Мы развиваем собственное производство ПВХ и алюминиевых систем в Таджикистане, чтобы клиент получал не просто изделие, а готовое решение: консультация, замер, производство, доставка, монтаж и обслуживание."
           />
           <div className="mt-8 grid gap-4 sm:grid-cols-2">

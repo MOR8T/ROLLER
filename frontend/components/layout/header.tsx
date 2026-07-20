@@ -6,6 +6,7 @@ import { AnimatePresence, motion, useReducedMotion, type Variants } from "framer
 import { Menu, MessageCircle, Phone, X } from "lucide-react";
 import { Container } from "@/components/ui/container";
 import { ButtonLink } from "@/components/ui/button";
+import { BrandLogo } from "@/components/ui/brand-logo";
 import { navLinks, siteConfig } from "@/lib/site-config";
 import { LanguageSwitcher } from "./language-switcher";
 import { cn } from "@/lib/utils";
@@ -102,23 +103,10 @@ export function Header() {
           aria-label={siteConfig.name}
           className="flex shrink-0 items-center gap-2 transition-colors"
         >
-          <span
-            aria-hidden
-            className={cn(
-              "grid size-9 place-items-center rounded-md font-heading text-lg font-bold transition-colors",
-              solid ? "bg-brand-red text-brand-white" : "bg-brand-white text-brand-black",
-            )}
-          >
-            R
-          </span>
-          <span
-            className={cn(
-              "font-heading text-xl font-bold tracking-tight transition-colors lg:text-2xl",
-              solid ? "text-brand-black" : "text-brand-white",
-            )}
-          >
-            ROLLER<span className="text-brand-red">.TJ</span>
-          </span>
+          <BrandLogo
+            isDark={solid}
+            className="h-12 w-auto lg:h-16"
+          />
         </Link>
 
         <nav className="hidden items-center gap-8 lg:flex">
@@ -148,22 +136,12 @@ export function Header() {
           <a
             href={siteConfig.phoneHref}
             className={cn(
-              "flex flex-col leading-tight transition-colors hover:text-brand-red",
+              "flex items-center gap-2 transition-colors hover:text-brand-red",
               solid ? "text-brand-black" : "text-brand-white",
             )}
           >
-            <span className="flex items-center gap-2 text-sm font-semibold">
-              <Phone className="size-4" />
-              {siteConfig.phone}
-            </span>
-            <span
-              className={cn(
-                "pl-6 text-[11px] font-medium tracking-wide uppercase",
-                solid ? "text-brand-black/45" : "text-brand-white/55",
-              )}
-            >
-              {siteConfig.workingHours}
-            </span>
+            <Phone className="size-4" />
+            <span className="text-sm font-semibold">{siteConfig.phone}</span>
           </a>
           <ButtonLink href={siteConfig.whatsappHref} size="sm" className="rounded-full">
             <MessageCircle className="size-4" />
@@ -199,7 +177,7 @@ export function Header() {
               initial="hidden"
               animate="visible"
               exit="hidden"
-              className="fixed inset-0 z-40 bg-brand-black/50 lg:hidden"
+              className="fixed inset-0 z-40 w-full h-full bg-brand-black/50 lg:hidden"
             />
             <motion.aside
               key="drawer"
@@ -213,7 +191,11 @@ export function Header() {
               exit="exit"
               className="fixed bottom-0 right-0 top-0 z-40 flex w-full max-w-sm flex-col bg-brand-white shadow-2xl lg:hidden"
             >
-              <div className="flex h-16 shrink-0 items-center justify-between px-5">
+              <motion.div 
+                className="flex h-16 shrink-0 items-center justify-between px-5"
+                initial={{ opacity: 1 }}
+                animate={{ opacity: 1 }}
+              >
                 <span className="font-heading text-lg font-bold tracking-tight text-brand-black">
                   Меню
                 </span>
@@ -225,7 +207,7 @@ export function Header() {
                 >
                   <X className="size-6" />
                 </button>
-              </div>
+              </motion.div>
 
               <motion.nav
                 className="flex flex-1 flex-col gap-1 overflow-y-auto px-3 pb-4"
