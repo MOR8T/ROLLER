@@ -17,10 +17,10 @@ export function WhatsAppFab() {
       href={siteConfig.whatsappHref}
       aria-label="Написать нам в WhatsApp"
       className={cn(
-        "fixed bottom-6 right-6 z-40",
+        "fixed right-6 bottom-6 z-40",
         "grid size-14 place-items-center rounded-full",
         "bg-brand-red text-brand-white transition-all duration-200",
-        "hover:shadow-lg hover:scale-110",
+        "hover:scale-110 hover:shadow-lg",
         "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-red",
         "print:hidden",
       )}

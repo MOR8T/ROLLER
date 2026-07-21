@@ -12,11 +12,7 @@ interface BadgeProps extends React.HTMLAttributes<HTMLSpanElement> {
  * - black: Brand black background with white text
  * - outline: Transparent with subtle border and black text
  */
-export function Badge({
-  variant = "red",
-  className,
-  ...props
-}: BadgeProps) {
+export function Badge({ variant = "red", className, ...props }: BadgeProps) {
   const baseStyles =
     "inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold transition-colors";
 
@@ -26,10 +22,5 @@ export function Badge({
     outline: "border border-neutral-300 bg-transparent text-brand-black",
   };
 
-  return (
-    <span
-      className={cn(baseStyles, variantStyles[variant], className)}
-      {...props}
-    />
-  );
+  return <span className={cn(baseStyles, variantStyles[variant], className)} {...props} />;
 }

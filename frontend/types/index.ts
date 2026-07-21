@@ -67,18 +67,19 @@ export interface HeroSlide {
   secondaryCta?: { label: string; href: string };
 }
 
-export interface PopularProductSpec {
-  label: string;
-  value: string;
-}
+export type ProductCardBadgeVariant = "red" | "black" | "outline";
 
-export interface PopularProduct {
+export interface ShowcaseProduct {
   name: string;
   type: string;
   badge: string;
+  badgeVariant: ProductCardBadgeVariant;
   description: string;
+  summary: string;
+  highlights: string[];
   image: string;
-  specs: PopularProductSpec[];
+  href: string;
+  priority?: boolean;
 }
 
 export interface ProjectTeaser {
@@ -88,6 +89,7 @@ export interface ProjectTeaser {
   category: string;
   image: string;
   caption: string;
+  href: string;
 }
 
 export interface NewsTeaser {
@@ -97,4 +99,9 @@ export interface NewsTeaser {
   image: string;
   date: string;
   href: string;
+}
+
+export interface Partner {
+  name: string;
+  logo: string | null;
 }
