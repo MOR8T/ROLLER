@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ChevronDown } from "lucide-react";
 import { defaultLocale, locales, type Locale } from "@/lib/site-config";
 import { cn } from "@/lib/utils";
@@ -28,16 +28,38 @@ const localeLabels: Record<Locale, string> = {
 
 export function LanguageSwitcher({ solid }: LanguageSwitcherProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const wrapperRef = useRef<HTMLDivElement>(null);
+
+  // Close on Escape and on outside click/tap so keyboard and pointer users
+  // can dismiss the menu without committing a selection.
+  useEffect(() => {
+    if (!isOpen) return;
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setIsOpen(false);
+    };
+    const onPointer = (event: MouseEvent | TouchEvent) => {
+      if (!wrapperRef.current) return;
+      if (!wrapperRef.current.contains(event.target as Node)) setIsOpen(false);
+    };
+    window.addEventListener("keydown", onKey);
+    window.addEventListener("mousedown", onPointer);
+    window.addEventListener("touchstart", onPointer);
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      window.removeEventListener("mousedown", onPointer);
+      window.removeEventListener("touchstart", onPointer);
+    };
+  }, [isOpen]);
 
   return (
-    <div className="relative inline-block">
+    <div ref={wrapperRef} className="relative inline-block">
       <button
         type="button"
         aria-haspopup="listbox"
         aria-expanded={isOpen}
         onClick={() => setIsOpen(!isOpen)}
         className={cn(
-          "flex items-center gap-2 rounded-full border px-3 py-1.5 text-xs font-semibold uppercase transition-colors",
+          "flex items-center gap-2 rounded-full border px-3 py-1.5 text-xs font-semibold uppercase transition-colors focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:outline-none",
           solid
             ? "border-brand-black/10 text-brand-black hover:bg-brand-black/5"
             : "border-brand-white/25 text-brand-white hover:bg-brand-white/10",
@@ -53,7 +75,7 @@ export function LanguageSwitcher({ solid }: LanguageSwitcherProps) {
       {isOpen && (
         <div
           className={cn(
-            "absolute right-0 top-full z-50 mt-1 min-w-max overflow-hidden rounded-lg border shadow-lg transition-opacity",
+            "absolute top-full right-0 z-50 mt-1 min-w-max overflow-hidden rounded-lg border shadow-lg transition-opacity",
             solid
               ? "border-brand-black/15 bg-brand-white"
               : "border-brand-white/25 bg-brand-black/95",
@@ -71,7 +93,7 @@ export function LanguageSwitcher({ solid }: LanguageSwitcherProps) {
                     setIsOpen(false);
                   }}
                   className={cn(
-                    "block w-full px-4 py-2 text-left text-sm font-medium transition-colors",
+                    "block w-full px-4 py-2 text-left text-sm font-medium transition-colors focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:outline-none focus-visible:ring-inset",
                     locale === defaultLocale
                       ? solid
                         ? "bg-brand-red text-brand-white"

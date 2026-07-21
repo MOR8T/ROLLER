@@ -34,9 +34,17 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ru" className={`${montserrat.variable} ${chakraPetch.variable} h-full antialiased`}>
-      <body className="flex min-h-full flex-col bg-background text-foreground overflow-x-hidden">
+      <body className="flex min-h-full flex-col overflow-x-hidden bg-background text-foreground">
+        <a
+          href="#top"
+          className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-100 focus:rounded-md focus:bg-brand-black focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:text-brand-white focus:shadow-lg"
+        >
+          Перейти к основному содержимому
+        </a>
         <Header />
-        <main id="top" className="flex-1">{children}</main>
+        <main id="top" className="flex-1">
+          {children}
+        </main>
         <Footer />
         <WhatsAppFab />
       </body>

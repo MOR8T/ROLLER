@@ -1,14 +1,5 @@
 import Link from "next/link";
-import {
-  ArrowUp,
-  Camera,
-  Clock,
-  Mail,
-  MapPin,
-  MessageCircle,
-  Phone,
-  Send,
-} from "lucide-react";
+import { ArrowUp, Camera, Clock, Mail, MapPin, MessageCircle, Phone, Send } from "lucide-react";
 import { Container } from "@/components/ui/container";
 import { ButtonLink } from "@/components/ui/button";
 import { BrandLogo } from "@/components/ui/brand-logo";
@@ -59,10 +50,7 @@ export function Footer() {
             aria-label={siteConfig.name}
             className="flex items-center gap-2 transition-colors"
           >
-            <BrandLogo
-              isDark={false}
-              className="h-12 w-auto"
-            />
+            <BrandLogo isDark={false} className="h-12 w-auto" />
           </Link>
 
           <p className="mt-5 text-sm text-brand-white/70">{siteConfig.slogan.ru}</p>
@@ -75,15 +63,15 @@ export function Footer() {
 
         {/* Nav column */}
         <nav aria-label="Подвал" className="text-sm">
-          <h3 className="font-heading text-sm font-semibold tracking-[0.18em] text-brand-white uppercase">
+          <h2 className="font-heading text-sm font-semibold tracking-[0.18em] text-brand-white uppercase">
             Разделы
-          </h3>
-          <ul className="mt-5 space-y-3">
+          </h2>
+          <ul className="mt-5 space-y-2">
             {navLinks.map((link) => (
               <li key={link.href}>
                 <Link
                   href={link.href}
-                  className="text-brand-white/70 transition-colors hover:text-brand-red"
+                  className="inline-block rounded-md py-1 text-brand-white/70 transition-colors hover:text-brand-red focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:ring-offset-brand-black focus-visible:outline-none"
                 >
                   {link.label}
                 </Link>
@@ -94,9 +82,9 @@ export function Footer() {
 
         {/* Contacts column */}
         <div className="text-sm">
-          <h3 className="font-heading text-sm font-semibold tracking-[0.18em] text-brand-white uppercase">
+          <h2 className="font-heading text-sm font-semibold tracking-[0.18em] text-brand-white uppercase">
             Контакты
-          </h3>
+          </h2>
           <ul className="mt-5 space-y-4 text-brand-white/70">
             <li className="flex items-start gap-3">
               <MapPin className="mt-0.5 size-4 shrink-0 text-brand-red" aria-hidden />
@@ -106,7 +94,7 @@ export function Footer() {
               <Phone className="size-4 shrink-0 text-brand-red" aria-hidden />
               <a
                 href={siteConfig.phoneHref}
-                className="transition-colors hover:text-brand-white"
+                className="rounded-md py-1 transition-colors hover:text-brand-white focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:ring-offset-brand-black focus-visible:outline-none"
               >
                 {siteConfig.phone}
               </a>
@@ -115,7 +103,7 @@ export function Footer() {
               <Mail className="size-4 shrink-0 text-brand-red" aria-hidden />
               <a
                 href={`mailto:${siteConfig.email}`}
-                className="break-all transition-colors hover:text-brand-white"
+                className="rounded-md py-1 break-all transition-colors hover:text-brand-white focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:ring-offset-brand-black focus-visible:outline-none"
               >
                 {siteConfig.email}
               </a>
@@ -129,9 +117,9 @@ export function Footer() {
 
         {/* Social column */}
         <div>
-          <h3 className="font-heading text-sm font-semibold tracking-[0.18em] text-brand-white uppercase">
+          <h2 className="font-heading text-sm font-semibold tracking-[0.18em] text-brand-white uppercase">
             Мы в соцсетях
-          </h3>
+          </h2>
           <p className="mt-5 max-w-xs text-sm text-brand-white/60">
             Подписывайтесь, чтобы следить за новинками и проектами компании.
           </p>
@@ -141,7 +129,7 @@ export function Footer() {
                 key={href}
                 href={href}
                 aria-label={label}
-                className="grid size-10 place-items-center rounded-md border border-brand-white/20 text-brand-white/80 transition-colors hover:border-brand-red hover:text-brand-red"
+                className="grid size-10 place-items-center rounded-md border border-brand-white/20 text-brand-white/80 transition-colors hover:border-brand-red hover:text-brand-red focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:ring-offset-brand-black focus-visible:outline-none"
               >
                 <Icon className="size-5" />
               </a>
@@ -172,7 +160,7 @@ export function Footer() {
             </p>
             <a
               href="#top"
-              className="group flex items-center gap-1.5 transition-colors hover:text-brand-white"
+              className="group flex items-center gap-1.5 rounded-md py-1 transition-colors hover:text-brand-white focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:ring-offset-brand-black focus-visible:outline-none"
             >
               <span className="tracking-wide uppercase">Наверх</span>
               <ArrowUp

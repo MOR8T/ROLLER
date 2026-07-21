@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { AnimatePresence, motion, useReducedMotion, type Variants } from "framer-motion";
 import { Menu, MessageCircle, Phone, X } from "lucide-react";
@@ -40,6 +40,8 @@ export function Header() {
   const [scrolled, setScrolled] = useState(false);
   const prefersReducedMotion = useReducedMotion();
 
+  const drawerRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > SCROLL_THRESHOLD);
     onScroll();
@@ -47,19 +49,48 @@ export function Header() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  // Lock body scroll while the mobile drawer is open, and close the drawer
-  // on Escape so keyboard users can dismiss it without scrolling.
+  // Lock body scroll while the mobile drawer is open, close on Escape, and
+  // trap focus inside the dialog so keyboard users can't tab out to the page
+  // behind the backdrop.
   useEffect(() => {
     if (!open) return;
     const originalOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
+
+    const drawer = drawerRef.current;
+    const previouslyFocused = document.activeElement as HTMLElement | null;
+
+    // Move focus into the drawer on open.
+    const focusables = drawer?.querySelectorAll<HTMLElement>(
+      'a[href], button:not([disabled]), input, select, textarea, [tabindex]:not([tabindex="-1"])',
+    );
+    focusables?.[0]?.focus();
+
     const onKey = (event: KeyboardEvent) => {
-      if (event.key === "Escape") setOpen(false);
+      if (event.key === "Escape") {
+        setOpen(false);
+        return;
+      }
+      if (event.key !== "Tab" || !drawer || !focusables) return;
+
+      const first = focusables[0];
+      const last = focusables[focusables.length - 1];
+      const active = document.activeElement;
+
+      if (event.shiftKey && active === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && active === last) {
+        event.preventDefault();
+        first.focus();
+      }
     };
     window.addEventListener("keydown", onKey);
     return () => {
       document.body.style.overflow = originalOverflow;
       window.removeEventListener("keydown", onKey);
+      // Restore focus to the element that opened the drawer.
+      previouslyFocused?.focus?.();
     };
   }, [open]);
 
@@ -85,7 +116,11 @@ export function Header() {
     ? { hidden: { opacity: 1, y: 0 }, visible: { opacity: 1, y: 0 } }
     : {
         hidden: { opacity: 0, y: 12 },
-        visible: { opacity: 1, y: 0, transition: { duration: 0.3, ease: [0.25, 0.1, 0.25, 1] as const } },
+        visible: {
+          opacity: 1,
+          y: 0,
+          transition: { duration: 0.3, ease: [0.25, 0.1, 0.25, 1] as const },
+        },
       };
 
   return (
@@ -103,26 +138,23 @@ export function Header() {
           aria-label={siteConfig.name}
           className="flex shrink-0 items-center gap-2 transition-colors"
         >
-          <BrandLogo
-            isDark={solid}
-            className="h-12 w-auto lg:h-16"
-          />
+          <BrandLogo isDark={solid} className="h-12 w-auto lg:h-16" />
         </Link>
 
-        <nav className="hidden items-center gap-8 lg:flex">
+        <nav aria-label="Основная навигация" className="hidden items-center gap-6 lg:flex">
           {navLinks.map((link) => (
             <Link
               key={link.href}
               href={link.href}
               className={cn(
-                "group relative text-sm font-medium transition-colors hover:text-brand-red",
+                "group relative inline-flex items-center py-2 text-sm font-medium transition-colors hover:text-brand-red focus-visible:rounded-md focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:outline-none",
                 solid ? "text-brand-black/80" : "text-brand-white/85",
               )}
             >
               {link.label}
               <span
                 className={cn(
-                  "absolute -bottom-1.5 left-0 h-0.5 w-0 bg-brand-red transition-all duration-300 group-hover:w-full",
+                  "absolute bottom-0.5 left-0 h-0.5 w-0 bg-brand-red transition-all duration-300 group-hover:w-full",
                   solid ? "" : "bg-brand-white",
                 )}
               />
@@ -136,7 +168,7 @@ export function Header() {
           <a
             href={siteConfig.phoneHref}
             className={cn(
-              "flex items-center gap-2 transition-colors hover:text-brand-red",
+              "inline-flex items-center gap-2 rounded-md py-2 transition-colors hover:text-brand-red focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:outline-none",
               solid ? "text-brand-black" : "text-brand-white",
             )}
           >
@@ -155,7 +187,7 @@ export function Header() {
           aria-expanded={open}
           aria-controls="mobile-drawer"
           className={cn(
-            "grid size-10 place-items-center rounded-md transition-colors lg:hidden",
+            "grid size-10 place-items-center rounded-md transition-colors focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:outline-none lg:hidden",
             solid
               ? "text-brand-black hover:bg-brand-black/5"
               : "text-brand-white hover:bg-brand-white/10",
@@ -177,10 +209,11 @@ export function Header() {
               initial="hidden"
               animate="visible"
               exit="hidden"
-              className="fixed inset-0 z-40 w-full h-full bg-brand-black/50 lg:hidden"
+              className="fixed inset-0 z-50 h-full w-full bg-brand-black/50 lg:hidden"
             />
             <motion.aside
               key="drawer"
+              ref={drawerRef}
               id="mobile-drawer"
               role="dialog"
               aria-modal="true"
@@ -189,9 +222,9 @@ export function Header() {
               initial="hidden"
               animate="visible"
               exit="exit"
-              className="fixed bottom-0 right-0 top-0 z-40 flex w-full max-w-sm flex-col bg-brand-white shadow-2xl lg:hidden"
+              className="fixed top-0 right-0 bottom-0 z-50 flex w-full max-w-sm flex-col bg-brand-white shadow-2xl lg:hidden"
             >
-              <motion.div 
+              <motion.div
                 className="flex h-16 shrink-0 items-center justify-between px-5"
                 initial={{ opacity: 1 }}
                 animate={{ opacity: 1 }}
@@ -203,7 +236,7 @@ export function Header() {
                   type="button"
                   aria-label="Закрыть меню"
                   onClick={() => setOpen(false)}
-                  className="grid size-10 place-items-center rounded-md text-brand-black transition-colors hover:bg-brand-black/5"
+                  className="grid size-10 place-items-center rounded-md text-brand-black transition-colors hover:bg-brand-black/5 focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:outline-none"
                 >
                   <X className="size-6" />
                 </button>
@@ -213,14 +246,16 @@ export function Header() {
                 className="flex flex-1 flex-col gap-1 overflow-y-auto px-3 pb-4"
                 initial="hidden"
                 animate="visible"
-                variants={{ visible: { transition: { staggerChildren: 0.04, delayChildren: 0.05 } } }}
+                variants={{
+                  visible: { transition: { staggerChildren: 0.04, delayChildren: 0.05 } },
+                }}
               >
                 {navLinks.map((link) => (
                   <motion.div key={link.href} variants={itemVariants}>
                     <Link
                       href={link.href}
                       onClick={() => setOpen(false)}
-                      className="block rounded-md px-3 py-3 text-base font-medium text-brand-black/80 transition-colors hover:bg-brand-black/5 hover:text-brand-red"
+                      className="block rounded-md px-3 py-3 text-base font-medium text-brand-black/80 transition-colors hover:bg-brand-black/5 hover:text-brand-red focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:outline-none"
                     >
                       {link.label}
                     </Link>
@@ -234,12 +269,12 @@ export function Header() {
                 <motion.div variants={itemVariants} className="mt-4 px-3">
                   <a
                     href={siteConfig.phoneHref}
-                    className="flex items-center gap-3 rounded-md py-2 text-base font-semibold text-brand-black transition-colors hover:text-brand-red"
+                    className="flex items-center gap-3 rounded-md py-2 text-base font-semibold text-brand-black transition-colors hover:text-brand-red focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:outline-none"
                   >
                     <Phone className="size-5" />
                     <span className="flex flex-col leading-tight">
                       <span>{siteConfig.phone}</span>
-                      <span className="text-[11px] font-medium tracking-wide text-brand-black/45 uppercase">
+                      <span className="text-[11px] font-medium tracking-wide text-brand-black/60 uppercase">
                         {siteConfig.workingHours}
                       </span>
                     </span>

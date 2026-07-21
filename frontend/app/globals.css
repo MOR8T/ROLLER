@@ -26,7 +26,6 @@
   /* Fonts (bound to next/font CSS variables in layout.tsx) */
   --font-sans: var(--font-montserrat), ui-sans-serif, system-ui, sans-serif;
   --font-heading: var(--font-chakra-petch), var(--font-montserrat), sans-serif;
-
 }
 
 :root {
