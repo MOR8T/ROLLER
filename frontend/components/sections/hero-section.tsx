@@ -39,7 +39,7 @@ function TrustStrip() {
   );
 }
 
-const SLIDE_INTERVAL_MS = 6500;
+const SLIDE_INTERVAL_MS = 1000;
 
 const fallbackSlides: HeroSlide[] = [
   {
@@ -110,7 +110,7 @@ export function HeroSection() {
         onFocusCapture={() => setPaused(true)}
         onBlurCapture={handleBlur}
       >
-        <div className="absolute inset-0 -z-30 bg-brand-black" />
+        <div className="absolute inset-0 -z-30 bg-brand-white" />
         <div className="absolute inset-0 -z-20">
           {slides.map((slide, index) => {
             const hasImage = Boolean(slide.image) && !erroredSlideIds.has(slide.id);
@@ -149,23 +149,25 @@ export function HeroSection() {
             );
           })}
         </div>
-        <div className="absolute inset-0 -z-10 bg-[linear-gradient(180deg,rgba(29,29,27,0.28)_0%,rgba(29,29,27,0.68)_42%,rgba(29,29,27,0.9)_100%)]" />
-        <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_top_right,rgba(211,0,26,0.24),transparent_32%),linear-gradient(120deg,rgba(29,29,27,0.08),rgba(29,29,27,0.54))]" />
+        <div className="absolute inset-0 -z-10 bg-[linear-gradient(180deg,rgba(175,175,175,0.28)_0%,rgba(175,175,175,0.68)_42%,rgba(175,175,175,0.9)_100%)]" />
+        <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_top_right,rgba(211,0,26,0.24),transparent_32%),linear-gradient(120deg,rgba(175,175,175,0.08),rgba(175,175,175,0.54))]" />
 
-        <Container className="grid min-h-svh items-end gap-6 py-16 pt-20 sm:gap-10 sm:pt-32 sm:pb-16 lg:grid-cols-[minmax(0,1.1fr)_minmax(320px,0.9fr)] lg:gap-12 lg:pt-40 lg:pb-20">
-          <div className="max-w-3xl">
+        <Container className="grid min-h-svh items-center gap-6 py-16 pt-20 sm:gap-10 sm:pt-32 sm:pb-16 lg:grid-cols-[minmax(0,1.1fr)_minmax(320px,0.9fr)]_ lg:gap-12 lg:pt-40 lg:pb-20">
+          <div className="max-w-6xl">
             <div className="inline-flex items-center gap-2 rounded-full border border-brand-white/15 bg-brand-white/8 px-3 py-1.5 text-xs text-brand-white/80 backdrop-blur-md sm:px-4 sm:py-2 sm:text-sm">
               <CheckCircle2 className="size-3 text-brand-red sm:size-4" />
               Собственное производство профилей ПВХ и алюминия
             </div>
 
-            <h1 className="mt-4 max-w-4xl text-3xl font-bold tracking-tight text-balance sm:mt-6 sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl">
-              {siteConfig.slogan.ru}
+            <h1 className="mt-4 max-w-6xl text-3xl font-bold tracking-tight text-balance sm:mt-6 sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl">
+              {/* {siteConfig.slogan.ru} */}
+              {activeSlide.headline}
             </h1>
 
             <p className="mt-4 max-w-2xl text-sm leading-6 text-brand-white/78 sm:mt-6 sm:text-base sm:leading-7 lg:text-lg lg:leading-8">
-              Производим окна, двери и фасадные решения с точной геометрией, контролем качества и
-              монтажом под ключ для жилых, коммерческих и городских объектов.
+              {/* Производим окна, двери и фасадные решения с точной геометрией, контролем качества и
+              монтажом под ключ для жилых, коммерческих и городских объектов. */}
+               {activeSlide.subtext}
             </p>
 
             <div className="mt-6 flex flex-col gap-2 sm:flex-row sm:gap-3">
@@ -184,7 +186,7 @@ export function HeroSection() {
             </div>
           </div>
 
-          <div className="flex flex-col items-stretch gap-3 sm:gap-4 lg:items-end">
+          {/* <div className="flex flex-col items-stretch gap-3 sm:gap-4 lg:items-end">
             <div className="w-full max-w-xl rounded-3xl border border-brand-white/15 bg-brand-black/40 p-4 shadow-[0_30px_80px_-32px_rgba(0,0,0,0.75)] backdrop-blur-md sm:rounded-4xl sm:p-5 lg:p-6">
               <div className="flex items-start justify-between gap-4">
                 <div>
@@ -276,7 +278,7 @@ export function HeroSection() {
                 ? "Анимация уменьшена в настройках устройства"
                 : "Слайды переключаются автоматически"}
             </div>
-          </div>
+          </div> */}
         </Container>
 
         <Container className="hidden pb-8 lg:block">
