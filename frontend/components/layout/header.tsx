@@ -132,16 +132,16 @@ export function Header() {
           : "border-b border-transparent bg-transparent",
       )}
     >
-      <Container className="flex h-16 items-center justify-between gap-6 lg:h-20">
+      <Container className="flex h-16 items-center justify-between gap-6 xl:h-20">
         <Link
           href="/"
           aria-label={siteConfig.name}
           className="flex shrink-0 items-center gap-2 transition-colors"
         >
-          <BrandLogo isDark={solid} className="h-12 w-auto lg:h-16" />
+          <BrandLogo isDark={solid} className="h-full w-auto" />
         </Link>
 
-        <nav aria-label="Основная навигация" className="hidden items-center gap-6 lg:flex">
+        <nav aria-label="Основная навигация" className="hidden items-center gap-6 xl:flex">
           {navLinks.map((link) => (
             <Link
               key={link.href}
@@ -162,7 +162,7 @@ export function Header() {
           ))}
         </nav>
 
-        <div className="hidden items-center gap-4 lg:flex">
+        <div className="hidden items-center gap-4 xl:flex">
           <LanguageSwitcher solid={solid} />
 
           <a
@@ -187,7 +187,7 @@ export function Header() {
           aria-expanded={open}
           aria-controls="mobile-drawer"
           className={cn(
-            "grid size-10 place-items-center rounded-md transition-colors focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:outline-none lg:hidden",
+            "grid size-10 place-items-center rounded-md transition-colors focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:outline-none xl:hidden",
             solid
               ? "text-brand-black hover:bg-brand-black/5"
               : "text-brand-white hover:bg-brand-white/10",
@@ -209,7 +209,7 @@ export function Header() {
               initial="hidden"
               animate="visible"
               exit="hidden"
-              className="fixed inset-0 z-50 h-full w-full bg-brand-black/50 lg:hidden"
+              className="fixed inset-0 z-50 h-full w-full bg-brand-black/50 xl:hidden"
             />
             <motion.aside
               key="drawer"
@@ -222,7 +222,7 @@ export function Header() {
               initial="hidden"
               animate="visible"
               exit="exit"
-              className="fixed top-0 right-0 bottom-0 z-50 flex w-full max-w-sm flex-col bg-brand-white shadow-2xl lg:hidden"
+              className="fixed top-0 right-0 bottom-0 z-50 flex w-full max-w-sm flex-col bg-brand-white shadow-2xl xl:hidden"
             >
               <motion.div
                 className="flex h-16 shrink-0 items-center justify-between px-5"

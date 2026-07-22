@@ -104,7 +104,7 @@ export function HeroSection() {
   return (
     <>
       <section
-        className="relative isolate -mt-16 overflow-hidden bg-brand-black text-brand-white sm:-mt-16 lg:-mt-20"
+        className="relative isolate -mt-16.5 overflow-hidden bg-brand-black text-brand-white sm:-mt-16.5 lg:-mt-20.5"
         onMouseEnter={() => setPaused(true)}
         onMouseLeave={() => setPaused(false)}
         onFocusCapture={() => setPaused(true)}

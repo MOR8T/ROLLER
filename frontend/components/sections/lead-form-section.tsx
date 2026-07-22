@@ -12,6 +12,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { siteConfig } from "@/lib/site-config";
 import { cn } from "@/lib/utils";
 
+const cityOptions = ["Душанбе", "Худжант", "Вахдат"];
 const productTypes = ["ПВХ продукция", "Алюминиевая продукция", "Замер/консультация"];
 
 const trustPoints = [
@@ -68,10 +69,10 @@ export function LeadFormSection() {
           <h2 className="mt-3 max-w-xl text-3xl font-bold tracking-tight sm:text-5xl">
             Рассчитаем решение под ваш объект
           </h2>
-          <p className="mt-5 max-w-lg leading-7 text-brand-white/75">
+          {/* <p className="mt-5 max-w-lg leading-7 text-brand-white/75">
             Оставьте контакты, город и тип продукции. На этом этапе форма работает как UI-заглушка и
             готовит сообщение в WhatsApp.
-          </p>
+          </p> */}
           <ul className="mt-8 space-y-3">
             {trustPoints.map((point) => (
               <li key={point.label} className="flex items-center gap-3 text-brand-white/85">
@@ -98,7 +99,14 @@ export function LeadFormSection() {
                 <Input id="lead-phone" name="phone" type="tel" required placeholder="+992" />
               </Field>
               <Field label="Город" htmlFor="lead-city">
-                <Input id="lead-city" name="city" required placeholder="Душанбе" />
+                <Select id="lead-city" name="city" required defaultValue="Душанбе">
+                  <option value="" disabled>
+                    Выберите тип
+                  </option>
+                  {cityOptions.map((type) => (
+                    <option key={type}>{type}</option>
+                  ))}
+                </Select>
               </Field>
               <Field label="Тип продукции" htmlFor="lead-product-type">
                 <Select id="lead-product-type" name="productType" required defaultValue="">

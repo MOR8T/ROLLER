@@ -56,7 +56,7 @@ export function ContactsSection() {
           <SectionHeading
             eyebrow="Контакты"
             title="Свяжитесь с нами или приезжайте в офис"
-            description="Адрес, телефон, почта и график работы — всё в одном месте. Откройте карту, чтобы построить маршрут, или напишите нам в WhatsApp."
+            // description="Адрес, телефон, почта и график работы — всё в одном месте. Откройте карту, чтобы построить маршрут, или напишите нам в WhatsApp."
           />
         </Reveal>
 
@@ -69,7 +69,7 @@ export function ContactsSection() {
             ))}
           </Reveal>
 
-          <Reveal preset="fade-up" delay={0.1} className="flex flex-col gap-6">
+          <Reveal preset="fade-up" delay={0.1} className="flex flex-col-reverse gap-6">
             <div className="flex flex-col gap-3 sm:flex-row">
               <ButtonLink href={siteConfig.whatsappHref} size="lg" className="flex-1 rounded-full">
                 <MessageCircle className="size-5" />
@@ -86,7 +86,7 @@ export function ContactsSection() {
               </ButtonLink>
             </div>
 
-            <div className="flex items-center gap-2 text-sm text-brand-black/65">
+            {/* <div className="flex items-center gap-2 text-sm text-brand-black/65">
               <span className="h-px flex-1 bg-brand-black/10" />
               <span className="font-heading text-xs font-semibold tracking-[0.24em] uppercase">
                 Мы в соцсетях
@@ -105,7 +105,7 @@ export function ContactsSection() {
                   {social.label}
                 </ButtonLink>
               ))}
-            </div>
+            </div> */}
 
             <div className="relative flex-1 overflow-hidden rounded-4xl border border-brand-black/10 bg-neutral-50 p-3">
               <iframe

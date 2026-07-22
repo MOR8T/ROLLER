@@ -21,7 +21,7 @@ export function PartnersSection() {
         <SectionHeading
           eyebrow="Доверие"
           title="Материалы и технологии от проверенных поставщиков"
-          description="Партнёрские логотипы от ведущих производителей комплектующих и технологий."
+          // description="Партнёрские логотипы от ведущих производителей комплектующих и технологий."
           align="center"
         />
 
@@ -48,7 +48,7 @@ export function PartnersSection() {
                       />
                     </div>
                   ) : (
-                    <div className="flex h-full w-full items-center justify-center px-4 text-center">
+                    <div className="flex min-h-24 w-full items-center justify-center px-4 text-center">
                       <span className="font-heading text-sm font-semibold text-brand-black/72 transition-colors duration-300 group-hover:text-brand-red">
                         {partner.name}
                       </span>
