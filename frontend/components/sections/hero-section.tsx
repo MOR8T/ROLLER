@@ -71,7 +71,7 @@ function HeroSlideContent({ slide, isFirst }: { slide: HeroSlide; isFirst: boole
           fill
           priority={isFirst}
           sizes="100vw"
-          className="object-cover object-center"
+          className="object-contain object-right"
         />
         <div className="absolute inset-0 bg-[linear-gradient(105deg,rgba(29,29,27,0.92)_0%,rgba(29,29,27,0.72)_42%,rgba(29,29,27,0.35)_70%,rgba(29,29,27,0.2)_100%)]" />
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(211,0,26,0.28),transparent_45%)]" />
@@ -79,9 +79,9 @@ function HeroSlideContent({ slide, isFirst }: { slide: HeroSlide; isFirst: boole
 
       <Container className="relative z-10 w-full pt-28 pb-28 sm:pt-36 sm:pb-32 lg:pt-40 lg:pb-36">
         <div className="max-w-3xl">
-          <p className="font-heading text-4xl font-bold tracking-tight text-brand-white sm:text-6xl md:text-7xl lg:text-8xl">
+          {/* <p className="font-heading text-4xl font-bold tracking-tight text-brand-white sm:text-6xl md:text-7xl lg:text-8xl">
             <span className="text-brand-red">ROL</span>LER
-          </p>
+          </p> */}
 
           <p className="mt-3 text-xs font-semibold tracking-[0.22em] text-brand-white/55 uppercase sm:mt-4 sm:text-sm">
             {slide.eyebrow}
@@ -176,7 +176,7 @@ export function HeroSection() {
     <>
       <section
         aria-label="Главный баннер"
-        className="hero-swiper relative isolate -mt-16.5 overflow-hidden bg-brand-black text-brand-white sm:-mt-16.5 lg:-mt-20.5"
+        className="hero-swiper relative isolate -mt-16.5 overflow-hidden bg-brand-black text-brand-white sm:-mt-16.5 lg:-mt-20.5 pb-0.5"
       >
         <Swiper
           modules={[A11y, Autoplay, EffectFade, Navigation, Pagination]}

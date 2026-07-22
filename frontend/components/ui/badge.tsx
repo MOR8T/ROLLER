@@ -19,7 +19,7 @@ export function Badge({ variant = "red", className, ...props }: BadgeProps) {
   const variantStyles: Record<BadgeVariant, string> = {
     red: "bg-brand-red text-brand-white",
     black: "bg-brand-black text-brand-white",
-    outline: "border border-neutral-300 bg-transparent text-brand-black",
+    outline: "border border-neutral-300 bg-transparent text-brand-white",
   };
 
   return <span className={cn(baseStyles, variantStyles[variant], className)} {...props} />;
