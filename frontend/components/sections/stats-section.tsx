@@ -45,14 +45,14 @@ function CountUpStat({ stat }: { stat: CompanyStat }) {
 
 export function StatsSection() {
   return (
-    <Section id="stats" className="bg-brand-black text-brand-white">
+    <Section id="stats" className="bg-brand-white text-brand-black">
       <Container>
         <Reveal preset="fade-up" className="max-w-3xl">
           <SectionHeading
             eyebrow="Цифры"
             title="Масштаб, которому можно доверять"
-            description="Производство, команда и география проектов — в одном кадре. Цифры обновляются по мере роста компании."
-            tone="dark"
+            // description="Производство, команда и география проектов — в одном кадре. Цифры обновляются по мере роста компании."
+            tone="light"
           />
         </Reveal>
 
@@ -63,15 +63,15 @@ export function StatsSection() {
           {companyStats.map((stat, index) => (
             <RevealItem
               key={stat.label}
-              className="group relative flex h-full flex-col rounded-3xl border border-brand-white/10 bg-brand-white/[0.04] p-6 transition-colors duration-300 hover:border-brand-red/40 hover:bg-brand-white/[0.07]"
+              className="group relative flex h-full flex-col rounded-3xl border border-brand-black/10 bg-brand-black/[0.04] p-6 transition-colors duration-300 hover:border-brand-red/40 hover:bg-brand-black/[0.07]"
             >
-              <span className="font-heading text-sm font-semibold text-brand-white/30 tabular-nums">
+              <span className="font-heading text-sm font-semibold text-brand-black/30 tabular-nums">
                 {String(index + 1).padStart(2, "0")}
               </span>
               <p className="mt-4 font-heading text-4xl font-bold tracking-tight text-brand-red sm:text-5xl">
                 <CountUpStat stat={stat} />
               </p>
-              <p className="mt-3 text-sm font-medium text-brand-white/65">{stat.label}</p>
+              <p className="mt-3 text-sm font-medium text-brand-black/65">{stat.label}</p>
               <span className="mt-5 h-px w-10 bg-brand-red/40 transition-all duration-300 group-hover:w-16 group-hover:bg-brand-red" />
             </RevealItem>
           ))}

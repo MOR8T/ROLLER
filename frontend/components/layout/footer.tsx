@@ -13,7 +13,7 @@ import { navLinks, siteConfig } from "@/lib/site-config";
  *  - main grid (mobile-first): brand block, nav column, contacts column, social column
  *  - bottom bar: copyright + working hours + back-to-top
  *
- * All copy in Russian (site default locale). Slogan shows RU + TJ per plan.
+ * All copy in Russian (site default locale).
  * Data is sourced from `siteConfig` — no magic values.
  */
 export function Footer() {
@@ -39,39 +39,35 @@ export function Footer() {
 
   return (
     <footer className="bg-brand-black text-brand-white">
-      {/* Accent strip — IMZO/AKFA industrial signature */}
       <div className="h-1 w-full bg-brand-red" aria-hidden />
 
-      <Container className="grid gap-10 py-14 sm:grid-cols-2 lg:grid-cols-4 lg:py-16">
-        {/* Brand block */}
+      <Container className="grid gap-10 py-14 sm:grid-cols-2 lg:grid-cols-4 lg:gap-8 lg:py-16">
         <div className="max-w-xs">
           <Link
             href="/"
             aria-label={siteConfig.name}
-            className="flex items-center justify-start gap-2 transition-colors shrink-0"
+            className="inline-flex shrink-0 items-center transition-opacity hover:opacity-90"
           >
             <BrandLogo isDark={false} className="h-12 w-auto" />
           </Link>
 
-          <p className="mt-5 text-sm text-brand-white/70">{siteConfig.slogan.ru}</p>
-          <p className="mt-1 text-sm text-brand-white/50">{siteConfig.slogan.tg}</p>
+          <p className="mt-5 text-sm leading-relaxed text-brand-white/70">{siteConfig.slogan.ru}</p>
 
           <p className="mt-6 text-xs font-medium tracking-[0.18em] text-brand-white/45 uppercase">
             На рынке с {siteConfig.foundedYear} года
           </p>
         </div>
 
-        {/* Nav column */}
         <nav aria-label="Подвал" className="text-sm">
           <h2 className="font-heading text-sm font-semibold tracking-[0.18em] text-brand-white uppercase">
             Разделы
           </h2>
-          <ul className="mt-5 space-y-2">
+          <ul className="mt-5 space-y-1">
             {navLinks.map((link) => (
               <li key={link.href}>
                 <Link
                   href={link.href}
-                  className="inline-block rounded-md py-1 text-brand-white/70 transition-colors hover:text-brand-red focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:ring-offset-brand-black focus-visible:outline-none"
+                  className="inline-block rounded-md py-1.5 text-brand-white/70 transition-colors hover:text-brand-red focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:ring-offset-brand-black focus-visible:outline-none"
                 >
                   {link.label}
                 </Link>
@@ -80,7 +76,6 @@ export function Footer() {
           </ul>
         </nav>
 
-        {/* Contacts column */}
         <div className="text-sm">
           <h2 className="font-heading text-sm font-semibold tracking-[0.18em] text-brand-white uppercase">
             Контакты
@@ -88,7 +83,14 @@ export function Footer() {
           <ul className="mt-5 space-y-4 text-brand-white/70">
             <li className="flex items-start gap-3">
               <MapPin className="mt-0.5 size-4 shrink-0 text-brand-red" aria-hidden />
-              <span>{siteConfig.address}</span>
+              <a
+                href={siteConfig.mapUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="rounded-md transition-colors hover:text-brand-white focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:ring-offset-brand-black focus-visible:outline-none"
+              >
+                {siteConfig.address}
+              </a>
             </li>
             <li className="flex items-center gap-3">
               <Phone className="size-4 shrink-0 text-brand-red" aria-hidden />
@@ -115,19 +117,17 @@ export function Footer() {
           </ul>
         </div>
 
-        {/* Social column */}
         <div>
           <h2 className="font-heading text-sm font-semibold tracking-[0.18em] text-brand-white uppercase">
             Мы в соцсетях
           </h2>
-          <p className="mt-5 max-w-xs text-sm text-brand-white/60">
-            Подписывайтесь, чтобы следить за новинками и проектами компании.
-          </p>
           <div className="mt-5 flex gap-3">
             {socials.map(({ href, label, icon: Icon }) => (
               <a
                 key={href}
                 href={href}
+                target="_blank"
+                rel="noopener noreferrer"
                 aria-label={label}
                 className="grid size-10 place-items-center rounded-md border border-brand-white/20 text-brand-white/80 transition-colors hover:border-brand-red hover:text-brand-red focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:ring-offset-brand-black focus-visible:outline-none"
               >
@@ -147,13 +147,12 @@ export function Footer() {
         </div>
       </Container>
 
-      {/* Bottom bar */}
       <div className="border-t border-brand-white/10">
-        <Container className="flex flex-col items-center gap-3 py-6 text-xs text-brand-white/50 sm:flex-row sm:justify-center">
+        <Container className="flex flex-col items-center gap-4 py-6 text-xs text-brand-white/50 sm:flex-row sm:justify-between">
           <p>
             © {year} {siteConfig.name}. Все права защищены.
           </p>
-          {/* <div className="flex items-center gap-5">
+          <div className="flex items-center gap-5">
             <p className="flex items-center gap-2">
               <Clock className="size-3.5 text-brand-red" aria-hidden />
               {siteConfig.workingHours}
@@ -168,7 +167,7 @@ export function Footer() {
                 aria-hidden
               />
             </a>
-          </div> */}
+          </div>
         </Container>
       </div>
     </footer>
