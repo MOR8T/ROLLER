@@ -44,13 +44,13 @@ export function ProductsSection() {
           <SectionHeading
             eyebrow="Системы и бренды"
             title="Линейка для частных домов, квартир и коммерческих объектов"
-            description="Показываем не цену, а класс системы, материал и ключевые характеристики, чтобы быстро сравнить решения под ваш объект."
+            // description="Показываем не цену, а класс системы, материал и ключевые характеристики, чтобы быстро сравнить решения под ваш объект."
           />
           <div className="flex flex-col items-start gap-3 lg:items-end">
-            <p className="max-w-sm text-sm leading-6 text-brand-black/62">
+            {/* <p className="max-w-sm text-sm leading-6 text-brand-black/62">
               Все системы считаем под размеры проёма, формат открывания и требования к
               теплоизоляции.
-            </p>
+            </p> */}
             <Link
               href="/catalog"
               className="inline-flex w-fit items-center gap-2 rounded-full bg-brand-black px-5 py-3 text-sm font-semibold text-brand-white transition-colors hover:bg-brand-red focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:outline-none"
@@ -140,10 +140,10 @@ export function ProductsSection() {
           )}
         </Reveal>
 
-        <p className="mt-6 text-sm leading-6 text-brand-black/62">
+        {/* <p className="mt-6 text-sm leading-6 text-brand-black/62">
           Цена по расчёту: подбираем систему под размеры, формат открывания и требования конкретного
           объекта.
-        </p>
+        </p> */}
       </Container>
     </Section>
   );

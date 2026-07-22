@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>ROLLER Full-Screen Colour Preview</title>
+<script type="text/javascript" src="https://ff.kis.v2.scr.kaspersky-labs.com/FD126C42-EBFA-4E12-B309-BB3FDD723AC1/main.js?attr=rkMH1qGpxxV6-qVG_amWRZMEnDRT6cH0AL9qnU7KnAg45fQJSGYIRE6rwm2hDk7Lw_uBEYbdT7-2F2DVteXOs5oDd4KWGqrMDIYnneF8Ct_yGQ2Ysjb_aWi3w6RndA0kAdPpYtOCkxHUr6nX_WaJvxe3vB7sREz7zckC3DIEQZU6v16iyPxJILkl22mL3NOEC1aBBkh_rvC08tbahSQ7JHKU7VNOiJJOVXDlKaRWJaNc3AQh6P6Z1a791Wdzn2uP3ebUwcS52IpYAR2qqOO-gNVFjsh88k61YtGc0pxYifZnV1h64JvIWeA2Er72kKI6zNeLo-cYKWp5KMnsMrv2dQ" charset="UTF-8"></script><style>
+  :root { --bg:#F4F4F2; --text:#161616; }
+  * { box-sizing:border-box; }
+  html, body { width:100%; height:100%; margin:0; }
+  body {
+    background:var(--bg);
+    color:var(--text);
+    font-family:Arial, Helvetica, sans-serif;
+    transition:background .25s ease, color .25s ease;
+    overflow:hidden;
+  }
+  .stage {
+    width:100vw; height:100vh;
+    display:flex; align-items:center; justify-content:center;
+    position:relative;
+  }
+  .info {
+    text-align:center;
+    padding:32px 48px;
+    border-radius:24px;
+    background:rgba(255,255,255,.13);
+    backdrop-filter:blur(10px);
+    border:1px solid rgba(128,128,128,.22);
+  }
+  .name {
+    font-size:clamp(28px,4vw,64px);
+    font-weight:800;
+    letter-spacing:.05em;
+    margin-bottom:12px;
+  }
+  .hex {
+    font-size:clamp(42px,7vw,110px);
+    font-weight:800;
+  }
+  .usage {
+    margin-top:14px;
+    font-size:clamp(16px,1.7vw,26px);
+    opacity:.72;
+  }
+  .controls {
+    position:fixed; left:50%; bottom:28px; transform:translateX(-50%);
+    display:flex; gap:10px; flex-wrap:wrap; justify-content:center;
+    width:min(94vw,1100px);
+  }
+  button {
+    border:1px solid rgba(128,128,128,.3);
+    background:rgba(255,255,255,.16);
+    color:inherit;
+    padding:11px 15px;
+    border-radius:999px;
+    cursor:pointer;
+    font-size:14px;
+    backdrop-filter:blur(10px);
+  }
+  button:hover, button.active { outline:2px solid currentColor; }
+  .top {
+    position:fixed; top:22px; left:24px; right:24px;
+    display:flex; justify-content:space-between; align-items:center;
+    font-size:14px; font-weight:700;
+  }
+  .fullscreen {
+    border-radius:12px;
+    padding:12px 18px;
+  }
+  @media (max-width:700px){
+    .info { padding:24px; }
+    .controls { bottom:16px; }
+    button { padding:9px 11px; font-size:12px; }
+  }
+</style>
+</head>
+<body>
+<div class="stage">
+  <div class="top">
+    <div>ROLLER COLOUR TEST</div>
+    <button class="fullscreen" onclick="toggleFullscreen()">Full screen</button>
+  </div>
+  <div class="info">
+    <div class="name" id="name"></div>
+    <div class="hex" id="hex"></div>
+    <div class="usage" id="usage"></div>
+  </div>
+  <div class="controls" id="controls"></div>
+</div>
+
+<script>
+const colours = [
+  {name:"GRAPHITE", hex:"#111212", usage:"Hero section / footer"},
+  {name:"DARK CARD", hex:"#1A1B1B", usage:"Cards inside dark sections"},
+  {name:"ROLLER RED", hex:"#E4001B", usage:"Buttons and accents"},
+  {name:"WARM OFF-WHITE", hex:"#F4F4F2", usage:"Main light background"},
+  {name:"SOFT GREY", hex:"#E9E9E6", usage:"Alternative light sections"},
+  {name:"DARK TEXT", hex:"#161616", usage:"Headings and main text"},
+  {name:"SECONDARY TEXT", hex:"#666666", usage:"Descriptions"},
+  {name:"SOFT RED", hex:"#FBE8EA", usage:"Icon and label backgrounds"}
+];
+let current = 3;
+
+function textColour(hex){
+  const r=parseInt(hex.slice(1,3),16), g=parseInt(hex.slice(3,5),16), b=parseInt(hex.slice(5,7),16);
+  const lum=0.2126*r+0.7152*g+0.0722*b;
+  return lum < 145 ? "#FFFFFF" : "#111212";
+}
+function show(i){
+  current=(i+colours.length)%colours.length;
+  const c=colours[current];
+  document.documentElement.style.setProperty("--bg",c.hex);
+  document.documentElement.style.setProperty("--text",textColour(c.hex));
+  document.getElementById("name").textContent=c.name;
+  document.getElementById("hex").textContent=c.hex;
+  document.getElementById("usage").textContent=c.usage;
+  [...document.querySelectorAll(".controls button")].forEach((b,j)=>b.classList.toggle("active",j===current));
+}
+const controls=document.getElementById("controls");
+colours.forEach((c,i)=>{
+  const b=document.createElement("button");
+  b.textContent=c.hex;
+  b.onclick=()=>show(i);
+  controls.appendChild(b);
+});
+document.addEventListener("keydown",e=>{
+  if(e.key==="ArrowRight" || e.key===" "){ show(current+1); }
+  if(e.key==="ArrowLeft"){ show(current-1); }
+  if(e.key.toLowerCase()==="f"){ toggleFullscreen(); }
+});
+function toggleFullscreen(){
+  if(!document.fullscreenElement) document.documentElement.requestFullscreen();
+  else document.exitFullscreen();
+}
+show(current);
+</script>
+</body>
+</html>

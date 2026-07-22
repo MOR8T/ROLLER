@@ -48,7 +48,7 @@ export function Footer() {
           <Link
             href="/"
             aria-label={siteConfig.name}
-            className="flex items-center gap-2 transition-colors"
+            className="flex items-center justify-start gap-2 transition-colors shrink-0"
           >
             <BrandLogo isDark={false} className="h-12 w-auto" />
           </Link>
@@ -149,11 +149,11 @@ export function Footer() {
 
       {/* Bottom bar */}
       <div className="border-t border-brand-white/10">
-        <Container className="flex flex-col items-center gap-3 py-6 text-xs text-brand-white/50 sm:flex-row sm:justify-between">
+        <Container className="flex flex-col items-center gap-3 py-6 text-xs text-brand-white/50 sm:flex-row sm:justify-center">
           <p>
             © {year} {siteConfig.name}. Все права защищены.
           </p>
-          <div className="flex items-center gap-5">
+          {/* <div className="flex items-center gap-5">
             <p className="flex items-center gap-2">
               <Clock className="size-3.5 text-brand-red" aria-hidden />
               {siteConfig.workingHours}
@@ -168,7 +168,7 @@ export function Footer() {
                 aria-hidden
               />
             </a>
-          </div>
+          </div> */}
         </Container>
       </div>
     </footer>

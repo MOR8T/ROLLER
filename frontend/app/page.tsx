@@ -23,7 +23,7 @@ export default function Home() {
       <NewsSection />
       <PartnersSection />
       <LeadFormSection />
-      <ContactsSection />
+      {/* <ContactsSection /> */}
     </>
   );
 }

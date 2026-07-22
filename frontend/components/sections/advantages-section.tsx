@@ -19,7 +19,7 @@ export function AdvantagesSection() {
             <SectionHeading
               eyebrow="Преимущества"
               title="От замера до сервиса — один ответственный производитель"
-              description="Сохраняем индустриальный характер референсов IMZO и AKFA, но подаём чище: крупная типографика, чёткие карточки и понятные обязательства перед клиентом."
+              // description="Сохраняем индустриальный характер референсов IMZO и AKFA, но подаём чище: крупная типографика, чёткие карточки и понятные обязательства перед клиентом."
             />
             <div className="mt-8 hidden overflow-hidden rounded-3xl border border-brand-black/10 shadow-[0_30px_80px_-50px_rgba(29,29,27,0.45)] lg:block">
               <MediaFrame

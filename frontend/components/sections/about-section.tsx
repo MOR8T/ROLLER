@@ -71,7 +71,7 @@ export function AboutSection() {
                     {" — профильные решения для домов и бизнеса"}
                   </>
                 }
-                description="Развиваем собственное производство ПВХ и алюминиевых систем в Таджикистане. Клиент получает не просто изделие, а готовое решение: консультация, замер, производство, доставка, монтаж и обслуживание в одном процессе."
+                // description="Развиваем собственное производство ПВХ и алюминиевых систем в Таджикистане. Клиент получает не просто изделие, а готовое решение: консультация, замер, производство, доставка, монтаж и обслуживание в одном процессе."
               />
             </RevealItem>
 
@@ -98,7 +98,7 @@ export function AboutSection() {
 
             <RevealItem className="mt-6 flex flex-col items-start gap-3 sm:mt-8 sm:flex-row sm:items-center sm:gap-4">
               <ButtonLink href="/about" size="lg" className="rounded-full">
-                Подробнее о компании
+                Подробнее
                 <ArrowRight className="size-5" />
               </ButtonLink>
               <div className="flex items-center gap-2 text-xs text-brand-black/60 sm:text-sm">

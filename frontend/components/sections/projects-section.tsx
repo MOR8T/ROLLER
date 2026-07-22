@@ -63,14 +63,14 @@ export function ProjectsSection() {
           <SectionHeading
             eyebrow="Реализованные проекты"
             title="Короткий срез объектов до запуска полного портфолио"
-            description="Показываем типы объектов, географию и характер решений, чтобы клиент быстро понял масштаб и релевантность нашего опыта."
+            // description="Показываем типы объектов, географию и характер решений, чтобы клиент быстро понял масштаб и релевантность нашего опыта."
           />
 
           <div className="flex flex-col items-start gap-3 lg:items-end">
-            <p className="max-w-sm text-sm leading-6 text-brand-black/62">
+            {/* <p className="max-w-sm text-sm leading-6 text-brand-black/62">
               Пока это подборка ключевых кейсов. Полная галерея объектов и детали по каждому проекту
               будут доступны на отдельной странице.
-            </p>
+            </p> */}
             <Link
               href="/portfolio"
               className="inline-flex w-fit items-center gap-2 rounded-full bg-brand-black px-5 py-3 text-sm font-semibold text-brand-white transition-colors hover:bg-brand-red focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:outline-none"
