@@ -285,7 +285,7 @@ export const newsTeasers: NewsTeaser[] = [
     title: "Запуск производственной линии STELLA",
     excerpt:
       "Расширили выпуск пятикамерного профиля STELLA для проектов с повышенными требованиями к теплоизоляции.",
-    image: "/products/stella/stella-main.png",
+    image: "/news/stella-window.png",
     date: "2026-05-12",
     href: "/news/stella-line-launch",
   },
@@ -294,7 +294,7 @@ export const newsTeasers: NewsTeaser[] = [
     title: "Алюминиевые фасады ТЕРМО в новом бизнес-центре",
     excerpt:
       "Рассказываем о проекте фасадного остекления с тёплым алюминиевым профилем и панорамными проёмами.",
-    image: "/products/thermo/thermo-anthracite.png",
+    image: "/news/thermo-anthracite.png",
     date: "2026-04-03",
     href: "/news/thermo-facade-project",
   },
@@ -303,7 +303,7 @@ export const newsTeasers: NewsTeaser[] = [
     title: "Расширяем сервисное сопровождение объектов",
     excerpt:
       "Добавили плановое обслуживание и регулировку оконных систем в Душанбе, Худжанде и Бохтаре.",
-    image: "/hero/hero-main.png",
+    image: "/news/roller-windows.png",
     date: "2026-03-18",
     href: "/news/service-expansion-2026",
   },

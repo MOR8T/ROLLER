@@ -1,16 +1,14 @@
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-import { Card } from "@/components/ui/card";
 import { MediaFrame } from "@/components/ui/media-frame";
 import type { ShowcaseProduct } from "@/types";
 
 export type ProductCardProps = ShowcaseProduct;
 
 /**
- * Reusable product/brand card for the showcase and future catalog pages.
- * Renders the brand image, class badge, summary spec line, highlights and a
- * "Подробнее" link. No price is shown — pricing is calculation-based.
+ * Catalog-style product card: dark product stage + compact spec strip.
+ * Distinct from projects (overlay tiles) and news (editorial rows).
  */
 export function ProductCard({
   name,
@@ -24,44 +22,55 @@ export function ProductCard({
   href,
   sizes,
 }: ProductCardProps & { sizes?: string }) {
-  return (
-    <Card
-      variant="elevated"
-      className="group flex h-full flex-col overflow-hidden rounded-4xl border border-brand-black/10 shadow-sm transition-transform duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-brand-black/10"
-    >
-      <div className="relative aspect-4/3 bg-brand-black">
-        <MediaFrame
-          src={image}
-          alt={name}
-          fill
-          sizes={sizes}
-          containerClassName="h-full w-full bg-brand-black"
-          className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
-        />
-        <div className="absolute inset-x-0 bottom-0 h-24 bg-linear-to-t from-brand-black/45 to-transparent" />
-      </div>
+  const summaryParts = summary.split("·").map((part) => part.trim()).filter(Boolean);
 
-      <div className="flex flex-1 flex-col p-6 sm:p-7">
-        <div className="flex items-start justify-between gap-4">
-          <div>
-            <p className="text-sm font-semibold text-brand-red">{type}</p>
-            <h3 className="mt-2 font-heading text-3xl font-bold tracking-tight">{name}</h3>
-          </div>
-          <Badge variant={badgeVariant} className="shrink-0">
+  return (
+    <article className="group flex h-full flex-col overflow-hidden rounded-3xl border border-brand-black/8 bg-brand-white">
+      <Link
+        href={href}
+        className="relative block aspect-square bg-brand-black p-6 focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:outline-none sm:p-8"
+        aria-label={name}
+      >
+        <div className="relative h-full w-full">
+          <MediaFrame
+            src={image}
+            alt={name}
+            fill
+            sizes={sizes}
+            objectFit="contain"
+            containerClassName="h-full w-full bg-transparent"
+            className="object-contain transition-transform duration-700 ease-out group-hover:scale-105"
+          />
+        </div>
+        <div className="absolute top-4 left-4 right-4 flex items-start justify-between gap-3">
+          <span className="rounded-full border border-brand-white/15 bg-brand-black/40 px-3 py-1 text-[11px] font-semibold tracking-[0.16em] text-brand-white/80 uppercase backdrop-blur-sm">
+            {type}
+          </span>
+          <Badge variant={badgeVariant} className="shrink-0 shadow-sm">
             {badge}
           </Badge>
         </div>
+      </Link>
 
-        <p className="mt-4 text-sm leading-6 text-brand-black/68">{description}</p>
+      <div className="flex flex-1 flex-col border-t border-brand-black/8 p-5 sm:p-6">
+        <h3 className="font-heading text-3xl font-bold tracking-tight text-brand-black">{name}</h3>
+        <p className="mt-2 text-sm leading-6 text-brand-black/65">{description}</p>
 
-        <p className="mt-5 rounded-2xl bg-neutral-100 px-4 py-3 text-sm font-medium text-brand-black">
-          {summary}
-        </p>
+        <div className="mt-5 flex flex-wrap gap-2">
+          {summaryParts.map((part) => (
+            <span
+              key={part}
+              className="rounded-md border border-brand-black/10 bg-neutral-50 px-2.5 py-1 text-xs font-semibold text-brand-black/75"
+            >
+              {part}
+            </span>
+          ))}
+        </div>
 
-        <ul className="mt-5 space-y-2 text-sm leading-6 text-brand-black/62">
+        <ul className="mt-5 space-y-2 border-t border-brand-black/8 pt-5 text-sm leading-6 text-brand-black/62">
           {highlights.map((highlight) => (
-            <li key={highlight} className="flex items-start gap-3">
-              <span className="mt-2 size-2 shrink-0 rounded-full bg-brand-red" />
+            <li key={highlight} className="flex items-start gap-2.5">
+              <span className="mt-2 size-1.5 shrink-0 rounded-full bg-brand-red" />
               <span>{highlight}</span>
             </li>
           ))}
@@ -69,12 +78,12 @@ export function ProductCard({
 
         <Link
           href={href}
-          className="mt-6 inline-flex items-center gap-2 rounded-md py-2 text-sm font-semibold text-brand-black transition-colors group-hover:text-brand-red focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:outline-none"
+          className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-brand-black transition-colors group-hover:text-brand-red focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:outline-none"
         >
           Подробнее
-          <ArrowRight className="size-4" />
+          <ArrowUpRight className="size-4" />
         </Link>
       </div>
-    </Card>
+    </article>
   );
 }

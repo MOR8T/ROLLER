@@ -102,7 +102,7 @@ export function ProductsSection() {
                       >
                         <span
                           className={`block size-2 rounded-full transition-colors ${
-                            idx === activeSlide ? "bg-brand-red" : "bg-brand-black/20"
+                            idx === activeSlide ? "bg-brand-red" : "bg-brand-black/20 text-brand-white"
                           }`}
                         />
                       </button>

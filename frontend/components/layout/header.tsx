@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useSyncExternalStore } from "react";
+import { createPortal } from "react-dom";
 import Link from "next/link";
 import { AnimatePresence, motion, useReducedMotion, type Variants } from "framer-motion";
 import { Menu, MessageCircle, Phone, X } from "lucide-react";
@@ -15,6 +16,12 @@ import { cn } from "@/lib/utils";
 // transparent "over hero" state to the solid state, in px.
 const SCROLL_THRESHOLD = 24;
 
+const emptySubscribe = () => () => {};
+
+function useIsClient() {
+  return useSyncExternalStore(emptySubscribe, () => true, () => false);
+}
+
 /**
  * Header
  *
@@ -22,7 +29,7 @@ const SCROLL_THRESHOLD = 24;
  *  - left: logo
  *  - center (desktop): primary nav
  *  - right (desktop): language switcher + phone (with working hours) + WhatsApp CTA
- *  - right (mobile): burger -> full-height right-side drawer (animated)
+ *  - right (mobile): burger -> full-height right-side drawer (animated, portaled)
  *
  * Two visual states, coordinated with the hero section:
  *  - "over hero" (page at top): transparent background, light text — sits over
@@ -38,6 +45,7 @@ const SCROLL_THRESHOLD = 24;
 export function Header() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const isClient = useIsClient();
   const prefersReducedMotion = useReducedMotion();
 
   const drawerRef = useRef<HTMLDivElement>(null);
@@ -60,18 +68,19 @@ export function Header() {
     const drawer = drawerRef.current;
     const previouslyFocused = document.activeElement as HTMLElement | null;
 
-    // Move focus into the drawer on open.
+    // Move focus to the close button on open.
+    const closeButton = drawer?.querySelector<HTMLElement>('button[aria-label="Закрыть меню"]');
     const focusables = drawer?.querySelectorAll<HTMLElement>(
       'a[href], button:not([disabled]), input, select, textarea, [tabindex]:not([tabindex="-1"])',
     );
-    focusables?.[0]?.focus();
+    (closeButton ?? focusables?.[0])?.focus();
 
     const onKey = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
         setOpen(false);
         return;
       }
-      if (event.key !== "Tab" || !drawer || !focusables) return;
+      if (event.key !== "Tab" || !drawer || !focusables?.length) return;
 
       const first = focusables[0];
       const last = focusables[focusables.length - 1];
@@ -89,13 +98,12 @@ export function Header() {
     return () => {
       document.body.style.overflow = originalOverflow;
       window.removeEventListener("keydown", onKey);
-      // Restore focus to the element that opened the drawer.
       previouslyFocused?.focus?.();
     };
   }, [open]);
 
-  // Force the solid state while the mobile menu is open so the drawer panel
-  // and its contents stay legible regardless of scroll position.
+  // Force the solid state while the mobile menu is open so the bar stays
+  // legible regardless of scroll position.
   const solid = scrolled || open;
 
   const drawerVariants: Variants = prefersReducedMotion
@@ -123,6 +131,119 @@ export function Header() {
         },
       };
 
+  const mobileMenu =
+    isClient &&
+    createPortal(
+      <AnimatePresence>
+        {open && (
+          <>
+            <motion.div
+              key="backdrop"
+              aria-hidden
+              onClick={() => setOpen(false)}
+              variants={backdropVariants}
+              initial="hidden"
+              animate="visible"
+              exit="hidden"
+              className="fixed inset-0 z-60 bg-brand-black/55 xl:hidden"
+            />
+            <motion.aside
+              key="drawer"
+              ref={drawerRef}
+              id="mobile-drawer"
+              role="dialog"
+              aria-modal="true"
+              aria-label="Мобильное меню"
+              variants={drawerVariants}
+              initial="hidden"
+              animate="visible"
+              exit="exit"
+              className="fixed inset-y-0 right-0 z-70 flex w-full max-w-sm flex-col bg-brand-white shadow-2xl xl:hidden"
+            >
+              <div className="flex h-16 shrink-0 items-center justify-between border-b border-brand-black/10 px-5">
+                <Link
+                  href="/"
+                  aria-label={siteConfig.name}
+                  onClick={() => setOpen(false)}
+                  className="flex items-center"
+                >
+                  <BrandLogo isDark className="h-8 w-auto" />
+                </Link>
+                <button
+                  type="button"
+                  aria-label="Закрыть меню"
+                  onClick={() => setOpen(false)}
+                  className="grid size-10 place-items-center rounded-md text-brand-black transition-colors hover:bg-brand-black/5 focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:outline-none"
+                >
+                  <X className="size-6" />
+                </button>
+              </div>
+
+              <motion.nav
+                className="flex flex-1 flex-col gap-1 overflow-y-auto px-3 py-4"
+                initial="hidden"
+                animate="visible"
+                variants={{
+                  visible: { transition: { staggerChildren: 0.04, delayChildren: 0.05 } },
+                }}
+              >
+                {navLinks.map((link) => (
+                  <motion.div key={link.href} variants={itemVariants}>
+                    <Link
+                      href={link.href}
+                      onClick={() => setOpen(false)}
+                      className="block rounded-md px-3 py-3 text-base font-medium text-brand-black/80 transition-colors hover:bg-brand-black/5 hover:text-brand-red focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:outline-none"
+                    >
+                      {link.label}
+                    </Link>
+                  </motion.div>
+                ))}
+
+                <motion.div variants={itemVariants} className="mt-4 px-3">
+                  <LanguageSwitcher solid />
+                </motion.div>
+              </motion.nav>
+
+              <motion.div
+                className="shrink-0 space-y-3 border-t border-brand-black/10 px-5 py-5"
+                initial="hidden"
+                animate="visible"
+                variants={{
+                  visible: { transition: { staggerChildren: 0.04, delayChildren: 0.12 } },
+                }}
+              >
+                <motion.a
+                  variants={itemVariants}
+                  href={siteConfig.phoneHref}
+                  className="flex items-center gap-3 rounded-md py-1 text-base font-semibold text-brand-black transition-colors hover:text-brand-red focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:outline-none"
+                >
+                  <Phone className="size-5 shrink-0" />
+                  <span className="flex flex-col leading-tight">
+                    <span>{siteConfig.phone}</span>
+                    {/* <span className="text-[11px] font-medium tracking-wide text-brand-black/55 uppercase">
+                      {siteConfig.workingHours}
+                    </span> */}
+                  </span>
+                </motion.a>
+
+                <motion.div variants={itemVariants}>
+                  <ButtonLink
+                    href={siteConfig.whatsappHref}
+                    className="w-full"
+                    onClick={() => setOpen(false)}
+                  >
+                    <MessageCircle className="size-4" />
+                    Написать в WhatsApp
+                  </ButtonLink>
+                </motion.div>
+              </motion.div>
+            </motion.aside>
+          </>
+        )}
+      </AnimatePresence>,
+      document.body,
+    );
+
   return (
     <header
       className={cn(
@@ -138,7 +259,7 @@ export function Header() {
           aria-label={siteConfig.name}
           className="flex shrink-0 items-center gap-2 transition-colors"
         >
-          <BrandLogo isDark={solid} className="h-full w-auto" />
+          <BrandLogo isDark={solid} className="h-8 w-auto xl:h-10" />
         </Link>
 
         <nav aria-label="Основная навигация" className="hidden items-center gap-6 xl:flex">
@@ -183,7 +304,7 @@ export function Header() {
 
         <button
           type="button"
-          aria-label="Меню"
+          aria-label={open ? "Закрыть меню" : "Меню"}
           aria-expanded={open}
           aria-controls="mobile-drawer"
           className={cn(
@@ -198,104 +319,7 @@ export function Header() {
         </button>
       </Container>
 
-      <AnimatePresence>
-        {open && (
-          <>
-            <motion.div
-              key="backdrop"
-              aria-hidden
-              onClick={() => setOpen(false)}
-              variants={backdropVariants}
-              initial="hidden"
-              animate="visible"
-              exit="hidden"
-              className="fixed inset-0 z-50 h-full w-full bg-brand-black/50 xl:hidden"
-            />
-            <motion.aside
-              key="drawer"
-              ref={drawerRef}
-              id="mobile-drawer"
-              role="dialog"
-              aria-modal="true"
-              aria-label="Мобильное меню"
-              variants={drawerVariants}
-              initial="hidden"
-              animate="visible"
-              exit="exit"
-              className="fixed top-0 right-0 bottom-0 z-50 flex w-full max-w-sm flex-col bg-brand-white shadow-2xl xl:hidden"
-            >
-              <motion.div
-                className="flex h-16 shrink-0 items-center justify-between px-5"
-                initial={{ opacity: 1 }}
-                animate={{ opacity: 1 }}
-              >
-                <span className="font-heading text-lg font-bold tracking-tight text-brand-black">
-                  Меню
-                </span>
-                <button
-                  type="button"
-                  aria-label="Закрыть меню"
-                  onClick={() => setOpen(false)}
-                  className="grid size-10 place-items-center rounded-md text-brand-black transition-colors hover:bg-brand-black/5 focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:outline-none"
-                >
-                  <X className="size-6" />
-                </button>
-              </motion.div>
-
-              <motion.nav
-                className="flex flex-1 flex-col gap-1 overflow-y-auto px-3 pb-4"
-                initial="hidden"
-                animate="visible"
-                variants={{
-                  visible: { transition: { staggerChildren: 0.04, delayChildren: 0.05 } },
-                }}
-              >
-                {navLinks.map((link) => (
-                  <motion.div key={link.href} variants={itemVariants}>
-                    <Link
-                      href={link.href}
-                      onClick={() => setOpen(false)}
-                      className="block rounded-md px-3 py-3 text-base font-medium text-brand-black/80 transition-colors hover:bg-brand-black/5 hover:text-brand-red focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:outline-none"
-                    >
-                      {link.label}
-                    </Link>
-                  </motion.div>
-                ))}
-
-                <motion.div variants={itemVariants} className="mt-4 px-3">
-                  <LanguageSwitcher solid={true} />
-                </motion.div>
-
-                <motion.div variants={itemVariants} className="mt-4 px-3">
-                  <a
-                    href={siteConfig.phoneHref}
-                    className="flex items-center gap-3 rounded-md py-2 text-base font-semibold text-brand-black transition-colors hover:text-brand-red focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:outline-none"
-                  >
-                    <Phone className="size-5" />
-                    <span className="flex flex-col leading-tight">
-                      <span>{siteConfig.phone}</span>
-                      <span className="text-[11px] font-medium tracking-wide text-brand-black/60 uppercase">
-                        {siteConfig.workingHours}
-                      </span>
-                    </span>
-                  </a>
-                </motion.div>
-
-                <motion.div variants={itemVariants} className="mt-3 px-3">
-                  <ButtonLink
-                    href={siteConfig.whatsappHref}
-                    className="w-full"
-                    onClick={() => setOpen(false)}
-                  >
-                    <MessageCircle className="size-4" />
-                    Написать в WhatsApp
-                  </ButtonLink>
-                </motion.div>
-              </motion.nav>
-            </motion.aside>
-          </>
-        )}
-      </AnimatePresence>
+      {mobileMenu}
     </header>
   );
 }

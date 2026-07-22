@@ -50,3 +50,30 @@ h5,
 h6 {
   font-family: var(--font-heading);
 }
+
+/* Hero Swiper controls */
+.hero-swiper .swiper {
+  min-height: 100svh;
+}
+
+.hero-swiper .swiper-slide {
+  height: auto;
+  min-height: 100svh;
+}
+
+.hero-swiper .swiper-pagination-bullet {
+  width: 0.5rem;
+  height: 0.5rem;
+  margin: 0 0.25rem !important;
+  background: rgb(255 255 255 / 0.4);
+  opacity: 1;
+  transition:
+    width 0.25s ease,
+    background-color 0.25s ease;
+}
+
+.hero-swiper .swiper-pagination-bullet-active {
+  width: 2rem;
+  border-radius: 9999px;
+  background: var(--color-brand-red);
+}

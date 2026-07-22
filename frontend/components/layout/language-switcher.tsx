@@ -75,7 +75,7 @@ export function LanguageSwitcher({ solid }: LanguageSwitcherProps) {
       {isOpen && (
         <div
           className={cn(
-            "absolute top-full right-0 z-50 mt-1 min-w-max overflow-hidden rounded-lg border shadow-lg transition-opacity",
+            "absolute top-full left-0 z-50 mt-1 min-w-max overflow-hidden rounded-lg border shadow-lg transition-opacity",
             solid
               ? "border-brand-black/15 bg-brand-white"
               : "border-brand-white/25 bg-brand-black/95",
