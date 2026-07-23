@@ -228,7 +228,7 @@ export function HeroSection() {
         </Swiper>
       </section>
 
-      <TrustStrip />
+      {/* <TrustStrip /> */}
     </>
   );
 }
