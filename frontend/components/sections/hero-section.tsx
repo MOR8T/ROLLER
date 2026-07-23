@@ -100,7 +100,7 @@ function HeroSlideContent({ slide, isFirst }: { slide: HeroSlide; isFirst: boole
               {slide.primaryCta.label}
               <ArrowRight className="size-5" />
             </ButtonLink>
-            {slide.secondaryCta ? (
+            {/* {slide.secondaryCta ? (
               <ButtonLink
                 href={slide.secondaryCta.href}
                 variant="outline"
@@ -118,7 +118,7 @@ function HeroSlideContent({ slide, isFirst }: { slide: HeroSlide; isFirst: boole
               >
                 Заказать звонок
               </ButtonLink>
-            )}
+            )} */}
           </div>
         </div>
       </Container>
