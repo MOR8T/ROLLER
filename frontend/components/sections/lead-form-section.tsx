@@ -12,7 +12,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { siteConfig } from "@/lib/site-config";
 import { cn } from "@/lib/utils";
 
-const cityOptions = ["Душанбе", "Худжант", "Вахдат"];
+const cityOptions = ["Душанбе", "Худжант"];
 const productTypes = ["ПВХ продукция", "Алюминиевая продукция", "Замер/консультация"];
 
 const trustPoints = [
