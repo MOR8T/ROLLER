@@ -108,9 +108,9 @@ export function Footer() {
             <BrandLogo isDark={false} className="h-12 w-auto" />
           </Link>
 
-          <p className="mt-5 text-sm leading-relaxed text-brand-white/70">{siteConfig.slogan.ru}</p>
+          <p className="mt-5 text-sm leading-relaxed text-brand-white/85">{siteConfig.slogan.ru}</p>
 
-          <p className="mt-6 text-xs font-medium tracking-[0.18em] text-brand-white/45 uppercase">
+          <p className="mt-6 text-xs font-medium tracking-[0.18em] text-brand-white/85 uppercase">
             На рынке с {siteConfig.foundedYear} года
           </p>
         </div>
@@ -124,7 +124,7 @@ export function Footer() {
               <li key={link.href}>
                 <Link
                   href={link.href}
-                  className="inline-block rounded-md py-1.5 text-brand-white/70 transition-colors hover:text-brand-red focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:ring-offset-brand-black focus-visible:outline-none"
+                  className="inline-block rounded-md py-1.5 text-brand-white/85 transition-colors hover:text-brand-red focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:ring-offset-brand-black focus-visible:outline-none"
                 >
                   {link.label}
                 </Link>
@@ -137,7 +137,7 @@ export function Footer() {
           <h2 className="font-heading text-sm font-semibold tracking-[0.18em] text-brand-white uppercase">
             Контакты
           </h2>
-          <ul className="mt-5 space-y-4 text-brand-white/70">
+          <ul className="mt-5 space-y-4 text-brand-white/85">
             <li className="flex items-start gap-3">
               <MapPin className="mt-0.5 size-4 shrink-0 text-brand-red" aria-hidden />
               <a
@@ -205,7 +205,7 @@ export function Footer() {
       </Container>
 
       <div className="border-t border-brand-white/10">
-        <Container className="flex flex-col items-center gap-4 py-6 text-xs text-brand-white/50 sm:flex-row sm:justify-between">
+        <Container className="flex flex-col items-center gap-4 py-6 text-xs text-brand-white/85 sm:flex-row sm:justify-between">
           <p>
             © {year} {siteConfig.name}. Все права защищены.
           </p>
