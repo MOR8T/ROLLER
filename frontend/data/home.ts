@@ -134,7 +134,7 @@ export const showcaseProducts: ShowcaseProduct[] = [
     href: "/catalog/aluminium",
   },
   {
-    name: "HOLODNIY ALD-45",
+    name: "ALD-45",
     type: "Алюминиевая система",
     badge: "Эконом сегмент",
     badgeVariant: "outline",
