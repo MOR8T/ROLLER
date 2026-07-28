@@ -21,7 +21,7 @@ interface LanguageSwitcherProps {
 // Map locale codes to display labels
 const localeLabels: Record<Locale, string> = {
   ru: "Русский",
-  tg: "Таджикский",
+  tg: "Тоҷикӣ",
   en: "English",
   tr: "Türkçe",
 };
