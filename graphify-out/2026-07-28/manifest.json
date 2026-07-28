@@ -70,8 +70,8 @@
     "semantic_hash": "bf477dd7ced857f44384a1a42fdf6ae5"
   },
   "frontend/components/sections/partners-section.tsx": {
-    "mtime": 1785211840.5266023,
-    "ast_hash": "36f7e97868c2b6a1bb9cc7f3bd5ddf1d",
+    "mtime": 1785175107.2655547,
+    "ast_hash": "8f0ffdccd68f8cdc725334c9d34170f3",
     "semantic_hash": ""
   },
   "frontend/components/sections/product-card.tsx": {

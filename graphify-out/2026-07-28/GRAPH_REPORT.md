@@ -1,16 +1,16 @@
-# Graph Report - Praviz  (2026-07-28)
+# Graph Report - Praviz  (2026-07-27)
 
 ## Corpus Check
-- 45 files · ~243,148 words
+- 45 files · ~243,146 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 452 nodes · 655 edges · 32 communities (28 shown, 4 thin omitted)
+- 452 nodes · 657 edges · 32 communities (27 shown, 5 thin omitted)
 - Extraction: 98% EXTRACTED · 2% INFERRED · 0% AMBIGUOUS · INFERRED: 12 edges (avg confidence: 0.7)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `52c2caec`
+- Built from commit: `6d804c09`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -80,15 +80,15 @@
 - **Core ROLLER site capabilities from brief** — brif_of_website_product_catalog, brif_of_website_cost_calculator, brif_of_website_admin_panel, brif_of_website_seo [EXTRACTED 1.00]
 - **ROLLER brand colour tokens** — roller_fullscreen_colour_preview_graphite, roller_fullscreen_colour_preview_roller_red, roller_fullscreen_colour_preview_warm_off_white, roller_fullscreen_colour_preview_dark_text, roller_fullscreen_colour_preview_soft_red [EXTRACTED 1.00]
 
-## Communities (32 total, 4 thin omitted)
+## Communities (32 total, 5 thin omitted)
 
 ### Community 0 - "Site Shell Layout"
 Cohesion: 0.25
 Nodes (7): Button(), ButtonLinkProps, ButtonProps, Size, sizes, Variant, variants
 
 ### Community 1 - "Home Page Sections"
-Cohesion: 0.06
-Nodes (61): WhatsAppFab(), HIGHLIGHTS, NOTE: No dedicated company/production photo is available yet., ContactCard, contactCards, ContactsSection(), socialLinks, dateFormatter (+53 more)
+Cohesion: 0.05
+Nodes (69): WhatsAppFab(), AboutSection(), HIGHLIGHTS, NOTE: No dedicated company/production photo is available yet., AdvantagesSection(), CategoriesSection(), ContactCard, contactCards (+61 more)
 
 ### Community 2 - "Hero and Product Cards"
 Cohesion: 0.11
@@ -190,14 +190,10 @@ Nodes (6): STELLA, Stella logo color palette, Premium door and window profiles, 
 Cohesion: 0.10
 Nodes (19): ProductCard(), ProductCardProps, Badge(), BadgeProps, BadgeVariant, Article, Category, HeroSlide (+11 more)
 
-### Community 30 - "hero-section.tsx"
-Cohesion: 0.13
-Nodes (10): AboutSection(), AdvantagesSection(), CategoriesSection(), fallbackSlides, HeroSection(), NewsSection(), PartnersSection(), ProductsSection() (+2 more)
-
 ## Knowledge Gaps
-- **194 isolated node(s):** `LanguageSwitcherProps`, `localeLabels`, `Partner`, `partners`, `serviceHighlights` (+189 more)
+- **193 isolated node(s):** `LanguageSwitcherProps`, `localeLabels`, `Partner`, `serviceHighlights`, `heroSlides` (+188 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **4 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **5 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
@@ -207,9 +203,9 @@ _Questions this graph is uniquely positioned to answer:_
 - **Why does `devDependencies` connect `Lint and Tailwind Tooling` to `Frontend Dependencies`?**
   _High betweenness centrality (0.007) - this node is a cross-community bridge._
 - **What connects `LanguageSwitcherProps`, `localeLabels`, `Partner` to the rest of the system?**
-  _194 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _193 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Home Page Sections` be split into smaller, more focused modules?**
-  _Cohesion score 0.05965324713488099 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.05307709906199954 - nodes in this community are weakly interconnected._
 - **Should `Hero and Product Cards` be split into smaller, more focused modules?**
   _Cohesion score 0.11076923076923077 - nodes in this community are weakly interconnected._
 - **Should `ROLLER Brief Spec` be split into smaller, more focused modules?**

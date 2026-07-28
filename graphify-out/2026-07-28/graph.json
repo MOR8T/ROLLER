@@ -56,37 +56,15 @@
   },
   "nodes": [
     {
-      "label": "partners-section.tsx",
-      "file_type": "code",
-      "source_file": "frontend/components/sections/partners-section.tsx",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "frontend_components_sections_partners_section",
-      "community": 30,
-      "community_name": "hero-section.tsx",
-      "norm_label": "partners-section.tsx"
-    },
-    {
-      "label": "PartnersSection()",
-      "file_type": "code",
-      "source_file": "frontend/components/sections/partners-section.tsx",
-      "source_location": "L10",
-      "_origin": "ast",
-      "id": "frontend_components_sections_partners_section_partnerssection",
-      "community": 30,
-      "community_name": "hero-section.tsx",
-      "norm_label": "partnerssection()"
-    },
-    {
       "label": "language-switcher.tsx",
       "file_type": "code",
       "source_file": "frontend/components/layout/language-switcher.tsx",
       "source_location": "L1",
       "_origin": "ast",
+      "id": "frontend_components_layout_language_switcher",
       "community": 31,
       "community_name": "language-switcher.tsx",
-      "norm_label": "language-switcher.tsx",
-      "id": "frontend_components_layout_language_switcher"
+      "norm_label": "language-switcher.tsx"
     },
     {
       "label": "LanguageSwitcherProps",
@@ -94,10 +72,10 @@
       "source_file": "frontend/components/layout/language-switcher.tsx",
       "source_location": "L17",
       "_origin": "ast",
+      "id": "frontend_components_layout_language_switcher_languageswitcherprops",
       "community": 31,
       "community_name": "language-switcher.tsx",
-      "norm_label": "languageswitcherprops",
-      "id": "frontend_components_layout_language_switcher_languageswitcherprops"
+      "norm_label": "languageswitcherprops"
     },
     {
       "label": "localeLabels",
@@ -105,10 +83,10 @@
       "source_file": "frontend/components/layout/language-switcher.tsx",
       "source_location": "L22",
       "_origin": "ast",
+      "id": "frontend_components_layout_language_switcher_localelabels",
       "community": 31,
       "community_name": "language-switcher.tsx",
-      "norm_label": "localelabels",
-      "id": "frontend_components_layout_language_switcher_localelabels"
+      "norm_label": "localelabels"
     },
     {
       "label": "LanguageSwitcher()",
@@ -116,10 +94,10 @@
       "source_file": "frontend/components/layout/language-switcher.tsx",
       "source_location": "L29",
       "_origin": "ast",
+      "id": "frontend_components_layout_language_switcher_languageswitcher",
       "community": 31,
       "community_name": "language-switcher.tsx",
-      "norm_label": "languageswitcher()",
-      "id": "frontend_components_layout_language_switcher_languageswitcher"
+      "norm_label": "languageswitcher()"
     },
     {
       "label": "home.ts",
@@ -127,10 +105,10 @@
       "source_file": "frontend/data/home.ts",
       "source_location": "L1",
       "_origin": "ast",
+      "id": "frontend_data_home",
       "community": 1,
       "community_name": "Home Page Sections",
-      "norm_label": "home.ts",
-      "id": "frontend_data_home"
+      "norm_label": "home.ts"
     },
     {
       "label": "productCategories",
@@ -138,10 +116,10 @@
       "source_file": "frontend/data/home.ts",
       "source_location": "L13",
       "_origin": "ast",
+      "id": "frontend_data_home_productcategories",
       "community": 1,
       "community_name": "Home Page Sections",
-      "norm_label": "productcategories",
-      "id": "frontend_data_home_productcategories"
+      "norm_label": "productcategories"
     },
     {
       "label": "advantages",
@@ -149,10 +127,10 @@
       "source_file": "frontend/data/home.ts",
       "source_location": "L32",
       "_origin": "ast",
+      "id": "frontend_data_home_advantages",
       "community": 1,
       "community_name": "Home Page Sections",
-      "norm_label": "advantages",
-      "id": "frontend_data_home_advantages"
+      "norm_label": "advantages"
     },
     {
       "label": "showcaseProducts",
@@ -160,10 +138,10 @@
       "source_file": "frontend/data/home.ts",
       "source_location": "L70",
       "_origin": "ast",
+      "id": "frontend_data_home_showcaseproducts",
       "community": 1,
       "community_name": "Home Page Sections",
-      "norm_label": "showcaseproducts",
-      "id": "frontend_data_home_showcaseproducts"
+      "norm_label": "showcaseproducts"
     },
     {
       "label": "CompanyStat",
@@ -171,10 +149,10 @@
       "source_file": "frontend/data/home.ts",
       "source_location": "L154",
       "_origin": "ast",
+      "id": "frontend_data_home_companystat",
       "community": 1,
       "community_name": "Home Page Sections",
-      "norm_label": "companystat",
-      "id": "frontend_data_home_companystat"
+      "norm_label": "companystat"
     },
     {
       "label": "companyStats",
@@ -182,10 +160,10 @@
       "source_file": "frontend/data/home.ts",
       "source_location": "L160",
       "_origin": "ast",
+      "id": "frontend_data_home_companystats",
       "community": 1,
       "community_name": "Home Page Sections",
-      "norm_label": "companystats",
-      "id": "frontend_data_home_companystats"
+      "norm_label": "companystats"
     },
     {
       "label": "Partner",
@@ -193,10 +171,10 @@
       "source_file": "frontend/data/home.ts",
       "source_location": "L171",
       "_origin": "ast",
+      "id": "frontend_data_home_partner",
       "community": 1,
       "community_name": "Home Page Sections",
-      "norm_label": "partner",
-      "id": "frontend_data_home_partner"
+      "norm_label": "partner"
     },
     {
       "label": "partners",
@@ -204,10 +182,10 @@
       "source_file": "frontend/data/home.ts",
       "source_location": "L176",
       "_origin": "ast",
+      "id": "frontend_data_home_partners",
       "community": 1,
       "community_name": "Home Page Sections",
-      "norm_label": "partners",
-      "id": "frontend_data_home_partners"
+      "norm_label": "partners"
     },
     {
       "label": "serviceHighlights",
@@ -215,10 +193,10 @@
       "source_file": "frontend/data/home.ts",
       "source_location": "L211",
       "_origin": "ast",
+      "id": "frontend_data_home_servicehighlights",
       "community": 1,
       "community_name": "Home Page Sections",
-      "norm_label": "servicehighlights",
-      "id": "frontend_data_home_servicehighlights"
+      "norm_label": "servicehighlights"
     },
     {
       "label": "heroSlides",
@@ -226,10 +204,10 @@
       "source_file": "frontend/data/home.ts",
       "source_location": "L218",
       "_origin": "ast",
+      "id": "frontend_data_home_heroslides",
       "community": 1,
       "community_name": "Home Page Sections",
-      "norm_label": "heroslides",
-      "id": "frontend_data_home_heroslides"
+      "norm_label": "heroslides"
     },
     {
       "label": "projectTeasers",
@@ -237,10 +215,10 @@
       "source_file": "frontend/data/home.ts",
       "source_location": "L261",
       "_origin": "ast",
+      "id": "frontend_data_home_projectteasers",
       "community": 1,
       "community_name": "Home Page Sections",
-      "norm_label": "projectteasers",
-      "id": "frontend_data_home_projectteasers"
+      "norm_label": "projectteasers"
     },
     {
       "label": "newsTeasers",
@@ -248,10 +226,32 @@
       "source_file": "frontend/data/home.ts",
       "source_location": "L309",
       "_origin": "ast",
+      "id": "frontend_data_home_newsteasers",
       "community": 1,
       "community_name": "Home Page Sections",
-      "norm_label": "newsteasers",
-      "id": "frontend_data_home_newsteasers"
+      "norm_label": "newsteasers"
+    },
+    {
+      "label": "partners-section.tsx",
+      "file_type": "code",
+      "source_file": "frontend/components/sections/partners-section.tsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "community": 1,
+      "community_name": "Home Page Sections",
+      "norm_label": "partners-section.tsx",
+      "id": "frontend_components_sections_partners_section"
+    },
+    {
+      "label": "PartnersSection()",
+      "file_type": "code",
+      "source_file": "frontend/components/sections/partners-section.tsx",
+      "source_location": "L10",
+      "_origin": "ast",
+      "community": 1,
+      "community_name": "Home Page Sections",
+      "norm_label": "partnerssection()",
+      "id": "frontend_components_sections_partners_section_partnerssection"
     },
     {
       "label": "hero-section.tsx",
@@ -710,8 +710,8 @@
       "source_file": "frontend/app/page.tsx",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 30,
-      "community_name": "hero-section.tsx",
+      "community": 1,
+      "community_name": "Home Page Sections",
       "norm_label": "page.tsx",
       "id": "frontend_app_page"
     },
@@ -721,8 +721,8 @@
       "source_file": "frontend/app/page.tsx",
       "source_location": "L13",
       "_origin": "ast",
-      "community": 30,
-      "community_name": "hero-section.tsx",
+      "community": 1,
+      "community_name": "Home Page Sections",
       "norm_label": "home()",
       "id": "frontend_app_page_home"
     },
@@ -776,8 +776,8 @@
       "source_file": "frontend/components/sections/about-section.tsx",
       "source_location": "L33",
       "_origin": "ast",
-      "community": 30,
-      "community_name": "hero-section.tsx",
+      "community": 1,
+      "community_name": "Home Page Sections",
       "norm_label": "aboutsection()",
       "id": "frontend_components_sections_about_section_aboutsection"
     },
@@ -809,8 +809,8 @@
       "source_file": "frontend/components/sections/advantages-section.tsx",
       "source_location": "L13",
       "_origin": "ast",
-      "community": 30,
-      "community_name": "hero-section.tsx",
+      "community": 1,
+      "community_name": "Home Page Sections",
       "norm_label": "advantagessection()",
       "id": "frontend_components_sections_advantages_section_advantagessection"
     },
@@ -831,8 +831,8 @@
       "source_file": "frontend/components/sections/categories-section.tsx",
       "source_location": "L10",
       "_origin": "ast",
-      "community": 30,
-      "community_name": "hero-section.tsx",
+      "community": 1,
+      "community_name": "Home Page Sections",
       "norm_label": "categoriessection()",
       "id": "frontend_components_sections_categories_section_categoriessection"
     },
@@ -963,8 +963,8 @@
       "source_file": "frontend/components/sections/news-section.tsx",
       "source_location": "L125",
       "_origin": "ast",
-      "community": 30,
-      "community_name": "hero-section.tsx",
+      "community": 1,
+      "community_name": "Home Page Sections",
       "norm_label": "newssection()",
       "id": "frontend_components_sections_news_section_newssection"
     },
@@ -1018,8 +1018,8 @@
       "source_file": "frontend/components/sections/products-section.tsx",
       "source_location": "L13",
       "_origin": "ast",
-      "community": 30,
-      "community_name": "hero-section.tsx",
+      "community": 1,
+      "community_name": "Home Page Sections",
       "norm_label": "productssection()",
       "id": "frontend_components_sections_products_section_productssection"
     },
@@ -1051,8 +1051,8 @@
       "source_file": "frontend/components/sections/projects-section.tsx",
       "source_location": "L91",
       "_origin": "ast",
-      "community": 30,
-      "community_name": "hero-section.tsx",
+      "community": 1,
+      "community_name": "Home Page Sections",
       "norm_label": "projectssection()",
       "id": "frontend_components_sections_projects_section_projectssection"
     },
@@ -1128,8 +1128,8 @@
       "source_file": "frontend/components/sections/stats-section.tsx",
       "source_location": "L46",
       "_origin": "ast",
-      "community": 30,
-      "community_name": "hero-section.tsx",
+      "community": 1,
+      "community_name": "Home Page Sections",
       "norm_label": "statssection()",
       "id": "frontend_components_sections_stats_section_statssection"
     },
@@ -5141,50 +5141,15 @@
   ],
   "links": [
     {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/app/page.tsx",
-      "source_location": "L8",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "frontend_app_page",
-      "target": "frontend_components_sections_partners_section"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/components/sections/partners-section.tsx",
-      "source_location": "L10",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_components_sections_partners_section",
-      "target": "frontend_components_sections_partners_section_partnerssection",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/app/page.tsx",
-      "source_location": "L8",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "frontend_app_page",
-      "target": "frontend_components_sections_partners_section_partnerssection"
-    },
-    {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "frontend/components/layout/language-switcher.tsx",
       "source_location": "L29",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "frontend_components_layout_language_switcher",
-      "target": "frontend_components_layout_language_switcher_languageswitcher"
+      "target": "frontend_components_layout_language_switcher_languageswitcher",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -5193,9 +5158,9 @@
       "source_location": "L17",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "frontend_components_layout_language_switcher",
-      "target": "frontend_components_layout_language_switcher_languageswitcherprops"
+      "target": "frontend_components_layout_language_switcher_languageswitcherprops",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -5204,9 +5169,9 @@
       "source_location": "L22",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "frontend_components_layout_language_switcher",
-      "target": "frontend_components_layout_language_switcher_localelabels"
+      "target": "frontend_components_layout_language_switcher_localelabels",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
@@ -5242,6 +5207,18 @@
       "_origin": "ast",
       "confidence_score": 1.0,
       "source": "frontend_components_sections_news_section",
+      "target": "frontend_data_home"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/components/sections/partners-section.tsx",
+      "source_location": "L8",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "frontend_components_sections_partners_section",
       "target": "frontend_data_home"
     },
     {
@@ -5287,9 +5264,9 @@
       "source_location": "L32",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "frontend_data_home",
-      "target": "frontend_data_home_advantages"
+      "target": "frontend_data_home_advantages",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -5298,9 +5275,9 @@
       "source_location": "L154",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "frontend_data_home",
-      "target": "frontend_data_home_companystat"
+      "target": "frontend_data_home_companystat",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -5309,9 +5286,9 @@
       "source_location": "L160",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "frontend_data_home",
-      "target": "frontend_data_home_companystats"
+      "target": "frontend_data_home_companystats",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -5320,9 +5297,9 @@
       "source_location": "L218",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "frontend_data_home",
-      "target": "frontend_data_home_heroslides"
+      "target": "frontend_data_home_heroslides",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -5331,9 +5308,9 @@
       "source_location": "L309",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "frontend_data_home",
-      "target": "frontend_data_home_newsteasers"
+      "target": "frontend_data_home_newsteasers",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -5342,9 +5319,9 @@
       "source_location": "L171",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "frontend_data_home",
-      "target": "frontend_data_home_partner"
+      "target": "frontend_data_home_partner",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -5353,9 +5330,9 @@
       "source_location": "L176",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "frontend_data_home",
-      "target": "frontend_data_home_partners"
+      "target": "frontend_data_home_partners",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -5364,9 +5341,9 @@
       "source_location": "L13",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "frontend_data_home",
-      "target": "frontend_data_home_productcategories"
+      "target": "frontend_data_home_productcategories",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -5375,9 +5352,9 @@
       "source_location": "L261",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "frontend_data_home",
-      "target": "frontend_data_home_projectteasers"
+      "target": "frontend_data_home_projectteasers",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -5386,9 +5363,9 @@
       "source_location": "L211",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "frontend_data_home",
-      "target": "frontend_data_home_servicehighlights"
+      "target": "frontend_data_home_servicehighlights",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -5397,9 +5374,9 @@
       "source_location": "L70",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "frontend_data_home",
-      "target": "frontend_data_home_showcaseproducts"
+      "target": "frontend_data_home_showcaseproducts",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -5465,6 +5442,18 @@
       "relation": "imports",
       "context": "import",
       "confidence": "EXTRACTED",
+      "source_file": "frontend/components/sections/partners-section.tsx",
+      "source_location": "L8",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "frontend_components_sections_partners_section",
+      "target": "frontend_data_home_partners"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
       "source_file": "frontend/components/sections/projects-section.tsx",
       "source_location": "L8",
       "weight": 1.0,
@@ -5484,6 +5473,41 @@
       "confidence_score": 1.0,
       "source": "frontend_components_sections_news_section",
       "target": "frontend_data_home_newsteasers"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/app/page.tsx",
+      "source_location": "L8",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "frontend_app_page",
+      "target": "frontend_components_sections_partners_section"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/components/sections/partners-section.tsx",
+      "source_location": "L10",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "frontend_components_sections_partners_section",
+      "target": "frontend_components_sections_partners_section_partnerssection"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/app/page.tsx",
+      "source_location": "L8",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "frontend_app_page",
+      "target": "frontend_components_sections_partners_section_partnerssection"
     },
     {
       "relation": "imports_from",
@@ -11882,5 +11906,5 @@
       "weight": 1.0
     }
   ],
-  "built_at_commit": "52c2caece31fa4fa87fb84a7907f2190b6114356"
+  "built_at_commit": "6d804c0984c41a75035d7b34b2e8e1a722b2a3fe"
 }
