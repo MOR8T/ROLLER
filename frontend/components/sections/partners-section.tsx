@@ -30,7 +30,7 @@ export function PartnersSection() {
                       className="flex min-h-24 items-center justify-center p-3 [&_svg]:h-14 [&_svg]:w-full [&_svg]:max-w-[180px]"
                       aria-label={partner.name}
                       role="img"
-                      dangerouslySetInnerHTML={{ __html: partner.logo }}
+                      dangerouslySetInnerHTML={{ __html: partner.logo || '' }}
                     />
                   ) : (
                     <div className="flex min-h-24 w-full items-center justify-center px-4 text-center">
