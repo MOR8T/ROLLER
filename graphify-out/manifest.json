@@ -205,9 +205,9 @@
     "semantic_hash": ""
   },
   "README.md": {
-    "mtime": 1784200682.5480578,
-    "ast_hash": "e716abc42a6f9648024854ba3d9c9fdd",
-    "semantic_hash": "e716abc42a6f9648024854ba3d9c9fdd"
+    "mtime": 1785564326.88234,
+    "ast_hash": "e3dd2a01c2aca200e95dd0486f8b016c",
+    "semantic_hash": ""
   },
   "ROLLER_fullscreen_colour_preview.html": {
     "mtime": 1784615269.9616735,
@@ -225,9 +225,9 @@
     "semantic_hash": "5c27369b226fcf2be8a6cfe52224e767"
   },
   "frontend/README.md": {
-    "mtime": 1784479538.4308283,
-    "ast_hash": "f15aaa42d5d299d091b1171097ea56ad",
-    "semantic_hash": "f15aaa42d5d299d091b1171097ea56ad"
+    "mtime": 1785565301.6462774,
+    "ast_hash": "30c84a4fddaf5fcff0d73804d91634bc",
+    "semantic_hash": ""
   },
   "frontend/public/hero/hero-main.png": {
     "mtime": 1784533738.117328,
@@ -313,5 +313,20 @@
     "mtime": 1784533738.1276312,
     "ast_hash": "4ead4deb7dac1e80e722c080b0645836",
     "semantic_hash": "4ead4deb7dac1e80e722c080b0645836"
+  },
+  ".claude/settings.json": {
+    "mtime": 1785565006.5602531,
+    "ast_hash": "f90550e90992e2a2d92448c2c69cf7d0",
+    "semantic_hash": ""
+  },
+  ".claude/settings.local.json": {
+    "mtime": 1785564880.475523,
+    "ast_hash": "d6bb5aee56a0ef9d932d9a09ed348281",
+    "semantic_hash": ""
+  },
+  "CLAUDE.md": {
+    "mtime": 1785565006.5596642,
+    "ast_hash": "4c104d66fa62dc47cfadafc15bac8d7b",
+    "semantic_hash": ""
   }
 }
