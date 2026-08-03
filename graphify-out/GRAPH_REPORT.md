@@ -1,16 +1,16 @@
-# Graph Report - Praviz  (2026-08-01)
+# Graph Report - Praviz  (2026-08-03)
 
 ## Corpus Check
-- 48 files · ~246,622 words
+- 48 files · ~246,625 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 466 nodes · 668 edges · 33 communities (28 shown, 5 thin omitted)
+- 466 nodes · 739 edges · 31 communities (28 shown, 3 thin omitted)
 - Extraction: 98% EXTRACTED · 2% INFERRED · 0% AMBIGUOUS · INFERRED: 12 edges (avg confidence: 0.7)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `f486d4fa`
+- Built from commit: `621ac11b`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -45,19 +45,17 @@
 - Next.js Config
 - PostCSS Config
 - index.ts
-- hero-section.tsx
-- language-switcher.tsx
 - CLAUDE.md
 
 ## God Nodes (most connected - your core abstractions)
-1. `cn()` - 34 edges
+1. `cn()` - 42 edges
 2. `compilerOptions` - 16 edges
-3. `ROLLER` - 15 edges
-4. `Reveal()` - 11 edges
-5. `SectionHeading()` - 10 edges
-6. `Container()` - 10 edges
-7. `RevealItem()` - 10 edges
-8. `Section()` - 10 edges
+3. `Container()` - 15 edges
+4. `ROLLER` - 15 edges
+5. `Reveal()` - 13 edges
+6. `Section()` - 12 edges
+7. `SectionHeading()` - 11 edges
+8. `RevealItem()` - 11 edges
 9. `ROLLER colour palette` - 10 edges
 10. `MediaFrame()` - 8 edges
 
@@ -66,12 +64,12 @@
   ROLLER_fullscreen_colour_preview.html → Brif_of_website.md
 - `ROLLER root README` --references--> `ROLLER`  [EXTRACTED]
   README.md → Brif_of_website.md
-- `ProjectTile()` --calls--> `cn()`  [EXTRACTED]
-  frontend/components/sections/projects-section.tsx → frontend/lib/utils.ts
-- `WhatsAppFab()` --calls--> `cn()`  [EXTRACTED]
-  frontend/components/layout/whatsapp-fab.tsx → frontend/lib/utils.ts
-- `SectionHeading()` --calls--> `cn()`  [EXTRACTED]
-  frontend/components/sections/section-heading.tsx → frontend/lib/utils.ts
+- `HeroControls()` --calls--> `cn()`  [EXTRACTED]
+  frontend/components/sections/hero-section.tsx → frontend/lib/utils.ts
+- `Header()` --calls--> `cn()`  [EXTRACTED]
+  frontend/components/layout/header.tsx → frontend/lib/utils.ts
+- `LanguageSwitcher()` --calls--> `cn()`  [EXTRACTED]
+  frontend/components/layout/language-switcher.tsx → frontend/lib/utils.ts
 
 ## Import Cycles
 - None detected.
@@ -81,19 +79,19 @@
 - **Core ROLLER site capabilities from brief** — brif_of_website_product_catalog, brif_of_website_cost_calculator, brif_of_website_admin_panel, brif_of_website_seo [EXTRACTED 1.00]
 - **ROLLER brand colour tokens** — roller_fullscreen_colour_preview_graphite, roller_fullscreen_colour_preview_roller_red, roller_fullscreen_colour_preview_warm_off_white, roller_fullscreen_colour_preview_dark_text, roller_fullscreen_colour_preview_soft_red [EXTRACTED 1.00]
 
-## Communities (33 total, 5 thin omitted)
+## Communities (31 total, 3 thin omitted)
 
 ### Community 0 - "Site Shell Layout"
 Cohesion: 0.08
-Nodes (31): Badge(), BadgeProps, BadgeVariant, BrandLogo(), BrandLogoProps, Button(), ButtonLink(), ButtonLinkProps (+23 more)
+Nodes (34): cityOptions, Field(), LeadFormSection(), productTypes, trustPoints, ProjectTile(), Badge(), BadgeProps (+26 more)
 
 ### Community 1 - "Home Page Sections"
-Cohesion: 0.07
-Nodes (51): AboutSection(), HIGHLIGHTS, NOTE: No dedicated company/production photo is available yet., AdvantagesSection(), CategoriesSection(), ContactCard, contactCards, ContactsSection() (+43 more)
+Cohesion: 0.10
+Nodes (38): AboutSection(), HIGHLIGHTS, NOTE: No dedicated company/production photo is available yet., AdvantagesSection(), CategoriesSection(), ContactCard, contactCards, ContactsSection() (+30 more)
 
 ### Community 2 - "Hero and Product Cards"
-Cohesion: 0.11
-Nodes (20): chakraPetch, metadata, montserrat, Footer(), InstagramIcon(), TelegramIcon(), WhatsAppIcon(), emptySubscribe() (+12 more)
+Cohesion: 0.13
+Nodes (21): chakraPetch, metadata, montserrat, Footer(), InstagramIcon(), TelegramIcon(), WhatsAppIcon(), emptySubscribe() (+13 more)
 
 ### Community 3 - "ROLLER Brief Spec"
 Cohesion: 0.07
@@ -188,32 +186,32 @@ Cohesion: 0.38
 Nodes (6): STELLA, Stella logo color palette, Premium door and window profiles, Registered trademark symbol, PREMIUM DOOR AND WINDOW PROFILES, Window/door icon mark
 
 ### Community 29 - "index.ts"
-Cohesion: 0.15
-Nodes (12): Article, Category, HeroSlide, Lead, Material, NewsTeaser, Partner, Product (+4 more)
+Cohesion: 0.07
+Nodes (28): fallbackSlides, HeroControls(), HeroSection(), ProductCard(), ProductCardProps, advantages, heroSlides, newsTeasers (+20 more)
 
 ### Community 32 - "CLAUDE.md"
 Cohesion: 0.14
 Nodes (12): Architecture, Component Organization, Current State, Data Layer, Design System, Development Commands, graphify, Graphify Knowledge Graph (+4 more)
 
 ## Knowledge Gaps
-- **205 isolated node(s):** `Project Overview`, `Repository Layout`, `Development Commands`, `Tech Stack`, `Next.js 16 Warning` (+200 more)
+- **199 isolated node(s):** `semi`, `singleQuote`, `trailingComma`, `printWidth`, `tabWidth` (+194 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **5 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **3 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `cn()` connect `Site Shell Layout` to `Home Page Sections`, `Hero and Product Cards`?**
-  _High betweenness centrality (0.034) - this node is a cross-community bridge._
+- **Why does `cn()` connect `Site Shell Layout` to `Home Page Sections`, `Hero and Product Cards`, `index.ts`?**
+  _High betweenness centrality (0.033) - this node is a cross-community bridge._
 - **Why does `devDependencies` connect `Lint and Tailwind Tooling` to `Frontend Dependencies`?**
   _High betweenness centrality (0.006) - this node is a cross-community bridge._
-- **What connects `Project Overview`, `Repository Layout`, `Development Commands` to the rest of the system?**
-  _205 weakly-connected nodes found - possible documentation gaps or missing edges._
+- **Why does `Container()` connect `Home Page Sections` to `Site Shell Layout`, `Hero and Product Cards`, `index.ts`?**
+  _High betweenness centrality (0.006) - this node is a cross-community bridge._
+- **What connects `semi`, `singleQuote`, `trailingComma` to the rest of the system?**
+  _199 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Site Shell Layout` be split into smaller, more focused modules?**
-  _Cohesion score 0.07564102564102564 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.07781649245063879 - nodes in this community are weakly interconnected._
 - **Should `Home Page Sections` be split into smaller, more focused modules?**
-  _Cohesion score 0.06734867860187553 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.10303030303030303 - nodes in this community are weakly interconnected._
 - **Should `Hero and Product Cards` be split into smaller, more focused modules?**
-  _Cohesion score 0.10846560846560846 - nodes in this community are weakly interconnected._
-- **Should `ROLLER Brief Spec` be split into smaller, more focused modules?**
-  _Cohesion score 0.06722689075630252 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.12561576354679804 - nodes in this community are weakly interconnected._

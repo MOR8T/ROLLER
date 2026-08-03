@@ -65,7 +65,7 @@ h6 {
   width: 0.5rem;
   height: 0.5rem;
   margin: 0 0.25rem !important;
-  background: rgb(255 255 255 / 0.4);
+  background: rgb(29 29 27 / 0.25);
   opacity: 1;
   transition:
     width 0.25s ease,

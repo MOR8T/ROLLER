@@ -47,12 +47,12 @@ export function AboutSection() {
               containerClassName="rounded-[2rem] border border-brand-black/10 shadow-[0_30px_80px_-40px_rgba(29,29,27,0.45)]"
               className="object-cover"
             />
-            <div className="absolute right-0 -bottom-6 max-w-xs rounded-2xl bg-brand-black p-3 text-brand-white shadow-xl sm:right-6 sm:rounded-3xl sm:p-4 md:p-5">
+            <div className="absolute right-0 -bottom-6 max-w-xs rounded-2xl border border-brand-black/8 bg-brand-white p-3 text-brand-black shadow-xl sm:right-6 sm:rounded-3xl sm:p-4 md:p-5">
               <Factory className="size-5 text-brand-red sm:size-6 md:size-7" />
-              <p className="mt-2 font-heading text-2xl font-bold text-brand-white sm:mt-3 sm:text-3xl md:text-4xl">
+              <p className="mt-2 font-heading text-2xl font-bold text-brand-black sm:mt-3 sm:text-3xl md:text-4xl">
                 {years}
               </p>
-              <p className="mt-1 text-xs leading-5 font-medium text-brand-white/75 sm:text-sm sm:leading-6">
+              <p className="mt-1 text-xs leading-5 font-medium text-brand-black/70 sm:text-sm sm:leading-6">
                 лет собственного производства профильных систем
               </p>
             </div>

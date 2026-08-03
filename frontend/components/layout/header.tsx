@@ -39,15 +39,13 @@ function useIsClient() {
  *  - right (mobile): burger -> full-height right-side drawer (animated, portaled)
  *
  * Two visual states, coordinated with the hero section:
- *  - "over hero" (page at top): transparent background, light text — sits over
- *    the dark hero. The hero is pulled up under the header via a negative
- *    margin so the transparent header actually overlays it.
+ *  - "over hero" (page at top): transparent background over the light hero.
+ *    The hero is pulled up under the header via a negative margin so the
+ *    transparent header actually overlays it. Text/logo/icons stay dark in
+ *    this state too, since the hero is light — only the bar itself is
+ *    transparent.
  *  - "solid" (scrolled past threshold, or mobile menu open): white background,
  *    dark text, subtle bottom border + backdrop blur + elevation shadow.
- *
- * Note: the transparent state assumes the first section on the page is a dark
- * hero (true for the homepage). Other pages either start with a dark section or
- * will need to opt out — handled when those pages land.
  */
 export function Header() {
   const [open, setOpen] = useState(false);
@@ -271,9 +269,15 @@ export function Header() {
                         <AnimatePresence initial={false}>
                           {mobileCatalogOpen && (
                             <motion.div
-                              initial={prefersReducedMotion ? { opacity: 1, height: "auto" } : { opacity: 0, height: 0 }}
+                              initial={
+                                prefersReducedMotion
+                                  ? { opacity: 1, height: "auto" }
+                                  : { opacity: 0, height: 0 }
+                              }
                               animate={{ opacity: 1, height: "auto" }}
-                              exit={prefersReducedMotion ? { opacity: 0 } : { opacity: 0, height: 0 }}
+                              exit={
+                                prefersReducedMotion ? { opacity: 0 } : { opacity: 0, height: 0 }
+                              }
                               transition={{ duration: 0.2 }}
                               className="overflow-hidden"
                             >
@@ -376,7 +380,7 @@ export function Header() {
           aria-label={siteConfig.name}
           className="flex shrink-0 items-center gap-2 transition-colors"
         >
-          <BrandLogo isDark={solid} className="h-8 w-auto xl:h-10" />
+          <BrandLogo isDark className="h-8 w-auto xl:h-10" />
         </Link>
 
         <nav aria-label="Основная навигация" className="hidden items-center gap-6 xl:flex">
@@ -396,8 +400,7 @@ export function Header() {
                     aria-controls="catalog-mega-menu"
                     onFocus={openCatalog}
                     className={cn(
-                      "group relative inline-flex items-center gap-1 py-2 text-sm font-medium transition-colors hover:text-brand-red focus-visible:rounded-md focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:outline-none",
-                      solid ? "text-brand-black/80" : "text-brand-white/85",
+                      "group relative inline-flex items-center gap-1 py-2 text-sm font-medium text-brand-black/80 transition-colors hover:text-brand-red focus-visible:rounded-md focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:outline-none",
                       catalogOpen && "text-brand-red",
                     )}
                   >
@@ -412,8 +415,6 @@ export function Header() {
                       className={cn(
                         "absolute bottom-0.5 left-0 h-0.5 bg-brand-red transition-all duration-300",
                         catalogOpen ? "w-full" : "w-0 group-hover:w-full",
-                        solid ? "" : "bg-brand-white",
-                        catalogOpen && "bg-brand-red",
                       )}
                     />
                   </Link>
@@ -425,32 +426,21 @@ export function Header() {
               <Link
                 key={link.href}
                 href={link.href}
-                className={cn(
-                  "group relative inline-flex items-center py-2 text-sm font-medium transition-colors hover:text-brand-red focus-visible:rounded-md focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:outline-none",
-                  solid ? "text-brand-black/80" : "text-brand-white/85",
-                )}
+                className="group relative inline-flex items-center py-2 text-sm font-medium text-brand-black/80 transition-colors hover:text-brand-red focus-visible:rounded-md focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:outline-none"
               >
                 {link.label}
-                <span
-                  className={cn(
-                    "absolute bottom-0.5 left-0 h-0.5 w-0 bg-brand-red transition-all duration-300 group-hover:w-full",
-                    solid ? "" : "bg-brand-white",
-                  )}
-                />
+                <span className="absolute bottom-0.5 left-0 h-0.5 w-0 bg-brand-red transition-all duration-300 group-hover:w-full" />
               </Link>
             );
           })}
         </nav>
 
         <div className="hidden items-center gap-4 xl:flex">
-          <LanguageSwitcher solid={solid} />
+          <LanguageSwitcher solid />
 
           <a
             href={siteConfig.phoneHref}
-            className={cn(
-              "inline-flex items-center gap-2 rounded-md py-2 transition-colors hover:text-brand-red focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:outline-none",
-              solid ? "text-brand-black" : "text-brand-white",
-            )}
+            className="inline-flex items-center gap-2 rounded-md py-2 text-brand-black transition-colors hover:text-brand-red focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:outline-none"
           >
             <Phone className="size-4" />
             <span className="flex flex-col leading-tight">
@@ -471,12 +461,7 @@ export function Header() {
           aria-label={open ? "Закрыть меню" : "Меню"}
           aria-expanded={open}
           aria-controls="mobile-drawer"
-          className={cn(
-            "grid size-10 place-items-center rounded-md transition-colors focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:outline-none xl:hidden",
-            solid
-              ? "text-brand-black hover:bg-brand-black/5"
-              : "text-brand-white hover:bg-brand-white/10",
-          )}
+          className="grid size-10 place-items-center rounded-md text-brand-black transition-colors hover:bg-brand-black/5 focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:outline-none xl:hidden"
           onClick={() => setOpen((v) => !v)}
         >
           {open ? <X className="size-6" /> : <Menu className="size-6" />}
@@ -530,7 +515,9 @@ export function Header() {
                         {item.label}
                         <ArrowUpRight className="size-3.5 opacity-0 transition-all group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:opacity-100" />
                       </span>
-                      <span className="text-xs leading-5 text-brand-black/55">{item.description}</span>
+                      <span className="text-xs leading-5 text-brand-black/55">
+                        {item.description}
+                      </span>
                     </Link>
                   </li>
                 ))}
