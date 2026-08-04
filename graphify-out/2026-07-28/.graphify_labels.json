@@ -1,4 +1,5 @@
 {
+  "0": "Site Shell Layout",
   "1": "Home Page Sections",
   "2": "Hero and Product Cards",
   "3": "ROLLER Brief Spec",
@@ -28,5 +29,6 @@
   "27": "Next.js Config",
   "28": "PostCSS Config",
   "29": "index.ts",
-  "32": "CLAUDE.md"
+  "30": "hero-section.tsx",
+  "31": "language-switcher.tsx"
 }

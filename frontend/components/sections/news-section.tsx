@@ -24,7 +24,7 @@ function formatNewsDate(isoDate: string): string {
 
 function FeaturedNews({ article }: { article: NewsTeaser }) {
   return (
-    <article className="group flex h-full flex-col overflow-hidden rounded-3xl bg-brand-black text-brand-white">
+    <article className="group flex h-full flex-col overflow-hidden rounded-3xl border border-brand-black/8 bg-neutral-50 text-brand-black">
       <Link
         href={article.href}
         className="relative block aspect-4/5 overflow-hidden p-8 focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:outline-none sm:aspect-square sm:p-10 lg:aspect-4/5"
@@ -53,17 +53,17 @@ function FeaturedNews({ article }: { article: NewsTeaser }) {
         <h3 className="mt-3 font-heading text-2xl font-bold tracking-tight sm:text-3xl lg:text-4xl">
           <Link
             href={article.href}
-            className="transition-colors hover:text-brand-white/90 focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:ring-offset-brand-black focus-visible:outline-none"
+            className="transition-colors hover:text-brand-red focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:ring-offset-brand-white focus-visible:outline-none"
           >
             {article.title}
           </Link>
         </h3>
-        <p className="mt-3 max-w-lg text-sm leading-6 text-brand-white/65 sm:text-base sm:leading-7">
+        <p className="mt-3 max-w-lg text-sm leading-6 text-brand-black/65 sm:text-base sm:leading-7">
           {article.excerpt}
         </p>
         <Link
           href={article.href}
-          className="mt-6 inline-flex w-fit items-center gap-2 text-sm font-semibold text-brand-white transition-colors group-hover:text-brand-red focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:ring-offset-brand-black focus-visible:outline-none"
+          className="mt-6 inline-flex w-fit items-center gap-2 text-sm font-semibold text-brand-black transition-colors group-hover:text-brand-red focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:ring-offset-brand-white focus-visible:outline-none"
         >
           Читать статью
           <ArrowRight className="size-4" />
@@ -78,7 +78,7 @@ function NewsRow({ article }: { article: NewsTeaser }) {
     <article className="group grid gap-4 border-b border-brand-black/10 py-5 first:pt-0 last:border-b-0 last:pb-0 sm:grid-cols-[9rem_1fr] sm:gap-6 sm:py-6">
       <Link
         href={article.href}
-        className="relative block aspect-square overflow-hidden rounded-2xl bg-brand-black p-3 focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:outline-none"
+        className="relative block aspect-square overflow-hidden rounded-2xl border border-brand-black/8 bg-neutral-50 p-3 focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:outline-none"
         aria-label={article.title}
       >
         <div className="relative h-full w-full">
