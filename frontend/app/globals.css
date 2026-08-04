@@ -23,6 +23,20 @@
   --color-foreground: #1d1d1b;
   --color-accent: #d3001a;
 
+  /* Surfaces — see DESIGN.md §3.
+     White dominates. `surface-inverse` is a semantic anchor, not decoration:
+     it marks the "Профессионалам" section and the footer, where the audience
+     changes from private client to professional. Nowhere else. */
+  --color-surface: #ffffff;
+  --color-surface-muted: #f7f7f7;
+  --color-surface-inverse: #1d1d1b;
+
+  /* Radii — see DESIGN.md §5. The brandbook logo is sharp and geometric, and
+     its own cards are only lightly rounded, so the scale stays tight:
+     8px for controls, 12px for cards and media. Pills are out. */
+  --radius-control: 0.5rem;
+  --radius-card: 0.75rem;
+
   /* Fonts (bound to next/font CSS variables in layout.tsx) */
   --font-sans: var(--font-montserrat), ui-sans-serif, system-ui, sans-serif;
   --font-heading: var(--font-chakra-petch), var(--font-montserrat), sans-serif;

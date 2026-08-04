@@ -34,7 +34,7 @@ export function MediaFrame({
         "relative overflow-hidden",
         fill
           ? "h-full w-full bg-brand-black"
-          : "rounded-xl border border-neutral-200 bg-brand-white",
+          : "rounded-card border border-neutral-200 bg-brand-white",
         containerClassName,
       )}
       style={fill ? undefined : { aspectRatio: `${width} / ${height}` }}

@@ -4,8 +4,10 @@ import { cn } from "@/lib/utils";
 type Variant = "primary" | "outline" | "ghost";
 type Size = "sm" | "md" | "lg";
 
+// `rounded-control` (8px), never `rounded-full` — pill buttons fight the sharp,
+// geometric logo. See DESIGN.md §5.
 const base =
-  "inline-flex items-center justify-center gap-2 rounded-md font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50";
+  "inline-flex items-center justify-center gap-2 rounded-control font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50";
 
 const variants: Record<Variant, string> = {
   primary: "bg-brand-red text-brand-white hover:bg-brand-red/90",
