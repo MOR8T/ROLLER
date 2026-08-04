@@ -50,7 +50,7 @@ export function HeaderCatalogMenu({
           key="catalog-mega"
           id="catalog-mega-menu"
           role="region"
-          aria-label="Категории каталога"
+          aria-label="Применения"
           variants={panelVariants}
           initial="hidden"
           animate="visible"
@@ -63,16 +63,16 @@ export function HeaderCatalogMenu({
             <div className="flex items-end justify-between gap-6">
               <div>
                 <p className="text-xs font-medium tracking-[0.18em] text-brand-black/45 uppercase">
-                  Каталог продукции
+                  Применения
                 </p>
                 <p className="mt-1 font-heading text-2xl font-bold text-brand-black">
-                  Выберите категорию
+                  Куда ставим окна
                 </p>
               </div>
               <Link
                 href={CATALOG_HREF}
                 onClick={onClose}
-                className="inline-flex items-center gap-2 text-sm font-semibold text-brand-red transition-colors hover:text-brand-black focus-visible:rounded-control focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:outline-none"
+                className="inline-flex items-center gap-2 text-sm font-semibold text-brand-black transition-colors hover:text-brand-red focus-visible:rounded-control focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:outline-none"
               >
                 Весь каталог
                 <ArrowUpRight className="size-4" />

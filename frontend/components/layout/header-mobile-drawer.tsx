@@ -214,7 +214,7 @@ export function HeaderMobileDrawer({ open, onClose }: HeaderMobileDrawerProps) {
                               <Link
                                 href={CATALOG_HREF}
                                 onClick={close}
-                                className="rounded-control px-3 py-2.5 text-sm font-semibold text-brand-red transition-colors hover:bg-brand-red/5 focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:outline-none"
+                                className="rounded-control px-3 py-2.5 text-sm font-semibold text-brand-black transition-colors hover:bg-brand-black/5 hover:text-brand-red focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:outline-none"
                               >
                                 Весь каталог
                               </Link>
@@ -240,7 +240,7 @@ export function HeaderMobileDrawer({ open, onClose }: HeaderMobileDrawerProps) {
               })}
 
               <motion.div variants={itemVariants} className="mt-4 px-3">
-                <LanguageSwitcher solid />
+                <LanguageSwitcher />
               </motion.div>
             </motion.nav>
 

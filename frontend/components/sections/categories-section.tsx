@@ -2,11 +2,16 @@ import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import { Container } from "@/components/ui/container";
 import { MediaFrame } from "@/components/ui/media-frame";
-import { Reveal, RevealItem } from "@/components/ui/reveal";
+import { RevealGroup, RevealItem } from "@/components/ui/reveal";
 import { Section } from "@/components/ui/section";
 import { SectionHeading } from "@/components/sections/section-heading";
 import { productCategories } from "@/data/home";
 
+/**
+ * Not on the homepage. "ПВХ or aluminium?" is a manufacturer's question, so
+ * this moved inside the catalog where the split is URL structure rather than a
+ * visitor's first choice (DESIGN.md §7). Wired up in stage 04.
+ */
 export function CategoriesSection() {
   return (
     <Section id="categories">
@@ -19,19 +24,19 @@ export function CategoriesSection() {
           />
           <Link
             href="/catalog"
-            className="inline-flex w-fit items-center gap-2 rounded-full border border-brand-black/15 px-5 py-3 text-sm font-semibold transition-colors hover:border-brand-red hover:text-brand-red focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:outline-none"
+            className="inline-flex w-fit items-center gap-2 rounded-control border border-brand-black/15 px-5 py-3 text-sm font-semibold transition-colors hover:border-brand-red hover:text-brand-red focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:outline-none"
           >
             Весь каталог
             <ArrowUpRight className="size-4" />
           </Link>
         </div>
 
-        <Reveal preset="stagger" className="mt-10 grid gap-5 sm:gap-6 lg:grid-cols-2">
+        <RevealGroup className="mt-10 grid gap-5 sm:gap-6 lg:grid-cols-2">
           {productCategories.map((category) => (
             <RevealItem key={category.title}>
               <Link
                 href={category.href}
-                className="group relative block min-h-80 overflow-hidden rounded-4xl border border-brand-black/8 bg-neutral-50 text-brand-black shadow-sm transition-transform duration-300 hover:-translate-y-1 focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:outline-none"
+                className="group relative block min-h-80 overflow-hidden rounded-card border border-brand-black/8 bg-neutral-50 text-brand-black transition-colors duration-300 hover:border-brand-red/40 focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:outline-none"
               >
                 <div className="absolute inset-0">
                   <MediaFrame
@@ -46,7 +51,7 @@ export function CategoriesSection() {
                 <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(247,247,247,0.1)_0%,rgba(247,247,247,0.55)_50%,rgba(247,247,247,0.95)_100%)]" />
                 <div className="relative flex min-h-80 flex-col justify-between p-6 sm:p-8 lg:p-10">
                   <div className="flex items-start justify-between gap-4">
-                    <span className="inline-flex items-center gap-2 rounded-full border border-brand-black/12 bg-brand-white/70 px-3 py-1.5 text-xs font-medium tracking-[0.18em] text-brand-black/80 uppercase backdrop-blur-md">
+                    <span className="inline-flex items-center gap-2 rounded-control border border-brand-black/12 bg-brand-white/70 px-3 py-1.5 text-xs font-medium tracking-[0.18em] text-brand-black/80 uppercase backdrop-blur-md">
                       <span className={`size-2 rounded-full ${category.accent}`} />
                       {category.eyebrow}
                     </span>
@@ -68,7 +73,7 @@ export function CategoriesSection() {
               </Link>
             </RevealItem>
           ))}
-        </Reveal>
+        </RevealGroup>
       </Container>
     </Section>
   );

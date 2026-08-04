@@ -1,7 +1,9 @@
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 
-type Variant = "primary" | "outline" | "ghost";
+// `outline-inverse` is the dark-ground half of the pair required by DESIGN.md
+// §9. Primary needs no inverse: brand red reads on both grounds.
+type Variant = "primary" | "outline" | "outline-inverse" | "ghost";
 type Size = "sm" | "md" | "lg";
 
 // `rounded-control` (8px), never `rounded-full` — pill buttons fight the sharp,
@@ -12,6 +14,8 @@ const base =
 const variants: Record<Variant, string> = {
   primary: "bg-brand-red text-brand-white hover:bg-brand-red/90",
   outline: "border border-brand-black/20 bg-transparent text-brand-black hover:bg-brand-black/5",
+  "outline-inverse":
+    "border border-brand-white/30 bg-transparent text-brand-white hover:bg-brand-white/10 focus-visible:ring-offset-brand-black",
   ghost: "bg-transparent text-brand-black hover:bg-brand-black/5",
 };
 

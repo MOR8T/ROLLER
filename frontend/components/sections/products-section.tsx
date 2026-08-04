@@ -6,10 +6,15 @@ import { SectionHeading } from "@/components/sections/section-heading";
 import { ProductCard } from "@/components/sections/product-card";
 import { Container } from "@/components/ui/container";
 import { Section } from "@/components/ui/section";
-import { Reveal, RevealItem } from "@/components/ui/reveal";
+import { RevealGroup, RevealItem } from "@/components/ui/reveal";
 import { showcaseProducts } from "@/data/home";
 import { useState } from "react";
 
+/**
+ * Not on the homepage. The brand lineup replaced it there: it covers all six
+ * systems instead of five and explains how they differ, which is the page's
+ * stated job (DESIGN.md §1, §7). Kept for the catalog, stage 04.
+ */
 export function ProductsSection() {
   const [activeSlide, setActiveSlide] = useState(0);
 
@@ -40,7 +45,7 @@ export function ProductsSection() {
             </p> */}
             <Link
               href="/catalog"
-              className="inline-flex w-fit items-center gap-2 rounded-full bg-brand-black px-5 py-3 text-sm font-semibold text-brand-white transition-colors hover:bg-brand-red focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:outline-none"
+              className="inline-flex w-fit items-center gap-2 rounded-control bg-brand-black px-5 py-3 text-sm font-semibold text-brand-white transition-colors hover:bg-brand-red focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:outline-none"
             >
               Смотреть каталог
               <ArrowRight className="size-4" />
@@ -115,18 +120,16 @@ export function ProductsSection() {
         </div>
 
         {/* Desktop / tablet: grid with stagger reveal */}
-        <Reveal preset="stagger" className="mt-10 hidden md:block">
-          <div className="grid gap-5 sm:gap-6 md:grid-cols-2 xl:grid-cols-3">
-            {showcaseProducts.map((product) => (
-              <RevealItem key={product.name}>
-                <ProductCard
-                  {...product}
-                  sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
-                />
-              </RevealItem>
-            ))}
-          </div>
-        </Reveal>
+        <RevealGroup className="mt-10 hidden gap-5 sm:gap-6 md:grid md:grid-cols-2 xl:grid-cols-3">
+          {showcaseProducts.map((product) => (
+            <RevealItem key={product.name}>
+              <ProductCard
+                {...product}
+                sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
+              />
+            </RevealItem>
+          ))}
+        </RevealGroup>
 
         {/* <p className="mt-6 text-sm leading-6 text-brand-black/62">
           Цена по расчёту: подбираем систему под размеры, формат открывания и требования конкретного

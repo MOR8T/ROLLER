@@ -31,42 +31,38 @@ export const navLinks = [
   { href: "/contacts", label: "Контакты" },
 ] as const;
 
-/** Placeholder catalog menu — replace/edit freely later. */
+/**
+ * Catalog mega-menu.
+ *
+ * These point at the application landings (`/solutions/[application]`, built in
+ * stage 04), not at product-type URLs. The seven entries that used to live here
+ * all 404'd, and more importantly they asked the visitor to pick a product type
+ * — "раздвижные системы", "фурнитура" — which is a manufacturer's vocabulary.
+ * Sorting by situation is the choice a homeowner can actually make
+ * (DESIGN.md §7).
+ *
+ * Kept in sync with `applications` in `data/home.ts`.
+ */
 export const catalogMenu = [
   {
-    href: "/catalog/plastic-windows",
-    label: "Пластиковые окна",
-    description: "ПВХ-системы для квартир, домов и офисов",
+    href: "/solutions/apartment",
+    label: "Квартира",
+    description: "Замена окон в многоэтажном доме",
   },
   {
-    href: "/catalog/aluminium-windows",
-    label: "Алюминиевые окна",
-    description: "Лёгкие конструкции с большой площадью остекления",
+    href: "/solutions/house",
+    label: "Частный дом",
+    description: "Большие проёмы и максимальное тепло",
   },
   {
-    href: "/catalog/aluminium-doors",
-    label: "Алюминиевые двери",
-    description: "Входные и межкомнатные алюминиевые решения",
+    href: "/solutions/commercial",
+    label: "Офис и магазин",
+    description: "Витрины, перегородки и входные группы",
   },
   {
-    href: "/catalog/sliding-systems",
-    label: "Раздвижные системы",
-    description: "Раздвижные окна и двери для современных проёмов",
-  },
-  {
-    href: "/catalog/facade-systems",
-    label: "Фасадные системы",
-    description: "Фасадное остекление для коммерческих объектов",
-  },
-  {
-    href: "/catalog/mosquito-nets",
-    label: "Москитные сетки",
-    description: "Сетки и москитные профили в комплекте",
-  },
-  {
-    href: "/catalog/fittings",
-    label: "Фурнитура и комплектующие",
-    description: "Ручки, петли, ригели и сопутствующие детали",
+    href: "/solutions/facade",
+    label: "Фасад ЖК",
+    description: "Остекление жилых комплексов под проект",
   },
 ] as const;
 

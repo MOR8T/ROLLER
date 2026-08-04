@@ -1,5 +1,10 @@
 import { cn } from "@/lib/utils";
 
+/**
+ * The site's only container. One width, one gutter — sections must not add
+ * horizontal padding of their own (DESIGN.md §5). Both values come from
+ * `--container-page` / `--spacing-gutter` in globals.css.
+ */
 export function Container({
   className,
   children,
@@ -7,7 +12,5 @@ export function Container({
   className?: string;
   children: React.ReactNode;
 }) {
-  return (
-    <div className={cn("mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8", className)}>{children}</div>
-  );
+  return <div className={cn("mx-auto w-full max-w-page px-gutter", className)}>{children}</div>;
 }

@@ -59,36 +59,35 @@ export function LeadFormSection() {
     event.currentTarget.reset();
   }
 
+  // The section used to be flooded with `bg-brand-red`. DESIGN.md §3 п.3 caps
+  // red at roughly 5% of the screen and bans full-width red fills outright —
+  // red reads as more urgent here precisely because it is only the button.
   return (
-    <Section id="lead-form" className="bg-brand-red text-brand-white">
+    <Section id="lead-form">
       <Container className="grid gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-center lg:gap-14">
-        <Reveal preset="fade-up">
-          <p className="font-heading text-sm font-semibold tracking-[0.24em] text-brand-white/70 uppercase">
+        <Reveal>
+          <p className="font-heading text-sm font-semibold tracking-[0.24em] text-brand-black/55 uppercase">
             Заявка
           </p>
-          <h2 className="mt-3 max-w-xl text-3xl font-bold tracking-tight sm:text-5xl">
+          <h2 className="mt-3 max-w-xl text-3xl font-bold tracking-tight text-brand-black sm:text-4xl">
             Рассчитаем решение под ваш объект
           </h2>
-          {/* <p className="mt-5 max-w-lg leading-7 text-brand-white/75">
-            Оставьте контакты, город и тип продукции. На этом этапе форма работает как UI-заглушка и
-            готовит сообщение в WhatsApp.
-          </p> */}
           <ul className="mt-8 space-y-3">
             {trustPoints.map((point) => (
-              <li key={point.label} className="flex items-center gap-3 text-brand-white/85">
-                <span className="rounded-xl bg-brand-white/10 p-2 text-brand-white">
+              <li key={point.label} className="flex items-center gap-3">
+                <span className="rounded-control bg-brand-red/10 p-2 text-brand-red">
                   <point.icon className="size-5" />
                 </span>
-                <span className="text-sm font-medium">{point.label}</span>
+                <span className="text-sm font-medium text-brand-black/75">{point.label}</span>
               </li>
             ))}
           </ul>
         </Reveal>
 
-        <Reveal preset="fade-up" delay={0.1}>
+        <Reveal>
           <form
             onSubmit={handleSubmit}
-            className="rounded-4xl bg-brand-white p-5 text-brand-black shadow-2xl shadow-brand-black/20 sm:p-8 lg:rounded-[2.5rem]"
+            className="rounded-card border border-brand-black/10 bg-surface-muted p-5 text-brand-black sm:p-8"
             aria-label="Форма заявки"
           >
             <div className="grid gap-5 sm:grid-cols-2">
@@ -127,7 +126,7 @@ export function LeadFormSection() {
                 />
               </Field>
             </div>
-            <Button type="submit" size="lg" className="mt-6 w-full rounded-full">
+            <Button type="submit" size="lg" className="mt-6 w-full">
               Отправить в WhatsApp
               <Send className="size-5" />
             </Button>

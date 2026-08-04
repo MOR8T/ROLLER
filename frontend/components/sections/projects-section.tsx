@@ -3,7 +3,7 @@ import { ArrowRight, ArrowUpRight } from "lucide-react";
 import { SectionHeading } from "@/components/sections/section-heading";
 import { Container } from "@/components/ui/container";
 import { MediaFrame } from "@/components/ui/media-frame";
-import { Reveal, RevealItem } from "@/components/ui/reveal";
+import { Reveal, RevealGroup, RevealItem } from "@/components/ui/reveal";
 import { Section } from "@/components/ui/section";
 import { projectTeasers } from "@/data/home";
 import { cn } from "@/lib/utils";
@@ -22,7 +22,7 @@ function ProjectTile({
     <Link
       href={project.href}
       className={cn(
-        "group relative block overflow-hidden rounded-3xl border border-brand-black/8 bg-neutral-50 text-brand-black focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:outline-none",
+        "group relative block overflow-hidden rounded-card border border-brand-black/8 bg-neutral-50 text-brand-black focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:outline-none",
         featured ? "h-full min-h-[28rem] sm:min-h-[32rem]" : "h-full min-h-64 sm:min-h-72",
       )}
       aria-label={`${project.title}, ${project.location}`}
@@ -47,10 +47,10 @@ function ProjectTile({
       >
         <div className="flex items-start justify-between gap-3">
           <div className="flex flex-wrap gap-2">
-            <span className="rounded-full border border-brand-black/15 bg-brand-white/70 px-3 py-1 text-xs font-semibold text-brand-black backdrop-blur-sm">
+            <span className="rounded-control border border-brand-black/15 bg-brand-white/70 px-3 py-1 text-xs font-semibold text-brand-black backdrop-blur-sm">
               {project.location}
             </span>
-            <span className="rounded-full border border-brand-black/12 px-3 py-1 text-xs font-medium text-brand-black/70 backdrop-blur-sm">
+            <span className="rounded-control border border-brand-black/12 px-3 py-1 text-xs font-medium text-brand-black/70 backdrop-blur-sm">
               {project.category}
             </span>
           </div>
@@ -94,25 +94,26 @@ export function ProjectsSection() {
   const bottomProjects = rest.slice(2);
 
   return (
-    <Section id="projects" className="bg-neutral-50">
+    <Section id="projects">
       <Container>
-        <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+        <Reveal className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
           <SectionHeading
-            eyebrow="Реализованные проекты"
-            title="Короткий срез объектов до запуска полного портфолио"
+            eyebrow="Объекты"
+            title="Что мы уже остеклили"
+            description="Короткий срез объектов до запуска полного портфолио."
           />
 
           <Link
             href="/portfolio"
-            className="inline-flex w-fit items-center gap-2 rounded-full bg-brand-black px-5 py-3 text-sm font-semibold text-brand-white transition-colors hover:bg-brand-red focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:outline-none"
+            className="inline-flex w-fit items-center gap-2 rounded-control bg-brand-black px-5 py-3 text-sm font-semibold text-brand-white transition-colors hover:bg-brand-red focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:outline-none"
           >
             Открыть портфолио
             <ArrowRight className="size-4" />
           </Link>
-        </div>
+        </Reveal>
 
-        <Reveal preset="stagger" className="mt-10">
-          <div className="grid gap-4 sm:gap-5 lg:grid-cols-12 lg:grid-rows-2 lg:gap-5">
+        <div className="mt-10">
+          <RevealGroup className="grid gap-4 sm:gap-5 lg:grid-cols-12 lg:grid-rows-2 lg:gap-5">
             <RevealItem className="h-full lg:col-span-7 lg:row-span-2">
               <ProjectTile project={featured} featured sizes="(max-width: 1024px) 100vw, 58vw" />
             </RevealItem>
@@ -122,18 +123,18 @@ export function ProjectsSection() {
                 <ProjectTile project={project} sizes="(max-width: 1024px) 100vw, 42vw" />
               </RevealItem>
             ))}
-          </div>
+          </RevealGroup>
 
           {bottomProjects.length > 0 ? (
-            <div className="mt-4 grid gap-4 sm:mt-5 sm:gap-5 md:grid-cols-2">
+            <RevealGroup className="mt-4 grid gap-4 sm:mt-5 sm:gap-5 md:grid-cols-2">
               {bottomProjects.map((project) => (
                 <RevealItem key={project.id} className="h-full">
                   <ProjectTile project={project} sizes="(max-width: 768px) 100vw, 50vw" />
                 </RevealItem>
               ))}
-            </div>
+            </RevealGroup>
           ) : null}
-        </Reveal>
+        </div>
       </Container>
     </Section>
   );

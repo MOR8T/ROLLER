@@ -3,7 +3,7 @@ import { ArrowRight, ArrowUpRight } from "lucide-react";
 import { SectionHeading } from "@/components/sections/section-heading";
 import { Container } from "@/components/ui/container";
 import { MediaFrame } from "@/components/ui/media-frame";
-import { Reveal, RevealItem } from "@/components/ui/reveal";
+import { RevealGroup, RevealItem } from "@/components/ui/reveal";
 import { Section } from "@/components/ui/section";
 import { newsTeasers } from "@/data/home";
 import type { NewsTeaser } from "@/types";
@@ -24,7 +24,7 @@ function formatNewsDate(isoDate: string): string {
 
 function FeaturedNews({ article }: { article: NewsTeaser }) {
   return (
-    <article className="group flex h-full flex-col overflow-hidden rounded-3xl border border-brand-black/8 bg-neutral-50 text-brand-black">
+    <article className="group flex h-full flex-col overflow-hidden rounded-card border border-brand-black/8 bg-neutral-50 text-brand-black">
       <Link
         href={article.href}
         className="relative block aspect-4/5 overflow-hidden p-8 focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:outline-none sm:aspect-square sm:p-10 lg:aspect-4/5"
@@ -78,7 +78,7 @@ function NewsRow({ article }: { article: NewsTeaser }) {
     <article className="group grid gap-4 border-b border-brand-black/10 py-5 first:pt-0 last:border-b-0 last:pb-0 sm:grid-cols-[9rem_1fr] sm:gap-6 sm:py-6">
       <Link
         href={article.href}
-        className="relative block aspect-square overflow-hidden rounded-2xl border border-brand-black/8 bg-neutral-50 p-3 focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:outline-none"
+        className="relative block aspect-square overflow-hidden rounded-card border border-brand-black/8 bg-neutral-50 p-3 focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:outline-none"
         aria-label={article.title}
       >
         <div className="relative h-full w-full">
@@ -122,11 +122,15 @@ function NewsRow({ article }: { article: NewsTeaser }) {
   );
 }
 
+/**
+ * Not on the homepage — the target composition in DESIGN.md §7 has no news
+ * block. Kept for the /news page, stage 07.
+ */
 export function NewsSection() {
   const [featured, ...rest] = newsTeasers;
 
   return (
-    <Section id="news" className="bg-brand-white">
+    <Section id="news">
       <Container>
         <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
           <SectionHeading
@@ -136,14 +140,14 @@ export function NewsSection() {
 
           <Link
             href="/news"
-            className="inline-flex w-fit items-center gap-2 rounded-full bg-brand-black px-5 py-3 text-sm font-semibold text-brand-white transition-colors hover:bg-brand-red focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:outline-none"
+            className="inline-flex w-fit items-center gap-2 rounded-control bg-brand-black px-5 py-3 text-sm font-semibold text-brand-white transition-colors hover:bg-brand-red focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:outline-none"
           >
             Все новости
             <ArrowRight className="size-4" />
           </Link>
         </div>
 
-        <Reveal preset="stagger" className="mt-10">
+        <RevealGroup className="mt-10">
           <div className="grid gap-8 lg:grid-cols-12 lg:gap-10 xl:gap-14">
             <RevealItem className="lg:col-span-6 xl:col-span-7">
               <FeaturedNews article={featured} />
@@ -162,7 +166,7 @@ export function NewsSection() {
               </div>
             </RevealItem>
           </div>
-        </Reveal>
+        </RevealGroup>
       </Container>
     </Section>
   );

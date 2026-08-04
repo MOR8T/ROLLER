@@ -27,16 +27,11 @@ const SCROLL_THRESHOLD = 24;
  *  - right (desktop): language switcher + phone with working hours
  *  - right (mobile): burger -> `HeaderMobileDrawer`
  *
- * Two visual states, coordinated with the hero section:
- *  - "over hero" (page at top): transparent background, light text — sits over
- *    the dark hero. The hero is pulled up under the header via a negative
- *    margin so the transparent header actually overlays it.
- *  - "solid" (scrolled past threshold, or a menu open): white background,
- *    dark text, subtle bottom border + backdrop blur + elevation shadow.
- *
- * Note: the transparent state assumes the first section on the page is a dark
- * hero (true for the homepage). Other pages either start with a dark section or
- * will need to opt out — handled when those pages land.
+ * The bar is always light. It used to go transparent with white text while the
+ * page sat at the top, which only worked over a dark full-screen hero; now that
+ * white dominates the site (DESIGN.md §3) and the hero is light, that state
+ * would render white text on a near-white background. The only thing scroll
+ * changes now is elevation: a shadow appears once the page moves under the bar.
  *
  * This component owns only the bar and the open/closed state; the mega-menu and
  * the mobile drawer live in their own files, each with its own behaviour.
@@ -92,17 +87,15 @@ export function Header() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  // Force the solid state while a menu is open so the bar stays legible
-  // regardless of scroll position.
-  const solid = scrolled || open || catalogOpen;
+  // An open menu keeps the elevation on regardless of scroll position, so the
+  // bar stays visually detached from the panel it opened.
+  const elevated = scrolled || open || catalogOpen;
 
   return (
     <header
       className={cn(
-        "sticky top-0 z-50 transition-[background-color,border-color,box-shadow,color] duration-300",
-        solid
-          ? "border-b border-brand-black/10 bg-brand-white/95 shadow-[0_8px_30px_-12px_rgba(29,29,27,0.18)] backdrop-blur"
-          : "border-b border-transparent bg-transparent",
+        "sticky top-0 z-50 border-b border-brand-black/10 bg-surface/95 text-brand-black backdrop-blur transition-shadow duration-300",
+        elevated && "shadow-[0_8px_30px_-12px_rgba(29,29,27,0.18)]",
       )}
     >
       <Container className="flex h-16 items-center justify-between gap-6 xl:h-20">
@@ -115,21 +108,17 @@ export function Header() {
         </Link>
 
         <HeaderDesktopNav
-          solid={solid}
           catalogOpen={catalogOpen}
           onCatalogOpen={openCatalog}
           onCatalogScheduleClose={scheduleCloseCatalog}
         />
 
         <div className="hidden items-center gap-4 xl:flex">
-          <LanguageSwitcher solid />
+          <LanguageSwitcher />
 
           <a
             href={siteConfig.phoneHref}
-            className={cn(
-              "inline-flex items-center gap-2 rounded-control py-2 transition-colors hover:text-brand-red focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:outline-none",
-              solid ? "text-brand-black" : "text-brand-white",
-            )}
+            className="inline-flex items-center gap-2 rounded-control py-2 text-brand-black transition-colors hover:text-brand-red focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:outline-none"
           >
             <Phone className="size-4" />
             <span className="flex flex-col leading-tight">
@@ -146,12 +135,7 @@ export function Header() {
           aria-label={open ? "Закрыть меню" : "Меню"}
           aria-expanded={open}
           aria-controls="mobile-drawer"
-          className={cn(
-            "grid size-10 place-items-center rounded-control transition-colors focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:outline-none xl:hidden",
-            solid
-              ? "text-brand-black hover:bg-brand-black/5"
-              : "text-brand-white hover:bg-brand-white/10",
-          )}
+          className="grid size-10 place-items-center rounded-control text-brand-black transition-colors hover:bg-brand-black/5 focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:outline-none xl:hidden"
           onClick={() => setOpen((v) => !v)}
         >
           {open ? <X className="size-6" /> : <Menu className="size-6" />}

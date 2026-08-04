@@ -28,7 +28,7 @@ export function ProductCard({
     .filter(Boolean);
 
   return (
-    <article className="group flex h-full flex-col overflow-hidden rounded-3xl border border-brand-black/8 bg-brand-white">
+    <article className="group flex h-full flex-col overflow-hidden rounded-card border border-brand-black/8 bg-brand-white">
       <Link
         href={href}
         className="relative block aspect-square bg-neutral-50 p-6 focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:outline-none sm:p-8"
@@ -46,7 +46,7 @@ export function ProductCard({
           />
         </div>
         <div className="absolute top-4 right-4 left-4 flex items-start justify-between gap-3">
-          <span className="rounded-full border border-brand-black/12 bg-brand-white/70 px-3 py-1 text-[11px] font-semibold tracking-[0.16em] text-brand-black/70 uppercase backdrop-blur-sm">
+          <span className="rounded-control border border-brand-black/12 bg-brand-white/70 px-3 py-1 text-[11px] font-semibold tracking-[0.16em] text-brand-black/70 uppercase backdrop-blur-sm">
             {type}
           </span>
           <Badge variant={badgeVariant} className="shrink-0 shadow-sm">
@@ -63,7 +63,7 @@ export function ProductCard({
           {summaryParts.map((part) => (
             <span
               key={part}
-              className="rounded-md border border-brand-black/10 bg-neutral-50 px-2.5 py-1 text-xs font-semibold text-brand-black/75"
+              className="rounded-control border border-brand-black/10 bg-neutral-50 px-2.5 py-1 text-xs font-semibold text-brand-black/75"
             >
               {part}
             </span>

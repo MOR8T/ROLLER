@@ -8,7 +8,16 @@ import {
   Truck,
   Wrench,
 } from "lucide-react";
-import type { HeroSlide, NewsTeaser, ProjectTeaser, ShowcaseProduct } from "@/types";
+import type {
+  Application,
+  Brand,
+  HeroContent,
+  NewsTeaser,
+  Partner,
+  ProOffering,
+  ProjectTeaser,
+  ShowcaseProduct,
+} from "@/types";
 
 export const productCategories = [
   {
@@ -165,14 +174,6 @@ export const companyStats: CompanyStat[] = [
   { value: 10000, suffix: "+", label: "тонн в год" },
 ];
 
-// filepath: /Users/shahrom/Documents/Developer/Order/Praviz/frontend/data/home.ts
-// ...existing code...
-
-export interface Partner {
-  name: string;
-  logo: string | null;
-}
-
 export const partners: Partner[] = [
   {
     name: "Krauss Maffei",
@@ -215,46 +216,152 @@ export const serviceHighlights = [
   { label: "Сервис", icon: Headphones },
 ] as const;
 
-export const heroSlides: HeroSlide[] = [
+// Context-layer photography (interiors, facades, finished objects) does not
+// exist yet — `public/` holds only product renders and profile cutaways, which
+// DESIGN.md §11 bans from the first screen. Every such slot below is therefore
+// a nullable data field, never a hardcoded path: when the client's own shoot
+// arrives it is filled through the admin panel with no code change (§6 п.2).
+export const heroContent: HeroContent = {
+  eyebrow: "Производство профильных систем с 2006 года",
+  headline: "Тепло и комфорт для каждого дома",
+  subtext:
+    "Окна, двери и фасадные системы из ПВХ и алюминия. Шесть систем под разный бюджет и разные задачи — от квартиры до фасада жилого комплекса.",
+  image: null,
+  imageLabel: "Контекстное фото объекта — интерьер или фасад",
+  primaryCta: { label: "Подобрать систему", href: "#brands" },
+  secondaryCta: { label: "Профессионалам", href: "#professionals" },
+};
+
+// The six systems, ordered as a ladder from economy to premium — that order is
+// the explanation. See DESIGN.md §7 for the source table.
+export const brandLineup: Brand[] = [
   {
-    id: "roller-production",
-    eyebrow: "Собственное производство",
-    headline: "Профильные системы ROLLER",
-    subtext:
-      "Окна, двери и фасадные решения из ПВХ и алюминия для жилых, коммерческих и городских объектов в Таджикистане.",
-    image: "/hero/hero-main.png",
-    primaryCta: { label: "Рассчитать стоимость", href: "/calculator" },
-    secondaryCta: { label: "Заказать звонок", href: "/contacts" },
+    slug: "ecoline",
+    name: "ЭКОЛАЙН",
+    material: "ПВХ",
+    segment: "эконом",
+    depth: "60 мм",
+    chambers: 3,
+    audience: "Когда нужно закрыть проём надёжно и недорого",
+    logo: "/logos/ecolayn.png",
+    image: null,
+    href: "/catalog/pvc/ecoline",
   },
   {
-    id: "stella-comfort",
-    eyebrow: "Премиальная серия",
-    headline: "STELLA — комфорт и теплоизоляция",
-    subtext:
-      "Пятикамерный профиль с повышенной теплоизоляцией для частных домов и квартир с высокими требованиями к микроклимату.",
-    image: "/products/stella/stella-main.png",
-    primaryCta: { label: "Подобрать систему", href: "/catalog/pvc" },
-    secondaryCta: { label: "Заказать замер", href: "/contacts" },
+    slug: "roller",
+    name: "ROLLER",
+    material: "ПВХ",
+    segment: "средний",
+    depth: "60 мм",
+    chambers: 4,
+    audience: "Базовый выбор для квартиры, дома и офиса",
+    logo: "/logos/logo-dark.png",
+    image: "/products/roller/roller-main.png",
+    href: "/catalog/pvc/roller",
   },
   {
-    id: "thermo-aluminium",
-    eyebrow: "Алюминиевые системы",
-    headline: "ТЕРМО — алюминий для современных фасадов",
-    subtext:
-      "Тёплый алюминиевый профиль для фасадов, входных групп и панорамного остекления с увеличенными световыми проёмами.",
-    image: "/products/thermo/thermo-anthracite.png",
-    primaryCta: { label: "Смотреть алюминий", href: "/catalog/aluminium" },
-    secondaryCta: { label: "Получить консультацию", href: "/contacts" },
-  },
-  {
-    id: "unopen-universal",
-    eyebrow: "Универсальное решение",
-    headline: "UNOPEN — надёжность для любого объекта",
-    subtext:
-      "Универсальная оконно-дверная система для частных домов и коммерческих помещений с гарантией и сервисным сопровождением.",
+    slug: "unopen",
+    name: "UNOPEN",
+    material: "ПВХ",
+    segment: "выше среднего",
+    depth: "65 мм",
+    chambers: 5,
+    audience: "Усиленный профиль для шумной улицы и больших проёмов",
+    logo: "/logos/unopen.png",
     image: "/products/unopen/unopen-main.png",
-    primaryCta: { label: "Выбрать систему", href: "/catalog/pvc" },
-    secondaryCta: { label: "Связаться с нами", href: "/contacts" },
+    href: "/catalog/pvc/unopen",
+  },
+  {
+    slug: "stella",
+    name: "STELLA",
+    material: "ПВХ",
+    segment: "премиум",
+    depth: "75 мм",
+    chambers: 5,
+    audience: "Максимум тепла и тишины в частном доме",
+    logo: "/logos/stella-red.png",
+    image: "/products/stella/stella-main.png",
+    href: "/catalog/pvc/stella",
+  },
+  {
+    slug: "ald-45",
+    name: "АЛД-45",
+    material: "алюминий",
+    materialNote: "холодный",
+    segment: "эконом",
+    depth: "45 мм",
+    chambers: 1,
+    audience: "Витрины, перегородки и террасы без обогрева",
+    logo: null,
+    image: "/products/holodniy/holodniy-white.png",
+    href: "/catalog/aluminium/ald-45",
+  },
+  {
+    slug: "thermo-60",
+    name: "ТЕРМО 60",
+    material: "алюминий",
+    materialNote: "тёплый",
+    segment: "премиум",
+    depth: "60 мм",
+    chambers: 3,
+    audience: "Фасады и панорамное остекление отапливаемых зданий",
+    logo: null,
+    image: "/products/thermo/thermo-anthracite.png",
+    href: "/catalog/aluminium/thermo-60",
+  },
+];
+
+// Entry points by situation, not by material — the first question a flat owner
+// can actually answer. Targets are the SEO landings built in stage 04.
+export const applications: Application[] = [
+  {
+    slug: "apartment",
+    title: "Квартира",
+    description: "Замена окон в многоэтажном доме: тише, теплее, без сквозняков.",
+    image: null,
+    href: "/solutions/apartment",
+  },
+  {
+    slug: "house",
+    title: "Частный дом",
+    description: "Большие проёмы, входные группы и максимальная теплоизоляция.",
+    image: null,
+    href: "/solutions/house",
+  },
+  {
+    slug: "commercial",
+    title: "Офис и магазин",
+    description: "Витрины, перегородки и входные группы для коммерции.",
+    image: null,
+    href: "/solutions/commercial",
+  },
+  {
+    slug: "facade",
+    title: "Фасад ЖК",
+    description: "Остекление жилых комплексов и фасадные системы под проект.",
+    image: null,
+    href: "/solutions/facade",
+  },
+];
+
+// "Профессионалам" — the one dark section on the page. The dark ground is the
+// marker that the audience has changed (DESIGN.md §3 п.2), not decoration.
+export const proOfferings: ProOffering[] = [
+  {
+    title: "Оптовые поставки профиля",
+    description: "Отгружаем профильные системы производителям окон по всей стране.",
+  },
+  {
+    title: "Дилерство",
+    description: "Условия партнёрства, поддержка по объектам и обучение монтажу.",
+  },
+  {
+    title: "Комплектующие",
+    description: "Фурнитура, уплотнители, армирование и сопутствующие детали со склада.",
+  },
+  {
+    title: "Техническая документация",
+    description: "Узлы, разрезы, монтажные схемы и характеристики систем для проектирования.",
   },
 ];
 

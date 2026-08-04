@@ -11,13 +11,8 @@ import { cn } from "@/lib/utils";
  * Dropdown component for switching between locales (RU/TJ/EN/TR).
  * Displays the current language code and opens a dropdown menu to select a different language.
  *
- * No routing logic — locale switching routes handled in Stage 07 (i18n).
- * Supports both desktop and mobile layouts, responsive to solid/transparent states.
+ * No routing logic — locale switching routes handled in Stage 03 (i18n).
  */
-interface LanguageSwitcherProps {
-  solid: boolean;
-}
-
 // Map locale codes to display labels
 const localeLabels: Record<Locale, string> = {
   ru: "Русский",
@@ -26,7 +21,7 @@ const localeLabels: Record<Locale, string> = {
   tr: "Türkçe",
 };
 
-export function LanguageSwitcher({ solid }: LanguageSwitcherProps) {
+export function LanguageSwitcher() {
   const [isOpen, setIsOpen] = useState(false);
   const wrapperRef = useRef<HTMLDivElement>(null);
 
@@ -58,12 +53,7 @@ export function LanguageSwitcher({ solid }: LanguageSwitcherProps) {
         aria-haspopup="listbox"
         aria-expanded={isOpen}
         onClick={() => setIsOpen(!isOpen)}
-        className={cn(
-          "flex items-center gap-2 rounded-full border px-3 py-1.5 text-xs font-semibold uppercase transition-colors focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:outline-none",
-          solid
-            ? "border-brand-black/10 text-brand-black hover:bg-brand-black/5"
-            : "border-brand-white/25 text-brand-white hover:bg-brand-white/10",
-        )}
+        className="flex items-center gap-2 rounded-control border border-brand-black/10 px-3 py-1.5 text-xs font-semibold text-brand-black uppercase transition-colors hover:bg-brand-black/5 focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:outline-none"
       >
         <span>{defaultLocale.toUpperCase()}</span>
         <ChevronDown
@@ -73,14 +63,7 @@ export function LanguageSwitcher({ solid }: LanguageSwitcherProps) {
       </button>
 
       {isOpen && (
-        <div
-          className={cn(
-            "absolute top-full left-0 z-50 mt-1 min-w-max overflow-hidden rounded-lg border shadow-lg transition-opacity",
-            solid
-              ? "border-brand-black/15 bg-brand-white"
-              : "border-brand-white/25 bg-brand-black/95",
-          )}
-        >
+        <div className="absolute top-full left-0 z-50 mt-1 min-w-max overflow-hidden rounded-card border border-brand-black/15 bg-brand-white shadow-lg transition-opacity">
           <ul role="listbox" className="py-1">
             {locales.map((locale: Locale) => (
               <li key={locale}>
@@ -95,12 +78,8 @@ export function LanguageSwitcher({ solid }: LanguageSwitcherProps) {
                   className={cn(
                     "block w-full px-4 py-2 text-left text-sm font-medium transition-colors focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:outline-none focus-visible:ring-inset",
                     locale === defaultLocale
-                      ? solid
-                        ? "bg-brand-red text-brand-white"
-                        : "bg-brand-red text-brand-white"
-                      : solid
-                        ? "text-brand-black/70 hover:bg-brand-black/5 hover:text-brand-red"
-                        : "text-brand-white/75 hover:bg-brand-white/10 hover:text-brand-white",
+                      ? "bg-brand-red text-brand-white"
+                      : "text-brand-black/70 hover:bg-brand-black/5 hover:text-brand-red",
                   )}
                 >
                   {localeLabels[locale]}

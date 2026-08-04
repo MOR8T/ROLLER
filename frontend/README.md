@@ -27,14 +27,14 @@ npm run dev
 
 ### Скрипты
 
-| Команда | Что делает |
-|---------|-----------|
-| `npm run dev` | Дев-сервер на порту 3031 |
-| `npm run build` | Прод-сборка |
-| `npm run start` | Запуск прод-сборки |
-| `npm run lint` | ESLint (`eslint-config-next` + core-web-vitals + typescript) |
-| `npm run format` | Prettier — запись |
-| `npm run format:check` | Prettier — проверка |
+| Команда                | Что делает                                                   |
+| ---------------------- | ------------------------------------------------------------ |
+| `npm run dev`          | Дев-сервер на порту 3031                                     |
+| `npm run build`        | Прод-сборка                                                  |
+| `npm run start`        | Запуск прод-сборки                                           |
+| `npm run lint`         | ESLint (`eslint-config-next` + core-web-vitals + typescript) |
+| `npm run format`       | Prettier — запись                                            |
+| `npm run format:check` | Prettier — проверка                                          |
 
 Тестового фреймворка пока нет.
 
@@ -42,15 +42,15 @@ npm run dev
 
 ## Стек
 
-| Слой | Технология |
-|------|------------|
-| Framework | Next.js **16.2.10** (App Router) |
-| UI | React 19.2, TypeScript 5 (`strict`) |
-| Стили | Tailwind CSS **v4** (`@theme`-токены, без `tailwind.config`) |
-| Анимации | Framer Motion 12 |
-| Карусели | Swiper 14 |
-| Иконки | lucide-react |
-| Форматирование | Prettier + `prettier-plugin-tailwindcss` |
+| Слой           | Технология                                                   |
+| -------------- | ------------------------------------------------------------ |
+| Framework      | Next.js **16.2.10** (App Router)                             |
+| UI             | React 19.2, TypeScript 5 (`strict`)                          |
+| Стили          | Tailwind CSS **v4** (`@theme`-токены, без `tailwind.config`) |
+| Анимации       | Framer Motion 12                                             |
+| Карусели       | Swiper 14                                                    |
+| Иконки         | lucide-react                                                 |
+| Форматирование | Prettier + `prettier-plugin-tailwindcss`                     |
 
 Алиас путей: `@/*` → корень `frontend/`.
 
@@ -95,13 +95,13 @@ frontend/
 
 **Цвета (подтверждены заказчиком):**
 
-| Токен | Значение | Использование |
-|-------|----------|---------------|
-| `--color-brand-black` | `#1D1D1B` | основной тёмный |
-| `--color-brand-red` | `#D3001A` | акцент, CTA |
-| `--color-brand-white` | `#FFFFFF` | фон |
-| `--color-neutral-50…900` | серая шкала | текст, границы, поверхности |
-| `--color-background` / `--color-foreground` / `--color-accent` | семантические алиасы | |
+| Токен                                                          | Значение             | Использование               |
+| -------------------------------------------------------------- | -------------------- | --------------------------- |
+| `--color-brand-black`                                          | `#1D1D1B`            | основной тёмный             |
+| `--color-brand-red`                                            | `#D3001A`            | акцент, CTA                 |
+| `--color-brand-white`                                          | `#FFFFFF`            | фон                         |
+| `--color-neutral-50…900`                                       | серая шкала          | текст, границы, поверхности |
+| `--color-background` / `--color-foreground` / `--color-accent` | семантические алиасы |                             |
 
 В классах используются как `bg-brand-red`, `text-brand-black`, `border-neutral-200`.
 
@@ -112,17 +112,17 @@ frontend/
 
 ### UI-kit (`components/ui/`)
 
-| Компонент | API |
-|-----------|-----|
-| `Button` / `ButtonLink` | `variant`: `primary \| outline \| ghost`, `size`: `sm \| md \| lg` |
-| `Badge` | `variant`: `red \| black \| outline` |
-| `Card` + `CardHeader` / `CardContent` / `CardFooter` | `variant`: `default \| elevated \| bordered` |
-| `Container` | центрирование, `max-w-7xl`, адаптивные отступы |
-| `Section` | вертикальный ритм `py-16 / sm:py-20 / lg:py-24` |
-| `Input`, `Textarea`, `Select` | поля форм |
-| `MediaFrame` | обёртка над `next/image`: `fill`, `objectFit`, `sizes`, плейсхолдер |
-| `Reveal` / `RevealItem` | анимации появления, пресеты `fade-up \| fade \| stagger` |
-| `BrandLogo` | логотип, тёмный/светлый вариант |
+| Компонент                                            | API                                                                 |
+| ---------------------------------------------------- | ------------------------------------------------------------------- |
+| `Button` / `ButtonLink`                              | `variant`: `primary \| outline \| ghost`, `size`: `sm \| md \| lg`  |
+| `Badge`                                              | `variant`: `red \| black \| outline`                                |
+| `Card` + `CardHeader` / `CardContent` / `CardFooter` | `variant`: `default \| elevated \| bordered`                        |
+| `Container`                                          | центрирование, `max-w-7xl`, адаптивные отступы                      |
+| `Section`                                            | вертикальный ритм `py-16 / sm:py-20 / lg:py-24`                     |
+| `Input`, `Textarea`, `Select`                        | поля форм                                                           |
+| `MediaFrame`                                         | обёртка над `next/image`: `fill`, `objectFit`, `sizes`, плейсхолдер |
+| `Reveal` / `RevealItem`                              | анимации появления, пресеты `fade-up \| fade \| stagger`            |
+| `BrandLogo`                                          | логотип, тёмный/светлый вариант                                     |
 
 Утилита [`cn()`](lib/utils.ts) — самый переиспользуемый узел кодовой базы;
 используйте её для склейки классов вместо конкатенации строк.
@@ -168,14 +168,14 @@ API** (этапы 09–10). Замена моков на реальный API �
 
 ### Продуктовые бренды (по брифу)
 
-| Бренд | Класс | Материал | Профиль | Камеры |
-|-------|-------|----------|---------|--------|
-| ROLLER | средний | ПВХ | 60 мм | 4 |
-| STELLA | премиум | ПВХ | 75 мм | 5 |
-| UNOPEN | выше среднего | ПВХ | 65 мм | 5 |
-| ECOLINE | эконом | ПВХ | 60 мм | 3 |
-| АЛД-45 (холодный) | эконом | алюминий | 45 мм | 1 |
-| ТЕРМО 60 (тёплый) | премиум | алюминий | 60 мм | 3 |
+| Бренд             | Класс         | Материал | Профиль | Камеры |
+| ----------------- | ------------- | -------- | ------- | ------ |
+| ROLLER            | средний       | ПВХ      | 60 мм   | 4      |
+| STELLA            | премиум       | ПВХ      | 75 мм   | 5      |
+| UNOPEN            | выше среднего | ПВХ      | 65 мм   | 5      |
+| ECOLINE           | эконом        | ПВХ      | 60 мм   | 3      |
+| АЛД-45 (холодный) | эконом        | алюминий | 45 мм   | 1      |
+| ТЕРМО 60 (тёплый) | премиум       | алюминий | 60 мм   | 3      |
 
 Две верхнеуровневые категории каталога: **ПВХ продукция** и **Алюминиевая продукция**.
 
@@ -218,15 +218,15 @@ API** (этапы 09–10). Замена моков на реальный API �
 Порядок согласован с заказчиком: **сначала фронтенд, затем бэкенд**. Детали
 каждого этапа — в [.cursor/project_plan/](../.cursor/project_plan/).
 
-| Этап | Содержание | Статус |
-|------|-----------|--------|
-| [01](../.cursor/project_plan/01-frontend-foundation.md) | Фундамент: токены, структура, UI-kit, `siteConfig`, моки, Header/Footer | ✅ в основном готов |
-| [02](../.cursor/project_plan/02-homepage-template.md) | Эталонная главная страница 🚦 | ✅ сверстана, **ждёт «ОК» заказчика** |
-| [03](../.cursor/project_plan/03-catalog-and-category.md) | Каталог `/catalog` и категории `/catalog/[category]` | ⬜ |
-| [04](../.cursor/project_plan/04-product-page.md) | Страница товара `/catalog/[category]/[product]`: галерея, `SpecTable`, свотчи цветов, похожие товары | ⬜ |
-| [05](../.cursor/project_plan/05-calculator-and-forms.md) | Единый `RequestForm` + калькулятор `/calculator`, абстракция `submitLead()` | ⬜ |
-| [06](../.cursor/project_plan/06-secondary-pages.md) | О компании, Портфолио, Новости `/news/[slug]`, Контакты | ⬜ |
-| [07](../.cursor/project_plan/07-i18n-seo.md) | i18n (RU/TJ/EN) через `app/[locale]/`, `next-intl`; SEO, sitemap, robots, JSON-LD, hreflang | ⬜ |
+| Этап                                                     | Содержание                                                                                           | Статус                                |
+| -------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- | ------------------------------------- |
+| [01](../.cursor/project_plan/01-frontend-foundation.md)  | Фундамент: токены, структура, UI-kit, `siteConfig`, моки, Header/Footer                              | ✅ в основном готов                   |
+| [02](../.cursor/project_plan/02-homepage-template.md)    | Эталонная главная страница 🚦                                                                        | ✅ сверстана, **ждёт «ОК» заказчика** |
+| [03](../.cursor/project_plan/03-catalog-and-category.md) | Каталог `/catalog` и категории `/catalog/[category]`                                                 | ⬜                                    |
+| [04](../.cursor/project_plan/04-product-page.md)         | Страница товара `/catalog/[category]/[product]`: галерея, `SpecTable`, свотчи цветов, похожие товары | ⬜                                    |
+| [05](../.cursor/project_plan/05-calculator-and-forms.md) | Единый `RequestForm` + калькулятор `/calculator`, абстракция `submitLead()`                          | ⬜                                    |
+| [06](../.cursor/project_plan/06-secondary-pages.md)      | О компании, Портфолио, Новости `/news/[slug]`, Контакты                                              | ⬜                                    |
+| [07](../.cursor/project_plan/07-i18n-seo.md)             | i18n (RU/TJ/EN) через `app/[locale]/`, `next-intl`; SEO, sitemap, robots, JSON-LD, hreflang          | ⬜                                    |
 
 ### 🚦 Гейт этапа 02
 
