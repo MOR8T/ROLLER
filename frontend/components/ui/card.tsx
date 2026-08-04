@@ -13,7 +13,7 @@ interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
  * - bordered: White background with prominent brand-black border
  */
 export function Card({ variant = "default", className, ...props }: CardProps) {
-  const baseStyles = "rounded-lg transition-shadow";
+  const baseStyles = "rounded-card transition-shadow";
 
   const variantStyles: Record<CardVariant, string> = {
     default: "bg-neutral-50 border border-neutral-200",

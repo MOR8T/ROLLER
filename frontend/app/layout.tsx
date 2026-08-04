@@ -5,12 +5,28 @@ import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 import { WhatsAppFab } from "@/components/layout/whatsapp-fab";
 
+// `subsets` here controls PRELOADING only — next/font emits @font-face blocks
+// for every subset the font ships, so glyphs outside this list still render;
+// the browser just fetches them on demand via unicode-range.
+//
+// So this list is a bandwidth trade-off, not a correctness one. It names the
+// subsets the default locale needs. The Tajik letters ғ қ ҳ ҷ ӣ ӯ (cyrillic-ext)
+// and the Turkish ğ ş İ (latin-ext) load lazily on those locales rather than
+// being pushed at every Russian visitor. Adding all four subsets here doubles
+// the preloaded font files from 6 to 12 on every page.
+//
+// Proper fix is per-locale preloading once `[locale]` routing lands — see
+// .cursor/project_plan/03-i18n-foundation.md.
 const montserrat = Montserrat({
   variable: "--font-montserrat",
   subsets: ["latin", "cyrillic"],
   display: "swap",
 });
 
+// Chakra Petch ships no Cyrillic subset at all — only latin, latin-ext, thai
+// and vietnamese. Cyrillic headings therefore render in Montserrat through the
+// `--font-heading` fallback chain, by design rather than by accident. This font
+// is effectively reserved for brand names (ROLLER, STELLA, UNOPEN) and numerals.
 const chakraPetch = Chakra_Petch({
   variable: "--font-chakra-petch",
   subsets: ["latin"],
