@@ -67,6 +67,26 @@ export interface Spec {
 export type ProductKind = "system" | "component";
 
 /**
+ * One lamination colour of a system, together with the renders that show it.
+ *
+ * The client's source renders are filed exactly this way — a folder per colour,
+ * and inside it several camera angles of **one and the same construction**
+ * (`project_plan/05-product-page.md`). Flattening that into a single
+ * `images: string[]` would throw away the only fact the product page needs from
+ * it: which render is which colour. So the gallery is a list of colourways, and
+ * switching colour swaps the whole set of angles rather than jumping to an
+ * unrelated picture.
+ *
+ * `color` is a locale-independent key — labels live under `colors.*` in the
+ * message catalogue, swatch values in `colorSwatches` (`data/catalog.ts`).
+ */
+export interface Colorway {
+  color: string;
+  /** Angles of the same construction, best first. Never empty. */
+  images: string[];
+}
+
+/**
  * A product is a **profile system**. It lives in exactly one category (its
  * material) and is linked many-to-many to applications, because one system —
  * ROLLER, say — goes into both windows and doors and cannot honestly be filed
@@ -88,8 +108,24 @@ export interface Product {
   shortDescription: string;
   description: string;
   specs: Spec[];
+  /**
+   * The lamination palette the system is *sold* in, whether or not a render of
+   * it exists — `gallery` is the second, narrower list. ЭКОЛАЙН is why the two
+   * are separate fields: it ships in white and the client sent no renders at
+   * all, so its swatch row has to come from somewhere other than the pictures.
+   */
   colors: string[];
+  /** The card render — one editorial pick per system, not the whole gallery. */
   images: string[];
+  /** Colour-by-colour renders for the product page. Empty where none exist. */
+  gallery: Colorway[];
+  /**
+   * Cutaway renders: chambers, reinforcement, the glazing bead. The "technical"
+   * layer of DESIGN.md §6 — addressed to architects and dealers and kept off
+   * the first screen, which §11 forbids outright. Empty for the aluminium
+   * systems, which the client shot without a single cutaway.
+   */
+  sections: string[];
   /** `null` for the aluminium brands, which have no mark of their own. */
   logo: string | null;
   popular: boolean;

@@ -62,6 +62,16 @@
     "upper-mid": "orta üstü",
     "premium": "premium"
   },
+  "colors": {
+    "white": "Beyaz",
+    "light-oak": "Açık meşe",
+    "golden-oak": "Altın meşe",
+    "nut": "Ceviz",
+    "dark-oak": "Koyu meşe",
+    "grey": "Gri",
+    "anthracite": "Antrasit",
+    "brown": "Kahverengi"
+  },
   "hero": {
     "aria": "Ana ekran",
     "eyebrow": "2006'dan bu yana profil sistemleri üretimi",
@@ -393,6 +403,7 @@
     "cardAria": "{name} — {segment}",
     "items": {
       "ecoline": {
+        "heading": "ECOLINE — 60 mm ekonomik PVC profil",
         "description": "Üç odacıklı temel seri: boşluğu güvenilir biçimde ve fazlasına para vermeden kapatır. Yalnızca beyaz profille sunulur.",
         "specs": [
           {
@@ -408,12 +419,17 @@
             "value": "20 mm"
           },
           {
+            "name": "Açılım tipi",
+            "value": "Çift açılım ve normal"
+          },
+          {
             "name": "Garanti",
             "value": "5 yıl, beyaz profil"
           }
         ]
       },
       "roller": {
+        "heading": "ROLLER — daire ve evler için 60 mm PVC profil",
         "description": "Sıcaklık, sessizlik ve maliyet arasında güvenilir bir temel denge arayan daireler, evler ve ofisler için pratik seri.",
         "specs": [
           {
@@ -429,12 +445,17 @@
             "value": "20 mm"
           },
           {
+            "name": "Açılım tipi",
+            "value": "Çift açılım ve normal"
+          },
+          {
             "name": "Garanti",
             "value": "renklide 15 yıl / beyazda 10 yıl"
           }
         ]
       },
       "unopen": {
+        "heading": "UNOPEN — güçlendirilmiş 65 mm PVC profil",
         "description": "Premium segmente geçmeden güçlendirilmiş profil gereken konut ve ticari yapılar için çok yönlü sistem.",
         "specs": [
           {
@@ -450,12 +471,17 @@
             "value": "20 mm"
           },
           {
+            "name": "Açılım tipi",
+            "value": "Çift açılım ve normal"
+          },
+          {
             "name": "Garanti",
             "value": "renklide 15 yıl / beyazda 10 yıl"
           }
         ]
       },
       "stella": {
+        "heading": "STELLA — premium 75 mm PVC profil",
         "description": "Isı yalıtımı, akustik ve daha hassas profil geometrisi beklentisi yüksek projeler için seri.",
         "specs": [
           {
@@ -471,12 +497,21 @@
             "value": "26–42 mm"
           },
           {
+            "name": "Açılım tipi",
+            "value": "Çift açılım ve normal"
+          },
+          {
+            "name": "Conta",
+            "value": "3 kontur"
+          },
+          {
             "name": "Garanti",
             "value": "renklide 15 yıl / beyazda 10 yıl"
           }
         ]
       },
       "ald-45": {
+        "heading": "ALD-45 — 45 mm ısı yalıtımsız alüminyum profil",
         "description": "Bölmeler, teraslar, vitrinler ve ince profilli hafif ticari konstrüksiyonlar için ısı yalıtımsız alüminyum serisi.",
         "specs": [
           {
@@ -492,12 +527,17 @@
             "value": "20 mm"
           },
           {
+            "name": "Açılım tipi",
+            "value": "Çift açılım ve normal"
+          },
+          {
             "name": "Garanti",
             "value": "15 yıl"
           }
         ]
       },
       "thermo-60": {
+        "heading": "THERMO 60 — 60 mm ısı yalıtımlı alüminyum profil",
         "description": "Mimari görünümün ve enerji verimliliğinin önemli olduğu cepheler, giriş grupları ve geniş boşluklar için ısı yalıtımlı alüminyum.",
         "specs": [
           {
@@ -513,11 +553,121 @@
             "value": "4–20 mm"
           },
           {
+            "name": "Açılım tipi",
+            "value": "Çift açılım ve normal"
+          },
+          {
             "name": "Garanti",
             "value": "15 yıl"
           }
         ]
       }
+    }
+  },
+  "product": {
+    "eyebrow": "Profil sistemi",
+    "metaTitle": "{name} — {depth} mm profil sistemi",
+    "metaDescription": "{name}: {material} profil, {depth} mm derinlik. Duşanbe'deki kendi tesisimizde üretilir, garantili ve montajlı. Fiyat projeye göre hesaplanır.",
+    "imageAlt": "{name}, {color}",
+    "imagePlaceholder": "{name} sisteminin görselleri hazırlanıyor",
+    "facts": {
+      "depth": "Profil derinliği",
+      "chambers": "Odacık",
+      "colors": "Laminasyon rengi"
+    },
+    "cta": {
+      "configurator": "Konfigüratörde seçin",
+      "call": "Sizi arayalım"
+    },
+    "gallery": {
+      "aria": "{name} sistemi galerisi",
+      "colors": "Laminasyon rengi",
+      "angles": "Görünümler",
+      "angle": "{index}. görünüm",
+      "previous": "Önceki görünüm",
+      "next": "Sonraki görünüm"
+    },
+    "specs": {
+      "eyebrow": "Teknik veriler",
+      "title": "Teknik özellikler",
+      "description": "Sistemin parametreleri. Ürün ölçüleri keşifte boşluğunuza göre hesaplanır — hazır standart ölçü yoktur."
+    },
+    "colors": {
+      "eyebrow": "Renkler",
+      "title": "Laminasyon renkleri",
+      "description": "Ahşap dokulu laminasyon ve düz renk kaplamalar. Renk profile fabrikada uygulanır; solmaz ve boya gerektirmez.",
+      "single": "Bu sistem yalnızca beyaz profil olarak üretilir."
+    },
+    "applications": {
+      "eyebrow": "Kullanım",
+      "title": "Nerede kullanılır",
+      "description": "Bu sistemin tercih edildiği işler."
+    },
+    "advantages": {
+      "eyebrow": "Avantajlar",
+      "title": "Bu profil ne sağlar",
+      "pvc": {
+        "thermal": {
+          "title": "Isı yalıtımı",
+          "description": "Çok odacıklı profil ısıyı içeride tutar ve ısıtma giderini düşürür."
+        },
+        "acoustic": {
+          "title": "Ses yalıtımı",
+          "description": "Conta konturları ve cam ünitesi sokak gürültüsünü belirgin biçimde azaltır."
+        },
+        "durability": {
+          "title": "Dayanıklılık",
+          "description": "PVC korozyona uğramaz, çürümez ve boya istemez — biçim ve renk yıllarca korunur."
+        },
+        "aesthetics": {
+          "title": "Renk ve doku",
+          "description": "Ahşap dokulu laminasyon ve düz kaplamalar cepheye ve iç mekâna göre seçilir."
+        },
+        "ecology": {
+          "title": "Güvenlik",
+          "description": "Profil zehirli madde içermez ve yaşam alanları için güvenlidir."
+        }
+      },
+      "aluminium": {
+        "strength": {
+          "title": "Hafif ve sağlam",
+          "description": "Alüminyum, aynı rijitlikte ince kasa ve geniş cam yüzeyi mümkün kılar."
+        },
+        "spans": {
+          "title": "Geniş boşluklar",
+          "description": "PVC'nin ölçü olarak yetmediği yerlerde vitrin ve panoramik kanat ağırlığını taşır."
+        },
+        "weather": {
+          "title": "Hava koşullarına dayanım",
+          "description": "Elektrostatik boya güneşte solmaz, yağmurda korozyona uğramaz."
+        },
+        "maintenance": {
+          "title": "Az bakım",
+          "description": "Yüzey sıradan temizleyicilerle silinir, kaplamanın yenilenmesi gerekmez."
+        }
+      }
+    },
+    "section": {
+      "eyebrow": "Mimarlar ve bayiler için",
+      "title": "Profil kesiti",
+      "description": "Odacıklar, takviye ve cam ünitesinin oturuşu — sistemin içeriden yapısı. Tam teknik dokümantasyon talep üzerine gönderilir.",
+      "imageAlt": "{name} profil kesiti"
+    },
+    "warranty": {
+      "eyebrow": "Garanti",
+      "title": "Garanti koşulları",
+      "scope": "Aşağıdaki koşullar ROLLER üretimi PVC profiller için geçerlidir.",
+      "coveredTitle": "Kapsama girenler",
+      "covered": "Işık haslığı, bütünlük ve üretim kusurları. Garanti kapsamındaki bir kusur tespit edildiğinde üretici, kusurlu ürünü yenisiyle değiştirmeyi taahhüt eder.",
+      "excludedTitle": "Kapsam dışı",
+      "excluded": "Aksesuarlar, cam üniteleri ve pencere ile kapıların montaj ve kurulumunda yapılan hatalar.",
+      "conditionsTitle": "Garantinin geçersiz olduğu durumlar",
+      "conditions": "Kullanım talimatına uyulmaması hâlinde müşteri garanti koşullarının uygulanmasını talep edemez."
+    },
+    "related": {
+      "eyebrow": "Diğer sistemler",
+      "title": "Komşu sistemler",
+      "description": "Aynı malzemeden sistemler — segment olarak en yakın olanlar önce gelir."
     }
   },
   "news": {

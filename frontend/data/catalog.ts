@@ -1,4 +1,4 @@
-import type { Application, Category, Material, Product, Segment } from "@/types";
+import type { Application, Category, Colorway, Material, Product, Segment } from "@/types";
 
 /**
  * The catalog: two categories, six applications, six profile systems.
@@ -39,7 +39,7 @@ export const categories: CategoryBase[] = [
   },
   {
     slug: "aluminium",
-    image: "/products/thermo/thermo-anthracite.png",
+    image: "/products/thermo-60/thermo-60-anthracite.png",
     accent: "bg-brand-black",
   },
 ];
@@ -86,6 +86,81 @@ export const applications: ApplicationBase[] = [
  */
 export type ProductBase = Omit<Product, "name" | "shortDescription" | "description" | "specs">;
 
+/**
+ * Lamination palettes.
+ *
+ * The brief writes the PVC palette exactly once, under ROLLER, as a strip of
+ * swatch images; STELLA and UNOPEN then say «КАК У РОЛЛЕРА» and ЭКОЛАЙН says
+ * «ТОЛЬКО БЕЛЫЙ». So one shared constant is not a shortcut here — it *is* the
+ * client's answer, and writing the seven colours out three times would invite
+ * the three lists to drift apart.
+ *
+ * The keys were read off the renders themselves rather than off the swatch
+ * images, which are unlabelled base64 blobs in the brief: see
+ * `scripts/build-product-renders.py`, which decodes the same folders and is the
+ * only other place the colour of a folder is asserted.
+ *
+ * Aluminium is a different palette of four named colours, shared by both
+ * aluminium systems («КАК У ХОЛОДНОГО АЛЮМИН»).
+ */
+const PVC_PALETTE = [
+  "white",
+  "light-oak",
+  "golden-oak",
+  "nut",
+  "dark-oak",
+  "grey",
+  "anthracite",
+] as const;
+
+const ALUMINIUM_PALETTE = ["white", "golden-oak", "brown", "anthracite"] as const;
+
+/**
+ * Swatch fills for the colour row. Locale-independent, hence here and not in
+ * the message catalogue; sampled from the opaque frame pixels of each render.
+ *
+ * A swatch is a hint, not a colour proof — the renders are. Aluminium's
+ * «золотой дуб» is a warmer, more coppery coat than the PVC lamination of the
+ * same name and shares this one value; the gallery shows the difference.
+ */
+export const colorSwatches: Record<string, string> = {
+  white: "#f2f2f0",
+  "light-oak": "#c3af92",
+  "golden-oak": "#b08a30",
+  nut: "#5f412b",
+  "dark-oak": "#3e2a1c",
+  grey: "#8f8a80",
+  anthracite: "#3a4344",
+  brown: "#57423a",
+};
+
+/**
+ * Every colourway of a system has the same five camera angles, so the gallery
+ * is described by its exceptions rather than by 150 literal paths.
+ *
+ * `angles` is the count for a colour that is not in `exceptions`; the renders
+ * on disk are `/products/<slug>/<colour>/1.webp` … `<n>.webp`, emitted in that
+ * order by `scripts/build-product-renders.py`.
+ */
+function galleryOf(
+  slug: string,
+  palette: readonly string[],
+  angles: number,
+  exceptions: Record<string, number> = {},
+): Colorway[] {
+  return palette.map((color) => ({
+    color,
+    images: Array.from(
+      { length: exceptions[color] ?? angles },
+      (_, index) => `/products/${slug}/${color}/${index + 1}.webp`,
+    ),
+  }));
+}
+
+function sectionsOf(slug: string, count: number): string[] {
+  return Array.from({ length: count }, (_, index) => `/products/${slug}/section-${index + 1}.webp`);
+}
+
 export const products: ProductBase[] = [
   {
     slug: "ecoline",
@@ -100,6 +175,13 @@ export const products: ProductBase[] = [
     // have got wrong.
     colors: ["white"],
     images: [],
+    // ⚠️ The client sent renders for five of the six systems; there is no
+    // ЭКОЛАЙН folder in `notes/` at all (plan §"Заметки"). The page has to
+    // survive that, so the gallery, the card render and the cutaways are all
+    // empty here and every block that draws them falls back to the neutral
+    // placeholder. Requested from the client — white renders would fill this.
+    gallery: [],
+    sections: [],
     logo: "/logos/ecolayn.png",
     popular: false,
   },
@@ -111,8 +193,10 @@ export const products: ProductBase[] = [
     applicationSlugs: ["windows", "doors"],
     depthMm: 60,
     chambers: 4,
-    colors: ["white", "golden-oak", "dark-oak", "mahogany", "nut", "grey"],
+    colors: [...PVC_PALETTE],
     images: ["/products/roller/roller-main.png"],
+    gallery: galleryOf("roller", PVC_PALETTE, 5),
+    sections: sectionsOf("roller", 3),
     logo: "/logos/logo-dark.png",
     popular: true,
   },
@@ -124,8 +208,14 @@ export const products: ProductBase[] = [
     applicationSlugs: ["windows", "doors", "sliding-systems"],
     depthMm: 65,
     chambers: 5,
-    colors: ["white", "golden-oak", "dark-oak", "mahogany", "nut", "grey"],
+    colors: [...PVC_PALETTE],
     images: ["/products/unopen/unopen-main.png"],
+    // White is three angles, not five: one of its source files was an
+    // anthracite window filed in the white folder and was dropped rather than
+    // shipped as white. `SpecTable`-style flexibility applies to the gallery
+    // too — nothing may assume a fixed angle count.
+    gallery: galleryOf("unopen", PVC_PALETTE, 5, { white: 3 }),
+    sections: sectionsOf("unopen", 2),
     logo: "/logos/unopen.png",
     popular: false,
   },
@@ -137,8 +227,10 @@ export const products: ProductBase[] = [
     applicationSlugs: ["windows", "doors"],
     depthMm: 75,
     chambers: 5,
-    colors: ["white", "golden-oak", "dark-oak", "mahogany", "nut", "grey"],
+    colors: [...PVC_PALETTE],
     images: ["/products/stella/stella-main.png"],
+    gallery: galleryOf("stella", PVC_PALETTE, 5),
+    sections: sectionsOf("stella", 2),
     logo: "/logos/stella-red.png",
     popular: true,
   },
@@ -151,8 +243,13 @@ export const products: ProductBase[] = [
     applicationSlugs: ["doors", "sliding-systems", "partitions", "facade-glazing"],
     depthMm: 45,
     chambers: 1,
-    colors: ["anthracite", "white", "golden-oak", "brown"],
-    images: ["/products/holodniy/holodniy-white.png"],
+    colors: [...ALUMINIUM_PALETTE],
+    images: ["/products/ald-45/ald-45-white.png"],
+    gallery: galleryOf("ald-45", ALUMINIUM_PALETTE, 5),
+    // The aluminium renders include no cutaway — an edge-on view of the closed
+    // frame is the closest the client shot, and it goes in the gallery as the
+    // last angle rather than pretending to be a section drawing.
+    sections: [],
     // No mark of their own: the two aluminium systems have no logo, so every
     // card that renders a product must lay out identically without one.
     logo: null,
@@ -167,8 +264,10 @@ export const products: ProductBase[] = [
     applicationSlugs: ["windows", "doors", "sliding-systems", "facade-glazing"],
     depthMm: 60,
     chambers: 3,
-    colors: ["anthracite", "white", "golden-oak", "brown"],
-    images: ["/products/thermo/thermo-anthracite.png"],
+    colors: [...ALUMINIUM_PALETTE],
+    images: ["/products/thermo-60/thermo-60-anthracite.png"],
+    gallery: galleryOf("thermo-60", ALUMINIUM_PALETTE, 5),
+    sections: [],
     logo: null,
     popular: true,
   },
@@ -221,9 +320,37 @@ export function applicationsOfProduct(product: ProductBase): ApplicationBase[] {
   return applications.filter((application) => product.applicationSlugs.includes(application.slug));
 }
 
-/** Systems shown as "other systems" — same category, excluding the current one. */
+/**
+ * Systems shown as "other systems", nearest rung of the ladder first.
+ *
+ * The plan asks for "соседи по сегменту и по категории", and the two are one
+ * list rather than two blocks: with six systems in total, a second grid would
+ * repeat most of the first. Ordering by distance along the segment ladder is
+ * what makes it a neighbour list — from ROLLER, UNOPEN is one rung away and
+ * ЭКОЛАЙН one rung the other way, and both come before STELLA.
+ */
 export function relatedProducts(product: ProductBase): ProductBase[] {
-  return productsByCategory(product.categorySlug).filter(
-    (candidate) => candidate.slug !== product.slug,
-  );
+  const rung = (candidate: ProductBase) => segments.indexOf(candidate.segment);
+
+  return productsByCategory(product.categorySlug)
+    .filter((candidate) => candidate.slug !== product.slug)
+    .sort((a, b) => Math.abs(rung(a) - rung(product)) - Math.abs(rung(b) - rung(product)));
 }
+
+/**
+ * The product at `/catalog/[category]/[product]`, or `undefined`.
+ *
+ * Both segments are checked, not just the slug: `/catalog/aluminium/roller`
+ * addresses a system that exists under a category it does not belong to, and
+ * answering it would give the page two URLs — the one thing `localePrefix:
+ * "always"` was chosen to avoid in `i18n/routing.ts`.
+ */
+export function findProduct(category: string, slug: string): ProductBase | undefined {
+  return products.find((product) => product.categorySlug === category && product.slug === slug);
+}
+
+/** Every `/catalog/[category]/[product]` pair, for `generateStaticParams`. */
+export const productParams = products.map((product) => ({
+  category: product.categorySlug,
+  product: product.slug,
+}));

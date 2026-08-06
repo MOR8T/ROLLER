@@ -140,7 +140,7 @@ export const projectTeasers: ProjectTeaserBase[] = [
   {
     id: "business-center-khujand",
     category: "commercial",
-    image: "/products/thermo/thermo-anthracite.png",
+    image: "/products/thermo-60/thermo-60-anthracite.png",
     href: "/portfolio",
   },
   {
@@ -158,7 +158,7 @@ export const projectTeasers: ProjectTeaserBase[] = [
   {
     id: "apartment-renovation-dushanbe",
     category: "residential",
-    image: "/products/holodniy/holodniy-white.png",
+    image: "/products/ald-45/ald-45-white.png",
     href: "/portfolio",
   },
 ];
