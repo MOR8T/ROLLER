@@ -22,6 +22,10 @@
     "showroom": "Showrooms",
     "contacts": "Contacts"
   },
+  "breadcrumbs": {
+    "aria": "Breadcrumb",
+    "home": "Home"
+  },
   "header": {
     "mainNav": "Main navigation",
     "openMenu": "Menu",
@@ -106,30 +110,64 @@
   },
   "applications": {
     "eyebrow": "Applications",
-    "title": "Where the windows go",
-    "description": "Start with the building, not the material — we will pick the right system.",
+    "title": "Start from the job, not from the material",
+    "description": "Windows, doors, sliding systems and facades. Which profile suits them is our job to work out.",
     "cta": "Find a solution",
     "imagePlaceholder": "Project photograph: {title}",
     "items": {
-      "apartment": {
-        "title": "Flat",
-        "description": "Replacing windows in an apartment block: quieter, warmer, no draughts.",
-        "menuDescription": "Replacing windows in an apartment block"
+      "windows": {
+        "title": "Windows",
+        "description": "PVC and aluminium window systems for flats, private houses and commercial buildings.",
+        "menuDescription": "PVC and aluminium for any opening",
+        "heading": "PVC and aluminium windows in Dushanbe",
+        "intro": "We make windows in our own plant in Dushanbe, from the three-chamber economy series to a premium 75 mm profile. Survey, manufacture, delivery and installation are all done by our own teams.",
+        "metaTitle": "PVC windows in Dushanbe — PVC and aluminium, direct from the maker",
+        "metaDescription": "PVC and aluminium windows in Dushanbe direct from ROLLER: six profile systems, survey, manufacture and installation. Priced per project."
       },
-      "house": {
-        "title": "Private house",
-        "description": "Large openings, entrance groups and maximum thermal insulation.",
-        "menuDescription": "Large openings and maximum warmth"
+      "doors": {
+        "title": "Doors",
+        "description": "Entrance groups, balcony doors and internal doors in PVC and thermally broken aluminium.",
+        "menuDescription": "Entrance groups and balcony doors",
+        "heading": "PVC and aluminium doors in Dushanbe",
+        "intro": "Door sets are built to the opening: thermally broken aluminium entrances for heated buildings, light aluminium doors for shops, and PVC balcony doors.",
+        "metaTitle": "Aluminium doors in Dushanbe — made-to-order PVC and aluminium doors",
+        "metaDescription": "Made-to-order aluminium and PVC doors in Dushanbe: entrance groups, balcony and internal doors from ROLLER. Survey and installation included."
       },
-      "commercial": {
-        "title": "Office and shop",
-        "description": "Shopfronts, partitions and entrance groups for commercial spaces.",
-        "menuDescription": "Shopfronts, partitions and entrance groups"
+      "sliding-systems": {
+        "title": "Sliding systems",
+        "description": "Sliding windows and doors for balconies, terraces and panoramic openings.",
+        "menuDescription": "Balconies, terraces, panoramic openings",
+        "heading": "Sliding windows and doors in Dushanbe",
+        "intro": "Sliding units save room where a hinged sash has nowhere to swing: on a balcony, on a terrace, in a narrow passage. Built on both cold and thermally broken aluminium profiles.",
+        "metaTitle": "Sliding windows and doors in Dushanbe",
+        "metaDescription": "Aluminium sliding systems for balconies, terraces and panoramic openings in Dushanbe. Made by ROLLER, survey and installation included."
       },
-      "facade": {
-        "title": "Residential facade",
-        "description": "Glazing for residential complexes and made-to-project facade systems.",
-        "menuDescription": "Glazing residential complexes to project"
+      "facade-glazing": {
+        "title": "Facade glazing",
+        "description": "Facade systems for residential complexes, business centres and retail buildings.",
+        "menuDescription": "Residential, business centres, retail",
+        "heading": "Facade glazing in Dushanbe",
+        "intro": "We work with developers on volume and on schedule: glazing for residential complexes, curtain walling for business centres, entrance groups for retail buildings. Making the profile ourselves is what keeps large batches on time.",
+        "metaTitle": "Facade glazing in Dushanbe — aluminium facade systems",
+        "metaDescription": "Facade glazing for residential complexes and business centres in Dushanbe: cold and thermally broken aluminium systems from ROLLER."
+      },
+      "mosquito-nets": {
+        "title": "Insect screens",
+        "description": "Screens for windows and doors, made to the size of the opening.",
+        "menuDescription": "For windows and doors, made to size",
+        "heading": "Insect screens in Dushanbe",
+        "intro": "Screens are made to one specific opening — framed for windows, hinged for doors. They have no catalogue of their own: the size is taken at the survey along with the window.",
+        "metaTitle": "Insect screens in Dushanbe — for windows and doors",
+        "metaDescription": "Insect screens for windows and doors in Dushanbe, made to the size of the opening. Made by ROLLER, survey and fitting included."
+      },
+      "partitions": {
+        "title": "Partitions",
+        "description": "Office and retail partitions in cold aluminium with a slim profile.",
+        "menuDescription": "Offices, shops, zoning",
+        "heading": "Aluminium partitions in Dushanbe",
+        "intro": "Partitions divide an office, a shop or a showroom without eating the daylight. A slim 45 mm cold profile is the right answer where no heating is needed but geometry and rigidity are.",
+        "metaTitle": "Aluminium partitions in Dushanbe — office and retail",
+        "metaDescription": "Office and retail partitions in aluminium profile, Dushanbe. Made by ROLLER: survey, manufacture and installation."
       }
     }
   },
@@ -280,85 +318,204 @@
       }
     }
   },
+  "catalog": {
+    "metaTitle": "Catalogue of profile systems",
+    "metaDescription": "Six ROLLER profile systems in PVC and aluminium, from economy to premium. Filter by material, segment and application. Priced per project.",
+    "breadcrumb": "Catalogue",
+    "eyebrow": "Catalogue",
+    "title": "PVC and aluminium profile systems",
+    "description": "Six systems, all made in our own plant. Start from the material, from the job, or go straight to the list — we quote per project, so there are no price lists on the site.",
+    "systems": {
+      "eyebrow": "All systems",
+      "title": "Six systems, economy to premium",
+      "description": "Filter by material, segment or application and compare the systems side by side."
+    },
+    "filters": {
+      "aria": "Catalogue filters",
+      "category": "Material",
+      "segment": "Segment",
+      "application": "Application",
+      "all": "All",
+      "reset": "Clear filters",
+      "results": "{count, plural, =0 {Nothing found} one {# system} other {# systems}}"
+    },
+    "empty": {
+      "title": "Nothing found",
+      "description": "No system matches the filters you picked. Clear them, or write to us and we will pick one by hand."
+    },
+    "categoryEmptyDescription": "Nothing is published in this category yet. Have a look at the full catalogue, or send a request and we will match a system to your building."
+  },
+  "solutions": {
+    "cta": "Send a request",
+    "systems": {
+      "eyebrow": "Suitable systems",
+      "title": "What we fit on jobs like this",
+      "description": "The systems that suit this job. The final choice depends on the size of the opening, the floor and the budget — we will help at the survey."
+    },
+    "empty": {
+      "title": "Made to your opening",
+      "description": "Nothing is listed in the catalogue yet — these are made to the size of your opening. Send a request and we will quote your version."
+    },
+    "other": {
+      "eyebrow": "Other applications",
+      "title": "What else we make"
+    }
+  },
   "categories": {
     "eyebrow": "Catalogue",
-    "title": "Two key product categories",
     "viewCategory": "View category",
     "items": {
       "pvc": {
         "eyebrow": "Windows and doors",
         "title": "PVC products",
-        "description": "Window and door systems for flats, private houses and commercial buildings."
+        "description": "Window and door systems for flats, private houses and commercial buildings.",
+        "heading": "PVC profile systems",
+        "intro": "Four systems on one ladder: ECOLINE closes an opening dependably and cheaply, ROLLER is the baseline choice for a flat, UNOPEN handles a noisy street and large openings, and STELLA gives the most warmth and quiet.",
+        "metaTitle": "PVC profile systems — catalogue",
+        "metaDescription": "Four PVC systems made by ROLLER: ECOLINE, ROLLER, UNOPEN and STELLA — 60 to 75 mm, 3 to 5 chambers. Priced per project."
       },
       "aluminium": {
         "eyebrow": "Facades and glazing",
         "title": "Aluminium products",
-        "description": "Thermally broken, facade and sliding aluminium solutions for contemporary architecture."
+        "description": "Thermally broken, facade and sliding aluminium solutions for contemporary architecture.",
+        "heading": "Aluminium profile systems",
+        "intro": "Two systems for two jobs: the cold ALD-45 for shopfronts, partitions and unheated terraces, and the thermally broken THERMO 60 for facades and panoramic glazing on heated buildings.",
+        "metaTitle": "Aluminium profile systems — catalogue",
+        "metaDescription": "Aluminium systems made by ROLLER: the cold ALD-45 (45 mm) and the thermally broken THERMO 60 (60 mm) for facades, shopfronts and partitions."
       }
     }
   },
   "products": {
-    "eyebrow": "Systems and brands",
-    "title": "A range for private houses, flats and commercial buildings",
-    "viewCatalog": "View the catalogue",
     "more": "Learn more",
-    "previousSlide": "Previous system",
-    "nextSlide": "Next system",
-    "goToSlide": "Go to slide {index}",
+    "choose": "Get a quote",
+    "imageAlt": "{name} system",
+    "imagePlaceholder": "Render of the {name} system",
+    "cardAria": "{name} — {segment}",
     "items": {
-      "roller": {
-        "type": "PVC system",
-        "badge": "Mid-range",
-        "description": "A practical series for flats, houses and offices that need a dependable baseline balance of warmth, quiet and cost.",
-        "summary": "PVC · 60 mm · 4 chambers",
-        "highlights": [
-          "20 mm glazing unit",
-          "Tilt and turn mechanism",
-          "Up to 15 years' warranty on coloured finishes"
+      "ecoline": {
+        "description": "A baseline three-chamber series: it closes the opening dependably and without paying for more. Supplied in white profile only.",
+        "specs": [
+          {
+            "name": "Profile depth",
+            "value": "60 mm"
+          },
+          {
+            "name": "Chambers",
+            "value": "3"
+          },
+          {
+            "name": "Glazing unit",
+            "value": "20 mm"
+          },
+          {
+            "name": "Warranty",
+            "value": "5 years, white profile"
+          }
         ]
       },
-      "stella": {
-        "type": "PVC system",
-        "badge": "Premium class",
-        "description": "A series for projects with higher demands on thermal insulation, acoustics and tighter profile geometry.",
-        "summary": "PVC · 75 mm · 5 chambers",
-        "highlights": [
-          "26–42 mm glazing unit",
-          "Triple sealing line",
-          "Suits both flats and private houses"
+      "roller": {
+        "description": "A practical series for flats, houses and offices that need a dependable baseline balance of warmth, quiet and cost.",
+        "specs": [
+          {
+            "name": "Profile depth",
+            "value": "60 mm"
+          },
+          {
+            "name": "Chambers",
+            "value": "4"
+          },
+          {
+            "name": "Glazing unit",
+            "value": "20 mm"
+          },
+          {
+            "name": "Warranty",
+            "value": "15 years coloured / 10 years white"
+          }
         ]
       },
       "unopen": {
-        "type": "PVC system",
-        "badge": "Upper mid-range",
         "description": "A versatile system for residential and commercial buildings that need a reinforced profile without moving up to premium.",
-        "summary": "PVC · 65 mm · 5 chambers",
-        "highlights": [
-          "20 mm glazing unit",
-          "Dual and standard opening",
-          "Suits houses, offices and shops"
+        "specs": [
+          {
+            "name": "Profile depth",
+            "value": "65 mm"
+          },
+          {
+            "name": "Chambers",
+            "value": "5"
+          },
+          {
+            "name": "Glazing unit",
+            "value": "20 mm"
+          },
+          {
+            "name": "Warranty",
+            "value": "15 years coloured / 10 years white"
+          }
         ]
       },
-      "thermo-60": {
-        "type": "Aluminium system",
-        "badge": "Premium",
-        "description": "Thermally broken aluminium for facades, entrance groups and large openings where architecture and energy efficiency matter.",
-        "summary": "Aluminium · 60 mm · 3 chambers",
-        "highlights": [
-          "4–20 mm glazing unit",
-          "Suits facades and panoramic glazing",
-          "Dual and standard opening"
+      "stella": {
+        "description": "A series for projects with higher demands on thermal insulation, acoustics and tighter profile geometry.",
+        "specs": [
+          {
+            "name": "Profile depth",
+            "value": "75 mm"
+          },
+          {
+            "name": "Chambers",
+            "value": "5"
+          },
+          {
+            "name": "Glazing unit",
+            "value": "26–42 mm"
+          },
+          {
+            "name": "Warranty",
+            "value": "15 years coloured / 10 years white"
+          }
         ]
       },
       "ald-45": {
-        "type": "Aluminium system",
-        "badge": "Economy",
         "description": "A cold aluminium series for partitions, terraces, shopfronts and light commercial structures with a slim profile.",
-        "summary": "Aluminium · 45 mm · 1 chamber",
-        "highlights": [
-          "20 mm glazing unit",
-          "For offices, shops and partitions",
-          "Light and rigid profile"
+        "specs": [
+          {
+            "name": "Profile depth",
+            "value": "45 mm"
+          },
+          {
+            "name": "Chambers",
+            "value": "1"
+          },
+          {
+            "name": "Glazing unit",
+            "value": "20 mm"
+          },
+          {
+            "name": "Warranty",
+            "value": "15 years"
+          }
+        ]
+      },
+      "thermo-60": {
+        "description": "Thermally broken aluminium for facades, entrance groups and large openings where architecture and energy efficiency matter.",
+        "specs": [
+          {
+            "name": "Profile depth",
+            "value": "60 mm"
+          },
+          {
+            "name": "Chambers",
+            "value": "3"
+          },
+          {
+            "name": "Glazing unit",
+            "value": "4–20 mm"
+          },
+          {
+            "name": "Warranty",
+            "value": "15 years"
+          }
         ]
       }
     }

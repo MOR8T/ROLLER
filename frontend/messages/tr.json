@@ -22,6 +22,10 @@
     "showroom": "Showroom'lar",
     "contacts": "İletişim"
   },
+  "breadcrumbs": {
+    "aria": "Sayfa yolu",
+    "home": "Ana sayfa"
+  },
   "header": {
     "mainNav": "Ana gezinme",
     "openMenu": "Menü",
@@ -106,30 +110,64 @@
   },
   "applications": {
     "eyebrow": "Kullanım alanları",
-    "title": "Pencereleri nereye takıyoruz",
-    "description": "Malzemeden değil yapıdan başlayın — uygun sistemi biz seçeriz.",
+    "title": "Malzemeden değil işten başlayın",
+    "description": "Pencereler, kapılar, sürme sistemler ve cepheler. Hangi profilin uyacağını biz belirleriz.",
     "cta": "Çözüm seçin",
     "imagePlaceholder": "Proje fotoğrafı: {title}",
     "items": {
-      "apartment": {
-        "title": "Daire",
-        "description": "Apartmanda pencere değişimi: daha sessiz, daha sıcak, cereyansız.",
-        "menuDescription": "Apartmanda pencere değişimi"
+      "windows": {
+        "title": "Pencereler",
+        "description": "Daireler, müstakil evler ve ticari yapılar için PVC ve alüminyum pencere sistemleri.",
+        "menuDescription": "Her boşluk için PVC ve alüminyum",
+        "heading": "Duşanbe'de PVC ve alüminyum pencereler",
+        "intro": "Pencereleri Duşanbe'deki kendi tesisimizde üretiyoruz: üç odacıklı ekonomik seriden 75 mm premium profile kadar. Keşif, üretim, sevkiyat ve montaj kendi ekiplerimizle, aracısız.",
+        "metaTitle": "Duşanbe'de PVC pencere — üreticiden PVC ve alüminyum",
+        "metaDescription": "Duşanbe'de üretici ROLLER'den PVC ve alüminyum pencereler: altı profil sistemi, keşif, üretim ve montaj. Fiyat projeye göre."
       },
-      "house": {
-        "title": "Müstakil ev",
-        "description": "Geniş boşluklar, giriş grupları ve en yüksek ısı yalıtımı.",
-        "menuDescription": "Geniş boşluklar ve en iyi ısı yalıtımı"
+      "doors": {
+        "title": "Kapılar",
+        "description": "PVC ve ısı yalıtımlı alüminyumdan giriş grupları, balkon ve iç kapılar.",
+        "menuDescription": "Giriş grupları ve balkon kapıları",
+        "heading": "Duşanbe'de PVC ve alüminyum kapılar",
+        "intro": "Kapı gruplarını boşluğa göre üretiyoruz: ısıtılan binalar için ısı yalıtımlı alüminyum giriş kapıları, mağazalar için hafif alüminyum kapılar ve PVC balkon kapıları.",
+        "metaTitle": "Duşanbe'de alüminyum kapı — ısmarlama PVC ve alüminyum kapılar",
+        "metaDescription": "Duşanbe'de ısmarlama alüminyum ve PVC kapılar: giriş grupları, balkon ve iç kapılar. Üretici ROLLER, keşif ve montaj dahil."
       },
-      "commercial": {
-        "title": "Ofis ve mağaza",
-        "description": "Ticari mekânlar için vitrinler, bölmeler ve giriş grupları.",
-        "menuDescription": "Vitrinler, bölmeler ve giriş grupları"
+      "sliding-systems": {
+        "title": "Sürme sistemler",
+        "description": "Balkonlar, teraslar ve panoramik boşluklar için sürme pencere ve kapılar.",
+        "menuDescription": "Balkonlar, teraslar, panoramik boşluklar",
+        "heading": "Duşanbe'de sürme pencere ve kapılar",
+        "intro": "Sürme sistemler, kanadın açılacak yeri olmadığı yerde alan kazandırır: balkonda, terasta, dar geçişte. Isı yalıtımlı ve yalıtımsız alüminyum profille üretiyoruz.",
+        "metaTitle": "Duşanbe'de sürme pencere ve kapılar",
+        "metaDescription": "Duşanbe'de balkonlar, teraslar ve panoramik boşluklar için alüminyum sürme sistemler. Üretici ROLLER, keşif ve montaj dahil."
       },
-      "facade": {
-        "title": "Konut cephesi",
-        "description": "Konut projelerinin cam uygulaması ve projeye özel cephe sistemleri.",
-        "menuDescription": "Konut projelerinin projeye özel cam uygulaması"
+      "facade-glazing": {
+        "title": "Cephe uygulamaları",
+        "description": "Konut projeleri, iş merkezleri ve ticari yapılar için cephe sistemleri.",
+        "menuDescription": "Konut projeleri, iş merkezleri, ticari",
+        "heading": "Duşanbe'de cephe uygulamaları",
+        "intro": "Müteahhitlerle hacim ve termin üzerinden çalışıyoruz: konut projelerinin cam uygulaması, iş merkezlerinin giydirme cepheleri, ticari yapıların giriş grupları. Profili kendimiz ürettiğimiz için büyük partilerde takvim şaşmıyor.",
+        "metaTitle": "Duşanbe'de cephe uygulaması — alüminyum cephe sistemleri",
+        "metaDescription": "Duşanbe'de konut projeleri ve iş merkezleri için cephe uygulaması: üretici ROLLER'den ısı yalıtımlı ve yalıtımsız alüminyum sistemler."
+      },
+      "mosquito-nets": {
+        "title": "Sineklikler",
+        "description": "Pencere ve kapı sineklikleri — boşluk ölçüsüne göre üretilir.",
+        "menuDescription": "Pencere ve kapılara, ölçüye göre",
+        "heading": "Duşanbe'de sineklik",
+        "intro": "Sineklikleri tek bir boşluğa göre üretiyoruz — pencerelerde çerçeveli, kapılarda menteşeli. Ayrı bir katalogları yok: ölçü, keşifte pencereyle birlikte alınır.",
+        "metaTitle": "Duşanbe'de sineklik — pencere ve kapılar için",
+        "metaDescription": "Duşanbe'de pencere ve kapılar için boşluk ölçüsüne göre sineklik. Üretici ROLLER, keşif ve montaj dahil."
+      },
+      "partitions": {
+        "title": "Bölmeler",
+        "description": "İnce profilli, ısı yalıtımsız alüminyumdan ofis ve mağaza bölmeleri.",
+        "menuDescription": "Ofisler, mağazalar, alan ayırma",
+        "heading": "Duşanbe'de alüminyum bölmeler",
+        "intro": "Bölmeler ofisi, mağazayı ya da showroom'u gün ışığını yemeden ayırır. Isıtmanın gerekmediği, ama geometri ve sağlamlığın gerektiği yerde ince 45 mm yalıtımsız profil doğru cevaptır.",
+        "metaTitle": "Duşanbe'de alüminyum bölme — ofis ve mağaza",
+        "metaDescription": "Duşanbe'de alüminyum profilden ofis ve mağaza bölmeleri. Üretici ROLLER: keşif, üretim ve montaj."
       }
     }
   },
@@ -280,85 +318,204 @@
       }
     }
   },
+  "catalog": {
+    "metaTitle": "Profil sistemleri kataloğu",
+    "metaDescription": "ROLLER'in PVC ve alüminyum altı profil sistemi — ekonomikten premiuma. Malzeme, segment ve kullanım alanına göre filtreleyin. Fiyat projeye göre.",
+    "breadcrumb": "Katalog",
+    "eyebrow": "Katalog",
+    "title": "PVC ve alüminyum profil sistemleri",
+    "description": "Kendi tesisimizde ürettiğimiz altı sistem. Malzemeden, işten başlayın ya da doğrudan listeye geçin — fiyatı projeye göre hesaplıyoruz, sitede hazır fiyat listesi yok.",
+    "systems": {
+      "eyebrow": "Tüm sistemler",
+      "title": "Altı sistem — ekonomikten premiuma",
+      "description": "Malzemeye, segmente veya kullanım alanına göre filtreleyin ve sistemleri yan yana karşılaştırın."
+    },
+    "filters": {
+      "aria": "Katalog filtreleri",
+      "category": "Malzeme",
+      "segment": "Segment",
+      "application": "Kullanım alanı",
+      "all": "Tümü",
+      "reset": "Filtreleri temizle",
+      "results": "{count, plural, =0 {Sonuç bulunamadı} one {# sistem} other {# sistem}}"
+    },
+    "empty": {
+      "title": "Sonuç bulunamadı",
+      "description": "Seçtiğiniz koşullara uyan sistem yok. Filtreleri temizleyin ya da bize yazın — sizin için elle seçelim."
+    },
+    "categoryEmptyDescription": "Bu kategoride henüz yayımlanmış sistem yok. Tüm kataloğa göz atın ya da talep bırakın — yapınıza uygun olanı biz seçelim."
+  },
+  "solutions": {
+    "cta": "Talep bırakın",
+    "systems": {
+      "eyebrow": "Uygun sistemler",
+      "title": "Bu tür işlerde ne kullanıyoruz",
+      "description": "Bu işe uyan sistemler. Nihai seçim boşluk ölçüsüne, kata ve bütçeye bağlı — keşifte birlikte karar veririz."
+    },
+    "empty": {
+      "title": "Boşluğunuza göre üretiyoruz",
+      "description": "Katalogda henüz hazır ürün yok — yapınızın boşluğuna göre üretiyoruz. Talep bırakın, sizin için hesaplayalım."
+    },
+    "other": {
+      "eyebrow": "Diğer kullanım alanları",
+      "title": "Başka neler üretiyoruz"
+    }
+  },
   "categories": {
     "eyebrow": "Katalog",
-    "title": "İki temel ürün kategorisi",
     "viewCategory": "Kategoriyi incele",
     "items": {
       "pvc": {
         "eyebrow": "Pencere ve kapılar",
         "title": "PVC ürünleri",
-        "description": "Daireler, müstakil evler ve ticari yapılar için pencere ve kapı sistemleri."
+        "description": "Daireler, müstakil evler ve ticari yapılar için pencere ve kapı sistemleri.",
+        "heading": "PVC profil sistemleri",
+        "intro": "Tek bir merdivende dört sistem: ECOLINE boşluğu güvenilir ve uygun biçimde kapatır, ROLLER daire için temel seçimdir, UNOPEN gürültülü caddeyi ve geniş boşlukları karşılar, STELLA en yüksek ısı ve ses yalıtımını verir.",
+        "metaTitle": "PVC profil sistemleri — katalog",
+        "metaDescription": "ROLLER üretimi dört PVC sistemi: ECOLINE, ROLLER, UNOPEN ve STELLA — 60–75 mm, 3–5 odacık. Fiyat projeye göre."
       },
       "aluminium": {
         "eyebrow": "Cepheler ve cam uygulamaları",
         "title": "Alüminyum ürünleri",
-        "description": "Çağdaş mimari için ısı yalıtımlı, cephe ve sürme alüminyum çözümleri."
+        "description": "Çağdaş mimari için ısı yalıtımlı, cephe ve sürme alüminyum çözümleri.",
+        "heading": "Alüminyum profil sistemleri",
+        "intro": "İki iş için iki sistem: vitrinler, bölmeler ve ısıtılmayan teraslar için yalıtımsız ALD-45; ısıtılan binaların cepheleri ve panoramik cam uygulamaları için ısı yalıtımlı THERMO 60.",
+        "metaTitle": "Alüminyum profil sistemleri — katalog",
+        "metaDescription": "ROLLER üretimi alüminyum sistemler: yalıtımsız ALD-45 (45 mm) ve ısı yalıtımlı THERMO 60 (60 mm) — cepheler, vitrinler ve bölmeler için."
       }
     }
   },
   "products": {
-    "eyebrow": "Sistemler ve markalar",
-    "title": "Müstakil evler, daireler ve ticari yapılar için ürün ailesi",
-    "viewCatalog": "Kataloğu görün",
     "more": "Ayrıntılar",
-    "previousSlide": "Önceki sistem",
-    "nextSlide": "Sonraki sistem",
-    "goToSlide": "{index}. slayta git",
+    "choose": "Teklif alın",
+    "imageAlt": "{name} sistemi",
+    "imagePlaceholder": "{name} sisteminin görseli",
+    "cardAria": "{name} — {segment}",
     "items": {
-      "roller": {
-        "type": "PVC sistemi",
-        "badge": "Orta segment",
-        "description": "Sıcaklık, sessizlik ve maliyet arasında güvenilir bir temel denge arayan daireler, evler ve ofisler için pratik seri.",
-        "summary": "PVC · 60 mm · 4 odacık",
-        "highlights": [
-          "20 mm cam ünitesi",
-          "Çift açılım (vasistas ve kanat) mekanizması",
-          "Renkli çözümlerde 15 yıla kadar garanti"
+      "ecoline": {
+        "description": "Üç odacıklı temel seri: boşluğu güvenilir biçimde ve fazlasına para vermeden kapatır. Yalnızca beyaz profille sunulur.",
+        "specs": [
+          {
+            "name": "Profil derinliği",
+            "value": "60 mm"
+          },
+          {
+            "name": "Odacık sayısı",
+            "value": "3"
+          },
+          {
+            "name": "Cam ünitesi",
+            "value": "20 mm"
+          },
+          {
+            "name": "Garanti",
+            "value": "5 yıl, beyaz profil"
+          }
         ]
       },
-      "stella": {
-        "type": "PVC sistemi",
-        "badge": "Premium sınıf",
-        "description": "Isı yalıtımı, akustik ve daha hassas profil geometrisi beklentisi yüksek projeler için seri.",
-        "summary": "PVC · 75 mm · 5 odacık",
-        "highlights": [
-          "26–42 mm cam ünitesi",
-          "Üç sıra conta",
-          "Daireler ve müstakil evler için uygundur"
+      "roller": {
+        "description": "Sıcaklık, sessizlik ve maliyet arasında güvenilir bir temel denge arayan daireler, evler ve ofisler için pratik seri.",
+        "specs": [
+          {
+            "name": "Profil derinliği",
+            "value": "60 mm"
+          },
+          {
+            "name": "Odacık sayısı",
+            "value": "4"
+          },
+          {
+            "name": "Cam ünitesi",
+            "value": "20 mm"
+          },
+          {
+            "name": "Garanti",
+            "value": "renklide 15 yıl / beyazda 10 yıl"
+          }
         ]
       },
       "unopen": {
-        "type": "PVC sistemi",
-        "badge": "Orta üstü",
         "description": "Premium segmente geçmeden güçlendirilmiş profil gereken konut ve ticari yapılar için çok yönlü sistem.",
-        "summary": "PVC · 65 mm · 5 odacık",
-        "highlights": [
-          "20 mm cam ünitesi",
-          "Çift ve standart açılım",
-          "Evler, ofisler ve mağazalar için uygundur"
+        "specs": [
+          {
+            "name": "Profil derinliği",
+            "value": "65 mm"
+          },
+          {
+            "name": "Odacık sayısı",
+            "value": "5"
+          },
+          {
+            "name": "Cam ünitesi",
+            "value": "20 mm"
+          },
+          {
+            "name": "Garanti",
+            "value": "renklide 15 yıl / beyazda 10 yıl"
+          }
         ]
       },
-      "thermo-60": {
-        "type": "Alüminyum sistemi",
-        "badge": "Premium",
-        "description": "Mimari görünümün ve enerji verimliliğinin önemli olduğu cepheler, giriş grupları ve geniş boşluklar için ısı yalıtımlı alüminyum.",
-        "summary": "Alüminyum · 60 mm · 3 odacık",
-        "highlights": [
-          "4–20 mm cam ünitesi",
-          "Cepheler ve panoramik cam uygulamaları için uygundur",
-          "Çift ve standart açılım"
+      "stella": {
+        "description": "Isı yalıtımı, akustik ve daha hassas profil geometrisi beklentisi yüksek projeler için seri.",
+        "specs": [
+          {
+            "name": "Profil derinliği",
+            "value": "75 mm"
+          },
+          {
+            "name": "Odacık sayısı",
+            "value": "5"
+          },
+          {
+            "name": "Cam ünitesi",
+            "value": "26–42 mm"
+          },
+          {
+            "name": "Garanti",
+            "value": "renklide 15 yıl / beyazda 10 yıl"
+          }
         ]
       },
       "ald-45": {
-        "type": "Alüminyum sistemi",
-        "badge": "Ekonomik segment",
         "description": "Bölmeler, teraslar, vitrinler ve ince profilli hafif ticari konstrüksiyonlar için ısı yalıtımsız alüminyum serisi.",
-        "summary": "Alüminyum · 45 mm · 1 odacık",
-        "highlights": [
-          "20 mm cam ünitesi",
-          "Ofisler, mağazalar ve bölmeler için",
-          "Hafif ve dayanıklı profil"
+        "specs": [
+          {
+            "name": "Profil derinliği",
+            "value": "45 mm"
+          },
+          {
+            "name": "Odacık sayısı",
+            "value": "1"
+          },
+          {
+            "name": "Cam ünitesi",
+            "value": "20 mm"
+          },
+          {
+            "name": "Garanti",
+            "value": "15 yıl"
+          }
+        ]
+      },
+      "thermo-60": {
+        "description": "Mimari görünümün ve enerji verimliliğinin önemli olduğu cepheler, giriş grupları ve geniş boşluklar için ısı yalıtımlı alüminyum.",
+        "specs": [
+          {
+            "name": "Profil derinliği",
+            "value": "60 mm"
+          },
+          {
+            "name": "Odacık sayısı",
+            "value": "3"
+          },
+          {
+            "name": "Cam ünitesi",
+            "value": "4–20 mm"
+          },
+          {
+            "name": "Garanti",
+            "value": "15 yıl"
+          }
         ]
       }
     }

@@ -8,15 +8,7 @@ import {
   Truck,
   Wrench,
 } from "lucide-react";
-import type {
-  Application,
-  Brand,
-  HeroContent,
-  NewsTeaser,
-  Partner,
-  ProjectTeaser,
-  ShowcaseProduct,
-} from "@/types";
+import type { HeroContent, NewsTeaser, Partner, ProjectTeaser } from "@/types";
 
 /**
  * Mock content for the homepage.
@@ -27,37 +19,20 @@ import type {
  * below.
  *
  * The split is not cosmetic. `data/` is the stand-in for the API, and the API
- * will return a system's depth as `"60 мм"` in every language but its
- * `audience` line as four different sentences (JSONB per
+ * will return a system's depth as `60` in every language but its `audience`
+ * line as four different sentences (JSONB per
  * `project_plan/10-database-schema.md`). Keeping the two apart here means the
  * components already consume them the way they will once the backend exists.
  *
  * Each `…Base` type is the domain interface from `@/types` minus the fields the
  * message catalogue supplies, so the contract stays visible in one place.
+ *
+ * ⚠️ The catalog itself — categories, applications and the six profile systems —
+ * moved to `data/catalog.ts` in stage 04. It stopped being homepage mock data
+ * the moment `/catalog` and `/solutions/[application]` started reading it, and
+ * the homepage's brand lineup now renders the same `products` array the catalog
+ * grid does rather than a second copy of the six systems.
  */
-
-/** Catalog landing cards. Copy: `categories.items.<key>` (`key` = material). */
-export type ProductCategoryBase = {
-  key: "pvc" | "aluminium";
-  href: string;
-  image: string;
-  accent: string;
-};
-
-export const productCategories: ProductCategoryBase[] = [
-  {
-    key: "pvc",
-    href: "/catalog/pvc",
-    image: "/products/stella/stella-main.png",
-    accent: "bg-brand-red",
-  },
-  {
-    key: "aluminium",
-    href: "/catalog/aluminium",
-    image: "/products/thermo/thermo-anthracite.png",
-    accent: "bg-brand-black",
-  },
-];
 
 /** Copy: `advantages.<key>`. */
 export const advantages = [
@@ -69,50 +44,6 @@ export const advantages = [
   { key: "delivery", icon: Truck },
   { key: "service", icon: Headphones },
 ] as const;
-
-/**
- * Copy: `products.items.<slug>` for the spec text, `brands.items.<slug>.name`
- * for the name — the same six systems as `brandLineup`, so the brand name has
- * exactly one source per locale.
- */
-export type ShowcaseProductBase = Omit<
-  ShowcaseProduct,
-  "name" | "type" | "badge" | "description" | "summary" | "highlights"
->;
-
-export const showcaseProducts: ShowcaseProductBase[] = [
-  {
-    slug: "roller",
-    badgeVariant: "outline",
-    image: "/products/roller/roller-main.png",
-    href: "/catalog/pvc",
-    priority: true,
-  },
-  {
-    slug: "stella",
-    badgeVariant: "red",
-    image: "/products/stella/stella-main.png",
-    href: "/catalog/pvc",
-  },
-  {
-    slug: "unopen",
-    badgeVariant: "black",
-    image: "/products/unopen/unopen-main.png",
-    href: "/catalog/pvc",
-  },
-  {
-    slug: "thermo-60",
-    badgeVariant: "red",
-    image: "/products/thermo/thermo-anthracite.png",
-    href: "/catalog/aluminium",
-  },
-  {
-    slug: "ald-45",
-    badgeVariant: "outline",
-    image: "/products/holodniy/holodniy-white.png",
-    href: "/catalog/aluminium",
-  },
-];
 
 /** Copy: `production.stats.<key>`. Values are formatted per locale on render. */
 export interface CompanyStat {
@@ -190,96 +121,6 @@ export const heroContent: HeroContentBase = {
   primaryCtaHref: "#brands",
   secondaryCtaHref: "#professionals",
 };
-
-// The six systems, ordered as a ladder from economy to premium — that order is
-// the explanation. See DESIGN.md §7 for the source table.
-// Copy: `brands.items.<slug>.name` and `.audience`.
-export type BrandBase = Omit<Brand, "name" | "audience" | "depth"> & {
-  /** Structural depth in millimetres. The unit is a word — `мм` / `mm` — so it
-   *  lives in `brands.depth` and is joined per locale, not baked in here. */
-  depthMm: number;
-};
-
-export const brandLineup: BrandBase[] = [
-  {
-    slug: "ecoline",
-    material: "pvc",
-    segment: "economy",
-    depthMm: 60,
-    chambers: 3,
-    logo: "/logos/ecolayn.png",
-    image: null,
-    href: "/catalog/pvc/ecoline",
-  },
-  {
-    slug: "roller",
-    material: "pvc",
-    segment: "mid",
-    depthMm: 60,
-    chambers: 4,
-    logo: "/logos/logo-dark.png",
-    image: "/products/roller/roller-main.png",
-    href: "/catalog/pvc/roller",
-  },
-  {
-    slug: "unopen",
-    material: "pvc",
-    segment: "upper-mid",
-    depthMm: 65,
-    chambers: 5,
-    logo: "/logos/unopen.png",
-    image: "/products/unopen/unopen-main.png",
-    href: "/catalog/pvc/unopen",
-  },
-  {
-    slug: "stella",
-    material: "pvc",
-    segment: "premium",
-    depthMm: 75,
-    chambers: 5,
-    logo: "/logos/stella-red.png",
-    image: "/products/stella/stella-main.png",
-    href: "/catalog/pvc/stella",
-  },
-  {
-    slug: "ald-45",
-    material: "aluminium",
-    materialNote: "cold",
-    segment: "economy",
-    depthMm: 45,
-    chambers: 1,
-    logo: null,
-    image: "/products/holodniy/holodniy-white.png",
-    href: "/catalog/aluminium/ald-45",
-  },
-  {
-    slug: "thermo-60",
-    material: "aluminium",
-    materialNote: "warm",
-    segment: "premium",
-    depthMm: 60,
-    chambers: 3,
-    logo: null,
-    image: "/products/thermo/thermo-anthracite.png",
-    href: "/catalog/aluminium/thermo-60",
-  },
-];
-
-// Entry points by situation, not by material — the first question a flat owner
-// can actually answer. Targets are the SEO landings built in stage 04.
-//
-// This list also drives the header's catalog mega-menu. It used to be copied
-// into `catalogMenu` in `lib/site-config.ts` with a "keep in sync" comment
-// attached; one list keyed by slug removes the hazard and stops the same four
-// words being translated twice. Copy: `applications.items.<slug>`.
-export type ApplicationBase = Omit<Application, "title" | "description">;
-
-export const applications: ApplicationBase[] = [
-  { slug: "apartment", image: null, href: "/solutions/apartment" },
-  { slug: "house", image: null, href: "/solutions/house" },
-  { slug: "commercial", image: null, href: "/solutions/commercial" },
-  { slug: "facade", image: null, href: "/solutions/facade" },
-];
 
 // "Профессионалам" — the one dark section on the page. The dark ground is the
 // marker that the audience has changed (DESIGN.md §3 п.2), not decoration.

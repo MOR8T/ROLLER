@@ -25,33 +25,73 @@ export type Segment = "economy" | "mid" | "upper-mid" | "premium";
 
 export type ProjectCategory = "residential" | "commercial" | "private";
 
+/**
+ * A catalog category is the **material**, and nothing else — there are exactly
+ * two of them and they are a product's "home" and its URL
+ * (`project_plan/04-catalog-and-applications.md`).
+ *
+ * The slug is `Material`, not `string`: the plan warns that an older draft
+ * wrote `pvh` where the code writes `pvc`, and typing the slug is what stops
+ * that ever being expressible again.
+ */
 export interface Category {
-  slug: string;
+  slug: Material;
   title: string;
   description: string;
   image: string;
 }
 
-export interface ProductSpecs {
-  thickness: string;
-  chambers: number;
-  glazing: string;
-  soundInsulation: boolean;
-  heatInsulation: boolean;
-  warranty: string;
+/**
+ * One characteristic of a product, as a free-form pair.
+ *
+ * Deliberately *not* a fixed set of columns. A mosquito net, a windowsill or a
+ * handle has neither chambers nor a glazing unit, so a `ProductSpecs` interface
+ * with `chambers: number` would either lie about them or need a migration the
+ * day the client adds one through the admin panel. The two filters the brief
+ * actually asks for — category and segment — are typed fields on `Product`, so
+ * typed spec columns would buy nothing.
+ *
+ * ⚠️ Not enough for the configurator (stage 06), which needs machine-readable
+ * option lists. That is open question №1 in `project_plan/00-overview.md`.
+ */
+export interface Spec {
+  name: string;
+  value: string;
 }
 
+/**
+ * `component` covers nets, windowsills, cable trunking, cylinders and the rest.
+ * None of them are in the catalog at launch — there is no content for them —
+ * but the schema accepts them, which is the point of the flexible `specs`.
+ */
+export type ProductKind = "system" | "component";
+
+/**
+ * A product is a **profile system**. It lives in exactly one category (its
+ * material) and is linked many-to-many to applications, because one system —
+ * ROLLER, say — goes into both windows and doors and cannot honestly be filed
+ * under "PVC windows".
+ */
 export interface Product {
   slug: string;
+  /** Brand name. Translated: `ТЕРМО 60` on RU/TG, `THERMO 60` on EN/TR. */
   name: string;
-  brand: string;
-  categorySlug: string;
+  kind: ProductKind;
+  categorySlug: Material;
+  /** Only meaningful for the aluminium systems: with or without a thermal break. */
+  materialNote?: MaterialNote;
+  applicationSlugs: string[];
   segment: Segment;
-  material: Material;
+  /** Structural depth in millimetres. The unit is a word, so it is joined per locale. */
+  depthMm: number;
+  chambers: number;
   shortDescription: string;
-  specs: ProductSpecs;
+  description: string;
+  specs: Spec[];
   colors: string[];
   images: string[];
+  /** `null` for the aluminium brands, which have no mark of their own. */
+  logo: string | null;
   popular: boolean;
 }
 
@@ -106,46 +146,23 @@ export interface HeroContent {
 }
 
 /**
- * One of the six profile systems, the core of the homepage (DESIGN.md §7).
- * The site's stated job is explaining why there are four PVC brands and how
- * ROLLER differs from UNOPEN, and this is where that happens.
- */
-export interface Brand {
-  slug: string;
-  /**
-   * Translated: the Cyrillic brands are written `ЭКОЛАЙН` / `АЛД-45` /
-   * `ТЕРМО 60` on the Russian and Tajik sites and `ECOLINE` / `ALD-45` /
-   * `THERMO 60` on the English and Turkish ones. The Latin brands
-   * (ROLLER, UNOPEN, STELLA) read the same in all four.
-   */
-  name: string;
-  material: Material;
-  materialNote?: MaterialNote;
-  segment: Segment;
-  /** Structural depth as shown, unit included — "60 мм" / "60 mm". */
-  depth: string;
-  chambers: number;
-  /** The single "для кого" line that makes the card readable by a non-expert. */
-  audience: string;
-  /**
-   * `null` for the aluminium systems, which have no mark of their own — the
-   * card then falls back to typography. Both cases must lay out identically.
-   */
-  logo: string | null;
-  image: string | null;
-  href: string;
-}
-
-/**
- * An entry point by situation rather than by material. A flat owner cannot
- * answer "PVC or aluminium?" — that is a manufacturer's question (DESIGN.md §7).
+ * The second axis of the catalog: a facet on `Product` *and* an SEO landing of
+ * its own (`project_plan/04-catalog-and-applications.md`).
+ *
+ * It exists because the category axis cannot carry the brief's search terms.
+ * "Пластиковые окна Душанбе" and "алюминиевые двери Душанбе" (brief §14.2) are
+ * queries about what the thing *does*, and every one of the six systems does
+ * several of those things — so the query gets a landing page, not a category.
+ *
+ * It is also the entry point a flat owner can actually use. "PVC or
+ * aluminium?" is a manufacturer's question (DESIGN.md §7); "windows or a
+ * facade?" is not.
  */
 export interface Application {
   slug: string;
   title: string;
   description: string;
   image: string | null;
-  href: string;
 }
 
 /** A "Профессионалам" offering — wholesale, dealership, components, docs. */
@@ -156,20 +173,6 @@ export interface ProOffering {
 }
 
 export type ProductCardBadgeVariant = "red" | "black" | "outline";
-
-export interface ShowcaseProduct {
-  slug: string;
-  name: string;
-  type: string;
-  badge: string;
-  badgeVariant: ProductCardBadgeVariant;
-  description: string;
-  summary: string;
-  highlights: string[];
-  image: string;
-  href: string;
-  priority?: boolean;
-}
 
 export interface ProjectTeaser {
   id: string;

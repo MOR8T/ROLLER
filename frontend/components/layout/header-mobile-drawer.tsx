@@ -8,7 +8,7 @@ import { ChevronDown, MessageCircle, Phone, X } from "lucide-react";
 import { ButtonLink } from "@/components/ui/button";
 import { BrandLogo } from "@/components/ui/brand-logo";
 import { Link } from "@/i18n/navigation";
-import { applications } from "@/data/home";
+import { applicationHref, applications, categories, categoryHref } from "@/data/catalog";
 import { navLinks, siteConfig } from "@/lib/site-config";
 import { cn } from "@/lib/utils";
 import { LanguageSwitcher } from "./language-switcher";
@@ -46,6 +46,7 @@ export function HeaderMobileDrawer({ open, onClose }: HeaderMobileDrawerProps) {
   const tNav = useTranslations("nav");
   const tCommon = useTranslations("common");
   const tApplications = useTranslations("applications");
+  const tCategories = useTranslations("categories");
 
   const close = () => {
     setCatalogOpen(false);
@@ -213,11 +214,24 @@ export function HeaderMobileDrawer({ open, onClose }: HeaderMobileDrawerProps) {
                               {applications.map((application) => (
                                 <Link
                                   key={application.slug}
-                                  href={application.href}
+                                  href={applicationHref(application.slug)}
                                   onClick={close}
                                   className="rounded-control px-3 py-2.5 text-sm text-brand-black/70 transition-colors hover:bg-brand-black/5 hover:text-brand-red focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:outline-none"
                                 >
                                   {tApplications(`items.${application.slug}.title`)}
+                                </Link>
+                              ))}
+                              {/* The material split sits below the applications
+                                  and above "весь каталог", mirroring the
+                                  desktop mega-menu's two columns. */}
+                              {categories.map((category) => (
+                                <Link
+                                  key={category.slug}
+                                  href={categoryHref(category.slug)}
+                                  onClick={close}
+                                  className="rounded-control px-3 py-2.5 text-sm text-brand-black/70 transition-colors hover:bg-brand-black/5 hover:text-brand-red focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:outline-none"
+                                >
+                                  {tCategories(`items.${category.slug}.title`)}
                                 </Link>
                               ))}
                               <Link
