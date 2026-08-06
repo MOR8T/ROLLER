@@ -1,15 +1,16 @@
 import Image from "next/image";
-import Link from "next/link";
+import { useTranslations } from "next-intl";
 import { ArrowUpRight } from "lucide-react";
 
-import { SectionHeading } from "@/components/sections/section-heading";
+import { accentTag, SectionHeading } from "@/components/sections/section-heading";
 import { Badge } from "@/components/ui/badge";
 import { Container } from "@/components/ui/container";
 import { MediaFrame } from "@/components/ui/media-frame";
 import { Reveal, RevealGroup, RevealItem } from "@/components/ui/reveal";
 import { Section } from "@/components/ui/section";
-import { brandLineup } from "@/data/home";
-import type { Brand, ProductCardBadgeVariant, Segment } from "@/types";
+import { Link } from "@/i18n/navigation";
+import { brandLineup, type BrandBase } from "@/data/home";
+import type { ProductCardBadgeVariant, Segment } from "@/types";
 
 /**
  * The core of the homepage (DESIGN.md §7).
@@ -23,22 +24,13 @@ import type { Brand, ProductCardBadgeVariant, Segment } from "@/types";
 // Red stays an accent, not a coding system: only the premium rung is marked in
 // brand red, so the badges add up to a fraction of the ~5% budget in §3.
 const segmentBadge: Record<Segment, ProductCardBadgeVariant> = {
-  эконом: "outline",
-  средний: "outline",
-  "выше среднего": "black",
-  премиум: "red",
+  economy: "outline",
+  mid: "outline",
+  "upper-mid": "black",
+  premium: "red",
 };
 
-function chambersLabel(count: number): string {
-  const lastTwo = count % 100;
-  const last = count % 10;
-  if (lastTwo >= 11 && lastTwo <= 14) return `${count} камер`;
-  if (last === 1) return `${count} камера`;
-  if (last >= 2 && last <= 4) return `${count} камеры`;
-  return `${count} камер`;
-}
-
-function BrandMark({ brand }: { brand: Brand }) {
+function BrandMark({ brand, name }: { brand: BrandBase; name: string }) {
   // Fixed height for both branches: the aluminium systems have no mark of their
   // own, and a card built on typography has to sit at exactly the same height
   // as one built on a logo (DESIGN.md §7).
@@ -47,39 +39,52 @@ function BrandMark({ brand }: { brand: Brand }) {
       {brand.logo ? (
         <Image
           src={brand.logo}
-          alt={brand.name}
+          alt={name}
           width={160}
           height={36}
           className="h-full w-auto object-contain object-left"
         />
       ) : (
         <span className="font-heading text-2xl font-bold tracking-tight text-brand-black">
-          {brand.name}
+          {name}
         </span>
       )}
     </div>
   );
 }
 
-function BrandCard({ brand }: { brand: Brand }) {
+function BrandCard({ brand }: { brand: BrandBase }) {
+  const t = useTranslations("brands");
+  const tMaterials = useTranslations("materials");
+  const tMaterialNotes = useTranslations("materialNotes");
+  const tSegments = useTranslations("segments");
+
+  const name = t(`items.${brand.slug}.name`);
+  const segment = tSegments(brand.segment);
+
   const specs = [
-    brand.material,
-    ...(brand.materialNote ? [brand.materialNote] : []),
-    brand.depth,
-    chambersLabel(brand.chambers),
+    tMaterials(brand.material),
+    ...(brand.materialNote ? [tMaterialNotes(brand.materialNote)] : []),
+    // "мм" is a word, not a symbol — it is "mm" on the English and Turkish
+    // sites. Joining it here rather than storing "60 мм" in the data is what
+    // keeps the spec strip from showing Cyrillic on `/en` and `/tr`.
+    t("depth", { value: brand.depthMm }),
+    // ICU plural, not a hand-rolled Russian rule: `few`/`many` differ per
+    // locale and Turkish has no plural agreement after a numeral at all.
+    t("chambers", { count: brand.chambers }),
   ];
 
   return (
     <Link
       href={brand.href}
       className="group flex h-full flex-col overflow-hidden rounded-card border border-brand-black/10 bg-surface transition-colors hover:border-brand-red/40 focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:outline-none"
-      aria-label={`${brand.name} — ${brand.segment}`}
+      aria-label={t("cardAria", { name, segment })}
     >
       <div className="relative bg-surface-muted p-6">
         <MediaFrame
           src={brand.image}
-          alt={`Система ${brand.name}`}
-          placeholderLabel={`Рендер системы ${brand.name}`}
+          alt={t("imageAlt", { name })}
+          placeholderLabel={t("imagePlaceholder", { name })}
           width={480}
           height={320}
           objectFit="contain"
@@ -89,11 +94,12 @@ function BrandCard({ brand }: { brand: Brand }) {
       </div>
 
       <div className="flex flex-1 flex-col border-t border-brand-black/8 p-6">
-        <div className="flex items-start justify-between gap-3">
-          <BrandMark brand={brand} />
-          <Badge variant={segmentBadge[brand.segment]} className="shrink-0">
-            {brand.segment}
-          </Badge>
+        {/* `flex-wrap`: the segment label is one short word in Russian
+            ("премиум") and three in Tajik ("болотар аз миёна"). Wrapping under
+            the mark beats squeezing it. */}
+        <div className="flex flex-wrap items-start justify-between gap-3">
+          <BrandMark brand={brand} name={name} />
+          <Badge variant={segmentBadge[brand.segment]}>{segment}</Badge>
         </div>
 
         <div className="mt-5 flex flex-wrap gap-2">
@@ -107,11 +113,13 @@ function BrandCard({ brand }: { brand: Brand }) {
           ))}
         </div>
 
-        <p className="mt-5 flex-1 text-sm leading-6 text-brand-black/70">{brand.audience}</p>
+        <p className="mt-5 flex-1 text-sm leading-6 text-brand-black/70">
+          {t(`items.${brand.slug}.audience`)}
+        </p>
 
         <span className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-brand-black transition-colors group-hover:text-brand-red">
-          Смотреть систему
-          <ArrowUpRight className="size-4" />
+          {t("viewSystem")}
+          <ArrowUpRight className="size-4 shrink-0" />
         </span>
       </div>
     </Link>
@@ -119,18 +127,19 @@ function BrandCard({ brand }: { brand: Brand }) {
 }
 
 export function BrandLineupSection() {
+  const t = useTranslations("brands");
+
   return (
     <Section id="brands" className="scroll-mt-20">
       <Container>
         <Reveal>
           <SectionHeading
-            eyebrow="Линейка систем"
-            title={
-              <>
-                Шесть систем — <span className="text-brand-red">одна</span> под вашу задачу
-              </>
-            }
-            description="Четыре системы из ПВХ и две из алюминия. Отличаются глубиной профиля, числом камер и тем, для чего они предназначены."
+            eyebrow={t("eyebrow")}
+            // The accented word is marked up inside the message, so each
+            // translation decides which of its own words carries the red —
+            // its position in the sentence differs per language.
+            title={t.rich("title", { accent: accentTag })}
+            description={t("description")}
           />
         </Reveal>
 

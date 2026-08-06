@@ -1,4 +1,6 @@
-import { SectionHeading } from "@/components/sections/section-heading";
+import { useFormatter, useTranslations } from "next-intl";
+
+import { accentTag, SectionHeading } from "@/components/sections/section-heading";
 import { Container } from "@/components/ui/container";
 import { Reveal, RevealGroup, RevealItem } from "@/components/ui/reveal";
 import { Section } from "@/components/ui/section";
@@ -18,52 +20,49 @@ import { companyStats, partners, serviceHighlights } from "@/data/home";
  * counting up explains nothing — and dropping it takes framer-motion off this
  * section entirely.
  */
-
-// Deterministic thousands separator. `toLocaleString` would depend on the
-// runtime's ICU data and can differ between server render and hydration.
-function formatStatValue(value: number): string {
-  return String(value).replace(/\B(?=(\d{3})+(?!\d))/g, " ");
-}
-
 export function ProductionScaleSection() {
+  const t = useTranslations("production");
+  // Grouping separators are a locale decision, not a formatting detail:
+  // "10 000" in Russian, "10,000" in English, "10.000" in Turkish. This used to
+  // be a hand-rolled regex, written that way to avoid the hydration mismatch a
+  // bare `toLocaleString` risks — `next-intl`'s formatter resolves the same
+  // locale on the server and on the client, so the mismatch cannot occur.
+  const format = useFormatter();
+
   return (
     <Section id="production" tone="muted">
       <Container>
         <Reveal>
           <SectionHeading
-            eyebrow="Производство и масштаб"
-            title={
-              <>
-                Собственный цех, а не <span className="text-brand-red">перепродажа</span>
-              </>
-            }
-            description="Профиль варим сами: от экструзии до готовой конструкции, замера и монтажа. Это позволяет держать сроки на объёмах застройщика и отвечать за результат целиком."
+            eyebrow={t("eyebrow")}
+            title={t.rich("title", { accent: accentTag })}
+            description={t("description")}
           />
         </Reveal>
 
         <RevealGroup className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-5 lg:gap-5">
           {companyStats.map((stat) => (
             <RevealItem
-              key={stat.label}
+              key={stat.key}
               className="flex h-full flex-col rounded-card border border-brand-black/10 bg-surface p-6"
             >
               <p className="font-heading text-4xl font-bold tracking-tight text-brand-black tabular-nums">
-                {formatStatValue(stat.value)}
+                {format.number(stat.value)}
                 {stat.suffix}
               </p>
-              <p className="mt-3 text-sm leading-6 text-brand-black/65">{stat.label}</p>
+              <p className="mt-3 text-sm leading-6 text-brand-black/65">{t(`stats.${stat.key}`)}</p>
             </RevealItem>
           ))}
         </RevealGroup>
 
         <Reveal className="mt-12">
           <h3 className="font-heading text-sm font-semibold tracking-[0.24em] text-brand-black/55 uppercase">
-            Полный цикл
+            {t("fullCycle")}
           </h3>
           <ol className="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-4 lg:gap-5">
             {serviceHighlights.map((step, index) => (
               <li
-                key={step.label}
+                key={step.key}
                 className="flex items-center gap-4 rounded-card border border-brand-black/10 bg-surface p-5"
               >
                 <span className="font-heading text-sm font-semibold text-brand-black/35 tabular-nums">
@@ -71,7 +70,7 @@ export function ProductionScaleSection() {
                 </span>
                 <step.icon className="size-5 shrink-0 text-brand-black/45" aria-hidden />
                 <span className="font-heading text-base font-semibold text-brand-black">
-                  {step.label}
+                  {t(`steps.${step.key}`)}
                 </span>
               </li>
             ))}
@@ -80,7 +79,7 @@ export function ProductionScaleSection() {
 
         <Reveal className="mt-12">
           <h3 className="font-heading text-sm font-semibold tracking-[0.24em] text-brand-black/55 uppercase">
-            Сырьё и оборудование
+            {t("suppliers")}
           </h3>
           <ul className="mt-5 grid grid-cols-2 gap-3 md:grid-cols-4">
             {partners.map((partner) => {

@@ -1,3 +1,4 @@
+import { setRequestLocale } from "next-intl/server";
 import { ApplicationsSection } from "@/components/sections/applications-section";
 import { BrandLineupSection } from "@/components/sections/brand-lineup-section";
 import { ContactsSection } from "@/components/sections/contacts-section";
@@ -26,7 +27,10 @@ import { ProjectsSection } from "@/components/sections/projects-section";
  *   News → the /news page (stage 07).
  *   About / Advantages / Stats / Partners → merged into "Производство и масштаб".
  */
-export default function Home() {
+export default async function Home({ params }: PageProps<"/[locale]">) {
+  const { locale } = await params;
+  setRequestLocale(locale);
+
   return (
     <>
       <HeroSection />

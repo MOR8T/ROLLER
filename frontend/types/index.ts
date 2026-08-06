@@ -1,6 +1,29 @@
-export type Material = "ПВХ" | "алюминий";
+/**
+ * Domain types — the contract the FastAPI backend will have to satisfy
+ * (`project_plan/10-database-schema.md`).
+ *
+ * Every discriminator below is a **locale-independent key**, never a display
+ * label. They used to be Russian string literals (`"ПВХ"`, `"выше среднего"`),
+ * which worked while the site was monolingual and stops working the moment a
+ * value has to be both a stable enum in Postgres and a translated word on
+ * screen. The labels now live in `messages/*.json` under `materials.*`,
+ * `segments.*` and `materialNotes.*`.
+ *
+ * Text-bearing fields (`title`, `description`, `audience`, …) stay on these
+ * interfaces: the backend stores them as JSONB and resolves them per request,
+ * so the API will return exactly this shape. During the frontend-only phase
+ * `data/` supplies the non-text half and the message catalogue supplies the
+ * text — see `data/home.ts`.
+ */
 
-export type Segment = "эконом" | "средний" | "выше среднего" | "премиум";
+export type Material = "pvc" | "aluminium";
+
+/** Only meaningful for the aluminium systems: with or without a thermal break. */
+export type MaterialNote = "cold" | "warm";
+
+export type Segment = "economy" | "mid" | "upper-mid" | "premium";
+
+export type ProjectCategory = "residential" | "commercial" | "private";
 
 export interface Category {
   slug: string;
@@ -89,12 +112,17 @@ export interface HeroContent {
  */
 export interface Brand {
   slug: string;
+  /**
+   * Translated: the Cyrillic brands are written `ЭКОЛАЙН` / `АЛД-45` /
+   * `ТЕРМО 60` on the Russian and Tajik sites and `ECOLINE` / `ALD-45` /
+   * `THERMO 60` on the English and Turkish ones. The Latin brands
+   * (ROLLER, UNOPEN, STELLA) read the same in all four.
+   */
   name: string;
   material: Material;
-  /** "холодный" / "тёплый" — only meaningful for the aluminium systems. */
-  materialNote?: string;
+  materialNote?: MaterialNote;
   segment: Segment;
-  /** Structural depth, e.g. "60 мм". */
+  /** Structural depth as shown, unit included — "60 мм" / "60 mm". */
   depth: string;
   chambers: number;
   /** The single "для кого" line that makes the card readable by a non-expert. */
@@ -122,6 +150,7 @@ export interface Application {
 
 /** A "Профессионалам" offering — wholesale, dealership, components, docs. */
 export interface ProOffering {
+  key: string;
   title: string;
   description: string;
 }
@@ -129,6 +158,7 @@ export interface ProOffering {
 export type ProductCardBadgeVariant = "red" | "black" | "outline";
 
 export interface ShowcaseProduct {
+  slug: string;
   name: string;
   type: string;
   badge: string;
@@ -145,7 +175,7 @@ export interface ProjectTeaser {
   id: string;
   title: string;
   location: string;
-  category: string;
+  category: ProjectCategory;
   image: string;
   caption: string;
   href: string;
@@ -156,6 +186,7 @@ export interface NewsTeaser {
   title: string;
   excerpt: string;
   image: string;
+  /** ISO-8601 date; rendered through `next-intl`'s formatter per locale. */
   date: string;
   href: string;
 }

@@ -1,7 +1,8 @@
-import Link from "next/link";
+import { useTranslations } from "next-intl";
 import { ArrowUp, Clock, Mail, MapPin, Phone } from "lucide-react";
 import { Container } from "@/components/ui/container";
 import { BrandLogo } from "@/components/ui/brand-logo";
+import { Link } from "@/i18n/navigation";
 import { navLinks, siteConfig } from "@/lib/site-config";
 
 function InstagramIcon({ className }: { className?: string }) {
@@ -87,26 +88,32 @@ function WhatsAppIcon({ className }: { className?: string }) {
  *  - main grid (mobile-first): brand block, nav column, contacts column, social column
  *  - bottom bar: copyright + working hours + back-to-top
  *
- * All copy in Russian (site default locale).
- * Data is sourced from `siteConfig` — no magic values.
+ * Locale-independent facts come from `siteConfig`, copy from `messages/*.json`
+ * — no magic values in either direction.
  */
 export function Footer() {
-  const year = new Date().getFullYear();
+  const t = useTranslations("footer");
+  const tNav = useTranslations("nav");
+  const tCommon = useTranslations("common");
+
+  // Passed to ICU as a string on purpose: `{year}` typed as a number would be
+  // formatted per locale and render "2 026" in Russian.
+  const year = String(new Date().getFullYear());
 
   const socials = [
     {
       href: siteConfig.social.instagram,
-      label: "Instagram ROLLER",
+      label: t("instagram"),
       icon: InstagramIcon,
     },
     {
       href: siteConfig.social.telegram,
-      label: "Telegram ROLLER",
+      label: t("telegram"),
       icon: TelegramIcon,
     },
     {
       href: siteConfig.whatsappHref,
-      label: "WhatsApp ROLLER",
+      label: t("whatsapp"),
       icon: WhatsAppIcon,
     },
   ] as const;
@@ -125,16 +132,16 @@ export function Footer() {
             <BrandLogo isDark={false} className="h-12 w-auto" />
           </Link>
 
-          <p className="mt-5 text-sm leading-relaxed text-brand-white/85">{siteConfig.slogan.ru}</p>
+          <p className="mt-5 text-sm leading-relaxed text-brand-white/85">{tCommon("slogan")}</p>
 
           <p className="mt-6 text-xs font-medium tracking-[0.18em] text-brand-white/85 uppercase">
-            На рынке с {siteConfig.foundedYear} года
+            {t("onMarketSince", { year: String(siteConfig.foundedYear) })}
           </p>
         </div>
 
-        <nav aria-label="Подвал" className="text-sm">
+        <nav aria-label={t("nav")} className="text-sm">
           <h2 className="font-heading text-sm font-semibold tracking-[0.18em] text-brand-white uppercase">
-            Разделы
+            {t("sections")}
           </h2>
           <ul className="mt-5 space-y-1">
             {navLinks.map((link) => (
@@ -143,7 +150,7 @@ export function Footer() {
                   href={link.href}
                   className="inline-block rounded-control py-1.5 text-brand-white/85 transition-colors hover:text-brand-red focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:ring-offset-brand-black focus-visible:outline-none"
                 >
-                  {link.label}
+                  {tNav(link.key)}
                 </Link>
               </li>
             ))}
@@ -152,7 +159,7 @@ export function Footer() {
 
         <div className="text-sm">
           <h2 className="font-heading text-sm font-semibold tracking-[0.18em] text-brand-white uppercase">
-            Контакты
+            {t("contacts")}
           </h2>
           <ul className="mt-5 space-y-4 text-brand-white/85">
             <li className="flex items-start gap-3">
@@ -163,7 +170,7 @@ export function Footer() {
                 rel="noopener noreferrer"
                 className="rounded-control transition-colors hover:text-brand-white focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:ring-offset-brand-black focus-visible:outline-none"
               >
-                {siteConfig.address}
+                {tCommon("address")}
               </a>
             </li>
             <li className="flex items-center gap-3">
@@ -186,14 +193,14 @@ export function Footer() {
             </li>
             <li className="flex items-center gap-3">
               <Clock className="size-4 shrink-0 text-brand-red" aria-hidden />
-              <span>{siteConfig.workingHours}</span>
+              <span>{tCommon("workingHours")}</span>
             </li>
           </ul>
         </div>
 
         <div>
           <h2 className="font-heading text-sm font-semibold tracking-[0.18em] text-brand-white uppercase">
-            Мы в соцсетях
+            {t("social")}
           </h2>
           <div className="mt-5 flex gap-3">
             {socials.map(({ href, label, icon: Icon }) => (
@@ -214,19 +221,17 @@ export function Footer() {
 
       <div className="border-t border-brand-white/10">
         <Container className="flex flex-col items-center gap-4 py-6 text-xs text-brand-white/85 sm:flex-row sm:justify-between">
-          <p>
-            © {year} {siteConfig.name}. Все права защищены.
-          </p>
-          <div className="flex items-center gap-5">
+          <p>{t("rights", { year, name: siteConfig.name })}</p>
+          <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2">
             <p className="flex items-center gap-2">
-              <Clock className="size-3.5 text-brand-red" aria-hidden />
-              {siteConfig.workingHours}
+              <Clock className="size-3.5 shrink-0 text-brand-red" aria-hidden />
+              {tCommon("workingHours")}
             </p>
             <a
               href="#top"
               className="group flex items-center gap-1.5 rounded-control py-1 transition-colors hover:text-brand-white focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:ring-offset-brand-black focus-visible:outline-none"
             >
-              <span className="tracking-wide uppercase">Наверх</span>
+              <span className="tracking-wide uppercase">{t("toTop")}</span>
               <ArrowUp
                 className="size-3.5 text-brand-red transition-transform group-hover:-translate-y-0.5"
                 aria-hidden

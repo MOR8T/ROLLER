@@ -1,3 +1,4 @@
+import { useTranslations } from "next-intl";
 import { ArrowRight } from "lucide-react";
 
 import { heroContent } from "@/data/home";
@@ -20,39 +21,37 @@ import { MediaFrame } from "@/components/ui/media-frame";
  * which is precisely the reaction the client reported.
  */
 export function HeroSection() {
+  const t = useTranslations("hero");
+
   return (
-    <section
-      id="hero"
-      aria-label="Главный экран"
-      className="border-b border-brand-black/8 bg-surface"
-    >
+    <section id="hero" aria-label={t("aria")} className="border-b border-brand-black/8 bg-surface">
       {/* Two columns from `md`, not `lg`: the image may only appear where it can
           sit beside the headline. Stacked underneath it pushes the hero past
           the 72–80svh cap in DESIGN.md §5. */}
       <Container className="grid min-h-hero content-center gap-10 py-section md:grid-cols-[1.05fr_0.95fr] md:items-center md:gap-12 lg:gap-16">
         <div className="max-w-2xl">
           <p className="text-xs font-semibold tracking-[0.22em] text-brand-black/55 uppercase sm:text-sm">
-            {heroContent.eyebrow}
+            {t("eyebrow")}
           </p>
 
           <h1 className="mt-4 text-3xl font-bold tracking-tight text-balance text-brand-black sm:text-4xl lg:text-6xl">
-            {heroContent.headline}
+            {t("headline")}
           </h1>
 
           <p className="mt-5 max-w-xl text-base leading-7 text-brand-black/70 lg:text-lg lg:leading-8">
-            {heroContent.subtext}
+            {t("subtext")}
           </p>
 
           {/* Side by side only from `lg`. In the narrower md column the labels
               wrapped mid-button, and Tajik runs 10–20% longer than Russian
               (DESIGN.md §10) — stacking is the layout that survives both. */}
           <div className="mt-8 flex flex-col gap-3 lg:flex-row">
-            <ButtonLink href={heroContent.primaryCta.href} size="lg">
-              {heroContent.primaryCta.label}
-              <ArrowRight className="size-5" />
+            <ButtonLink href={heroContent.primaryCtaHref} size="lg">
+              {t("primaryCta")}
+              <ArrowRight className="size-5 shrink-0" />
             </ButtonLink>
-            <ButtonLink href={heroContent.secondaryCta.href} variant="outline" size="lg">
-              {heroContent.secondaryCta.label}
+            <ButtonLink href={heroContent.secondaryCtaHref} variant="outline" size="lg">
+              {t("secondaryCta")}
             </ButtonLink>
           </div>
         </div>
@@ -62,8 +61,8 @@ export function HeroSection() {
             image. The promise wins. */}
         <MediaFrame
           src={heroContent.image}
-          alt={heroContent.imageLabel}
-          placeholderLabel={heroContent.imageLabel}
+          alt={t("imageLabel")}
+          placeholderLabel={t("imageLabel")}
           width={640}
           height={500}
           priority

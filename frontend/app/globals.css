@@ -54,7 +54,22 @@
 
   /* Fonts (bound to next/font CSS variables in layout.tsx) */
   --font-sans: var(--font-montserrat), ui-sans-serif, system-ui, sans-serif;
-  --font-heading: var(--font-chakra-petch), var(--font-montserrat), sans-serif;
+
+  /* Chakra Petch is named literally here, not through `--font-chakra-petch`.
+     That variable expands to `"Chakra Petch", "Chakra Petch Fallback"`, and the
+     fallback is a metrics-adjusted `local(Arial)` declared over `U+0-10FFFF` —
+     it claims every codepoint, so it swallowed Cyrillic before the chain could
+     reach Montserrat. Measured on the Tajik homepage, an <h1> rendered at the
+     fallback's width (358px) instead of Montserrat's (413px): headings on the
+     Russian and Tajik sites were being drawn in Arial, not in the brand font
+     that DESIGN.md §4 specifies.
+
+     Naming the family directly skips that fallback. Chakra Petch ships no
+     Cyrillic subset at all, so Cyrillic now falls through to Montserrat and its
+     own adjusted fallback covers the swap — which is what §4 describes.
+     `next/font` names the @font-face family exactly after the Google font, so
+     the literal is stable. */
+  --font-heading: "Chakra Petch", var(--font-montserrat), sans-serif;
 }
 
 :root {

@@ -1,10 +1,11 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import Link from "next/link";
+import { useTranslations } from "next-intl";
 import { Menu, Phone, X } from "lucide-react";
 import { Container } from "@/components/ui/container";
 import { BrandLogo } from "@/components/ui/brand-logo";
+import { Link } from "@/i18n/navigation";
 import { siteConfig } from "@/lib/site-config";
 import { cn } from "@/lib/utils";
 import { LanguageSwitcher } from "./language-switcher";
@@ -40,6 +41,9 @@ export function Header() {
   const [open, setOpen] = useState(false);
   const [catalogOpen, setCatalogOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+
+  const t = useTranslations("header");
+  const tCommon = useTranslations("common");
 
   const catalogCloseTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -98,7 +102,10 @@ export function Header() {
         elevated && "shadow-[0_8px_30px_-12px_rgba(29,29,27,0.18)]",
       )}
     >
-      <Container className="flex h-16 items-center justify-between gap-6 xl:h-20">
+      {/* `gap-4` at `xl`, not `gap-6`: seven nav items plus the logo and the
+          phone block already run close to the edge at 1280px in Russian, and
+          Tajik labels are 10–20% longer (DESIGN.md §10). */}
+      <Container className="flex h-16 items-center justify-between gap-4 xl:h-20 2xl:gap-6">
         <Link
           href="/"
           aria-label={siteConfig.name}
@@ -113,18 +120,18 @@ export function Header() {
           onCatalogScheduleClose={scheduleCloseCatalog}
         />
 
-        <div className="hidden items-center gap-4 xl:flex">
+        <div className="hidden shrink-0 items-center gap-3 xl:flex 2xl:gap-4">
           <LanguageSwitcher />
 
           <a
             href={siteConfig.phoneHref}
             className="inline-flex items-center gap-2 rounded-control py-2 text-brand-black transition-colors hover:text-brand-red focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:outline-none"
           >
-            <Phone className="size-4" />
+            <Phone className="size-4 shrink-0" />
             <span className="flex flex-col leading-tight">
-              <span className="text-sm font-semibold">{siteConfig.phone}</span>
+              <span className="text-sm font-semibold whitespace-nowrap">{siteConfig.phone}</span>
               <span className="text-[11px] font-medium tracking-wide uppercase">
-                {siteConfig.workingHours}
+                {tCommon("workingHours")}
               </span>
             </span>
           </a>
@@ -132,7 +139,7 @@ export function Header() {
 
         <button
           type="button"
-          aria-label={open ? "Закрыть меню" : "Меню"}
+          aria-label={open ? t("closeMenu") : t("openMenu")}
           aria-expanded={open}
           aria-controls="mobile-drawer"
           className="grid size-10 place-items-center rounded-control text-brand-black transition-colors hover:bg-brand-black/5 focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:outline-none xl:hidden"

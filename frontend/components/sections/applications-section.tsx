@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { useTranslations } from "next-intl";
 import { ArrowUpRight } from "lucide-react";
 
 import { SectionHeading } from "@/components/sections/section-heading";
@@ -6,8 +6,8 @@ import { Container } from "@/components/ui/container";
 import { MediaFrame } from "@/components/ui/media-frame";
 import { Reveal, RevealGroup, RevealItem } from "@/components/ui/reveal";
 import { Section } from "@/components/ui/section";
-import { applications } from "@/data/home";
-import type { Application } from "@/types";
+import { Link } from "@/i18n/navigation";
+import { applications, type ApplicationBase } from "@/data/home";
 
 /**
  * Entry points by situation rather than by material (DESIGN.md §7).
@@ -18,7 +18,10 @@ import type { Application } from "@/types";
  *
  * Targets are the SEO landings built in stage 04.
  */
-function ApplicationCard({ application }: { application: Application }) {
+function ApplicationCard({ application }: { application: ApplicationBase }) {
+  const t = useTranslations("applications");
+  const title = t(`items.${application.slug}.title`);
+
   return (
     <Link
       href={application.href}
@@ -26,8 +29,11 @@ function ApplicationCard({ application }: { application: Application }) {
     >
       <MediaFrame
         src={application.image}
-        alt={application.title}
-        placeholderLabel={`Контекстное фото: ${application.title.toLowerCase()}`}
+        alt={title}
+        // The title is interpolated as written. It used to be lowercased in
+        // code, which is unsafe once Turkish is in scope: `toLowerCase()` turns
+        // "İ" into "i̇" and "I" into "i" rather than "ı".
+        placeholderLabel={t("imagePlaceholder", { title })}
         width={420}
         height={300}
         sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
@@ -35,13 +41,13 @@ function ApplicationCard({ application }: { application: Application }) {
       />
 
       <div className="flex flex-1 flex-col p-6">
-        <h3 className="font-heading text-xl font-semibold text-brand-black">{application.title}</h3>
+        <h3 className="font-heading text-xl font-semibold text-brand-black">{title}</h3>
         <p className="mt-3 flex-1 text-sm leading-6 text-brand-black/70">
-          {application.description}
+          {t(`items.${application.slug}.description`)}
         </p>
         <span className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-brand-black transition-colors group-hover:text-brand-red">
-          Подобрать решение
-          <ArrowUpRight className="size-4" />
+          {t("cta")}
+          <ArrowUpRight className="size-4 shrink-0" />
         </span>
       </div>
     </Link>
@@ -49,14 +55,16 @@ function ApplicationCard({ application }: { application: Application }) {
 }
 
 export function ApplicationsSection() {
+  const t = useTranslations("applications");
+
   return (
     <Section id="applications">
       <Container>
         <Reveal>
           <SectionHeading
-            eyebrow="Применения"
-            title="Куда ставим окна"
-            description="Начните с объекта, а не с материала — подходящую систему подберём мы."
+            eyebrow={t("eyebrow")}
+            title={t("title")}
+            description={t("description")}
           />
         </Reveal>
 

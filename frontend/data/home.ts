@@ -14,164 +14,119 @@ import type {
   HeroContent,
   NewsTeaser,
   Partner,
-  ProOffering,
   ProjectTeaser,
   ShowcaseProduct,
 } from "@/types";
 
-export const productCategories = [
+/**
+ * Mock content for the homepage.
+ *
+ * Since stage 03 this file holds only what is **the same in all four locales**:
+ * slugs, routes, image paths, icons and numbers. Every word on screen lives in
+ * `messages/{ru,tg,en,tr}.json` and is looked up by the `slug` / `key` fields
+ * below.
+ *
+ * The split is not cosmetic. `data/` is the stand-in for the API, and the API
+ * will return a system's depth as `"60 мм"` in every language but its
+ * `audience` line as four different sentences (JSONB per
+ * `project_plan/10-database-schema.md`). Keeping the two apart here means the
+ * components already consume them the way they will once the backend exists.
+ *
+ * Each `…Base` type is the domain interface from `@/types` minus the fields the
+ * message catalogue supplies, so the contract stays visible in one place.
+ */
+
+/** Catalog landing cards. Copy: `categories.items.<key>` (`key` = material). */
+export type ProductCategoryBase = {
+  key: "pvc" | "aluminium";
+  href: string;
+  image: string;
+  accent: string;
+};
+
+export const productCategories: ProductCategoryBase[] = [
   {
-    title: "ПВХ продукция",
-    eyebrow: "Окна и двери",
-    description: "Оконные и дверные системы для квартир, частных домов и коммерческих объектов.",
+    key: "pvc",
     href: "/catalog/pvc",
     image: "/products/stella/stella-main.png",
     accent: "bg-brand-red",
   },
   {
-    title: "Алюминиевая продукция",
-    eyebrow: "Фасады и остекление",
-    description: "Тёплые, фасадные и раздвижные алюминиевые решения для современной архитектуры.",
+    key: "aluminium",
     href: "/catalog/aluminium",
     image: "/products/thermo/thermo-anthracite.png",
     accent: "bg-brand-black",
   },
-] as const;
+];
 
+/** Copy: `advantages.<key>`. */
 export const advantages = [
-  {
-    title: "Собственное производство",
-    description: "Контроль качества на каждом этапе: от профиля до готовой конструкции.",
-    icon: Factory,
-  },
-  {
-    title: "Качественные материалы",
-    description: "Профильные системы, фурнитура и комплектующие от проверенных поставщиков.",
-    icon: Award,
-  },
-  {
-    title: "Гарантия",
-    description: "Фиксируем обязательства и сопровождаем объект после установки.",
-    icon: ShieldCheck,
-  },
-  {
-    title: "Быстрый замер",
-    description: "Специалист выезжает на объект и помогает выбрать подходящую систему.",
-    icon: Ruler,
-  },
-  {
-    title: "Профессиональный монтаж",
-    description: "Монтажные бригады работают по технологическим картам и стандартам.",
-    icon: Wrench,
-  },
-  {
-    title: "Доставка",
-    description: "Организуем аккуратную доставку конструкций на объект в согласованный срок.",
-    icon: Truck,
-  },
-  {
-    title: "Сервис",
-    description: "Помогаем с регулировкой, консультациями и плановым обслуживанием.",
-    icon: Headphones,
-  },
+  { key: "own-production", icon: Factory },
+  { key: "materials", icon: Award },
+  { key: "warranty", icon: ShieldCheck },
+  { key: "measurement", icon: Ruler },
+  { key: "installation", icon: Wrench },
+  { key: "delivery", icon: Truck },
+  { key: "service", icon: Headphones },
 ] as const;
 
-export const showcaseProducts: ShowcaseProduct[] = [
+/**
+ * Copy: `products.items.<slug>` for the spec text, `brands.items.<slug>.name`
+ * for the name — the same six systems as `brandLineup`, so the brand name has
+ * exactly one source per locale.
+ */
+export type ShowcaseProductBase = Omit<
+  ShowcaseProduct,
+  "name" | "type" | "badge" | "description" | "summary" | "highlights"
+>;
+
+export const showcaseProducts: ShowcaseProductBase[] = [
   {
-    name: "ROLLER",
-    type: "ПВХ система",
-    badge: "Средний сегмент",
+    slug: "roller",
     badgeVariant: "outline",
-    description:
-      "Практичная серия для квартир, домов и офисов, где нужен надёжный базовый баланс тепла, тишины и стоимости.",
-    summary: "ПВХ · 60 мм · 4 камеры",
-    highlights: [
-      "Стеклопакет 20 мм",
-      "Откидной и поворотный механизм",
-      "Гарантия до 15 лет на цветные решения",
-    ],
     image: "/products/roller/roller-main.png",
     href: "/catalog/pvc",
     priority: true,
   },
   {
-    name: "STELLA",
-    type: "ПВХ система",
-    badge: "Премиум класс",
+    slug: "stella",
     badgeVariant: "red",
-    description:
-      "Серия для проектов с повышенными требованиями к теплоизоляции, акустике и более строгой геометрии профиля.",
-    summary: "ПВХ · 75 мм · 5 камер",
-    highlights: [
-      "Стеклопакет 26–42 мм",
-      "Тройной контур уплотнения",
-      "Подходит для квартир и частных домов",
-    ],
     image: "/products/stella/stella-main.png",
     href: "/catalog/pvc",
   },
   {
-    name: "UNOPEN",
-    type: "ПВХ система",
-    badge: "Выше среднего",
+    slug: "unopen",
     badgeVariant: "black",
-    description:
-      "Универсальная система для жилых и коммерческих объектов, когда нужен усиленный профиль без перехода в премиальный сегмент.",
-    summary: "ПВХ · 65 мм · 5 камер",
-    highlights: [
-      "Стеклопакет 20 мм",
-      "Двойное и стандартное открывание",
-      "Подходит для домов, офисов и магазинов",
-    ],
     image: "/products/unopen/unopen-main.png",
     href: "/catalog/pvc",
   },
   {
-    name: "THERMO 60",
-    type: "Алюминиевая система",
-    badge: "Премиум",
+    slug: "thermo-60",
     badgeVariant: "red",
-    description:
-      "Тёплый алюминий для фасадов, входных групп и больших проёмов, где важны архитектурность и энергоэффективность.",
-    summary: "Алюминий · 60 мм · 3 камеры",
-    highlights: [
-      "Стеклопакет 4–20 мм",
-      "Подходит для фасадов и панорамного остекления",
-      "Двойное и стандартное открывание",
-    ],
     image: "/products/thermo/thermo-anthracite.png",
     href: "/catalog/aluminium",
   },
   {
-    name: "ALD-45",
-    type: "Алюминиевая система",
-    badge: "Эконом сегмент",
+    slug: "ald-45",
     badgeVariant: "outline",
-    description:
-      "Холодная алюминиевая серия для перегородок, террас, витрин и лёгких коммерческих конструкций с тонким профилем.",
-    summary: "Алюминий · 45 мм · 1 камера",
-    highlights: [
-      "Стеклопакет 20 мм",
-      "Для офисов, магазинов и перегородок",
-      "Лёгкий и прочный профиль",
-    ],
     image: "/products/holodniy/holodniy-white.png",
     href: "/catalog/aluminium",
   },
 ];
 
+/** Copy: `production.stats.<key>`. Values are formatted per locale on render. */
 export interface CompanyStat {
+  key: string;
   value: number;
   suffix: string;
-  label: string;
 }
 
 export const companyStats: CompanyStat[] = [
-  { value: 20, suffix: "", label: "лет на рынке" },
-  { value: 1000, suffix: "+", label: "реализованных объектов" },
-  { value: 1000, suffix: "+", label: "клиентов" },
-  { value: 400, suffix: "", label: "сотрудников" },
-  { value: 10000, suffix: "+", label: "тонн в год" },
+  { key: "years", value: 20, suffix: "" },
+  { key: "projects", value: 1000, suffix: "+" },
+  { key: "clients", value: 1000, suffix: "+" },
+  { key: "employees", value: 400, suffix: "" },
+  { key: "tonnage", value: 10000, suffix: "+" },
 ];
 
 export const partners: Partner[] = [
@@ -209,11 +164,12 @@ export const partners: Partner[] = [
   },
 ] as const;
 
+/** Copy: `production.steps.<key>`. */
 export const serviceHighlights = [
-  { label: "Замер", icon: Ruler },
-  { label: "Производство", icon: PackageCheck },
-  { label: "Монтаж", icon: Wrench },
-  { label: "Сервис", icon: Headphones },
+  { key: "measure", icon: Ruler },
+  { key: "manufacture", icon: PackageCheck },
+  { key: "installation", icon: Wrench },
+  { key: "service", icon: Headphones },
 ] as const;
 
 // Context-layer photography (interiors, facades, finished objects) does not
@@ -221,90 +177,88 @@ export const serviceHighlights = [
 // DESIGN.md §11 bans from the first screen. Every such slot below is therefore
 // a nullable data field, never a hardcoded path: when the client's own shoot
 // arrives it is filled through the admin panel with no code change (§6 п.2).
-export const heroContent: HeroContent = {
-  eyebrow: "Производство профильных систем с 2006 года",
-  headline: "Тепло и комфорт для каждого дома",
-  subtext:
-    "Окна, двери и фасадные системы из ПВХ и алюминия. Шесть систем под разный бюджет и разные задачи — от квартиры до фасада жилого комплекса.",
+//
+// Copy: `hero.*`. The CTA targets are same-page fragments, so they carry no
+// locale prefix and are rendered with a plain `<a>`.
+export type HeroContentBase = Pick<HeroContent, "image"> & {
+  primaryCtaHref: string;
+  secondaryCtaHref: string;
+};
+
+export const heroContent: HeroContentBase = {
   image: null,
-  imageLabel: "Контекстное фото объекта — интерьер или фасад",
-  primaryCta: { label: "Подобрать систему", href: "#brands" },
-  secondaryCta: { label: "Профессионалам", href: "#professionals" },
+  primaryCtaHref: "#brands",
+  secondaryCtaHref: "#professionals",
 };
 
 // The six systems, ordered as a ladder from economy to premium — that order is
 // the explanation. See DESIGN.md §7 for the source table.
-export const brandLineup: Brand[] = [
+// Copy: `brands.items.<slug>.name` and `.audience`.
+export type BrandBase = Omit<Brand, "name" | "audience" | "depth"> & {
+  /** Structural depth in millimetres. The unit is a word — `мм` / `mm` — so it
+   *  lives in `brands.depth` and is joined per locale, not baked in here. */
+  depthMm: number;
+};
+
+export const brandLineup: BrandBase[] = [
   {
     slug: "ecoline",
-    name: "ЭКОЛАЙН",
-    material: "ПВХ",
-    segment: "эконом",
-    depth: "60 мм",
+    material: "pvc",
+    segment: "economy",
+    depthMm: 60,
     chambers: 3,
-    audience: "Когда нужно закрыть проём надёжно и недорого",
     logo: "/logos/ecolayn.png",
     image: null,
     href: "/catalog/pvc/ecoline",
   },
   {
     slug: "roller",
-    name: "ROLLER",
-    material: "ПВХ",
-    segment: "средний",
-    depth: "60 мм",
+    material: "pvc",
+    segment: "mid",
+    depthMm: 60,
     chambers: 4,
-    audience: "Базовый выбор для квартиры, дома и офиса",
     logo: "/logos/logo-dark.png",
     image: "/products/roller/roller-main.png",
     href: "/catalog/pvc/roller",
   },
   {
     slug: "unopen",
-    name: "UNOPEN",
-    material: "ПВХ",
-    segment: "выше среднего",
-    depth: "65 мм",
+    material: "pvc",
+    segment: "upper-mid",
+    depthMm: 65,
     chambers: 5,
-    audience: "Усиленный профиль для шумной улицы и больших проёмов",
     logo: "/logos/unopen.png",
     image: "/products/unopen/unopen-main.png",
     href: "/catalog/pvc/unopen",
   },
   {
     slug: "stella",
-    name: "STELLA",
-    material: "ПВХ",
-    segment: "премиум",
-    depth: "75 мм",
+    material: "pvc",
+    segment: "premium",
+    depthMm: 75,
     chambers: 5,
-    audience: "Максимум тепла и тишины в частном доме",
     logo: "/logos/stella-red.png",
     image: "/products/stella/stella-main.png",
     href: "/catalog/pvc/stella",
   },
   {
     slug: "ald-45",
-    name: "АЛД-45",
-    material: "алюминий",
-    materialNote: "холодный",
-    segment: "эконом",
-    depth: "45 мм",
+    material: "aluminium",
+    materialNote: "cold",
+    segment: "economy",
+    depthMm: 45,
     chambers: 1,
-    audience: "Витрины, перегородки и террасы без обогрева",
     logo: null,
     image: "/products/holodniy/holodniy-white.png",
     href: "/catalog/aluminium/ald-45",
   },
   {
     slug: "thermo-60",
-    name: "ТЕРМО 60",
-    material: "алюминий",
-    materialNote: "тёплый",
-    segment: "премиум",
-    depth: "60 мм",
+    material: "aluminium",
+    materialNote: "warm",
+    segment: "premium",
+    depthMm: 60,
     chambers: 3,
-    audience: "Фасады и панорамное остекление отапливаемых зданий",
     logo: null,
     image: "/products/thermo/thermo-anthracite.png",
     href: "/catalog/aluminium/thermo-60",
@@ -313,130 +267,79 @@ export const brandLineup: Brand[] = [
 
 // Entry points by situation, not by material — the first question a flat owner
 // can actually answer. Targets are the SEO landings built in stage 04.
-export const applications: Application[] = [
-  {
-    slug: "apartment",
-    title: "Квартира",
-    description: "Замена окон в многоэтажном доме: тише, теплее, без сквозняков.",
-    image: null,
-    href: "/solutions/apartment",
-  },
-  {
-    slug: "house",
-    title: "Частный дом",
-    description: "Большие проёмы, входные группы и максимальная теплоизоляция.",
-    image: null,
-    href: "/solutions/house",
-  },
-  {
-    slug: "commercial",
-    title: "Офис и магазин",
-    description: "Витрины, перегородки и входные группы для коммерции.",
-    image: null,
-    href: "/solutions/commercial",
-  },
-  {
-    slug: "facade",
-    title: "Фасад ЖК",
-    description: "Остекление жилых комплексов и фасадные системы под проект.",
-    image: null,
-    href: "/solutions/facade",
-  },
+//
+// This list also drives the header's catalog mega-menu. It used to be copied
+// into `catalogMenu` in `lib/site-config.ts` with a "keep in sync" comment
+// attached; one list keyed by slug removes the hazard and stops the same four
+// words being translated twice. Copy: `applications.items.<slug>`.
+export type ApplicationBase = Omit<Application, "title" | "description">;
+
+export const applications: ApplicationBase[] = [
+  { slug: "apartment", image: null, href: "/solutions/apartment" },
+  { slug: "house", image: null, href: "/solutions/house" },
+  { slug: "commercial", image: null, href: "/solutions/commercial" },
+  { slug: "facade", image: null, href: "/solutions/facade" },
 ];
 
 // "Профессионалам" — the one dark section on the page. The dark ground is the
 // marker that the audience has changed (DESIGN.md §3 п.2), not decoration.
-export const proOfferings: ProOffering[] = [
-  {
-    title: "Оптовые поставки профиля",
-    description: "Отгружаем профильные системы производителям окон по всей стране.",
-  },
-  {
-    title: "Дилерство",
-    description: "Условия партнёрства, поддержка по объектам и обучение монтажу.",
-  },
-  {
-    title: "Комплектующие",
-    description: "Фурнитура, уплотнители, армирование и сопутствующие детали со склада.",
-  },
-  {
-    title: "Техническая документация",
-    description: "Узлы, разрезы, монтажные схемы и характеристики систем для проектирования.",
-  },
-];
+// Copy: `professionals.offerings.<key>`.
+export const proOfferingKeys = ["wholesale", "dealership", "components", "documentation"] as const;
 
-export const projectTeasers: ProjectTeaser[] = [
+/** Copy: `projects.items.<id>` and `projects.categories.<category>`. */
+export type ProjectTeaserBase = Omit<ProjectTeaser, "title" | "location" | "caption">;
+
+export const projectTeasers: ProjectTeaserBase[] = [
   {
     id: "residential-complex-dushanbe",
-    title: "Жилой комплекс в Душанбе",
-    location: "Душанбе",
-    category: "Жильё",
+    category: "residential",
     image: "/products/stella/stella-main.png",
-    caption: "Остекление 240 квартир системой STELLA с повышенной теплоизоляцией.",
     href: "/portfolio",
   },
   {
     id: "business-center-khujand",
-    title: "Бизнес-центр в Худжанде",
-    location: "Худжанд",
-    category: "Коммерция",
+    category: "commercial",
     image: "/products/thermo/thermo-anthracite.png",
-    caption: "Фасадное остекление алюминиевой системой ТЕРМО с панорамными проёмами.",
     href: "/portfolio",
   },
   {
     id: "private-house-vahdat",
-    title: "Частный дом в Вахдате",
-    location: "Вахдат",
-    category: "Частное строительство",
+    category: "private",
     image: "/products/roller/roller-main.png",
-    caption: "Окна и двери ROLLER для частного дома с базовой теплоизоляцией.",
     href: "/portfolio",
   },
   {
     id: "shopping-mall-bokhtar",
-    title: "Торговый центр в Бохтаре",
-    location: "Бохтар",
-    category: "Коммерция",
+    category: "commercial",
     image: "/products/unopen/unopen-main.png",
-    caption: "Входные группы и витрины UNOPEN для торгового центра.",
     href: "/portfolio",
   },
   {
     id: "apartment-renovation-dushanbe",
-    title: "Реновация квартир в Душанбе",
-    location: "Душанбе",
-    category: "Жильё",
+    category: "residential",
     image: "/products/holodniy/holodniy-white.png",
-    caption: "Замена оконных блоков в 80 квартирах с системой холодного остекления.",
     href: "/portfolio",
   },
 ];
 
-export const newsTeasers: NewsTeaser[] = [
+/** Copy: `news.items.<id>`. Dates are formatted per locale on render. */
+export type NewsTeaserBase = Omit<NewsTeaser, "title" | "excerpt">;
+
+export const newsTeasers: NewsTeaserBase[] = [
   {
     id: "new-stella-line-launch",
-    title: "Запуск производственной линии STELLA",
-    excerpt:
-      "Расширили выпуск пятикамерного профиля STELLA для проектов с повышенными требованиями к теплоизоляции.",
     image: "/news/stella-window.png",
     date: "2026-05-12",
     href: "/news/stella-line-launch",
   },
   {
     id: "thermo-facade-project",
-    title: "Алюминиевые фасады ТЕРМО в новом бизнес-центре",
-    excerpt:
-      "Рассказываем о проекте фасадного остекления с тёплым алюминиевым профилем и панорамными проёмами.",
     image: "/news/thermo-anthracite.png",
     date: "2026-04-03",
     href: "/news/thermo-facade-project",
   },
   {
     id: "service-expansion-2026",
-    title: "Расширяем сервисное сопровождение объектов",
-    excerpt:
-      "Добавили плановое обслуживание и регулировку оконных систем в Душанбе, Худжанде и Бохтаре.",
     image: "/news/roller-windows.png",
     date: "2026-03-18",
     href: "/news/service-expansion-2026",

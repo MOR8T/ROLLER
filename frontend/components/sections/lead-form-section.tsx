@@ -1,6 +1,7 @@
 "use client";
 
 import { FormEvent, useState } from "react";
+import { useTranslations } from "next-intl";
 import { Clock, MessageCircle, Ruler, Send, ShieldCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
@@ -12,22 +13,27 @@ import { Textarea } from "@/components/ui/textarea";
 import { siteConfig } from "@/lib/site-config";
 import { cn } from "@/lib/utils";
 
-const cityOptions = ["Душанбе", "Худжант"];
-const productTypes = ["ПВХ продукция", "Алюминиевая продукция", "Замер/консультация"];
+// Keys, not labels. The `value` the visitor picks is what ends up in the
+// WhatsApp message, so it is resolved through the catalogue at render time and
+// arrives at the call centre in the language the visitor was reading.
+const cityKeys = ["dushanbe", "khujand"] as const;
+const productTypeKeys = ["pvc", "aluminium", "consultation"] as const;
 
 const trustPoints = [
-  { icon: Ruler, label: "Бесплатный замер и расчёт" },
-  { icon: Clock, label: "Ответ в течение дня" },
-  { icon: ShieldCheck, label: "Гарантия производителя" },
-];
+  { key: "measure", icon: Ruler },
+  { key: "response", icon: Clock },
+  { key: "warranty", icon: ShieldCheck },
+] as const;
 
 export function LeadFormSection() {
   const [status, setStatus] = useState<string | null>(null);
+  const t = useTranslations("leadForm");
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
-    const formData = new FormData(event.currentTarget);
+    const form = event.currentTarget;
+    const formData = new FormData(form);
     const name = String(formData.get("name") ?? "").trim();
     const phone = String(formData.get("phone") ?? "").trim();
     const city = String(formData.get("city") ?? "").trim();
@@ -35,19 +41,19 @@ export function LeadFormSection() {
     const comment = String(formData.get("comment") ?? "").trim();
 
     if (!name || !phone || !city || !productType) {
-      setStatus("Заполните все поля, чтобы подготовить сообщение.");
+      setStatus(t("errorIncomplete"));
       return;
     }
 
     const lines = [
-      "Здравствуйте! Хочу оставить заявку на сайте ROLLER.",
-      `Имя: ${name}`,
-      `Телефон: ${phone}`,
-      `Город: ${city}`,
-      `Тип продукции: ${productType}`,
+      t("whatsapp.intro"),
+      `${t("fields.name")}: ${name}`,
+      `${t("fields.phone")}: ${phone}`,
+      `${t("fields.city")}: ${city}`,
+      `${t("fields.productType")}: ${productType}`,
     ];
     if (comment) {
-      lines.push(`Комментарий: ${comment}`);
+      lines.push(`${t("fields.comment")}: ${comment}`);
     }
     const message = lines.join("\n");
 
@@ -55,8 +61,8 @@ export function LeadFormSection() {
       `https://wa.me/${siteConfig.whatsapp}?text=${encodeURIComponent(message)}`,
       "_blank",
     );
-    setStatus("Сообщение подготовлено для отправки в WhatsApp.");
-    event.currentTarget.reset();
+    setStatus(t("successPrepared"));
+    form.reset();
   }
 
   // The section used to be flooded with `bg-brand-red`. DESIGN.md §3 п.3 caps
@@ -67,18 +73,20 @@ export function LeadFormSection() {
       <Container className="grid gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-center lg:gap-14">
         <Reveal>
           <p className="font-heading text-sm font-semibold tracking-[0.24em] text-brand-black/55 uppercase">
-            Заявка
+            {t("eyebrow")}
           </p>
           <h2 className="mt-3 max-w-xl text-3xl font-bold tracking-tight text-brand-black sm:text-4xl">
-            Рассчитаем решение под ваш объект
+            {t("title")}
           </h2>
           <ul className="mt-8 space-y-3">
             {trustPoints.map((point) => (
-              <li key={point.label} className="flex items-center gap-3">
+              <li key={point.key} className="flex items-center gap-3">
                 <span className="rounded-control bg-brand-red/10 p-2 text-brand-red">
-                  <point.icon className="size-5" />
+                  <point.icon className="size-5 shrink-0" />
                 </span>
-                <span className="text-sm font-medium text-brand-black/75">{point.label}</span>
+                <span className="text-sm font-medium text-brand-black/75">
+                  {t(`trustPoints.${point.key}`)}
+                </span>
               </li>
             ))}
           </ul>
@@ -88,54 +96,65 @@ export function LeadFormSection() {
           <form
             onSubmit={handleSubmit}
             className="rounded-card border border-brand-black/10 bg-surface-muted p-5 text-brand-black sm:p-8"
-            aria-label="Форма заявки"
+            aria-label={t("formAria")}
           >
             <div className="grid gap-5 sm:grid-cols-2">
-              <Field label="Имя" htmlFor="lead-name">
-                <Input id="lead-name" name="name" required placeholder="Ваше имя" />
+              <Field label={t("fields.name")} htmlFor="lead-name">
+                <Input id="lead-name" name="name" required placeholder={t("placeholders.name")} />
               </Field>
-              <Field label="Телефон" htmlFor="lead-phone">
-                <Input id="lead-phone" name="phone" type="tel" required placeholder="+992" />
+              <Field label={t("fields.phone")} htmlFor="lead-phone">
+                <Input
+                  id="lead-phone"
+                  name="phone"
+                  type="tel"
+                  required
+                  placeholder={t("placeholders.phone")}
+                />
               </Field>
-              <Field label="Город" htmlFor="lead-city">
-                <Select id="lead-city" name="city" required defaultValue="Душанбе">
+              <Field label={t("fields.city")} htmlFor="lead-city">
+                <Select id="lead-city" name="city" required defaultValue="">
                   <option value="" disabled>
-                    Выберите тип
+                    {t("selectPlaceholder")}
                   </option>
-                  {cityOptions.map((type) => (
-                    <option key={type}>{type}</option>
+                  {cityKeys.map((key) => (
+                    <option key={key}>{t(`cities.${key}`)}</option>
                   ))}
                 </Select>
               </Field>
-              <Field label="Тип продукции" htmlFor="lead-product-type">
+              <Field label={t("fields.productType")} htmlFor="lead-product-type">
                 <Select id="lead-product-type" name="productType" required defaultValue="">
                   <option value="" disabled>
-                    Выберите тип
+                    {t("selectPlaceholder")}
                   </option>
-                  {productTypes.map((type) => (
-                    <option key={type}>{type}</option>
+                  {productTypeKeys.map((key) => (
+                    <option key={key}>{t(`productTypes.${key}`)}</option>
                   ))}
                 </Select>
               </Field>
-              <Field label="Комментарий" htmlFor="lead-comment" optional className="sm:col-span-2">
+              <Field
+                label={t("fields.comment")}
+                htmlFor="lead-comment"
+                optionalLabel={t("optional")}
+                className="sm:col-span-2"
+              >
                 <Textarea
                   id="lead-comment"
                   name="comment"
                   rows={3}
-                  placeholder="Опишите объект, сроки или вопрос — необязательно"
+                  placeholder={t("placeholders.comment")}
                 />
               </Field>
             </div>
             <Button type="submit" size="lg" className="mt-6 w-full">
-              Отправить в WhatsApp
-              <Send className="size-5" />
+              {t("submit")}
+              <Send className="size-5 shrink-0" />
             </Button>
             {status ? (
               <p
                 className="mt-4 flex items-center gap-2 text-sm text-brand-black/60"
                 aria-live="polite"
               >
-                <MessageCircle className="size-4 text-brand-red" />
+                <MessageCircle className="size-4 shrink-0 text-brand-red" />
                 {status}
               </p>
             ) : null}
@@ -149,22 +168,23 @@ export function LeadFormSection() {
 function Field({
   label,
   htmlFor,
-  optional,
+  optionalLabel,
   className,
   children,
 }: {
   label: string;
   htmlFor: string;
-  optional?: boolean;
+  /** Rendered next to the label when the field may be left empty. */
+  optionalLabel?: string;
   className?: string;
   children: React.ReactNode;
 }) {
   return (
     <label htmlFor={htmlFor} className={cn("block", className)}>
-      <span className="flex items-center gap-2 text-sm font-semibold">
+      <span className="flex flex-wrap items-center gap-2 text-sm font-semibold">
         {label}
-        {optional ? (
-          <span className="text-xs font-normal text-brand-black/45">(необязательно)</span>
+        {optionalLabel ? (
+          <span className="text-xs font-normal text-brand-black/45">{optionalLabel}</span>
         ) : null}
       </span>
       <span className="mt-2 block">{children}</span>
