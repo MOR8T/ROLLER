@@ -4,8 +4,7 @@
     {
       "name": "roller-frontend",
       "runtimeExecutable": "npm",
-      "runtimeArgs": ["run", "dev"],
-      "cwd": "frontend",
+      "runtimeArgs": ["--prefix", "frontend", "run", "dev"],
       "port": 3031
     }
   ]
