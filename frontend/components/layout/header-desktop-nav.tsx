@@ -1,14 +1,13 @@
 "use client";
 
-import Link from "next/link";
+import { useTranslations } from "next-intl";
 import { ChevronDown } from "lucide-react";
+import { Link } from "@/i18n/navigation";
 import { navLinks } from "@/lib/site-config";
 import { cn } from "@/lib/utils";
 import { CATALOG_HREF } from "./header-shared";
 
 interface HeaderDesktopNavProps {
-  /** Header is in its solid (scrolled) state — nav text goes dark. */
-  solid: boolean;
   catalogOpen: boolean;
   onCatalogOpen: () => void;
   onCatalogScheduleClose: () => void;
@@ -18,15 +17,25 @@ interface HeaderDesktopNavProps {
  * Primary desktop navigation. The catalog item additionally drives the
  * mega-menu, which is rendered by the header itself so it can span the
  * full width below the bar.
+ *
+ * The gap tightens at `xl` and only opens up at `2xl`: seven items already sit
+ * close to the logo and the phone block at 1280px in Russian, and Tajik labels
+ * run 10–20% longer (DESIGN.md §10). Shrinking the gutter is what keeps the row
+ * on one line instead of pushing the phone off the bar.
  */
 export function HeaderDesktopNav({
-  solid,
   catalogOpen,
   onCatalogOpen,
   onCatalogScheduleClose,
 }: HeaderDesktopNavProps) {
+  const t = useTranslations("nav");
+  const tHeader = useTranslations("header");
+
   return (
-    <nav aria-label="Основная навигация" className="hidden items-center gap-6 xl:flex">
+    <nav
+      aria-label={tHeader("mainNav")}
+      className="hidden min-w-0 items-center gap-4 xl:flex 2xl:gap-6"
+    >
       {navLinks.map((link) => {
         if (link.href === CATALOG_HREF) {
           return (
@@ -43,12 +52,11 @@ export function HeaderDesktopNav({
                 aria-controls="catalog-mega-menu"
                 onFocus={onCatalogOpen}
                 className={cn(
-                  "group relative inline-flex items-center gap-1 py-2 text-sm font-medium transition-colors hover:text-brand-red focus-visible:rounded-control focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:outline-none",
-                  solid ? "text-brand-black/80" : "text-brand-white/85",
+                  "group relative inline-flex items-center gap-1 py-2 text-sm font-medium text-brand-black/80 transition-colors hover:text-brand-red focus-visible:rounded-control focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:outline-none",
                   catalogOpen && "text-brand-red",
                 )}
               >
-                {link.label}
+                {t(link.key)}
                 <ChevronDown
                   className={cn(
                     "size-3.5 transition-transform duration-200",
@@ -59,8 +67,6 @@ export function HeaderDesktopNav({
                   className={cn(
                     "absolute bottom-0.5 left-0 h-0.5 bg-brand-red transition-all duration-300",
                     catalogOpen ? "w-full" : "w-0 group-hover:w-full",
-                    solid ? "" : "bg-brand-white",
-                    catalogOpen && "bg-brand-red",
                   )}
                 />
               </Link>
@@ -72,18 +78,10 @@ export function HeaderDesktopNav({
           <Link
             key={link.href}
             href={link.href}
-            className={cn(
-              "group relative inline-flex items-center py-2 text-sm font-medium transition-colors hover:text-brand-red focus-visible:rounded-control focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:outline-none",
-              solid ? "text-brand-black/80" : "text-brand-white/85",
-            )}
+            className="group relative inline-flex items-center py-2 text-sm font-medium text-brand-black/80 transition-colors hover:text-brand-red focus-visible:rounded-control focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:outline-none"
           >
-            {link.label}
-            <span
-              className={cn(
-                "absolute bottom-0.5 left-0 h-0.5 w-0 bg-brand-red transition-all duration-300 group-hover:w-full",
-                solid ? "" : "bg-brand-white",
-              )}
-            />
+            {t(link.key)}
+            <span className="absolute bottom-0.5 left-0 h-0.5 w-0 bg-brand-red transition-all duration-300 group-hover:w-full" />
           </Link>
         );
       })}

@@ -2,12 +2,14 @@
 
 import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { createPortal } from "react-dom";
-import Link from "next/link";
+import { useTranslations } from "next-intl";
 import { AnimatePresence, motion, useReducedMotion, type Variants } from "framer-motion";
 import { ChevronDown, MessageCircle, Phone, X } from "lucide-react";
 import { ButtonLink } from "@/components/ui/button";
 import { BrandLogo } from "@/components/ui/brand-logo";
-import { catalogMenu, navLinks, siteConfig } from "@/lib/site-config";
+import { Link } from "@/i18n/navigation";
+import { applicationHref, applications, categories, categoryHref } from "@/data/catalog";
+import { navLinks, siteConfig } from "@/lib/site-config";
 import { cn } from "@/lib/utils";
 import { LanguageSwitcher } from "./language-switcher";
 import { CATALOG_HREF } from "./header-shared";
@@ -40,6 +42,12 @@ export function HeaderMobileDrawer({ open, onClose }: HeaderMobileDrawerProps) {
   const prefersReducedMotion = useReducedMotion();
   const drawerRef = useRef<HTMLDivElement>(null);
 
+  const t = useTranslations("header");
+  const tNav = useTranslations("nav");
+  const tCommon = useTranslations("common");
+  const tApplications = useTranslations("applications");
+  const tCategories = useTranslations("categories");
+
   const close = () => {
     setCatalogOpen(false);
     onClose();
@@ -53,8 +61,9 @@ export function HeaderMobileDrawer({ open, onClose }: HeaderMobileDrawerProps) {
     const drawer = drawerRef.current;
     const previouslyFocused = document.activeElement as HTMLElement | null;
 
-    // Move focus to the close button on open.
-    const closeButton = drawer?.querySelector<HTMLElement>('button[aria-label="Закрыть меню"]');
+    // Move focus to the close button on open. Located by `data-drawer-close`
+    // rather than by its label, which is now translated.
+    const closeButton = drawer?.querySelector<HTMLElement>("[data-drawer-close]");
     const focusables = drawer?.querySelectorAll<HTMLElement>(
       'a[href], button:not([disabled]), input, select, textarea, [tabindex]:not([tabindex="-1"])',
     );
@@ -135,7 +144,7 @@ export function HeaderMobileDrawer({ open, onClose }: HeaderMobileDrawerProps) {
             id="mobile-drawer"
             role="dialog"
             aria-modal="true"
-            aria-label="Мобильное меню"
+            aria-label={t("mobileMenu")}
             variants={drawerVariants}
             initial="hidden"
             animate="visible"
@@ -153,7 +162,8 @@ export function HeaderMobileDrawer({ open, onClose }: HeaderMobileDrawerProps) {
               </Link>
               <button
                 type="button"
-                aria-label="Закрыть меню"
+                data-drawer-close
+                aria-label={t("closeMenu")}
                 onClick={close}
                 className="grid size-10 place-items-center rounded-control text-brand-black transition-colors hover:bg-brand-black/5 focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:outline-none"
               >
@@ -177,12 +187,12 @@ export function HeaderMobileDrawer({ open, onClose }: HeaderMobileDrawerProps) {
                         type="button"
                         aria-expanded={catalogOpen}
                         onClick={() => setCatalogOpen((v) => !v)}
-                        className="flex w-full items-center justify-between rounded-control px-3 py-3 text-left text-base font-medium text-brand-black/80 transition-colors hover:bg-brand-black/5 hover:text-brand-red focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:outline-none"
+                        className="flex w-full items-center justify-between gap-3 rounded-control px-3 py-3 text-left text-base font-medium text-brand-black/80 transition-colors hover:bg-brand-black/5 hover:text-brand-red focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:outline-none"
                       >
-                        {link.label}
+                        {tNav(link.key)}
                         <ChevronDown
                           className={cn(
-                            "size-4 transition-transform duration-200",
+                            "size-4 shrink-0 transition-transform duration-200",
                             catalogOpen && "rotate-180",
                           )}
                         />
@@ -201,22 +211,35 @@ export function HeaderMobileDrawer({ open, onClose }: HeaderMobileDrawerProps) {
                             className="overflow-hidden"
                           >
                             <div className="mb-2 ml-2 flex flex-col gap-0.5 border-l border-brand-black/10 pl-3">
-                              {catalogMenu.map((item) => (
+                              {applications.map((application) => (
                                 <Link
-                                  key={item.href}
-                                  href={item.href}
+                                  key={application.slug}
+                                  href={applicationHref(application.slug)}
                                   onClick={close}
                                   className="rounded-control px-3 py-2.5 text-sm text-brand-black/70 transition-colors hover:bg-brand-black/5 hover:text-brand-red focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:outline-none"
                                 >
-                                  {item.label}
+                                  {tApplications(`items.${application.slug}.title`)}
+                                </Link>
+                              ))}
+                              {/* The material split sits below the applications
+                                  and above "весь каталог", mirroring the
+                                  desktop mega-menu's two columns. */}
+                              {categories.map((category) => (
+                                <Link
+                                  key={category.slug}
+                                  href={categoryHref(category.slug)}
+                                  onClick={close}
+                                  className="rounded-control px-3 py-2.5 text-sm text-brand-black/70 transition-colors hover:bg-brand-black/5 hover:text-brand-red focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:outline-none"
+                                >
+                                  {tCategories(`items.${category.slug}.title`)}
                                 </Link>
                               ))}
                               <Link
                                 href={CATALOG_HREF}
                                 onClick={close}
-                                className="rounded-control px-3 py-2.5 text-sm font-semibold text-brand-red transition-colors hover:bg-brand-red/5 focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:outline-none"
+                                className="rounded-control px-3 py-2.5 text-sm font-semibold text-brand-black transition-colors hover:bg-brand-black/5 hover:text-brand-red focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:outline-none"
                               >
-                                Весь каталог
+                                {tCommon("allCatalog")}
                               </Link>
                             </div>
                           </motion.div>
@@ -233,14 +256,14 @@ export function HeaderMobileDrawer({ open, onClose }: HeaderMobileDrawerProps) {
                       onClick={close}
                       className="block rounded-control px-3 py-3 text-base font-medium text-brand-black/80 transition-colors hover:bg-brand-black/5 hover:text-brand-red focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:outline-none"
                     >
-                      {link.label}
+                      {tNav(link.key)}
                     </Link>
                   </motion.div>
                 );
               })}
 
               <motion.div variants={itemVariants} className="mt-4 px-3">
-                <LanguageSwitcher solid />
+                <LanguageSwitcher />
               </motion.div>
             </motion.nav>
 
@@ -261,15 +284,15 @@ export function HeaderMobileDrawer({ open, onClose }: HeaderMobileDrawerProps) {
                 <span className="flex flex-col leading-tight">
                   <span>{siteConfig.phone}</span>
                   <span className="text-[11px] font-medium tracking-wide text-brand-black/55 uppercase">
-                    {siteConfig.workingHours}
+                    {tCommon("workingHours")}
                   </span>
                 </span>
               </motion.a>
 
               <motion.div variants={itemVariants}>
                 <ButtonLink href={siteConfig.whatsappHref} className="w-full" onClick={close}>
-                  <MessageCircle className="size-4" />
-                  Написать в WhatsApp
+                  <MessageCircle className="size-4 shrink-0" />
+                  {tCommon("writeWhatsapp")}
                 </ButtonLink>
               </motion.div>
             </motion.div>

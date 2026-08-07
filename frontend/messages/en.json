@@ -1,0 +1,730 @@
+{
+  "meta": {
+    "title": "ROLLER — PVC and aluminium profile systems in Tajikistan",
+    "titleTemplate": "%s | ROLLER",
+    "description": "ROLLER is Tajikistan's first manufacturer of PVC materials. PVC windows and doors, aluminium and facade systems. Warmth and comfort for every home."
+  },
+  "common": {
+    "skipToContent": "Skip to main content",
+    "slogan": "Warmth and comfort for every home",
+    "address": "25 Mirali Mahmadali St., Dushanbe",
+    "workingHours": "Mon–Sat: 08:00–18:00",
+    "writeWhatsapp": "Message us on WhatsApp",
+    "call": "Call us",
+    "allCatalog": "Full catalogue"
+  },
+  "nav": {
+    "catalog": "Catalogue",
+    "about": "About",
+    "portfolio": "Portfolio",
+    "calculator": "Calculator",
+    "news": "News",
+    "showroom": "Showrooms",
+    "contacts": "Contacts"
+  },
+  "breadcrumbs": {
+    "aria": "Breadcrumb",
+    "home": "Home"
+  },
+  "header": {
+    "mainNav": "Main navigation",
+    "openMenu": "Menu",
+    "closeMenu": "Close menu",
+    "mobileMenu": "Mobile menu",
+    "languageSwitcher": "Choose language"
+  },
+  "footer": {
+    "nav": "Footer",
+    "sections": "Sections",
+    "contacts": "Contacts",
+    "social": "Follow us",
+    "onMarketSince": "On the market since {year}",
+    "rights": "© {year} {name}. All rights reserved.",
+    "toTop": "Back to top",
+    "instagram": "ROLLER on Instagram",
+    "telegram": "ROLLER on Telegram",
+    "whatsapp": "ROLLER on WhatsApp"
+  },
+  "whatsappFab": {
+    "label": "Message us on WhatsApp"
+  },
+  "materials": {
+    "pvc": "PVC",
+    "aluminium": "aluminium"
+  },
+  "materialNotes": {
+    "cold": "cold",
+    "warm": "thermally broken"
+  },
+  "segments": {
+    "economy": "economy",
+    "mid": "mid-range",
+    "upper-mid": "upper mid-range",
+    "premium": "premium"
+  },
+  "colors": {
+    "white": "White",
+    "light-oak": "Light oak",
+    "golden-oak": "Golden oak",
+    "nut": "Walnut",
+    "dark-oak": "Dark oak",
+    "grey": "Grey",
+    "anthracite": "Anthracite",
+    "brown": "Brown"
+  },
+  "hero": {
+    "aria": "Hero",
+    "eyebrow": "Manufacturing profile systems since 2006",
+    "headline": "Warmth and comfort for every home",
+    "subtext": "PVC and aluminium windows, doors and facade systems. Six systems for different budgets and different jobs — from a single flat to the facade of a residential complex.",
+    "imageLabel": "Project photograph — interior or facade",
+    "primaryCta": "Find your system",
+    "secondaryCta": "For professionals"
+  },
+  "brands": {
+    "eyebrow": "System range",
+    "title": "Six systems — <accent>one</accent> for your job",
+    "description": "Four PVC systems and two aluminium ones. They differ in profile depth, chamber count and what they are built for.",
+    "viewSystem": "View system",
+    "depth": "{value} mm",
+    "chambers": "{count, plural, one {# chamber} other {# chambers}}",
+    "imageAlt": "{name} system",
+    "imagePlaceholder": "Render of the {name} system",
+    "cardAria": "{name} — {segment}",
+    "items": {
+      "ecoline": {
+        "name": "ECOLINE",
+        "audience": "When an opening has to be closed reliably and cheaply"
+      },
+      "roller": {
+        "name": "ROLLER",
+        "audience": "The baseline choice for a flat, a house or an office"
+      },
+      "unopen": {
+        "name": "UNOPEN",
+        "audience": "A reinforced profile for noisy streets and large openings"
+      },
+      "stella": {
+        "name": "STELLA",
+        "audience": "Maximum warmth and quiet in a private house"
+      },
+      "ald-45": {
+        "name": "ALD-45",
+        "audience": "Shopfronts, partitions and unheated terraces"
+      },
+      "thermo-60": {
+        "name": "THERMO 60",
+        "audience": "Facades and panoramic glazing for heated buildings"
+      }
+    }
+  },
+  "applications": {
+    "eyebrow": "Applications",
+    "title": "Start from the job, not from the material",
+    "description": "Windows, doors, sliding systems and facades. Which profile suits them is our job to work out.",
+    "cta": "Find a solution",
+    "imagePlaceholder": "Project photograph: {title}",
+    "items": {
+      "windows": {
+        "title": "Windows",
+        "description": "PVC and aluminium window systems for flats, private houses and commercial buildings.",
+        "menuDescription": "PVC and aluminium for any opening",
+        "heading": "PVC and aluminium windows in Dushanbe",
+        "intro": "We make windows in our own plant in Dushanbe, from the three-chamber economy series to a premium 75 mm profile. Survey, manufacture, delivery and installation are all done by our own teams.",
+        "metaTitle": "PVC windows in Dushanbe — PVC and aluminium, direct from the maker",
+        "metaDescription": "PVC and aluminium windows in Dushanbe direct from ROLLER: six profile systems, survey, manufacture and installation. Priced per project."
+      },
+      "doors": {
+        "title": "Doors",
+        "description": "Entrance groups, balcony doors and internal doors in PVC and thermally broken aluminium.",
+        "menuDescription": "Entrance groups and balcony doors",
+        "heading": "PVC and aluminium doors in Dushanbe",
+        "intro": "Door sets are built to the opening: thermally broken aluminium entrances for heated buildings, light aluminium doors for shops, and PVC balcony doors.",
+        "metaTitle": "Aluminium doors in Dushanbe — made-to-order PVC and aluminium doors",
+        "metaDescription": "Made-to-order aluminium and PVC doors in Dushanbe: entrance groups, balcony and internal doors from ROLLER. Survey and installation included."
+      },
+      "sliding-systems": {
+        "title": "Sliding systems",
+        "description": "Sliding windows and doors for balconies, terraces and panoramic openings.",
+        "menuDescription": "Balconies, terraces, panoramic openings",
+        "heading": "Sliding windows and doors in Dushanbe",
+        "intro": "Sliding units save room where a hinged sash has nowhere to swing: on a balcony, on a terrace, in a narrow passage. Built on both cold and thermally broken aluminium profiles.",
+        "metaTitle": "Sliding windows and doors in Dushanbe",
+        "metaDescription": "Aluminium sliding systems for balconies, terraces and panoramic openings in Dushanbe. Made by ROLLER, survey and installation included."
+      },
+      "facade-glazing": {
+        "title": "Facade glazing",
+        "description": "Facade systems for residential complexes, business centres and retail buildings.",
+        "menuDescription": "Residential, business centres, retail",
+        "heading": "Facade glazing in Dushanbe",
+        "intro": "We work with developers on volume and on schedule: glazing for residential complexes, curtain walling for business centres, entrance groups for retail buildings. Making the profile ourselves is what keeps large batches on time.",
+        "metaTitle": "Facade glazing in Dushanbe — aluminium facade systems",
+        "metaDescription": "Facade glazing for residential complexes and business centres in Dushanbe: cold and thermally broken aluminium systems from ROLLER."
+      },
+      "mosquito-nets": {
+        "title": "Insect screens",
+        "description": "Screens for windows and doors, made to the size of the opening.",
+        "menuDescription": "For windows and doors, made to size",
+        "heading": "Insect screens in Dushanbe",
+        "intro": "Screens are made to one specific opening — framed for windows, hinged for doors. They have no catalogue of their own: the size is taken at the survey along with the window.",
+        "metaTitle": "Insect screens in Dushanbe — for windows and doors",
+        "metaDescription": "Insect screens for windows and doors in Dushanbe, made to the size of the opening. Made by ROLLER, survey and fitting included."
+      },
+      "partitions": {
+        "title": "Partitions",
+        "description": "Office and retail partitions in cold aluminium with a slim profile.",
+        "menuDescription": "Offices, shops, zoning",
+        "heading": "Aluminium partitions in Dushanbe",
+        "intro": "Partitions divide an office, a shop or a showroom without eating the daylight. A slim 45 mm cold profile is the right answer where no heating is needed but geometry and rigidity are.",
+        "metaTitle": "Aluminium partitions in Dushanbe — office and retail",
+        "metaDescription": "Office and retail partitions in aluminium profile, Dushanbe. Made by ROLLER: survey, manufacture and installation."
+      }
+    }
+  },
+  "production": {
+    "eyebrow": "Production and scale",
+    "title": "Our own plant, not <accent>resale</accent>",
+    "description": "We extrude the profile ourselves: from extrusion to the finished unit, survey and installation. That is how we hold schedules at developer volumes and answer for the whole result.",
+    "fullCycle": "Full cycle",
+    "suppliers": "Raw materials and equipment",
+    "stats": {
+      "years": "years on the market",
+      "projects": "completed projects",
+      "clients": "clients",
+      "employees": "employees",
+      "tonnage": "tonnes per year"
+    },
+    "steps": {
+      "measure": "Survey",
+      "manufacture": "Production",
+      "installation": "Installation",
+      "service": "Service"
+    }
+  },
+  "projects": {
+    "eyebrow": "Projects",
+    "title": "What we have already glazed",
+    "description": "A short cut of projects until the full portfolio launches.",
+    "openPortfolio": "Open the portfolio",
+    "viewCase": "View case study",
+    "cardAria": "{title}, {location}",
+    "categories": {
+      "residential": "Residential",
+      "commercial": "Commercial",
+      "private": "Private construction"
+    },
+    "items": {
+      "residential-complex-dushanbe": {
+        "title": "Residential complex in Dushanbe",
+        "location": "Dushanbe",
+        "caption": "240 flats glazed with the STELLA system for higher thermal insulation."
+      },
+      "business-center-khujand": {
+        "title": "Business centre in Khujand",
+        "location": "Khujand",
+        "caption": "Facade glazing in the THERMO aluminium system with panoramic openings."
+      },
+      "private-house-vahdat": {
+        "title": "Private house in Vahdat",
+        "location": "Vahdat",
+        "caption": "ROLLER windows and doors for a private house with baseline insulation."
+      },
+      "shopping-mall-bokhtar": {
+        "title": "Shopping centre in Bokhtar",
+        "location": "Bokhtar",
+        "caption": "UNOPEN entrance groups and shopfronts for a shopping centre."
+      },
+      "apartment-renovation-dushanbe": {
+        "title": "Flat renovation in Dushanbe",
+        "location": "Dushanbe",
+        "caption": "Window units replaced in 80 flats using the cold glazing system."
+      }
+    }
+  },
+  "professionals": {
+    "eyebrow": "For professionals",
+    "title": "Profile <accent>wholesale</accent> and dealership terms",
+    "description": "We work with window manufacturers, dealers and designers: profile shipments, components from stock and technical documentation for every system.",
+    "requestPrice": "Request a price list",
+    "becomeDealer": "Become a dealer",
+    "imageAlt": "Cross-section of the ROLLER profile system",
+    "offerings": {
+      "wholesale": {
+        "title": "Wholesale profile supply",
+        "description": "We ship profile systems to window manufacturers across the country."
+      },
+      "dealership": {
+        "title": "Dealership",
+        "description": "Partnership terms, project support and installation training."
+      },
+      "components": {
+        "title": "Components",
+        "description": "Hardware, seals, reinforcement and related parts from stock."
+      },
+      "documentation": {
+        "title": "Technical documentation",
+        "description": "Junctions, sections, installation drawings and system specifications for design work."
+      }
+    }
+  },
+  "leadForm": {
+    "eyebrow": "Enquiry",
+    "title": "We will price a solution for your building",
+    "formAria": "Enquiry form",
+    "submit": "Send via WhatsApp",
+    "optional": "(optional)",
+    "selectPlaceholder": "Choose an option",
+    "errorIncomplete": "Fill in every field so we can prepare the message.",
+    "successPrepared": "Your message is ready to send on WhatsApp.",
+    "fields": {
+      "name": "Name",
+      "phone": "Phone",
+      "city": "City",
+      "productType": "Product type",
+      "comment": "Comment"
+    },
+    "placeholders": {
+      "name": "Your name",
+      "phone": "+992",
+      "comment": "Describe the building, the timeline or your question — optional"
+    },
+    "trustPoints": {
+      "measure": "Free survey and quote",
+      "response": "Answer within the day",
+      "warranty": "Manufacturer's warranty"
+    },
+    "cities": {
+      "dushanbe": "Dushanbe",
+      "khujand": "Khujand"
+    },
+    "productTypes": {
+      "pvc": "PVC products",
+      "aluminium": "Aluminium products",
+      "consultation": "Survey / consultation"
+    },
+    "whatsapp": {
+      "intro": "Hello! I would like to submit an enquiry from the ROLLER website."
+    }
+  },
+  "contacts": {
+    "eyebrow": "Contacts",
+    "title": "Get in touch or visit our office",
+    "mapTitle": "Map of the ROLLER office",
+    "cards": {
+      "address": {
+        "label": "Address",
+        "hint": "Open the map"
+      },
+      "phone": {
+        "label": "Phone",
+        "hint": "Call us"
+      },
+      "email": {
+        "label": "Email",
+        "hint": "Send an email"
+      },
+      "hours": {
+        "label": "Opening hours"
+      }
+    }
+  },
+  "catalog": {
+    "metaTitle": "Catalogue of profile systems",
+    "metaDescription": "Six ROLLER profile systems in PVC and aluminium, from economy to premium. Filter by material, segment and application. Priced per project.",
+    "breadcrumb": "Catalogue",
+    "eyebrow": "Catalogue",
+    "title": "PVC and aluminium profile systems",
+    "description": "Six systems, all made in our own plant. Start from the material, from the job, or go straight to the list — we quote per project, so there are no price lists on the site.",
+    "systems": {
+      "eyebrow": "All systems",
+      "title": "Six systems, economy to premium",
+      "description": "Filter by material, segment or application and compare the systems side by side."
+    },
+    "filters": {
+      "aria": "Catalogue filters",
+      "category": "Material",
+      "segment": "Segment",
+      "application": "Application",
+      "all": "All",
+      "reset": "Clear filters",
+      "results": "{count, plural, =0 {Nothing found} one {# system} other {# systems}}"
+    },
+    "empty": {
+      "title": "Nothing found",
+      "description": "No system matches the filters you picked. Clear them, or write to us and we will pick one by hand."
+    },
+    "categoryEmptyDescription": "Nothing is published in this category yet. Have a look at the full catalogue, or send a request and we will match a system to your building."
+  },
+  "solutions": {
+    "cta": "Send a request",
+    "systems": {
+      "eyebrow": "Suitable systems",
+      "title": "What we fit on jobs like this",
+      "description": "The systems that suit this job. The final choice depends on the size of the opening, the floor and the budget — we will help at the survey."
+    },
+    "empty": {
+      "title": "Made to your opening",
+      "description": "Nothing is listed in the catalogue yet — these are made to the size of your opening. Send a request and we will quote your version."
+    },
+    "other": {
+      "eyebrow": "Other applications",
+      "title": "What else we make"
+    }
+  },
+  "categories": {
+    "eyebrow": "Catalogue",
+    "viewCategory": "View category",
+    "items": {
+      "pvc": {
+        "eyebrow": "Windows and doors",
+        "title": "PVC products",
+        "description": "Window and door systems for flats, private houses and commercial buildings.",
+        "heading": "PVC profile systems",
+        "intro": "Four systems on one ladder: ECOLINE closes an opening dependably and cheaply, ROLLER is the baseline choice for a flat, UNOPEN handles a noisy street and large openings, and STELLA gives the most warmth and quiet.",
+        "metaTitle": "PVC profile systems — catalogue",
+        "metaDescription": "Four PVC systems made by ROLLER: ECOLINE, ROLLER, UNOPEN and STELLA — 60 to 75 mm, 3 to 5 chambers. Priced per project."
+      },
+      "aluminium": {
+        "eyebrow": "Facades and glazing",
+        "title": "Aluminium products",
+        "description": "Thermally broken, facade and sliding aluminium solutions for contemporary architecture.",
+        "heading": "Aluminium profile systems",
+        "intro": "Two systems for two jobs: the cold ALD-45 for shopfronts, partitions and unheated terraces, and the thermally broken THERMO 60 for facades and panoramic glazing on heated buildings.",
+        "metaTitle": "Aluminium profile systems — catalogue",
+        "metaDescription": "Aluminium systems made by ROLLER: the cold ALD-45 (45 mm) and the thermally broken THERMO 60 (60 mm) for facades, shopfronts and partitions."
+      }
+    }
+  },
+  "products": {
+    "more": "Learn more",
+    "choose": "Get a quote",
+    "imageAlt": "{name} system",
+    "imagePlaceholder": "Render of the {name} system",
+    "cardAria": "{name} — {segment}",
+    "items": {
+      "ecoline": {
+        "heading": "ECOLINE — 60 mm economy PVC profile",
+        "description": "A baseline three-chamber series: it closes the opening dependably and without paying for more. Supplied in white profile only.",
+        "specs": [
+          {
+            "name": "Profile depth",
+            "value": "60 mm"
+          },
+          {
+            "name": "Chambers",
+            "value": "3"
+          },
+          {
+            "name": "Glazing unit",
+            "value": "20 mm"
+          },
+          {
+            "name": "Opening type",
+            "value": "Tilt-and-turn and side-hung"
+          },
+          {
+            "name": "Warranty",
+            "value": "5 years, white profile"
+          }
+        ]
+      },
+      "roller": {
+        "heading": "ROLLER — 60 mm PVC profile for flats and houses",
+        "description": "A practical series for flats, houses and offices that need a dependable baseline balance of warmth, quiet and cost.",
+        "specs": [
+          {
+            "name": "Profile depth",
+            "value": "60 mm"
+          },
+          {
+            "name": "Chambers",
+            "value": "4"
+          },
+          {
+            "name": "Glazing unit",
+            "value": "20 mm"
+          },
+          {
+            "name": "Opening type",
+            "value": "Tilt-and-turn and side-hung"
+          },
+          {
+            "name": "Warranty",
+            "value": "15 years coloured / 10 years white"
+          }
+        ]
+      },
+      "unopen": {
+        "heading": "UNOPEN — reinforced 65 mm PVC profile",
+        "description": "A versatile system for residential and commercial buildings that need a reinforced profile without moving up to premium.",
+        "specs": [
+          {
+            "name": "Profile depth",
+            "value": "65 mm"
+          },
+          {
+            "name": "Chambers",
+            "value": "5"
+          },
+          {
+            "name": "Glazing unit",
+            "value": "20 mm"
+          },
+          {
+            "name": "Opening type",
+            "value": "Tilt-and-turn and side-hung"
+          },
+          {
+            "name": "Warranty",
+            "value": "15 years coloured / 10 years white"
+          }
+        ]
+      },
+      "stella": {
+        "heading": "STELLA — premium 75 mm PVC profile",
+        "description": "A series for projects with higher demands on thermal insulation, acoustics and tighter profile geometry.",
+        "specs": [
+          {
+            "name": "Profile depth",
+            "value": "75 mm"
+          },
+          {
+            "name": "Chambers",
+            "value": "5"
+          },
+          {
+            "name": "Glazing unit",
+            "value": "26–42 mm"
+          },
+          {
+            "name": "Opening type",
+            "value": "Tilt-and-turn and side-hung"
+          },
+          {
+            "name": "Sealing",
+            "value": "Three contours"
+          },
+          {
+            "name": "Warranty",
+            "value": "15 years coloured / 10 years white"
+          }
+        ]
+      },
+      "ald-45": {
+        "heading": "ALD-45 — 45 mm cold aluminium profile",
+        "description": "A cold aluminium series for partitions, terraces, shopfronts and light commercial structures with a slim profile.",
+        "specs": [
+          {
+            "name": "Profile depth",
+            "value": "45 mm"
+          },
+          {
+            "name": "Chambers",
+            "value": "1"
+          },
+          {
+            "name": "Glazing unit",
+            "value": "20 mm"
+          },
+          {
+            "name": "Opening type",
+            "value": "Tilt-and-turn and side-hung"
+          },
+          {
+            "name": "Warranty",
+            "value": "15 years"
+          }
+        ]
+      },
+      "thermo-60": {
+        "heading": "THERMO 60 — 60 mm thermally broken aluminium profile",
+        "description": "Thermally broken aluminium for facades, entrance groups and large openings where architecture and energy efficiency matter.",
+        "specs": [
+          {
+            "name": "Profile depth",
+            "value": "60 mm"
+          },
+          {
+            "name": "Chambers",
+            "value": "3"
+          },
+          {
+            "name": "Glazing unit",
+            "value": "4–20 mm"
+          },
+          {
+            "name": "Opening type",
+            "value": "Tilt-and-turn and side-hung"
+          },
+          {
+            "name": "Warranty",
+            "value": "15 years"
+          }
+        ]
+      }
+    }
+  },
+  "product": {
+    "eyebrow": "Profile system",
+    "metaTitle": "{name} — {depth} mm profile system",
+    "metaDescription": "{name}: {material} profile, {depth} mm deep. Made in our own plant in Dushanbe, installed and warranted. Priced per project.",
+    "imageAlt": "{name}, {color}",
+    "imagePlaceholder": "Renders of the {name} system are on the way",
+    "facts": {
+      "depth": "Profile depth",
+      "chambers": "Chambers",
+      "colors": "Lamination colours"
+    },
+    "cta": {
+      "configurator": "Configure your unit",
+      "call": "Request a call"
+    },
+    "gallery": {
+      "aria": "{name} system gallery",
+      "colors": "Lamination colour",
+      "angles": "Views",
+      "angle": "View {index}",
+      "previous": "Previous view",
+      "next": "Next view"
+    },
+    "specs": {
+      "eyebrow": "Specification",
+      "title": "Technical specification",
+      "description": "The system's parameters. Unit sizes are calculated against your opening at the survey — there are no stock sizes."
+    },
+    "colors": {
+      "eyebrow": "Colours",
+      "title": "Lamination colours",
+      "description": "Wood-effect lamination and plain finishes. The colour is applied to the profile at the plant, so it does not fade and never needs painting.",
+      "single": "This system ships in white profile only."
+    },
+    "applications": {
+      "eyebrow": "Applications",
+      "title": "Where it is used",
+      "description": "The jobs this system is specified for."
+    },
+    "advantages": {
+      "eyebrow": "Advantages",
+      "title": "What this profile gives you",
+      "pvc": {
+        "thermal": {
+          "title": "Thermal insulation",
+          "description": "A multi-chamber profile keeps heat inside and cuts what you spend on heating."
+        },
+        "acoustic": {
+          "title": "Sound insulation",
+          "description": "Sealing contours and the glazing unit noticeably cut street noise."
+        },
+        "durability": {
+          "title": "Durability",
+          "description": "PVC does not corrode or rot and never needs painting — shape and colour hold for years."
+        },
+        "aesthetics": {
+          "title": "Colour and texture",
+          "description": "Wood-effect lamination and plain finishes are chosen to match the facade and the interior."
+        },
+        "ecology": {
+          "title": "Safety",
+          "description": "The profile contains no toxic substances and is safe for living spaces."
+        }
+      },
+      "aluminium": {
+        "strength": {
+          "title": "Light and strong",
+          "description": "Aluminium allows slim frames and a large glazed area at the same rigidity."
+        },
+        "spans": {
+          "title": "Large openings",
+          "description": "These units carry the weight of shopfronts and panoramic sashes where PVC no longer works at that size."
+        },
+        "weather": {
+          "title": "Weather resistance",
+          "description": "The powder coat neither fades nor corrodes, in sun or rain."
+        },
+        "maintenance": {
+          "title": "Minimal upkeep",
+          "description": "The surface washes with ordinary cleaners and the coating never needs redoing."
+        }
+      }
+    },
+    "section": {
+      "eyebrow": "For architects and dealers",
+      "title": "Profile cross-section",
+      "description": "Chambers, reinforcement and how the glazing unit sits — how the system is built inside. Full technical documentation on request.",
+      "imageAlt": "{name} profile cross-section"
+    },
+    "warranty": {
+      "eyebrow": "Warranty",
+      "title": "Warranty terms",
+      "scope": "The terms below apply to PVC profiles made by ROLLER.",
+      "coveredTitle": "What is covered",
+      "covered": "Light fastness, structural integrity and manufacturing defects. Where a defect covered by the warranty is found, the manufacturer undertakes to replace the faulty item with a new one.",
+      "excludedTitle": "What is not covered",
+      "excluded": "Hardware, glazing units, and errors made while assembling and installing the windows and doors.",
+      "conditionsTitle": "When the warranty does not apply",
+      "conditions": "If the operating instructions are not followed, the customer cannot claim under the warranty."
+    },
+    "related": {
+      "eyebrow": "Other systems",
+      "title": "Neighbouring systems",
+      "description": "Systems in the same material — the closest rungs of the ladder come first."
+    }
+  },
+  "news": {
+    "eyebrow": "News and articles",
+    "title": "Short notes on production, projects and service",
+    "allNews": "All news",
+    "readArticle": "Read the article",
+    "read": "Read",
+    "moreMaterials": "More reading",
+    "items": {
+      "new-stella-line-launch": {
+        "title": "STELLA production line launched",
+        "excerpt": "We have expanded output of the five-chamber STELLA profile for projects with higher thermal insulation requirements."
+      },
+      "thermo-facade-project": {
+        "title": "THERMO aluminium facades in a new business centre",
+        "excerpt": "A look at a facade glazing project using the thermally broken aluminium profile and panoramic openings."
+      },
+      "service-expansion-2026": {
+        "title": "Expanding our project service coverage",
+        "excerpt": "We have added scheduled maintenance and window adjustment in Dushanbe, Khujand and Bokhtar."
+      }
+    }
+  },
+  "advantages": {
+    "own-production": {
+      "title": "In-house production",
+      "description": "Quality control at every stage: from the profile to the finished unit."
+    },
+    "materials": {
+      "title": "Quality materials",
+      "description": "Profile systems, hardware and components from vetted suppliers."
+    },
+    "warranty": {
+      "title": "Warranty",
+      "description": "We put our obligations in writing and stay with the project after installation."
+    },
+    "measurement": {
+      "title": "Fast survey",
+      "description": "A specialist visits the site and helps you choose the right system."
+    },
+    "installation": {
+      "title": "Professional installation",
+      "description": "Installation crews work to technical charts and standards."
+    },
+    "delivery": {
+      "title": "Delivery",
+      "description": "We arrange careful delivery of the units to site on the agreed date."
+    },
+    "service": {
+      "title": "Service",
+      "description": "We help with adjustment, advice and scheduled maintenance."
+    }
+  },
+  "notFound": {
+    "title": "Page not found",
+    "description": "This page does not exist or has moved. Go back to the homepage or take a look at the catalogue.",
+    "home": "Back to the homepage"
+  }
+}

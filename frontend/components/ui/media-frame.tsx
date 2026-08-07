@@ -13,6 +13,13 @@ interface MediaFrameProps {
   objectFit?: "cover" | "contain";
   sizes?: string;
   onError?: () => void;
+  /**
+   * Shown inside the empty state instead of `alt`. Context photography
+   * (interiors, facades, finished objects) does not exist yet — those slots
+   * ship as data fields set to `null` and render this calm neutral panel until
+   * the client's own shoot lands via the admin panel (DESIGN.md §6 п.2).
+   */
+  placeholderLabel?: string;
 }
 
 export function MediaFrame({
@@ -27,13 +34,14 @@ export function MediaFrame({
   objectFit = "cover",
   sizes,
   onError,
+  placeholderLabel,
 }: MediaFrameProps) {
   return (
     <div
       className={cn(
         "relative overflow-hidden",
         fill
-          ? "h-full w-full bg-brand-black"
+          ? "h-full w-full bg-neutral-100"
           : "rounded-card border border-neutral-200 bg-brand-white",
         containerClassName,
       )}
@@ -52,14 +60,14 @@ export function MediaFrame({
       ) : (
         <div
           className={cn(
-            "flex h-full w-full items-center justify-center bg-[linear-gradient(135deg,rgba(211,0,26,0.12)_0%,rgba(211,0,26,0.06)_50%,rgba(29,29,27,0.08)_100%)]",
+            "flex h-full w-full items-center justify-center bg-neutral-100 p-6",
+            "bg-[repeating-linear-gradient(135deg,transparent_0_14px,rgba(29,29,27,0.035)_14px_28px)]",
             className,
           )}
         >
-          <div className="text-center">
-            <div className="text-sm font-medium text-neutral-500">Изображение не загружено</div>
-            <div className="mt-1 text-xs text-neutral-400">{alt}</div>
-          </div>
+          <p className="max-w-56 text-center text-xs leading-5 font-medium text-neutral-500">
+            {placeholderLabel ?? alt}
+          </p>
         </div>
       )}
     </div>

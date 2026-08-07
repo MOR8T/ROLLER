@@ -1,39 +1,44 @@
-import Link from "next/link";
+import { useFormatter, useTranslations } from "next-intl";
 import { ArrowRight, ArrowUpRight } from "lucide-react";
 import { SectionHeading } from "@/components/sections/section-heading";
 import { Container } from "@/components/ui/container";
 import { MediaFrame } from "@/components/ui/media-frame";
-import { Reveal, RevealItem } from "@/components/ui/reveal";
+import { RevealGroup, RevealItem } from "@/components/ui/reveal";
 import { Section } from "@/components/ui/section";
-import { newsTeasers } from "@/data/home";
-import type { NewsTeaser } from "@/types";
+import { Link } from "@/i18n/navigation";
+import { newsTeasers, type NewsTeaserBase } from "@/data/home";
 
-const dateFormatter = new Intl.DateTimeFormat("ru-RU", {
-  day: "numeric",
-  month: "long",
-  year: "numeric",
-});
+/**
+ * Date formatting runs through `next-intl` rather than a module-scope
+ * `Intl.DateTimeFormat("ru-RU")`, which produced "12 мая 2026" on every locale
+ * regardless of what the visitor was reading.
+ */
+function useNewsDate() {
+  const format = useFormatter();
 
-function formatNewsDate(isoDate: string): string {
-  const parsed = new Date(isoDate);
-  if (Number.isNaN(parsed.getTime())) {
-    return isoDate;
-  }
-  return dateFormatter.format(parsed);
+  return (isoDate: string) => {
+    const parsed = new Date(isoDate);
+    if (Number.isNaN(parsed.getTime())) return isoDate;
+    return format.dateTime(parsed, { day: "numeric", month: "long", year: "numeric" });
+  };
 }
 
-function FeaturedNews({ article }: { article: NewsTeaser }) {
+function FeaturedNews({ article }: { article: NewsTeaserBase }) {
+  const t = useTranslations("news");
+  const formatNewsDate = useNewsDate();
+  const title = t(`items.${article.id}.title`);
+
   return (
-    <article className="group flex h-full flex-col overflow-hidden rounded-3xl border border-brand-black/8 bg-neutral-50 text-brand-black">
+    <article className="group flex h-full flex-col overflow-hidden rounded-card border border-brand-black/8 bg-neutral-50 text-brand-black">
       <Link
         href={article.href}
         className="relative block aspect-4/5 overflow-hidden p-8 focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:outline-none sm:aspect-square sm:p-10 lg:aspect-4/5"
-        aria-label={article.title}
+        aria-label={title}
       >
         <div className="relative h-full w-full">
           <MediaFrame
             src={article.image}
-            alt={article.title}
+            alt={title}
             fill
             sizes="(max-width: 1024px) 100vw, 48vw"
             objectFit="contain"
@@ -55,36 +60,40 @@ function FeaturedNews({ article }: { article: NewsTeaser }) {
             href={article.href}
             className="transition-colors hover:text-brand-red focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:ring-offset-brand-white focus-visible:outline-none"
           >
-            {article.title}
+            {title}
           </Link>
         </h3>
         <p className="mt-3 max-w-lg text-sm leading-6 text-brand-black/65 sm:text-base sm:leading-7">
-          {article.excerpt}
+          {t(`items.${article.id}.excerpt`)}
         </p>
         <Link
           href={article.href}
           className="mt-6 inline-flex w-fit items-center gap-2 text-sm font-semibold text-brand-black transition-colors group-hover:text-brand-red focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:ring-offset-brand-white focus-visible:outline-none"
         >
-          Читать статью
-          <ArrowRight className="size-4" />
+          {t("readArticle")}
+          <ArrowRight className="size-4 shrink-0" />
         </Link>
       </div>
     </article>
   );
 }
 
-function NewsRow({ article }: { article: NewsTeaser }) {
+function NewsRow({ article }: { article: NewsTeaserBase }) {
+  const t = useTranslations("news");
+  const formatNewsDate = useNewsDate();
+  const title = t(`items.${article.id}.title`);
+
   return (
     <article className="group grid gap-4 border-b border-brand-black/10 py-5 first:pt-0 last:border-b-0 last:pb-0 sm:grid-cols-[9rem_1fr] sm:gap-6 sm:py-6">
       <Link
         href={article.href}
-        className="relative block aspect-square overflow-hidden rounded-2xl border border-brand-black/8 bg-neutral-50 p-3 focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:outline-none"
-        aria-label={article.title}
+        className="relative block aspect-square overflow-hidden rounded-card border border-brand-black/8 bg-neutral-50 p-3 focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:outline-none"
+        aria-label={title}
       >
         <div className="relative h-full w-full">
           <MediaFrame
             src={article.image}
-            alt={article.title}
+            alt={title}
             fill
             sizes="(max-width: 640px) 100vw, 144px"
             objectFit="contain"
@@ -106,44 +115,48 @@ function NewsRow({ article }: { article: NewsTeaser }) {
             href={article.href}
             className="transition-colors hover:text-brand-red focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:outline-none"
           >
-            {article.title}
+            {title}
           </Link>
         </h3>
-        <p className="mt-2 line-clamp-2 text-sm leading-6 text-brand-black/65">{article.excerpt}</p>
+        <p className="mt-2 line-clamp-2 text-sm leading-6 text-brand-black/65">
+          {t(`items.${article.id}.excerpt`)}
+        </p>
         <Link
           href={article.href}
           className="mt-4 inline-flex w-fit items-center gap-1.5 text-sm font-semibold text-brand-black transition-colors group-hover:text-brand-red focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:outline-none"
         >
-          Читать
-          <ArrowUpRight className="size-4" />
+          {t("read")}
+          <ArrowUpRight className="size-4 shrink-0" />
         </Link>
       </div>
     </article>
   );
 }
 
+/**
+ * Not on the homepage — the target composition in DESIGN.md §7 has no news
+ * block. Kept for the /news page, stage 07.
+ */
 export function NewsSection() {
+  const t = useTranslations("news");
   const [featured, ...rest] = newsTeasers;
 
   return (
-    <Section id="news" className="bg-brand-white">
+    <Section id="news">
       <Container>
         <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
-          <SectionHeading
-            eyebrow="Новости и статьи"
-            title="Короткие заметки о производстве, проектах и сервисе"
-          />
+          <SectionHeading eyebrow={t("eyebrow")} title={t("title")} />
 
           <Link
             href="/news"
-            className="inline-flex w-fit items-center gap-2 rounded-full bg-brand-black px-5 py-3 text-sm font-semibold text-brand-white transition-colors hover:bg-brand-red focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:outline-none"
+            className="inline-flex w-fit shrink-0 items-center gap-2 rounded-control bg-brand-black px-5 py-3 text-sm font-semibold text-brand-white transition-colors hover:bg-brand-red focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:outline-none"
           >
-            Все новости
-            <ArrowRight className="size-4" />
+            {t("allNews")}
+            <ArrowRight className="size-4 shrink-0" />
           </Link>
         </div>
 
-        <Reveal preset="stagger" className="mt-10">
+        <RevealGroup className="mt-10">
           <div className="grid gap-8 lg:grid-cols-12 lg:gap-10 xl:gap-14">
             <RevealItem className="lg:col-span-6 xl:col-span-7">
               <FeaturedNews article={featured} />
@@ -152,7 +165,7 @@ export function NewsSection() {
             <RevealItem className="lg:col-span-6 xl:col-span-5">
               <div className="flex h-full flex-col justify-center lg:pl-2">
                 <p className="mb-2 text-xs font-semibold tracking-[0.2em] text-brand-black/40 uppercase">
-                  Ещё материалы
+                  {t("moreMaterials")}
                 </p>
                 <div>
                   {rest.map((article) => (
@@ -162,7 +175,7 @@ export function NewsSection() {
               </div>
             </RevealItem>
           </div>
-        </Reveal>
+        </RevealGroup>
       </Container>
     </Section>
   );

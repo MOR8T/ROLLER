@@ -37,14 +37,52 @@
   --radius-control: 0.5rem;
   --radius-card: 0.75rem;
 
+  /* Layout — see DESIGN.md §5. One container width and one horizontal gutter
+     for the whole site; sections never introduce side padding of their own.
+     `max-w-page` + `px-gutter` are the only way to reach these. */
+  --container-page: 80rem;
+  --spacing-gutter: clamp(1rem, 4vw, 2rem);
+
+  /* Vertical rhythm — a single fluid scale, so neighbouring sections cannot
+     end up with different "air" by accident. Reach it via `py-section`. */
+  --spacing-section: clamp(3.5rem, 7vw, 6rem);
+
+  /* Hero height — DESIGN.md §5 pins this to 72–80svh, deliberately short of a
+     full screen so the next section's top edge is visible without scrolling.
+     A full-height hero is the single reason the old site read as "dark". */
+  --spacing-hero: 74svh;
+
   /* Fonts (bound to next/font CSS variables in layout.tsx) */
   --font-sans: var(--font-montserrat), ui-sans-serif, system-ui, sans-serif;
-  --font-heading: var(--font-chakra-petch), var(--font-montserrat), sans-serif;
+
+  /* Chakra Petch is named literally here, not through `--font-chakra-petch`.
+     That variable expands to `"Chakra Petch", "Chakra Petch Fallback"`, and the
+     fallback is a metrics-adjusted `local(Arial)` declared over `U+0-10FFFF` —
+     it claims every codepoint, so it swallowed Cyrillic before the chain could
+     reach Montserrat. Measured on the Tajik homepage, an <h1> rendered at the
+     fallback's width (358px) instead of Montserrat's (413px): headings on the
+     Russian and Tajik sites were being drawn in Arial, not in the brand font
+     that DESIGN.md §4 specifies.
+
+     Naming the family directly skips that fallback. Chakra Petch ships no
+     Cyrillic subset at all, so Cyrillic now falls through to Montserrat and its
+     own adjusted fallback covers the swap — which is what §4 describes.
+     `next/font` names the @font-face family exactly after the Google font, so
+     the literal is stable. */
+  --font-heading: "Chakra Petch", var(--font-montserrat), sans-serif;
 }
 
 :root {
   --background: var(--color-background);
   --foreground: var(--color-foreground);
+}
+
+/* The hero CTAs are in-page anchors; smooth scrolling makes the jump readable.
+   Opt out under reduced motion, where an instant jump is the safer behaviour. */
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
 }
 
 body {
@@ -65,29 +103,73 @@ h6 {
   font-family: var(--font-heading);
 }
 
-/* Hero Swiper controls */
-.hero-swiper .swiper {
-  min-height: 100svh;
+/* ---------------------------------------------------------------------------
+   Scroll reveal — DESIGN.md §8.
+
+   Native CSS scroll-driven animation, zero JS: works in server components and
+   costs nothing at runtime. Two levels only, matching the motion hierarchy:
+
+     .reveal        level 1 — structural sections. Opacity only, no offset.
+     .reveal-group  level 2 — card grids. Short stagger, 12px offset.
+
+   Anything not in those two levels does not animate.
+
+   Note on duration: DESIGN.md asks for ~0.25s. A scroll-driven animation has
+   no wall-clock duration — it is scrubbed by scroll position — so the intent
+   is expressed as a short `animation-range` instead. The perceived effect is
+   the same brief fade.
+
+   Both guards below are deliberate degradations to "content is simply visible":
+     - no `animation-timeline` support → rules never apply, nothing is hidden;
+     - `prefers-reduced-motion: reduce` → same.
+   --------------------------------------------------------------------------- */
+
+@keyframes reveal-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
-.hero-swiper .swiper-slide {
-  height: auto;
-  min-height: 100svh;
+@keyframes reveal-rise {
+  from {
+    opacity: 0;
+    translate: 0 12px;
+  }
+  to {
+    opacity: 1;
+    translate: 0 0;
+  }
 }
 
-.hero-swiper .swiper-pagination-bullet {
-  width: 0.5rem;
-  height: 0.5rem;
-  margin: 0 0.25rem !important;
-  background: rgb(29 29 27 / 0.25);
-  opacity: 1;
-  transition:
-    width 0.25s ease,
-    background-color 0.25s ease;
-}
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .reveal {
+      animation: reveal-fade linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 40%;
+    }
 
-.hero-swiper .swiper-pagination-bullet-active {
-  width: 2rem;
-  border-radius: 9999px;
-  background: var(--color-brand-red);
+    .reveal-group > * {
+      animation: reveal-rise linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 40%;
+    }
+
+    /* Short stagger. The offset repeats every four items rather than growing
+       with the index, so the last card of a long grid is not left waiting. */
+    .reveal-group > *:nth-child(4n + 2) {
+      animation-range: entry 4% entry 44%;
+    }
+
+    .reveal-group > *:nth-child(4n + 3) {
+      animation-range: entry 8% entry 48%;
+    }
+
+    .reveal-group > *:nth-child(4n + 4) {
+      animation-range: entry 12% entry 52%;
+    }
+  }
 }
