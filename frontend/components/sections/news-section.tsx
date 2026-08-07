@@ -6,7 +6,7 @@ import { MediaFrame } from "@/components/ui/media-frame";
 import { RevealGroup, RevealItem } from "@/components/ui/reveal";
 import { Section } from "@/components/ui/section";
 import { Link } from "@/i18n/navigation";
-import { newsTeasers, type NewsTeaserBase } from "@/data/home";
+import { articleHref, articles, type ArticleRecord } from "@/data/news";
 
 /**
  * Date formatting runs through `next-intl` rather than a module-scope
@@ -23,7 +23,7 @@ function useNewsDate() {
   };
 }
 
-function FeaturedNews({ article }: { article: NewsTeaserBase }) {
+function FeaturedNews({ article }: { article: ArticleRecord }) {
   const t = useTranslations("news");
   const formatNewsDate = useNewsDate();
   const title = t(`items.${article.id}.title`);
@@ -31,13 +31,13 @@ function FeaturedNews({ article }: { article: NewsTeaserBase }) {
   return (
     <article className="group flex h-full flex-col overflow-hidden rounded-card border border-brand-black/8 bg-neutral-50 text-brand-black">
       <Link
-        href={article.href}
+        href={articleHref(article.slug)}
         className="relative block aspect-4/5 overflow-hidden p-8 focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:outline-none sm:aspect-square sm:p-10 lg:aspect-4/5"
         aria-label={title}
       >
         <div className="relative h-full w-full">
           <MediaFrame
-            src={article.image}
+            src={article.cover}
             alt={title}
             fill
             sizes="(max-width: 1024px) 100vw, 48vw"
@@ -57,7 +57,7 @@ function FeaturedNews({ article }: { article: NewsTeaserBase }) {
         </time>
         <h3 className="mt-3 font-heading text-2xl font-bold tracking-tight sm:text-3xl lg:text-4xl">
           <Link
-            href={article.href}
+            href={articleHref(article.slug)}
             className="transition-colors hover:text-brand-red focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:ring-offset-brand-white focus-visible:outline-none"
           >
             {title}
@@ -67,7 +67,7 @@ function FeaturedNews({ article }: { article: NewsTeaserBase }) {
           {t(`items.${article.id}.excerpt`)}
         </p>
         <Link
-          href={article.href}
+          href={articleHref(article.slug)}
           className="mt-6 inline-flex w-fit items-center gap-2 text-sm font-semibold text-brand-black transition-colors group-hover:text-brand-red focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:ring-offset-brand-white focus-visible:outline-none"
         >
           {t("readArticle")}
@@ -78,7 +78,7 @@ function FeaturedNews({ article }: { article: NewsTeaserBase }) {
   );
 }
 
-function NewsRow({ article }: { article: NewsTeaserBase }) {
+function NewsRow({ article }: { article: ArticleRecord }) {
   const t = useTranslations("news");
   const formatNewsDate = useNewsDate();
   const title = t(`items.${article.id}.title`);
@@ -86,13 +86,13 @@ function NewsRow({ article }: { article: NewsTeaserBase }) {
   return (
     <article className="group grid gap-4 border-b border-brand-black/10 py-5 first:pt-0 last:border-b-0 last:pb-0 sm:grid-cols-[9rem_1fr] sm:gap-6 sm:py-6">
       <Link
-        href={article.href}
+        href={articleHref(article.slug)}
         className="relative block aspect-square overflow-hidden rounded-card border border-brand-black/8 bg-neutral-50 p-3 focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:outline-none"
         aria-label={title}
       >
         <div className="relative h-full w-full">
           <MediaFrame
-            src={article.image}
+            src={article.cover}
             alt={title}
             fill
             sizes="(max-width: 640px) 100vw, 144px"
@@ -112,7 +112,7 @@ function NewsRow({ article }: { article: NewsTeaserBase }) {
         </time>
         <h3 className="mt-2 font-heading text-xl font-bold tracking-tight text-brand-black sm:text-2xl">
           <Link
-            href={article.href}
+            href={articleHref(article.slug)}
             className="transition-colors hover:text-brand-red focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:outline-none"
           >
             {title}
@@ -122,7 +122,7 @@ function NewsRow({ article }: { article: NewsTeaserBase }) {
           {t(`items.${article.id}.excerpt`)}
         </p>
         <Link
-          href={article.href}
+          href={articleHref(article.slug)}
           className="mt-4 inline-flex w-fit items-center gap-1.5 text-sm font-semibold text-brand-black transition-colors group-hover:text-brand-red focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:outline-none"
         >
           {t("read")}
@@ -139,7 +139,7 @@ function NewsRow({ article }: { article: NewsTeaserBase }) {
  */
 export function NewsSection() {
   const t = useTranslations("news");
-  const [featured, ...rest] = newsTeasers;
+  const [featured, ...rest] = articles;
 
   return (
     <Section id="news">

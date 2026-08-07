@@ -6,7 +6,6 @@ import { MediaFrame } from "@/components/ui/media-frame";
 import { Reveal, RevealGroup, RevealItem } from "@/components/ui/reveal";
 import { Section } from "@/components/ui/section";
 import { proOfferingKeys } from "@/data/home";
-import { siteConfig } from "@/lib/site-config";
 
 /**
  * "Профессионалам" — the only dark section on the page.
@@ -39,11 +38,14 @@ export function ProfessionalsSection() {
               description={t("description")}
             />
 
+            {/* Since stage 07 both actions land on `/professionals`, the page
+                this section is the teaser for — the plan asks for the link from
+                exactly here. WhatsApp stays one tap away on that page's form. */}
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-              <ButtonLink href={siteConfig.whatsappHref} size="lg">
+              <ButtonLink href="/professionals" size="lg">
                 {t("requestPrice")}
               </ButtonLink>
-              <ButtonLink href="/contacts" variant="outline-inverse" size="lg">
+              <ButtonLink href="/professionals" variant="outline-inverse" size="lg">
                 {t("becomeDealer")}
               </ButtonLink>
             </div>

@@ -4,7 +4,8 @@ import { accentTag, SectionHeading } from "@/components/sections/section-heading
 import { Container } from "@/components/ui/container";
 import { Reveal, RevealGroup, RevealItem } from "@/components/ui/reveal";
 import { Section } from "@/components/ui/section";
-import { companyStats, partners, serviceHighlights } from "@/data/home";
+import { PartnersGrid } from "@/components/sections/partners-grid";
+import { companyStats, serviceHighlights } from "@/data/home";
 
 /**
  * "Производство и масштаб" — for developers and dealers (DESIGN.md §7).
@@ -81,32 +82,7 @@ export function ProductionScaleSection() {
           <h3 className="font-heading text-sm font-semibold tracking-[0.24em] text-brand-black/55 uppercase">
             {t("suppliers")}
           </h3>
-          <ul className="mt-5 grid grid-cols-2 gap-3 md:grid-cols-4">
-            {partners.map((partner) => {
-              const isInlineSvg =
-                typeof partner.logo === "string" && partner.logo.trim().startsWith("<svg");
-
-              return (
-                <li
-                  key={partner.name}
-                  className="flex min-h-24 items-center justify-center overflow-hidden rounded-card border border-brand-black/10 bg-surface p-4"
-                >
-                  {isInlineSvg ? (
-                    <span
-                      className="flex w-full items-center justify-center [&_svg]:h-12 [&_svg]:w-full [&_svg]:max-w-[160px]"
-                      aria-label={partner.name}
-                      role="img"
-                      dangerouslySetInnerHTML={{ __html: partner.logo ?? "" }}
-                    />
-                  ) : (
-                    <span className="text-center font-heading text-sm font-semibold text-brand-black/70">
-                      {partner.name}
-                    </span>
-                  )}
-                </li>
-              );
-            })}
-          </ul>
+          <PartnersGrid className="mt-5" />
         </Reveal>
       </Container>
     </Section>

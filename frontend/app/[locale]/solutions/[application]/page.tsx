@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 
 import { ApplicationCard } from "@/components/catalog/application-card";
-import { CatalogPageHeader } from "@/components/catalog/page-header";
+import { PageHeader } from "@/components/layout/page-header";
 import { EmptyState, ProductGrid } from "@/components/catalog/product-grid";
 import { LeadFormSection } from "@/components/sections/lead-form-section";
 import { SectionHeading } from "@/components/sections/section-heading";
@@ -15,6 +15,7 @@ import { Section } from "@/components/ui/section";
 import { applications, isApplicationSlug, productsByApplication } from "@/data/catalog";
 
 const LEAD_FORM_ANCHOR = "#lead-form";
+const CALCULATOR_HREF = "/calculator";
 
 export function generateStaticParams() {
   return applications.map((application) => ({ application: application.slug }));
@@ -67,7 +68,7 @@ export default async function ApplicationPage({
   return (
     <>
       <Section>
-        <CatalogPageHeader
+        <PageHeader
           breadcrumbs={[{ label: tCatalog("breadcrumb"), href: "/catalog" }, { label: title }]}
           eyebrow={t("eyebrow")}
           title={t(`items.${application}.heading`)}
@@ -81,7 +82,7 @@ export default async function ApplicationPage({
               {tCatalog("breadcrumb")}
             </ButtonLink>
           </div>
-        </CatalogPageHeader>
+        </PageHeader>
 
         <Container>
           {/* Context layer, DESIGN.md §6: an interior, a facade, a finished
@@ -115,7 +116,7 @@ export default async function ApplicationPage({
           <ProductGrid
             className="mt-10"
             products={items}
-            chooseHref={LEAD_FORM_ANCHOR}
+            chooseHref={CALCULATOR_HREF}
             empty={
               <EmptyState
                 title={tSolutions("empty.title")}

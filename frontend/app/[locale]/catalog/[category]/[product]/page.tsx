@@ -23,7 +23,7 @@ import { cn } from "@/lib/utils";
 import type { ProductCardBadgeVariant, Segment, Spec } from "@/types";
 
 const LEAD_FORM_ANCHOR = "#lead-form";
-const CONFIGURATOR_HREF = "/calculator";
+const CALCULATOR_HREF = "/calculator";
 
 // Same mapping as the catalog card, and for the same reason: only the premium
 // rung is marked in brand red, which keeps badges inside the ~5% budget of
@@ -178,8 +178,8 @@ export default async function ProductPage({
               </dl>
 
               <div className="mt-8 flex flex-wrap gap-3">
-                <ButtonLink href={CONFIGURATOR_HREF} size="lg">
-                  {t("cta.configurator")}
+                <ButtonLink href={CALCULATOR_HREF} size="lg">
+                  {t("cta.calculator")}
                 </ButtonLink>
                 <ButtonLink href={LEAD_FORM_ANCHOR} variant="outline" size="lg">
                   {t("cta.call")}
@@ -364,7 +364,7 @@ export default async function ProductPage({
         </Section>
       ) : null}
 
-      <RelatedProducts product={product} chooseHref={LEAD_FORM_ANCHOR} />
+      <RelatedProducts product={product} chooseHref={CALCULATOR_HREF} />
 
       <LeadFormSection />
     </>
