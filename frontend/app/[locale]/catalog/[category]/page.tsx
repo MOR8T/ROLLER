@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 
-import { CatalogPageHeader } from "@/components/catalog/page-header";
+import { PageHeader } from "@/components/layout/page-header";
 import { EmptyState, ProductGrid } from "@/components/catalog/product-grid";
 import { LeadFormSection } from "@/components/sections/lead-form-section";
 import { ButtonLink } from "@/components/ui/button";
@@ -10,7 +10,7 @@ import { Container } from "@/components/ui/container";
 import { Section } from "@/components/ui/section";
 import { categories, isCategorySlug, productsByCategory } from "@/data/catalog";
 
-const LEAD_FORM_ANCHOR = "#lead-form";
+const CALCULATOR_HREF = "/calculator";
 
 /**
  * ⚠️ Slugs are `pvc` and `aluminium`. An earlier draft of the plan wrote `pvh`;
@@ -59,7 +59,7 @@ export default async function CategoryPage({ params }: PageProps<"/[locale]/cata
   return (
     <>
       <Section>
-        <CatalogPageHeader
+        <PageHeader
           breadcrumbs={[
             { label: tCatalog("breadcrumb"), href: "/catalog" },
             { label: t(`items.${category}.title`) },
@@ -73,7 +73,7 @@ export default async function CategoryPage({ params }: PageProps<"/[locale]/cata
           <ProductGrid
             className="mt-12"
             products={items}
-            chooseHref={LEAD_FORM_ANCHOR}
+            chooseHref={CALCULATOR_HREF}
             empty={
               <EmptyState
                 title={tCatalog("empty.title")}

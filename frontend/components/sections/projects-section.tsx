@@ -6,7 +6,7 @@ import { MediaFrame } from "@/components/ui/media-frame";
 import { Reveal, RevealGroup, RevealItem } from "@/components/ui/reveal";
 import { Section } from "@/components/ui/section";
 import { Link } from "@/i18n/navigation";
-import { projectTeasers, type ProjectTeaserBase } from "@/data/home";
+import { projectHref, projects, type ProjectRecord } from "@/data/portfolio";
 import { cn } from "@/lib/utils";
 
 function ProjectTile({
@@ -14,7 +14,7 @@ function ProjectTile({
   sizes,
   featured = false,
 }: {
-  project: ProjectTeaserBase;
+  project: ProjectRecord;
   sizes: string;
   featured?: boolean;
 }) {
@@ -28,7 +28,7 @@ function ProjectTile({
 
   return (
     <Link
-      href={project.href}
+      href={projectHref(project.slug)}
       className={cn(
         "group relative block overflow-hidden rounded-card border border-brand-black/8 bg-neutral-50 text-brand-black focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:outline-none",
         featured ? "h-full min-h-[28rem] sm:min-h-[32rem]" : "h-full min-h-64 sm:min-h-72",
@@ -98,7 +98,7 @@ function ProjectTile({
 
 export function ProjectsSection() {
   const t = useTranslations("projects");
-  const [featured, ...rest] = projectTeasers;
+  const [featured, ...rest] = projects;
   const sideProjects = rest.slice(0, 2);
   const bottomProjects = rest.slice(2);
 

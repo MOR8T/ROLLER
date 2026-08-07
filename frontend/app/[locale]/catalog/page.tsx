@@ -4,7 +4,7 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import { ApplicationCard } from "@/components/catalog/application-card";
 import { CatalogBrowser } from "@/components/catalog/catalog-browser";
 import { CategoryCard } from "@/components/catalog/category-card";
-import { CatalogPageHeader } from "@/components/catalog/page-header";
+import { PageHeader } from "@/components/layout/page-header";
 import { LeadFormSection } from "@/components/sections/lead-form-section";
 import { SectionHeading } from "@/components/sections/section-heading";
 import { Container } from "@/components/ui/container";
@@ -13,7 +13,8 @@ import { Section } from "@/components/ui/section";
 import { applications, categories } from "@/data/catalog";
 
 /** The "Подобрать" CTA on every card scrolls to the form at the foot of the page. */
-const LEAD_FORM_ANCHOR = "#lead-form";
+/** The "Подобрать" CTA on every card opens the calculator (plan §06). */
+const CALCULATOR_HREF = "/calculator";
 
 export async function generateMetadata({
   params,
@@ -46,7 +47,7 @@ export default async function CatalogPage({ params }: PageProps<"/[locale]/catal
   return (
     <>
       <Section>
-        <CatalogPageHeader
+        <PageHeader
           breadcrumbs={[{ label: t("breadcrumb") }]}
           eyebrow={t("eyebrow")}
           title={t("title")}
@@ -95,7 +96,7 @@ export default async function CatalogPage({ params }: PageProps<"/[locale]/catal
           </Reveal>
 
           <div className="mt-10">
-            <CatalogBrowser chooseHref={LEAD_FORM_ANCHOR} />
+            <CatalogBrowser chooseHref={CALCULATOR_HREF} />
           </div>
         </Container>
       </Section>

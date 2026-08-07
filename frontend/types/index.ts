@@ -51,7 +51,7 @@ export interface Category {
  * actually asks for — category and segment — are typed fields on `Product`, so
  * typed spec columns would buy nothing.
  *
- * ⚠️ Not enough for the configurator (stage 06), which needs machine-readable
+ * ⚠️ Not enough for the calculator (stage 06), which needs machine-readable
  * option lists. That is open question №1 in `project_plan/00-overview.md`.
  */
 export interface Spec {
@@ -148,12 +148,29 @@ export interface Project {
   images: string[];
 }
 
+/**
+ * Which of the three requests the visitor is making. The brief asks for one
+ * form with a choice of scenario — «рассчитать» / «получить КП» /
+ * «стать дилером» — and the value travels all the way through: it is stored
+ * with the lead and written into the WhatsApp message, because a human sorts
+ * the requests and no admin-side workflow exists (plan §06).
+ */
+export type LeadScenario = "calculate" | "quote" | "dealer";
+
 export interface Lead {
+  scenario: LeadScenario;
   name: string;
   phone: string;
   city: string;
   productType: string;
   comment?: string;
+  /**
+   * The calculator's read-out, already rendered as plain text in the
+   * visitor's locale. Free text rather than a structured payload on purpose:
+   * the sales desk reads it, and pinning a schema now would freeze option
+   * lists that are still open question №1 in `project_plan/00-overview.md`.
+   */
+  configuration?: string;
 }
 
 export interface Cta {
@@ -210,25 +227,13 @@ export interface ProOffering {
 
 export type ProductCardBadgeVariant = "red" | "black" | "outline";
 
-export interface ProjectTeaser {
-  id: string;
-  title: string;
-  location: string;
-  category: ProjectCategory;
-  image: string;
-  caption: string;
-  href: string;
-}
-
-export interface NewsTeaser {
-  id: string;
-  title: string;
-  excerpt: string;
-  image: string;
-  /** ISO-8601 date; rendered through `next-intl`'s formatter per locale. */
-  date: string;
-  href: string;
-}
+/**
+ * `ProjectTeaser` and `NewsTeaser` lived here until stage 07. They were
+ * homepage-only shapes carrying a prebuilt `href`, and `/portfolio` and `/news`
+ * need a slug they can route on instead — see `ProjectRecord` in
+ * `data/portfolio.ts` and `ArticleRecord` in `data/news.ts`. The domain
+ * contracts the backend must satisfy stay `Project` and `Article` above.
+ */
 
 export interface Partner {
   name: string;

@@ -3,6 +3,7 @@ import { ChevronRight } from "lucide-react";
 import { useTranslations } from "next-intl";
 
 import { Link } from "@/i18n/navigation";
+import { cn } from "@/lib/utils";
 
 export interface Crumb {
   label: string;
@@ -16,13 +17,25 @@ export interface Crumb {
  * visitor came in on, so every page below `/catalog` and `/solutions` carries
  * one. The "Главная" crumb is prepended here rather than by each caller.
  */
-export function Breadcrumbs({ items }: { items: Crumb[] }) {
+export function Breadcrumbs({
+  items,
+  tone = "light",
+}: {
+  items: Crumb[];
+  tone?: "light" | "dark";
+}) {
   const t = useTranslations("breadcrumbs");
   const trail: Crumb[] = [{ label: t("home"), href: "/" }, ...items];
+  const dark = tone === "dark";
 
   return (
     <nav aria-label={t("aria")}>
-      <ol className="flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-brand-black/55">
+      <ol
+        className={cn(
+          "flex flex-wrap items-center gap-x-2 gap-y-1 text-sm",
+          dark ? "text-brand-white/60" : "text-brand-black/55",
+        )}
+      >
         {trail.map((crumb, index) => {
           const isLast = index === trail.length - 1;
 
@@ -37,7 +50,10 @@ export function Breadcrumbs({ items }: { items: Crumb[] }) {
                     {crumb.label}
                   </Link>
                 ) : (
-                  <span aria-current="page" className="font-medium text-brand-black">
+                  <span
+                    aria-current="page"
+                    className={cn("font-medium", dark ? "text-brand-white" : "text-brand-black")}
+                  >
                     {crumb.label}
                   </span>
                 )}

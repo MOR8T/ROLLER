@@ -6,7 +6,11 @@ import { Badge } from "@/components/ui/badge";
 import { MediaFrame } from "@/components/ui/media-frame";
 import { Link } from "@/i18n/navigation";
 import { productHref, type ProductBase } from "@/data/catalog";
+import { isExternalHref } from "@/lib/utils";
 import type { ProductCardBadgeVariant, Segment, Spec } from "@/types";
+
+const chooseClasses =
+  "inline-flex items-center text-sm font-semibold text-brand-red transition-colors hover:text-brand-red/80 focus-visible:rounded-control focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:outline-none";
 
 /**
  * The catalog card for a profile system. Used by `/catalog`, by the category
@@ -31,7 +35,11 @@ const segmentBadge: Record<Segment, ProductCardBadgeVariant> = {
 
 interface ProductCardProps {
   product: ProductBase;
-  /** Target for the "Подобрать" CTA — the lead form on the current page. */
+  /**
+   * Target for the "Подобрать" CTA — `/calculator` since stage 06, which is
+   * where the plan puts the calculator CTA ("на карточках систем и на
+   * странице товара"). A page-local fragment is still accepted.
+   */
   chooseHref: string;
   sizes?: string;
 }
@@ -110,14 +118,18 @@ export function ProductCard({ product, chooseHref, sizes }: ProductCardProps) {
             {t("more")}
             <ArrowUpRight className="size-4 shrink-0" />
           </Link>
-          {/* Same-page fragment, so a plain `<a>`: a locale prefix would turn
-              the scroll into a navigation. */}
-          <a
-            href={chooseHref}
-            className="inline-flex items-center text-sm font-semibold text-brand-red transition-colors hover:text-brand-red/80 focus-visible:rounded-control focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:outline-none"
-          >
-            {t("choose")}
-          </a>
+          {/* A route (`/calculator`) goes through the locale-aware `Link`; a
+              same-page fragment stays on a plain `<a>`, where a locale prefix
+              would turn the scroll into a navigation. */}
+          {isExternalHref(chooseHref) ? (
+            <a href={chooseHref} className={chooseClasses}>
+              {t("choose")}
+            </a>
+          ) : (
+            <Link href={chooseHref} className={chooseClasses}>
+              {t("choose")}
+            </Link>
+          )}
         </div>
       </div>
     </article>

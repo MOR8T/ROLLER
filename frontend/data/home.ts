@@ -8,7 +8,7 @@ import {
   Truck,
   Wrench,
 } from "lucide-react";
-import type { HeroContent, NewsTeaser, Partner, ProjectTeaser } from "@/types";
+import type { HeroContent, Partner } from "@/types";
 
 /**
  * Mock content for the homepage.
@@ -127,62 +127,9 @@ export const heroContent: HeroContentBase = {
 // Copy: `professionals.offerings.<key>`.
 export const proOfferingKeys = ["wholesale", "dealership", "components", "documentation"] as const;
 
-/** Copy: `projects.items.<id>` and `projects.categories.<category>`. */
-export type ProjectTeaserBase = Omit<ProjectTeaser, "title" | "location" | "caption">;
-
-export const projectTeasers: ProjectTeaserBase[] = [
-  {
-    id: "residential-complex-dushanbe",
-    category: "residential",
-    image: "/products/stella/stella-main.png",
-    href: "/portfolio",
-  },
-  {
-    id: "business-center-khujand",
-    category: "commercial",
-    image: "/products/thermo-60/thermo-60-anthracite.png",
-    href: "/portfolio",
-  },
-  {
-    id: "private-house-vahdat",
-    category: "private",
-    image: "/products/roller/roller-main.png",
-    href: "/portfolio",
-  },
-  {
-    id: "shopping-mall-bokhtar",
-    category: "commercial",
-    image: "/products/unopen/unopen-main.png",
-    href: "/portfolio",
-  },
-  {
-    id: "apartment-renovation-dushanbe",
-    category: "residential",
-    image: "/products/ald-45/ald-45-white.png",
-    href: "/portfolio",
-  },
-];
-
-/** Copy: `news.items.<id>`. Dates are formatted per locale on render. */
-export type NewsTeaserBase = Omit<NewsTeaser, "title" | "excerpt">;
-
-export const newsTeasers: NewsTeaserBase[] = [
-  {
-    id: "new-stella-line-launch",
-    image: "/news/stella-window.png",
-    date: "2026-05-12",
-    href: "/news/stella-line-launch",
-  },
-  {
-    id: "thermo-facade-project",
-    image: "/news/thermo-anthracite.png",
-    date: "2026-04-03",
-    href: "/news/thermo-facade-project",
-  },
-  {
-    id: "service-expansion-2026",
-    image: "/news/roller-windows.png",
-    date: "2026-03-18",
-    href: "/news/service-expansion-2026",
-  },
-];
+/**
+ * ⚠️ The portfolio and the news list moved to `data/portfolio.ts` and
+ * `data/news.ts` in stage 07. They stopped being homepage mock data the moment
+ * `/portfolio` and `/news` started reading them — the same move the catalog
+ * made in stage 04.
+ */

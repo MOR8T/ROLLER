@@ -20,6 +20,7 @@
     "calculator": "Calculator",
     "news": "News",
     "showroom": "Showrooms",
+    "professionals": "For professionals",
     "contacts": "Contacts"
   },
   "breadcrumbs": {
@@ -217,28 +218,64 @@
       "residential-complex-dushanbe": {
         "title": "Residential complex in Dushanbe",
         "location": "Dushanbe",
-        "caption": "240 flats glazed with the STELLA system for higher thermal insulation."
+        "caption": "240 flats glazed with the STELLA system for higher thermal insulation.",
+        "installed": "STELLA, windows and balcony doors",
+        "volume": "240 apartments",
+        "body": [
+          "The complex was handed over in phases: surveying and fitting ran alongside the floors being completed, so production followed the developer's pace.",
+          "The five-chamber STELLA profile was chosen for the thermal requirements of the upper floors and for one colour across the whole facade."
+        ]
       },
       "business-center-khujand": {
         "title": "Business centre in Khujand",
         "location": "Khujand",
-        "caption": "Facade glazing in the THERMO aluminium system with panoramic openings."
+        "caption": "Facade glazing in the THERMO aluminium system with panoramic openings.",
+        "installed": "THERMO 60, facade glazing",
+        "volume": "1,800 m²",
+        "body": [
+          "The panoramic openings were closed with warm aluminium: a cold system over that area would not have held the heat loss.",
+          "The units were assembled in our own workshop and shipped in batches to match the site's fitting schedule."
+        ]
       },
       "private-house-vahdat": {
         "title": "Private house in Vahdat",
         "location": "Vahdat",
-        "caption": "ROLLER windows and doors for a private house with baseline insulation."
+        "caption": "ROLLER windows and doors for a private house with baseline insulation.",
+        "installed": "ROLLER, windows and entrance group",
+        "volume": "38 units",
+        "body": [
+          "A private house with non-standard openings: half the units were made to individual sizes after the survey.",
+          "The client picked the golden oak lamination to match the tone of the facade finish."
+        ]
       },
       "shopping-mall-bokhtar": {
         "title": "Shopping centre in Bokhtar",
         "location": "Bokhtar",
-        "caption": "UNOPEN entrance groups and shopfronts for a shopping centre."
+        "caption": "UNOPEN entrance groups and shopfronts for a shopping centre.",
+        "installed": "UNOPEN and ALD-45, shopfronts and doors",
+        "volume": "1,200 m²",
+        "body": [
+          "Shopfronts and entrance groups for a mall: PVC on the glazed units, cold aluminium on the doors and partitions.",
+          "Two systems on one site is ordinary practice — the material is chosen per detail, not for the building as a whole."
+        ]
       },
       "apartment-renovation-dushanbe": {
         "title": "Flat renovation in Dushanbe",
         "location": "Dushanbe",
-        "caption": "Window units replaced in 80 flats using the cold glazing system."
+        "caption": "Window units replaced in 80 flats using the cold glazing system.",
+        "installed": "ALD-45, balcony glazing",
+        "volume": "12 apartments",
+        "body": [
+          "Balcony glazing in a residential block: a light cold system that puts no load on the slab.",
+          "The work went apartment by apartment so residents could stay at home during the fitting."
+        ]
       }
+    },
+    "facts": {
+      "installed": "Installed",
+      "volume": "Volume",
+      "year": "Year",
+      "systems": "Systems used"
     }
   },
   "professionals": {
@@ -270,40 +307,10 @@
   "leadForm": {
     "eyebrow": "Enquiry",
     "title": "We will price a solution for your building",
-    "formAria": "Enquiry form",
-    "submit": "Send via WhatsApp",
-    "optional": "(optional)",
-    "selectPlaceholder": "Choose an option",
-    "errorIncomplete": "Fill in every field so we can prepare the message.",
-    "successPrepared": "Your message is ready to send on WhatsApp.",
-    "fields": {
-      "name": "Name",
-      "phone": "Phone",
-      "city": "City",
-      "productType": "Product type",
-      "comment": "Comment"
-    },
-    "placeholders": {
-      "name": "Your name",
-      "phone": "+992",
-      "comment": "Describe the building, the timeline or your question — optional"
-    },
     "trustPoints": {
       "measure": "Free survey and quote",
       "response": "Answer within the day",
       "warranty": "Manufacturer's warranty"
-    },
-    "cities": {
-      "dushanbe": "Dushanbe",
-      "khujand": "Khujand"
-    },
-    "productTypes": {
-      "pvc": "PVC products",
-      "aluminium": "Aluminium products",
-      "consultation": "Survey / consultation"
-    },
-    "whatsapp": {
-      "intro": "Hello! I would like to submit an enquiry from the ROLLER website."
     }
   },
   "contacts": {
@@ -576,8 +583,8 @@
       "colors": "Lamination colours"
     },
     "cta": {
-      "configurator": "Configure your unit",
-      "call": "Request a call"
+      "call": "Request a call",
+      "calculator": "Open the calculator"
     },
     "gallery": {
       "aria": "{name} system gallery",
@@ -680,15 +687,27 @@
     "items": {
       "new-stella-line-launch": {
         "title": "STELLA production line launched",
-        "excerpt": "We have expanded output of the five-chamber STELLA profile for projects with higher thermal insulation requirements."
+        "excerpt": "We have expanded output of the five-chamber STELLA profile for projects with higher thermal insulation requirements.",
+        "body": [
+          "We expanded production of the five-chamber STELLA profile: the line serves projects with raised thermal requirements.",
+          "The profile is available across the full lamination palette; lead times for a developer's volume are confirmed with the costing."
+        ]
       },
       "thermo-facade-project": {
         "title": "THERMO aluminium facades in a new business centre",
-        "excerpt": "A look at a facade glazing project using the thermally broken aluminium profile and panoramic openings."
+        "excerpt": "A look at a facade glazing project using the thermally broken aluminium profile and panoramic openings.",
+        "body": [
+          "We closed a business centre's facade with warm THERMO 60 aluminium — panoramic openings without breaking the thermal envelope.",
+          "The units were assembled in our own workshop and shipped in batches to match the site's fitting schedule."
+        ]
       },
       "service-expansion-2026": {
         "title": "Expanding our project service coverage",
-        "excerpt": "We have added scheduled maintenance and window adjustment in Dushanbe, Khujand and Bokhtar."
+        "excerpt": "We have added scheduled maintenance and window adjustment in Dushanbe, Khujand and Bokhtar.",
+        "body": [
+          "We added scheduled servicing and adjustment of window systems in Dushanbe, Khujand and Bokhtar.",
+          "A service request can be left through the form on the site or over WhatsApp — the technician agrees a time to come out."
+        ]
       }
     }
   },
@@ -726,5 +745,325 @@
     "title": "Page not found",
     "description": "This page does not exist or has moved. Go back to the homepage or take a look at the catalogue.",
     "home": "Back to the homepage"
+  },
+  "requestForm": {
+    "formAria": "Request form",
+    "scenarioLabel": "What do you need",
+    "scenarios": {
+      "calculate": {
+        "label": "Get a calculation",
+        "hint": "We will pick a system, come out to measure and cost it for your opening."
+      },
+      "quote": {
+        "label": "Request a quote",
+        "hint": "We will send a commercial proposal for the project: volumes, lead times, specification."
+      },
+      "dealer": {
+        "label": "Become a dealer",
+        "hint": "We will explain wholesale and dealership terms and send the profile price list."
+      }
+    },
+    "fields": {
+      "name": "Name",
+      "phone": "Phone",
+      "city": "City",
+      "productType": "Product type",
+      "comment": "Comment",
+      "configuration": "Configuration"
+    },
+    "placeholders": {
+      "name": "Your name",
+      "phone": "+992",
+      "comment": "Describe the project, timeline or question — optional"
+    },
+    "optional": "(optional)",
+    "selectPlaceholder": "Choose an option",
+    "cities": {
+      "dushanbe": "Dushanbe",
+      "khujand": "Khujand",
+      "bokhtar": "Bokhtar",
+      "kulob": "Kulob",
+      "other": "Another city"
+    },
+    "productTypes": {
+      "pvc": "PVC products",
+      "aluminium": "Aluminium products",
+      "consultation": "Survey / consultation"
+    },
+    "errors": {
+      "name": "Enter your name",
+      "phoneRequired": "Enter your phone number",
+      "phoneInvalid": "Check the phone number",
+      "city": "Choose a city",
+      "productType": "Choose a product type",
+      "submit": "The request could not be sent. Try again or call us."
+    },
+    "submit": "Send the request",
+    "submitting": "Sending…",
+    "note": "The request is stored with us first, then WhatsApp opens with the message ready. We show no prices on the site — every project is costed individually.",
+    "success": {
+      "title": "Request received",
+      "description": "We stored your request and opened WhatsApp with the message ready. If the window did not open, use the button below.",
+      "openWhatsapp": "Open WhatsApp",
+      "again": "Send another one"
+    },
+    "whatsapp": {
+      "intro": "Hello! A request from the ROLLER website.",
+      "scenario": "Request type"
+    }
+  },
+  "about": {
+    "metaTitle": "About the company",
+    "metaDescription": "ROLLER manufactures PVC and aluminium profile systems in Tajikistan since 2006: own workshop, 400 employees, over 10,000 tonnes of aluminium a year.",
+    "breadcrumb": "About",
+    "eyebrow": "About the company",
+    "title": "Twenty years of making profile systems in Tajikistan",
+    "description": "We started in 2006 with PVC profile and grew into a full cycle: extrusion, unit assembly, surveying, installation and service. The promise has not changed — warmth and comfort for every home.",
+    "timeline": {
+      "eyebrow": "History",
+      "title": "How the company grew",
+      "description": "Four points that show what separates today's ROLLER from the workshop of 2006.",
+      "items": [
+        {
+          "year": "2006",
+          "title": "The start",
+          "description": "Founded as a manufacturer of PVC materials — the first in Tajikistan."
+        },
+        {
+          "year": "2010s",
+          "title": "A range of brands",
+          "description": "From one series to four: ECOLINE, ROLLER, UNOPEN and STELLA, economy through premium."
+        },
+        {
+          "year": "2025",
+          "title": "Alumini Avvalin LLC",
+          "description": "A new step: aluminium profile systems — the cold ALD-45 and the warm THERMO 60."
+        },
+        {
+          "year": "2026",
+          "title": "Scale",
+          "description": "1000+ completed projects, 400 employees, over 10,000 tonnes of aluminium a year."
+        }
+      ]
+    },
+    "capabilities": {
+      "eyebrow": "What we have",
+      "title": "A full cycle, not resale",
+      "description": "We extrude the profile, assemble the units and fit them with our own crews — which is why we answer for the result end to end.",
+      "items": {
+        "production": {
+          "title": "Own production",
+          "description": "Profile extrusion and unit assembly on our own site, with checks at every stage."
+        },
+        "installation": {
+          "title": "Fitting crews",
+          "description": "Our own crews work to method statements, with no outside subcontracting."
+        },
+        "showroom": {
+          "title": "Showroom",
+          "description": "The systems can be seen in person at the production address in Dushanbe."
+        },
+        "warranty": {
+          "title": "Warranty and service",
+          "description": "We put the obligations in writing and stay with the project after handover."
+        }
+      }
+    },
+    "partners": {
+      "eyebrow": "Materials and equipment",
+      "title": "Who we work with",
+      "description": "Equipment and raw materials come from the industry's established suppliers."
+    },
+    "warranty": {
+      "eyebrow": "Warranty",
+      "title": "Warranty terms",
+      "intro": "The warranty covers profile systems of our own manufacture, provided the installation and use conditions are met.",
+      "terms": [
+        "White PVC profile — 5 years from the date the project is handed over.",
+        "Laminated profile and aluminium systems — on the terms recorded in the contract for the project.",
+        "Hardware and components are covered to the extent of the hardware manufacturer's own warranty.",
+        "The warranty holds where the units were fitted by the company or by a certified crew and the use conditions are observed.",
+        "It does not cover mechanical damage, unauthorised alterations to the unit, or the consequences of misuse."
+      ],
+      "note": "Exact durations and the scope of the obligations for a given project are recorded in the contract — ask when the costing is prepared."
+    }
+  },
+  "portfolio": {
+    "metaTitle": "Project portfolio",
+    "metaDescription": "ROLLER projects: residential complexes, commercial buildings and private houses — what was installed, in what volume and on which systems.",
+    "breadcrumb": "Portfolio",
+    "eyebrow": "Portfolio",
+    "title": "Buildings we have glazed",
+    "description": "Housing, commercial buildings and private construction. Each object shows which system went in and in what volume — which is the answer to “can you handle our volume”.",
+    "other": {
+      "eyebrow": "Other projects",
+      "title": "See also"
+    }
+  },
+  "newsPage": {
+    "metaTitle": "News and articles",
+    "metaDescription": "ROLLER news: production, projects, service and updates to the product range.",
+    "breadcrumb": "News",
+    "eyebrow": "News",
+    "title": "What is happening in the workshop and on site",
+    "description": "Short notes on systems, completed projects and service. The section is run from the admin panel."
+  },
+  "professionalsPage": {
+    "metaTitle": "For professionals: wholesale, dealership, documentation",
+    "metaDescription": "Wholesale profile supply, dealership terms, components from stock and technical documentation for ROLLER systems.",
+    "breadcrumb": "For professionals",
+    "eyebrow": "For professionals",
+    "title": "Wholesale profile, dealership and technical documentation",
+    "description": "The section for window makers, dealers and specifiers. Profile shipments, components and details — no retail framing.",
+    "components": {
+      "eyebrow": "Components",
+      "title": "What ships from stock",
+      "description": "Beyond the profile itself — the parts without which a project cannot be assembled.",
+      "items": [
+        "PVC and aluminium profile systems — all six series",
+        "Windowsills and trim",
+        "Cable trunking",
+        "Tracks and guides",
+        "Cylinders and hardware",
+        "Mosquito net profile and mesh"
+      ]
+    },
+    "documentation": {
+      "eyebrow": "Documentation",
+      "title": "The technical side",
+      "description": "For detailing and specification — system data, cutaways and installation drawings.",
+      "items": [
+        "Profile cutaways and junction details",
+        "Technical data for each system",
+        "Installation drawings and guidance",
+        "Lamination palette and available colours"
+      ],
+      "note": "The full documentation set for a given system is sent on request — name the system in your enquiry."
+    },
+    "cutaways": {
+      "eyebrow": "Cutaways",
+      "title": "How the profile is built",
+      "description": "Chambers, reinforcement and the glazing bead — deliberately kept off the first screen of the client-facing pages.",
+      "imageAlt": "Cutaway of the {name} profile system"
+    },
+    "request": {
+      "eyebrow": "Enquiry",
+      "title": "Ask for the price list or dealership terms",
+      "description": "Tell us the volume and the region and we will come back with terms. There are no retail prices on this site."
+    }
+  },
+  "contactsPage": {
+    "metaTitle": "Contacts",
+    "metaDescription": "Address, phone, WhatsApp, Telegram and opening hours of ROLLER in Dushanbe. Survey and costing on request.",
+    "breadcrumb": "Contacts",
+    "eyebrow": "Contacts",
+    "title": "How to reach us",
+    "description": "Call, write on WhatsApp, or come to the production site — the showroom is there too. A manager reads every request and comes back with a costing.",
+    "social": {
+      "instagram": {
+        "title": "Instagram",
+        "description": "Projects, products and the workshop in the feed."
+      },
+      "telegram": {
+        "title": "Telegram",
+        "description": "The company channel and a line to the call centre."
+      }
+    }
+  },
+  "showroom": {
+    "metaTitle": "Showroom",
+    "metaDescription": "The ROLLER showroom in Dushanbe: see the profile systems, lamination colours and hardware in person.",
+    "breadcrumb": "Showroom",
+    "eyebrow": "Showroom",
+    "title": "See the systems in person",
+    "description": "The showroom is at the production address. Come by — we will show the profile in section, the lamination palette and assembled units.",
+    "facts": {
+      "address": "Address",
+      "hours": "Opening hours",
+      "phone": "Phone"
+    },
+    "see": {
+      "eyebrow": "What to see",
+      "title": "What is in the showroom",
+      "items": [
+        "All six profile series — in section and assembled",
+        "The lamination palette: how a colour looks on profile rather than on a screen",
+        "Hardware and the ways a sash can open",
+        "Components: windowsills, mosquito nets, trim"
+      ]
+    },
+    "mapTitle": "Map of the ROLLER showroom"
+  },
+  "calculator": {
+    "metaTitle": "Window and door calculator",
+    "metaDescription": "Assemble your unit: system, dimensions, sashes, glazing unit and colour. Every project is costed individually — no prices on the site.",
+    "breadcrumb": "Calculator",
+    "eyebrow": "Calculator",
+    "title": "Assemble your unit",
+    "description": "Pick the system, the dimensions, the number of sashes and how each one opens — the drawing redraws as you go. Send the request at the end: we come out to measure and cost it.",
+    "noPrice": "We show no prices on the site: the cost depends on the survey, the specification and the installation. The calculator assembles the unit; the calculation comes from a manager.",
+    "construction": {
+      "window": "Window",
+      "door": "Door"
+    },
+    "labels": {
+      "construction": "Unit",
+      "material": "Material",
+      "system": "System",
+      "sashCount": "Sashes",
+      "sashes": "Sashes",
+      "sash": "Sash {index}",
+      "opening": "Opening type",
+      "layout": "Door type",
+      "width": "Width",
+      "height": "Height",
+      "glazing": "Glazing unit",
+      "color": "Lamination colour",
+      "accessories": "Accessories",
+      "quantity": "Quantity"
+    },
+    "openings": {
+      "fixed": "Fixed",
+      "casement": "Side-hung",
+      "tilt-turn": "Tilt and turn"
+    },
+    "layouts": {
+      "single": "Single leaf",
+      "double": "Double leaf",
+      "transom": "With a transom"
+    },
+    "glazing": {
+      "single-glass": "Single glass",
+      "single-chamber": "Single-chamber unit",
+      "double-chamber": "Double-chamber unit",
+      "double-chamber-energy": "Double-chamber low-E unit"
+    },
+    "accessories": {
+      "windowsill": "Windowsill",
+      "mosquito-net": "Mosquito net"
+    },
+    "units": {
+      "mm": "mm",
+      "pcs": "pcs"
+    },
+    "item": {
+      "legend": "Item {index}",
+      "remove": "Remove",
+      "add": "Add another",
+      "addHint": "One request can carry several units.",
+      "addLimit": "One request holds at most {max} items.",
+      "decrease": "Decrease quantity",
+      "increase": "Increase quantity"
+    },
+    "colorSingleNote": "This system is supplied in white profile only.",
+    "previewAria": "{construction}, {width} × {height} mm",
+    "summary": {
+      "title": "Your configuration"
+    },
+    "request": {
+      "eyebrow": "Request",
+      "title": "Send us the configuration",
+      "description": "The unit travels with the request — a manager sees all of it and comes back with the costing."
+    }
   }
 }

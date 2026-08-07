@@ -36,8 +36,16 @@ export const navLinks = [
   { key: "catalog", href: "/catalog" },
   { key: "about", href: "/about" },
   { key: "portfolio", href: "/portfolio" },
+  // «Калькулятор» / `/calculator` at the client's explicit request. The plan
+  // (§06 "Заметки") argued for «Конфигуратор», because the word "calculator"
+  // promises a figure and the page shows none — prices are forbidden by brief
+  // §5.3. The naming is the client's call; the page itself still shows no price
+  // and ends in a request, and its copy says so twice.
   { key: "calculator", href: "/calculator" },
   { key: "news", href: "/news" },
   { key: "showroom", href: "/showroom" },
+  // Added in stage 07: the plan puts the link to «Профессионалам» in the header
+  // as well as in the homepage section of the same name.
+  { key: "professionals", href: "/professionals" },
   { key: "contacts", href: "/contacts" },
 ] as const;

@@ -18,10 +18,15 @@ interface HeaderDesktopNavProps {
  * mega-menu, which is rendered by the header itself so it can span the
  * full width below the bar.
  *
- * The gap tightens at `xl` and only opens up at `2xl`: seven items already sit
- * close to the logo and the phone block at 1280px in Russian, and Tajik labels
- * run 10–20% longer (DESIGN.md §10). Shrinking the gutter is what keeps the row
- * on one line instead of pushing the phone off the bar.
+ * The gap tightens at `xl` and only opens up at `2xl`: the row now carries
+ * eight items — «Профессионалам» joined it in stage 07 — and they already sit
+ * close to the logo and the phone block at 1280px in Russian, while Tajik
+ * labels run 10–20% longer (DESIGN.md §10). Shrinking the gutter is what keeps
+ * the row on one line instead of pushing the phone off the bar.
+ *
+ * ⚠️ Eight is the ceiling for this layout. If the client keeps `/showroom`
+ * (open question №7) the bar stays this tight; dropping it is what would give
+ * the row air back.
  */
 export function HeaderDesktopNav({
   catalogOpen,
@@ -34,7 +39,7 @@ export function HeaderDesktopNav({
   return (
     <nav
       aria-label={tHeader("mainNav")}
-      className="hidden min-w-0 items-center gap-4 xl:flex 2xl:gap-6"
+      className="hidden min-w-0 items-center gap-3 xl:flex 2xl:gap-5"
     >
       {navLinks.map((link) => {
         if (link.href === CATALOG_HREF) {
