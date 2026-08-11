@@ -8,7 +8,7 @@ import {
   Truck,
   Wrench,
 } from "lucide-react";
-import type { HeroContent, Partner } from "@/types";
+import type { HeroSlide, Partner } from "@/types";
 
 /**
  * Mock content for the homepage.
@@ -63,35 +63,35 @@ export const companyStats: CompanyStat[] = [
 export const partners: Partner[] = [
   {
     name: "Krauss Maffei",
-    logo: "@public/partners_logo/akpen_2.png",
+    logo: "/partners_logo/akpen_2.png",
   },
   {
     name: "Renolit",
-    logo: "@public/partners_logo/akpen.png",
+    logo: "/partners_logo/akpen.png",
   },
   {
     name: "Mikrosan",
-    logo: "@public/partners_logo/celikas.png",
+    logo: "/partners_logo/celikas.png",
   },
   {
     name: "Akdeniz",
-    logo: "@public/partners_logo/dogus_iki.png",
+    logo: "/partners_logo/dogus_iki.png",
   },
   {
     name: "Dow",
-    logo: "@public/partners_logo/fornax_2.png",
+    logo: "/partners_logo/fornax_2.png",
   },
   {
     name: "Kronos",
-    logo: "@public/partners_logo/fornax.png",
+    logo: "/partners_logo/fornax.png",
   },
   {
     name: "Baerlocher",
-    logo: "@public/partners_logo/heywin.png",
+    logo: "/partners_logo/heywin.png",
   },
   {
     name: "CNT Conta",
-    logo: "@public/partners_logo/winax.png",
+    logo: "/partners_logo/winax.png",
   },
 ] as const;
 
@@ -103,24 +103,44 @@ export const serviceHighlights = [
   { key: "service", icon: Headphones },
 ] as const;
 
-// Context-layer photography (interiors, facades, finished objects) does not
-// exist yet — `public/` holds only product renders and profile cutaways, which
-// DESIGN.md §11 bans from the first screen. Every such slot below is therefore
-// a nullable data field, never a hardcoded path: when the client's own shoot
-// arrives it is filled through the admin panel with no code change (§6 п.2).
-//
-// Copy: `hero.*`. The CTA targets are same-page fragments, so they carry no
-// locale prefix and are rendered with a plain `<a>`.
-export type HeroContentBase = Pick<HeroContent, "image"> & {
-  primaryCtaHref: string;
-  secondaryCtaHref: string;
-};
-
-export const heroContent: HeroContentBase = {
-  image: null,
-  primaryCtaHref: "#brands",
-  secondaryCtaHref: "#professionals",
-};
+/**
+ * The first screen — one banner, one line and one action per slide.
+ *
+ * The order is a funnel, not a gallery: the promise first, then the two
+ * audiences the brief names (застройщик, коммерция), then the private client.
+ * It stops at four because that is the whole set the client shot; the deck is
+ * an override of DESIGN.md §2 (see `HeroSlide` in `@/types`) and growing it
+ * past its source material is how it would become the promo carousel §2
+ * actually warned about.
+ *
+ * Slide 1's CTA is a same-page fragment and carries no locale prefix —
+ * `ButtonLink` routes it through a plain `<a>` — while the rest point at real
+ * routes and go through the locale-aware `Link`.
+ *
+ * Copy: `hero.slides.<key>.{eyebrow,headline,cta,imageLabel}`.
+ */
+export const heroSlides: HeroSlide[] = [
+  {
+    key: "promise",
+    image: "/banners/banner_1.jpg",
+    cta: "#brands",
+  },
+  {
+    key: "residential",
+    image: "/banners/banner_2.jpg",
+    cta: "/products",
+  },
+  {
+    key: "commercial",
+    image: "/banners/banner_3.jpg",
+    cta: "/catalog/aluminium",
+  },
+  {
+    key: "private",
+    image: "/banners/banner_4.jpg",
+    cta: "/catalog/pvc",
+  },
+];
 
 // "Профессионалам" — the one dark section on the page. The dark ground is the
 // marker that the audience has changed (DESIGN.md §3 п.2), not decoration.
