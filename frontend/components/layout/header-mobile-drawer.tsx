@@ -12,7 +12,7 @@ import { applicationHref, applications, categories, categoryHref } from "@/data/
 import { navLinks, siteConfig } from "@/lib/site-config";
 import { cn } from "@/lib/utils";
 import { LanguageSwitcher } from "./language-switcher";
-import { CATALOG_HREF } from "./header-shared";
+import { PRODUCTS_HREF } from "./header-shared";
 
 const emptySubscribe = () => () => {};
 
@@ -180,7 +180,7 @@ export function HeaderMobileDrawer({ open, onClose }: HeaderMobileDrawerProps) {
               }}
             >
               {navLinks.map((link) => {
-                if (link.href === CATALOG_HREF) {
+                if (link.href === PRODUCTS_HREF) {
                   return (
                     <motion.div key={link.href} variants={itemVariants} className="flex flex-col">
                       <button
@@ -235,7 +235,7 @@ export function HeaderMobileDrawer({ open, onClose }: HeaderMobileDrawerProps) {
                                 </Link>
                               ))}
                               <Link
-                                href={CATALOG_HREF}
+                                href={PRODUCTS_HREF}
                                 onClick={close}
                                 className="rounded-control px-3 py-2.5 text-sm font-semibold text-brand-black transition-colors hover:bg-brand-black/5 hover:text-brand-red focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:outline-none"
                               >

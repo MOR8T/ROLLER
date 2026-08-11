@@ -18,20 +18,6 @@ export async function generateMetadata({
   return { title: t("metaTitle"), description: t("metaDescription") };
 }
 
-/**
- * `/portfolio` — `project_plan/07-secondary-pages.md`.
- *
- * ⚠️ The objects are placeholders and the page **must not go to production as
- * it stands**: §10.2 of the brief is empty, so there is no real portfolio to
- * show, and DESIGN.md §6 п.3 bans stock photography here outright. What ships
- * is the layout; the content arrives from the client (open question №3) through
- * the admin panel.
- *
- * The route is `/portfolio`, not the plan's `/projects`: the navigation, the
- * footer and the homepage teasers have all pointed at `/portfolio` since stage
- * 01, and the plan itself settles this class of conflict in favour of the code
- * (the `pvc` / `pvh` precedent in stage 04).
- */
 export default async function PortfolioPage({ params }: PageProps<"/[locale]/portfolio">) {
   const { locale } = await params;
   setRequestLocale(locale);

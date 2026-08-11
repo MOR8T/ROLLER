@@ -10,10 +10,10 @@ import { siteConfig } from "@/lib/site-config";
 import { cn } from "@/lib/utils";
 import { LanguageSwitcher } from "./language-switcher";
 import { HeaderDesktopNav } from "./header-desktop-nav";
-import { HeaderCatalogMenu } from "./header-catalog-menu";
+import { HeaderProductsMenu } from "./header-products-menu";
 import { HeaderMobileDrawer } from "./header-mobile-drawer";
 
-const CATALOG_CLOSE_DELAY_MS = 140;
+const PRODUCTS_CLOSE_DELAY_MS = 140;
 
 // Distance the page must scroll before the header switches from the
 // transparent "over hero" state to the solid state, in px.
@@ -39,31 +39,31 @@ const SCROLL_THRESHOLD = 24;
  */
 export function Header() {
   const [open, setOpen] = useState(false);
-  const [catalogOpen, setCatalogOpen] = useState(false);
+  const [productsOpen, setProductsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
   const t = useTranslations("header");
   const tCommon = useTranslations("common");
 
-  const catalogCloseTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const productsCloseTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const openCatalog = useCallback(() => {
-    if (catalogCloseTimer.current) {
-      clearTimeout(catalogCloseTimer.current);
-      catalogCloseTimer.current = null;
+  const openProducts = useCallback(() => {
+    if (productsCloseTimer.current) {
+      clearTimeout(productsCloseTimer.current);
+      productsCloseTimer.current = null;
     }
-    setCatalogOpen(true);
+    setProductsOpen(true);
   }, []);
 
-  const scheduleCloseCatalog = useCallback(() => {
-    if (catalogCloseTimer.current) clearTimeout(catalogCloseTimer.current);
-    catalogCloseTimer.current = setTimeout(() => {
-      setCatalogOpen(false);
-      catalogCloseTimer.current = null;
-    }, CATALOG_CLOSE_DELAY_MS);
+  const scheduleCloseProducts = useCallback(() => {
+    if (productsCloseTimer.current) clearTimeout(productsCloseTimer.current);
+    productsCloseTimer.current = setTimeout(() => {
+      setProductsOpen(false);
+      productsCloseTimer.current = null;
+    }, PRODUCTS_CLOSE_DELAY_MS);
   }, []);
 
-  const closeCatalog = useCallback(() => setCatalogOpen(false), []);
+  const closeProducts = useCallback(() => setProductsOpen(false), []);
 
   // Stable identity: the drawer keys its scroll-lock and focus-trap effect on
   // this callback, so a new function per render would re-run the effect.
@@ -71,18 +71,18 @@ export function Header() {
 
   useEffect(() => {
     return () => {
-      if (catalogCloseTimer.current) clearTimeout(catalogCloseTimer.current);
+      if (productsCloseTimer.current) clearTimeout(productsCloseTimer.current);
     };
   }, []);
 
   useEffect(() => {
-    if (!catalogOpen) return;
+    if (!productsOpen) return;
     const onKey = (event: KeyboardEvent) => {
-      if (event.key === "Escape") setCatalogOpen(false);
+      if (event.key === "Escape") setProductsOpen(false);
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [catalogOpen]);
+  }, [productsOpen]);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > SCROLL_THRESHOLD);
@@ -93,7 +93,7 @@ export function Header() {
 
   // An open menu keeps the elevation on regardless of scroll position, so the
   // bar stays visually detached from the panel it opened.
-  const elevated = scrolled || open || catalogOpen;
+  const elevated = scrolled || open || productsOpen;
 
   return (
     <header
@@ -115,9 +115,9 @@ export function Header() {
         </Link>
 
         <HeaderDesktopNav
-          catalogOpen={catalogOpen}
-          onCatalogOpen={openCatalog}
-          onCatalogScheduleClose={scheduleCloseCatalog}
+          productsOpen={productsOpen}
+          onProductsOpen={openProducts}
+          onProductsScheduleClose={scheduleCloseProducts}
         />
 
         <div className="hidden shrink-0 items-center gap-3 xl:flex 2xl:gap-4">
@@ -149,11 +149,11 @@ export function Header() {
         </button>
       </Container>
 
-      <HeaderCatalogMenu
-        open={catalogOpen}
-        onOpen={openCatalog}
-        onScheduleClose={scheduleCloseCatalog}
-        onClose={closeCatalog}
+      <HeaderProductsMenu
+        open={productsOpen}
+        onOpen={openProducts}
+        onScheduleClose={scheduleCloseProducts}
+        onClose={closeProducts}
       />
 
       <HeaderMobileDrawer open={open} onClose={closeMobile} />
