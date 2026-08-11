@@ -12,27 +12,6 @@ import { Link } from "@/i18n/navigation";
 import { productHref, products, type ProductBase } from "@/data/catalog";
 import type { ProductCardBadgeVariant, Segment } from "@/types";
 
-/**
- * The core of the homepage (DESIGN.md §7).
- *
- * Nothing on the old site explained why there are four PVC brands or how ROLLER
- * differs from UNOPEN — which is the site's stated job (§1). The six systems are
- * ordered as a ladder from economy to premium, because that order *is* the
- * explanation.
- *
- * Since stage 04 the six come from `data/catalog.ts`, the same array the catalog
- * grid renders. They used to be a second list in `data/home.ts`; two copies of
- * the same six systems is the drift hazard this file already removed once for
- * the header's mega-menu.
- *
- * The card here is not the catalog's `ProductCard` and should not become it:
- * this one answers "which of the six is mine" with a spec strip and a "для
- * кого" line, while the catalog card answers "what is this system" with named
- * spec pairs and a second CTA.
- */
-
-// Red stays an accent, not a coding system: only the premium rung is marked in
-// brand red, so the badges add up to a fraction of the ~5% budget in §3.
 const segmentBadge: Record<Segment, ProductCardBadgeVariant> = {
   economy: "outline",
   mid: "outline",
