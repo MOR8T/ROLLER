@@ -38,14 +38,15 @@ export function ProfessionalsSection() {
               description={t("description")}
             />
 
-            {/* Since stage 07 both actions land on `/professionals`, the page
-                this section is the teaser for — the plan asks for the link from
-                exactly here. WhatsApp stays one tap away on that page's form. */}
+            {/* Both actions land on `/contacts`, which carries the lead form and
+                keeps WhatsApp one tap away. There is no dedicated
+                `/professionals` page in this project — this section is the whole
+                of that story, and the form takes it from here. */}
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-              <ButtonLink href="/professionals" size="lg">
+              <ButtonLink href="/contacts" size="lg">
                 {t("requestPrice")}
               </ButtonLink>
-              <ButtonLink href="/professionals" variant="outline-inverse" size="lg">
+              <ButtonLink href="/contacts" variant="outline-inverse" size="lg">
                 {t("becomeDealer")}
               </ButtonLink>
             </div>

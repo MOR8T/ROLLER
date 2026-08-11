@@ -113,7 +113,7 @@ export function ProjectsSection() {
           />
 
           <Link
-            href="/portfolio"
+            href="/products"
             className="inline-flex w-fit shrink-0 items-center gap-2 rounded-control bg-brand-black px-5 py-3 text-sm font-semibold text-brand-white transition-colors hover:bg-brand-red focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:outline-none"
           >
             {t("openPortfolio")}

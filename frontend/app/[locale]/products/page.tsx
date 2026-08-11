@@ -11,14 +11,14 @@ import { projects } from "@/data/portfolio";
 
 export async function generateMetadata({
   params,
-}: PageProps<"/[locale]/portfolio">): Promise<Metadata> {
+}: PageProps<"/[locale]/products">): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "portfolio" });
 
   return { title: t("metaTitle"), description: t("metaDescription") };
 }
 
-export default async function PortfolioPage({ params }: PageProps<"/[locale]/portfolio">) {
+export default async function PortfolioPage({ params }: PageProps<"/[locale]/products">) {
   const { locale } = await params;
   setRequestLocale(locale);
 

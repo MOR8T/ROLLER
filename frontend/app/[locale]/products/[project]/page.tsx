@@ -21,7 +21,7 @@ export function generateStaticParams() {
 
 export async function generateMetadata({
   params,
-}: PageProps<"/[locale]/portfolio/[project]">): Promise<Metadata> {
+}: PageProps<"/[locale]/products/[project]">): Promise<Metadata> {
   const { locale, project: slug } = await params;
   const project = findProjectBySlug(slug);
   if (!project) return {};
@@ -42,7 +42,7 @@ export async function generateMetadata({
  * and a lightbox would be JavaScript spent on placeholder images. It becomes
  * worth building when real photography arrives.
  */
-export default async function ProjectPage({ params }: PageProps<"/[locale]/portfolio/[project]">) {
+export default async function ProjectPage({ params }: PageProps<"/[locale]/products/[project]">) {
   const { locale, project: slug } = await params;
   const project = findProjectBySlug(slug);
   if (!project) notFound();
@@ -68,7 +68,7 @@ export default async function ProjectPage({ params }: PageProps<"/[locale]/portf
       <Section>
         <Container>
           <Breadcrumbs
-            items={[{ label: tPortfolio("breadcrumb"), href: "/portfolio" }, { label: title }]}
+            items={[{ label: tPortfolio("breadcrumb"), href: "/products" }, { label: title }]}
           />
 
           <div className="mt-8 grid gap-10 lg:grid-cols-2 lg:items-start lg:gap-12">
