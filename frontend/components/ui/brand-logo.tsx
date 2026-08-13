@@ -7,16 +7,16 @@ interface BrandLogoProps {
 }
 
 export function BrandLogo({ isDark = false, className }: BrandLogoProps) {
-  const logoSrc = isDark ? "/logos/logo-dark.png" : "/logos/logo-light.png";
+  const logoSrc = isDark ? "/logos/roller_black.svg" : "/logos/roller_white.svg";
   const logoAlt = isDark ? "ROLLER (dark)" : "ROLLER (light)";
 
   return (
     <Image
       src={logoSrc}
       alt={logoAlt}
-      width={180}
+      width={280}
       height={60}
-      className={cn("h-auto w-auto", className)}
+      className={cn("h-[40px] w-auto", className)}
       priority
     />
   );
