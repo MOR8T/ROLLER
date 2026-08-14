@@ -124,7 +124,7 @@ export function PartnersGrid({ className }: { className?: string }) {
             <img
               src={partner.logo}
               alt={partner.name}
-              className="max-h-full max-w-full mx-auto object-contain"
+              className="mx-auto max-h-full max-w-full object-contain"
             />
           ) : (
             // A partner without a mark falls back to its name set in type,

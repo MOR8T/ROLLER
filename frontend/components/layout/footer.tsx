@@ -119,7 +119,15 @@ export function Footer() {
   ] as const;
 
   return (
-    <footer className="bg-brand-black text-brand-white">
+    // `relative z-10` is layering, not positioning — nothing inside is placed
+    // against it. The homepage hangs a brand-mark watermark off a `fixed`
+    // layer inside a `relative` wrapper (`app/[locale]/page.tsx`), and a
+    // positioned element paints in a later step than a static one: with the
+    // footer left static, the whole of `main` — watermark included — was drawn
+    // over it, and the grey mark landed on top of the footer's own links.
+    // Giving the footer a positioned layer of its own puts it back on top,
+    // where opaque page chrome belongs.
+    <footer className="relative z-10 bg-brand-black text-brand-white">
       <div className="h-1 w-full bg-brand-red" aria-hidden />
 
       <Container className="grid gap-10 py-14 sm:grid-cols-2 lg:grid-cols-4 lg:gap-8 lg:py-16">

@@ -1,14 +1,26 @@
 import {
+  AppWindow,
   Award,
+  Briefcase,
+  Building2,
+  Columns3,
+  DoorOpen,
   Factory,
+  Frame,
+  Grid2x2,
   Headphones,
+  Home,
+  Layers,
+  MoveHorizontal,
   PackageCheck,
   Ruler,
   ShieldCheck,
+  Store,
   Truck,
   Wrench,
+  type LucideIcon,
 } from "lucide-react";
-import type { HeroSlide, Partner } from "@/types";
+import type { HeroSlide, Material, Partner } from "@/types";
 
 /**
  * Mock content for the homepage.
@@ -60,6 +72,149 @@ export const companyStats: CompanyStat[] = [
   { key: "tonnage", value: 10000, suffix: "+" },
 ];
 
+/**
+ * The four numbers the homepage's "О компании" block shows, in IMZO's shape:
+ * one big figure per claim, four across.
+ *
+ * It is a selection of `companyStats`, not a second list — `/about` still shows
+ * all five, and two lists of the same facts is exactly how they drift apart.
+ * `clients` is the one left out: "1000+ клиентов" and "1000+ объектов" are the
+ * same claim twice, and a four-up row has no room for a duplicate.
+ */
+export const homeStatKeys = ["years", "projects", "employees", "tonnage"] as const;
+
+export const homeStats: CompanyStat[] = homeStatKeys.map((key) =>
+  companyStats.find((stat) => stat.key === key)!,
+);
+
+/**
+ * The "Продукция" strip — eight photo cards, the way IMZO opens its catalogue
+ * on the homepage rather than hiding it behind the menu.
+ *
+ * Not a word of its own: the eight *are* the catalog's two axes — six
+ * applications, then the two materials — so their titles come from
+ * `applications.items.*` and `categories.items.*` and are translated once, in
+ * the place the catalog page and the mega-menu already read them. A tile whose
+ * label had to be repeated here would be the third copy of the same word.
+ *
+ * The order is the visitor's question first ("окна или фасад?") and the
+ * manufacturer's second ("ПВХ или алюминий?") — DESIGN.md §7.
+ *
+ * ⚠️ A ninth tile linked to the calculator until 2026-08-13. It was the only
+ * action in a strip of destinations and the only card without a photograph, and
+ * the client removed it: the calculator is in the header on every page, and a
+ * black card among eight photographs was reading as a gap rather than a button.
+ * Eight is also what makes the loop work — see `loopAdditionalSlides` in
+ * `home-carousel.tsx`.
+ *
+ * ── The photographs ─────────────────────────────────────────────────────────
+ *
+ * `image` is the client's own shoot, picked out of `notes/photos` (121 frames
+ * at 6000×4000) and cropped to 3:4 at 900×1200 into `public/home/`. `notes/` is
+ * gitignored source material, so the eight that ship live under `public/`.
+ *
+ * ⚠️ Two of the eight are approximations and the client should replace them:
+ * there is no photograph of a mosquito net in the folder at all, and nothing
+ * unambiguously *sliding* — both currently carry the nearest showroom frame.
+ * Everything else is the thing it says it is, and `pvc`/`aluminium` are the
+ * profile cutaway and the aluminium corner, which say it better than any
+ * interior could.
+ *
+ * `icon` is kept although the photograph covers the whole card: it is the
+ * fallback the day a photograph is swapped out and the new one is late, and the
+ * two cards flagged above are the ones most likely to be swapped.
+ */
+export type HomeProductTile = { icon: LucideIcon; image: string } & (
+  { kind: "application"; slug: string } | { kind: "category"; slug: Material }
+);
+
+export const homeProductTiles: HomeProductTile[] = [
+  { kind: "application", slug: "windows", icon: AppWindow, image: "/home/windows.jpg" },
+  { kind: "application", slug: "doors", icon: DoorOpen, image: "/home/doors.jpg" },
+  {
+    kind: "application",
+    slug: "sliding-systems",
+    icon: MoveHorizontal,
+    image: "/home/sliding-systems.jpg",
+  },
+  {
+    kind: "application",
+    slug: "facade-glazing",
+    icon: Building2,
+    image: "/home/facade-glazing.jpg",
+  },
+  { kind: "application", slug: "partitions", icon: Columns3, image: "/home/partitions.jpg" },
+  {
+    kind: "application",
+    slug: "mosquito-nets",
+    icon: Grid2x2,
+    image: "/home/mosquito-nets.jpg",
+  },
+  { kind: "category", slug: "pvc", icon: Layers, image: "/home/pvc.jpg" },
+  { kind: "category", slug: "aluminium", icon: Frame, image: "/home/aluminium.jpg" },
+];
+
+/**
+ * "Предложения для покупателей" — three tabs, one per audience.
+ *
+ * IMZO splits the same block by *place* (загородный дом / бизнес / импортные
+ * системы). Ours splits by who is asking, because that is the split the rest of
+ * the site already makes: the hero deck runs жильё → коммерция → частный дом,
+ * and the request form offers «Рассчитать» / «Получить КП» / «Стать дилером».
+ * A visitor who recognises themselves in a tab lands on pages written for them
+ * instead of on a material they have no way to choose between.
+ *
+ * Every `href` is a route that exists. Copy: `home.offers.tabs.<key>`.
+ */
+export interface HomeOfferLink {
+  key: string;
+  href: string;
+}
+
+export interface HomeOffer {
+  key: string;
+  icon: LucideIcon;
+  /** Where the tab's own button goes — the page that covers the whole audience. */
+  cta: string;
+  links: HomeOfferLink[];
+}
+
+export const homeOffers: HomeOffer[] = [
+  {
+    key: "apartment",
+    icon: Home,
+    cta: "/catalog/pvc",
+    links: [
+      { key: "windows", href: "/solutions/windows" },
+      { key: "sliding", href: "/solutions/sliding-systems" },
+      { key: "nets", href: "/solutions/mosquito-nets" },
+      { key: "calculator", href: "/calculator" },
+    ],
+  },
+  {
+    key: "house",
+    icon: Store,
+    cta: "/catalog",
+    links: [
+      { key: "stella", href: "/catalog/pvc/stella" },
+      { key: "doors", href: "/solutions/doors" },
+      { key: "sliding", href: "/solutions/sliding-systems" },
+      { key: "showroom", href: "/showroom" },
+    ],
+  },
+  {
+    key: "business",
+    icon: Briefcase,
+    cta: "/catalog/aluminium",
+    links: [
+      { key: "facade", href: "/solutions/facade-glazing" },
+      { key: "partitions", href: "/solutions/partitions" },
+      { key: "aluminium", href: "/catalog/aluminium" },
+      { key: "portfolio", href: "/products" },
+    ],
+  },
+];
+
 export const partners: Partner[] = [
   {
     name: "Krauss Maffei",
@@ -95,7 +250,12 @@ export const partners: Partner[] = [
   },
 ] as const;
 
-/** Copy: `production.steps.<key>`. */
+/**
+ * Copy: `production.steps.<key>`. Rendered by the homepage's "О компании" block
+ * — the one part of the retired "Производство и масштаб" section that says
+ * something the numbers do not: that замер, производство, монтаж and сервис are
+ * all ours.
+ */
 export const serviceHighlights = [
   { key: "measure", icon: Ruler },
   { key: "manufacture", icon: PackageCheck },
@@ -123,7 +283,7 @@ export const heroSlides: HeroSlide[] = [
   {
     key: "promise",
     image: "/banners/banner_1.jpg",
-    cta: "#brands",
+    cta: "#products",
   },
   {
     key: "residential",

@@ -18,23 +18,31 @@ export interface ArticleRecord {
   date: string;
 }
 
+/**
+ * ⚠️ The covers moved from product renders on white (`/news/*.png`) to the
+ * client's own photographs (`/home/news-*.jpg`) on 2026-08-13. A render is a
+ * catalogue illustration — it says what a system looks like, not that anything
+ * happened — and a news card whose whole job is to prove the company is still
+ * working needs the second. Source frames are in `notes/photos`, cropped to 4:3
+ * at 1200×900; see `homeProductTiles` in `data/home.ts` for the same treatment.
+ */
 export const articles: ArticleRecord[] = [
   {
     id: "new-stella-line-launch",
     slug: "stella-line-launch",
-    cover: "/news/stella-window.png",
+    cover: "/home/news-stella-line.jpg",
     date: "2026-05-12",
   },
   {
     id: "thermo-facade-project",
     slug: "thermo-facade-project",
-    cover: "/news/thermo-anthracite.png",
+    cover: "/home/news-thermo-facade.jpg",
     date: "2026-04-03",
   },
   {
     id: "service-expansion-2026",
     slug: "service-expansion-2026",
-    cover: "/news/roller-windows.png",
+    cover: "/home/news-service.jpg",
     date: "2026-03-18",
   },
 ];

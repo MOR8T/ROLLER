@@ -6,7 +6,7 @@ import { useTranslations } from "next-intl";
 import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
 
 import { heroSlides } from "@/data/home";
-import { ButtonLink } from "@/components/ui/button";
+import { PillLink } from "@/components/sections/home-kit";
 import { Container } from "@/components/ui/container";
 import { cn } from "@/lib/utils";
 
@@ -310,11 +310,16 @@ export function HeroSection() {
       aria-roledescription="carousel"
       // Not `py-section`: the header is already directly above, and the full
       // rhythm here is what would push the next section past the fold.
-      className="border-b border-brand-black/8 bg-surface py-6 sm:py-8 lg:py-10"
+      // No background of its own: the homepage carries a watermark down its
+      // right edge (`page.tsx`) and an opaque section would paint over it.
+      className="border-b border-brand-black/8 py-6 sm:py-8 lg:py-10"
     >
       <Container>
         <div
-          className="overflow-hidden rounded-card bg-brand-black"
+          // `rounded-[1.75rem]`, not `rounded-card`: the homepage runs on its
+          // own shape language (`components/sections/home-kit.tsx`) at the
+          // client's request, and the deck is the first thing on it.
+          className="overflow-hidden rounded-[1.75rem] bg-brand-black"
           // Pause on hover *and* on focus: a keyboard visitor tabbing to the CTA
           // has no pointer to hover with, and having the slide scroll out from
           // under the focused button is the worst version of this.
@@ -403,19 +408,26 @@ export function HeroSection() {
                     data-expo="content"
                     className="absolute inset-x-0 bottom-0 will-change-transform"
                   >
+                    {/* Headline and action, and nothing else. The eyebrow
+                        ("ЖИЛЫЕ КОМПЛЕКСЫ") is deliberately not rendered: the
+                        homepage was cut back to a heading and a link per block,
+                        and a slide that says its audience out loud is the one
+                        line the picture already makes. `hero.slides.*.eyebrow`
+                        is kept in the catalogue — this is a composition
+                        decision, and the copy should still be there if the
+                        client wants the deck labelled again. */}
                     <div className="max-w-2xl p-6 sm:p-8 lg:p-12">
-                      <p className="text-xs font-semibold tracking-[0.22em] text-brand-white/70 uppercase sm:text-sm">
-                        {t(`slides.${slide.key}.eyebrow`)}
-                      </p>
-
                       <SlideHeadline index={index}>
                         {t(`slides.${slide.key}.headline`)}
                       </SlideHeadline>
 
-                      <ButtonLink
+                      {/* White pill on the photograph — the homepage's own
+                          action shape. `ButtonLink` still serves every other
+                          page. */}
+                      <PillLink
                         href={slide.cta}
-                        size="lg"
-                        className="mt-6 lg:mt-8"
+                        tone="white"
+                        className="mt-7 lg:mt-8"
                         // An off-screen slide is not a tab stop. Without this
                         // the deck buries three more CTAs in the tab order and
                         // reaching the header's next link means passing all of
@@ -423,8 +435,8 @@ export function HeroSection() {
                         tabIndex={index === active ? undefined : -1}
                       >
                         {t(`slides.${slide.key}.cta`)}
-                        <ArrowRight className="size-5 shrink-0" />
-                      </ButtonLink>
+                        <ArrowRight className="size-4 shrink-0" />
+                      </PillLink>
                     </div>
                   </div>
                 </div>
@@ -448,9 +460,9 @@ export function HeroSection() {
                     // out pills for buttons, not for indicators. The active one
                     // stretches rather than only changing colour, which survives
                     // both a small screen and a colour-blind reading.
-                    "h-2 rounded-full transition-all duration-300 focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:outline-none",
+                    "h-2 rounded-full transition-all duration-300 focus-visible:ring-2 focus-visible:ring-brand-black focus-visible:ring-offset-2 focus-visible:outline-none",
                     index === active
-                      ? "w-8 bg-brand-red"
+                      ? "w-8 bg-brand-black"
                       : "w-2 bg-brand-black/20 hover:bg-brand-black/40",
                   )}
                 />
@@ -509,7 +521,7 @@ function SliderArrow({
       type="button"
       aria-label={label}
       onClick={onClick}
-      className="inline-flex size-10 items-center justify-center rounded-full border border-brand-black/15 bg-surface text-brand-black transition-colors hover:border-brand-red/50 hover:text-brand-red focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:outline-none"
+      className="inline-flex size-11 items-center justify-center rounded-full border border-brand-black/15 bg-brand-white text-brand-black transition-colors hover:border-brand-black/45 focus-visible:ring-2 focus-visible:ring-brand-black focus-visible:ring-offset-2 focus-visible:outline-none"
     >
       <Icon aria-hidden className="size-5" />
     </button>
