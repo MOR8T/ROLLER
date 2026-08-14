@@ -6,11 +6,11 @@ import { HomeCarousel } from "@/components/sections/home-carousel";
 import { HomeHeading, HomeSection, homeCard } from "@/components/sections/home-kit";
 import { Reveal } from "@/components/ui/reveal";
 import { Link } from "@/i18n/navigation";
-import { applicationHref, categoryHref } from "@/data/catalog";
+import { applicationHref } from "@/data/catalog";
 import { homeProductTiles, type HomeProductTile } from "@/data/home";
 
 /**
- * "Продукция" — eight photographs on a strip that loops and plays itself.
+ * "Продукция" — seven photographs on a strip that loops and plays itself.
  *
  * The photograph fills the card the way it does on imzo.uz: no frame, no
  * description, no icon panel. A visitor scanning this is choosing by
@@ -18,17 +18,21 @@ import { homeProductTiles, type HomeProductTile } from "@/data/home";
  * that before a sentence can. The line that used to sit under each one still
  * exists on `/solutions/<slug>`, which is where anyone who wants it has gone.
  *
- * Titles come from `applications.*` and `categories.*`, the same messages the
- * catalog page and the header menu read, so a card's name is translated once.
+ * Six of the seven take their title from `applications.*`, the same messages
+ * the catalog page and the header menu read, so a card's name is translated
+ * once; "Аксессуары" is the one with copy of its own.
  */
 function ProductCard({
   tile,
   href,
   title,
+  eager,
 }: {
   tile: HomeProductTile;
   href: string;
   title: string;
+  /** Cards that are on screen at rest. See the note on `loading` below. */
+  eager: boolean;
 }) {
   return (
     <Link
@@ -40,18 +44,24 @@ function ProductCard({
         alt=""
         fill
         sizes="(max-width: 640px) 78vw, (max-width: 1024px) 42vw, 29vw"
-        // Eager, against the default. Five of the eight start outside the
-        // viewport, and lazy loading waits for them to intersect — which on a
-        // strip that advances itself every four seconds means the card arrives
-        // as a grey rectangle and fills in after. Eight cards at the size they
-        // are actually drawn is a few hundred kilobytes, and they are the first
-        // thing under the hero.
-        loading="eager"
+        // ⚠️ Only the cards that are actually on screen.
+        //
+        // This was `loading="eager"` on all seven, to stop a card sliding in as
+        // a grey rectangle. It backfired: seven off-screen images requested at
+        // once, on top of the hero's four banners, exceeded the browser's
+        // per-host connection limit and the last two in the row — Перегородки
+        // and Москитные сетки — sat pending indefinitely. The cards the client
+        // reported as "having no photograph" were the two at the end of that
+        // queue, whichever photographs they held.
+        //
+        // Three covers the widest breakpoint's `slidesPerView`, so nothing
+        // visible is ever blank, and the rest load as the strip reaches them.
+        loading={eager ? "eager" : "lazy"}
         className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
       />
       {/* The photographs are showroom interiors — bright, busy and white at the
           bottom, which is exactly where the name goes. The scrim is what keeps
-          the type legible on all eight without retouching any of them. */}
+          the type legible on all seven without retouching any of them. */}
       <span className="absolute inset-0 bg-gradient-to-t from-brand-black/75 via-brand-black/20 to-transparent" />
 
       <span className="relative flex items-end justify-between gap-3">
@@ -70,15 +80,15 @@ function ProductCard({
 export function ProductsGridSection() {
   const t = useTranslations("home.products");
   const tApplications = useTranslations("applications");
-  const tCategories = useTranslations("categories");
 
   function resolve(tile: HomeProductTile) {
     return tile.kind === "application"
       ? {
+          key: tile.slug,
           href: applicationHref(tile.slug),
           title: tApplications(`items.${tile.slug}.title`),
         }
-      : { href: categoryHref(tile.slug), title: tCategories(`items.${tile.slug}.title`) };
+      : { key: tile.key, href: tile.href, title: t(tile.key) };
   }
 
   return (
@@ -92,15 +102,20 @@ export function ProductsGridSection() {
           label={t("title")}
           // Fractions on purpose: a card cut by the edge is what says "there is
           // more", and it is the only affordance a strip has before it moves.
+          //
+          // ⚠️ The widest value has to round down to three. `HomeCarousel`
+          // duplicates any list shorter than twice its widest `slidesPerView`,
+          // and seven cards against a rounded-up four would trip that and show
+          // every product twice. 2.8 rounds to 3, 7 ≥ 6, nothing is duplicated.
           perView={[1.25, 2.4, 3.4]}
           gap={16}
           autoplayDelay={4000}
-          slides={homeProductTiles.map((tile) => {
-            const { href, title } = resolve(tile);
+          slides={homeProductTiles.map((tile, index) => {
+            const { key, href, title } = resolve(tile);
 
             return {
-              key: tile.slug,
-              node: <ProductCard tile={tile} href={href} title={title} />,
+              key,
+              node: <ProductCard tile={tile} href={href} title={title} eager={index < 3} />,
             };
           })}
         />
