@@ -1,16 +1,15 @@
 import {
   AppWindow,
   Award,
+  Blinds,
   Briefcase,
   Building2,
   Columns3,
   DoorOpen,
   Factory,
-  Frame,
   Grid2x2,
   Headphones,
   Home,
-  Layers,
   MoveHorizontal,
   PackageCheck,
   Ruler,
@@ -20,7 +19,7 @@ import {
   Wrench,
   type LucideIcon,
 } from "lucide-react";
-import type { HeroSlide, Material, Partner } from "@/types";
+import type { HeroSlide, Partner } from "@/types";
 
 /**
  * Mock content for the homepage.
@@ -88,44 +87,46 @@ export const homeStats: CompanyStat[] = homeStatKeys.map((key) =>
 );
 
 /**
- * The "Продукция" strip — eight photo cards, the way IMZO opens its catalogue
+ * The "Продукция" strip — seven photo cards, the way IMZO opens its catalogue
  * on the homepage rather than hiding it behind the menu.
  *
- * Not a word of its own: the eight *are* the catalog's two axes — six
- * applications, then the two materials — so their titles come from
- * `applications.items.*` and `categories.items.*` and are translated once, in
- * the place the catalog page and the mega-menu already read them. A tile whose
- * label had to be repeated here would be the third copy of the same word.
+ * Six of the seven are the catalog's application axis, so their titles come
+ * from `applications.items.*` and are translated once, in the place the catalog
+ * page and the mega-menu already read them. A tile whose label had to be
+ * repeated here would be the third copy of the same word.
  *
- * The order is the visitor's question first ("окна или фасад?") and the
- * manufacturer's second ("ПВХ или алюминий?") — DESIGN.md §7.
+ * Every card is a thing you can want — a window, a door, a facade — never a
+ * material. "ПВХ или алюминий?" is a manufacturer's question (DESIGN.md §7),
+ * and the two cards that asked it were removed by the client on 2026-08-14;
+ * both materials are still one click away, in the header menu and on `/catalog`
+ * itself, which is where someone who thinks in materials is already heading.
  *
- * ⚠️ A ninth tile linked to the calculator until 2026-08-13. It was the only
- * action in a strip of destinations and the only card without a photograph, and
- * the client removed it: the calculator is in the header on every page, and a
- * black card among eight photographs was reading as a gap rather than a button.
- * Eight is also what makes the loop work — see `loopAdditionalSlides` in
- * `home-carousel.tsx`.
+ * ⚠️ Two tiles have come off since this strip was built: the calculator
+ * (2026-08-13, the only action among destinations and the only card without a
+ * photograph) and the two material cards above. Seven is not an accident —
+ * `home-carousel.tsx` duplicates a list too short for its own loop, and seven
+ * against a widest `slidesPerView` of three clears that bar. Adding an eighth
+ * is free; dropping to five is not.
  *
  * ── The photographs ─────────────────────────────────────────────────────────
  *
- * `image` is the client's own shoot, picked out of `notes/photos` (121 frames
- * at 6000×4000) and cropped to 3:4 at 900×1200 into `public/home/`. `notes/` is
- * gitignored source material, so the eight that ship live under `public/`.
+ * `image` is the client's own shoot, picked out of `notes/photos` (121 frames,
+ * around 6000×4000 but not all the same size) and cropped to 3:4 at 900×1200
+ * into `public/home/`. `notes/` is gitignored source material, so the seven
+ * that ship live under `public/`.
  *
- * ⚠️ Two of the eight are approximations and the client should replace them:
+ * ⚠️ Two of the seven are approximations and the client should replace them:
  * there is no photograph of a mosquito net in the folder at all, and nothing
  * unambiguously *sliding* — both currently carry the nearest showroom frame.
- * Everything else is the thing it says it is, and `pvc`/`aluminium` are the
- * profile cutaway and the aluminium corner, which say it better than any
- * interior could.
+ * Everything else is the thing it says it is; `accessories` is the showroom's
+ * door handle and keys, which is what "фурнитура" looks like.
  *
  * `icon` is kept although the photograph covers the whole card: it is the
  * fallback the day a photograph is swapped out and the new one is late, and the
  * two cards flagged above are the ones most likely to be swapped.
  */
 export type HomeProductTile = { icon: LucideIcon; image: string } & (
-  { kind: "application"; slug: string } | { kind: "category"; slug: Material }
+  { kind: "application"; slug: string } | { kind: "custom"; key: string; href: string }
 );
 
 export const homeProductTiles: HomeProductTile[] = [
@@ -150,8 +151,19 @@ export const homeProductTiles: HomeProductTile[] = [
     icon: Grid2x2,
     image: "/home/mosquito-nets.jpg",
   },
-  { kind: "category", slug: "pvc", icon: Layers, image: "/home/pvc.jpg" },
-  { kind: "category", slug: "aluminium", icon: Frame, image: "/home/aluminium.jpg" },
+  // ⚠️ The only tile with copy of its own, and the only one whose destination
+  // is a placeholder. There is no accessories page: `ProductKind` already has
+  // the `"component"` member for handles, windowsills, trunking and cylinders,
+  // and `data/catalog.ts` says outright that none of them are in the catalogue
+  // at launch. So this points at `/catalog`, which is where they will appear.
+  // Give it the real route the moment that content exists.
+  {
+    kind: "custom",
+    key: "accessories",
+    href: "/catalog",
+    icon: Blinds,
+    image: "/home/accessories.jpg",
+  },
 ];
 
 /**

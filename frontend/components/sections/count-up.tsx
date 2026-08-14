@@ -1,19 +1,9 @@
 "use client";
 
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useFormatter } from "next-intl";
 
-/**
- * `useLayoutEffect` in the browser, `useEffect` on the server render.
- *
- * The reset to zero has to land *before* the browser paints, or the visitor
- * sees the final number for one frame and then watches it drop to zero and
- * climb back — which reads as a glitch, not as an animation. `useLayoutEffect`
- * is the hook that runs before paint; it does nothing on the server and React
- * warns when it is called there, so the server render gets `useEffect` instead.
- * Hooks are matched by position, and this is one hook in both environments.
- */
-const useIsomorphicLayoutEffect = typeof window === "undefined" ? useEffect : useLayoutEffect;
+import { useIsomorphicLayoutEffect } from "@/lib/use-isomorphic-layout-effect";
 
 /** ease-out-cubic — fast at the start, settles at the end. */
 const easeOut = (t: number) => 1 - Math.pow(1 - t, 3);

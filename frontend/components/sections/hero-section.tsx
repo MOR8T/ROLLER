@@ -8,6 +8,7 @@ import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
 import { heroSlides } from "@/data/home";
 import { PillLink } from "@/components/sections/home-kit";
 import { Container } from "@/components/ui/container";
+import { useIsomorphicLayoutEffect } from "@/lib/use-isomorphic-layout-effect";
 import { cn } from "@/lib/utils";
 
 /**
@@ -51,6 +52,16 @@ import { cn } from "@/lib/utils";
 
 /** Long enough to read a four-word headline and reach for the button. */
 const AUTOPLAY_MS = 7000;
+
+/**
+ * How long after the last scroll event the deck is considered settled, and the
+ * seam is repaired.
+ *
+ * Short enough that it always lands between two autoplay beats, long enough
+ * that a smooth `scrollTo` — which emits events continuously while it runs —
+ * never looks idle mid-flight and gets teleported out from under itself.
+ */
+const SETTLE_MS = 140;
 
 /** Frame zoom for a neighbour, matching the reference's `scale(1.25)`. */
 const FRAME_ZOOM = 0.25;
@@ -98,13 +109,55 @@ function restoreSnapAfterScroll(element: HTMLElement) {
   timer = window.setTimeout(restore, 700);
 }
 
+/**
+ * ── The loop ────────────────────────────────────────────────────────────────
+ *
+ * A scroll container cannot wrap on its own, so the deck is rendered as
+ *
+ *     [ clone of last | 0 | 1 | 2 | 3 | clone of first ]
+ *
+ * and parked one slide in, on the first real banner. Reaching either clone
+ * shows the same picture as the real slide at the far end, so once the deck
+ * settles there `scrollLeft` is reassigned to that twin with no animation:
+ * identical pixels, no repaint anyone can see, and the track is suddenly a long
+ * way from its own edge again. That is the whole trick — the strip only ever
+ * moves forwards, and the rewind the old `% length` wrap performed (four slides
+ * of visible backwards travel every cycle) is gone.
+ *
+ * ⚠️ The clones are added *after* mount, not during the server render. Rendered
+ * on the server they would put the last banner first, and the deck would open
+ * on slide 4 for as long as hydration takes. `useIsomorphicLayoutEffect` flips
+ * them on and re-parks the track in the same commit, before the first paint.
+ */
 export function HeroSection() {
   const t = useTranslations("hero");
 
   const track = useRef<HTMLDivElement>(null);
   const frame = useRef(0);
+  const settle = useRef(0);
   const [active, setActive] = useState(0);
   const [paused, setPaused] = useState(false);
+  const [looped, setLooped] = useState(false);
+
+  /**
+   * How far the real slides are shifted along the track: one once the leading
+   * clone exists, zero before that.
+   *
+   * A ref rather than the state itself because `paint` and `repairSeam` run on
+   * every scroll event and must not be rebuilt when it changes — a `useCallback`
+   * that closed over the state would be a new function on the flip, and the
+   * scroll handler wired to the old one would keep reading zero. It is written
+   * in the layout effect below, never during render.
+   */
+  const offsetRef = useRef(0);
+
+  const deck = looped
+    ? [
+        { slide: heroSlides[heroSlides.length - 1], real: heroSlides.length - 1, clone: true },
+        ...heroSlides.map((slide, real) => ({ slide, real, clone: false })),
+        { slide: heroSlides[0], real: 0, clone: true },
+      ]
+    : heroSlides.map((slide, real) => ({ slide, real, clone: false }));
 
   const paint = useCallback(() => {
     const element = track.current;
@@ -149,16 +202,67 @@ export function HeroSection() {
       content.style.opacity = `${1 - 2 * away}`;
     }
 
-    const next = Math.round(element.scrollLeft / width);
+    // The dots track the *real* slide, so the two clones have to be folded back
+    // onto the banners they copy — otherwise the deck lights no dot at all for
+    // the moment it spends on a clone.
+    const total = heroSlides.length;
+    const position = Math.round(element.scrollLeft / width) - offsetRef.current;
+    const next = ((position % total) + total) % total;
     setActive((current) => (current === next ? current : next));
+  }, []);
+
+  /**
+   * Move off a clone and onto the real slide it copies.
+   *
+   * Assigned rather than animated, and deliberately without touching
+   * `scroll-snap-type`: the destination *is* a snap position, so there is
+   * nothing for the browser to re-snap and nothing to turn off. The two
+   * positions render the same photograph, so the only thing that changes is how
+   * much track is left in front of the deck.
+   */
+  const repairSeam = useCallback(() => {
+    const element = track.current;
+    if (!element || !offsetRef.current) return;
+
+    const width = element.clientWidth;
+    if (!width) return;
+
+    const total = heroSlides.length;
+    const position = Math.round(element.scrollLeft / width);
+
+    if (position === 0) element.scrollLeft = total * width;
+    else if (position === total + 1) element.scrollLeft = width;
   }, []);
 
   // One paint per frame at most. A scroll can fire several events per frame and
   // every one of them would otherwise walk all four slides.
+  //
+  // The same handler arms the settle timer, so "the deck stopped moving" is one
+  // signal with one source rather than a `scrollend` listener that Safari only
+  // learned recently.
   const schedulePaint = useCallback(() => {
     cancelAnimationFrame(frame.current);
     frame.current = requestAnimationFrame(paint);
-  }, [paint]);
+
+    window.clearTimeout(settle.current);
+    settle.current = window.setTimeout(repairSeam, SETTLE_MS);
+  }, [paint, repairSeam]);
+
+  // Clones go in after mount — see the note on the component. This runs before
+  // the browser paints, so the deck is never seen at the leading clone.
+  useIsomorphicLayoutEffect(() => setLooped(true), []);
+
+  useIsomorphicLayoutEffect(() => {
+    const element = track.current;
+    if (!element || !looped) return;
+
+    // Order matters by one line: the assignment below fires a scroll event, and
+    // the handler it reaches reads this ref to fold clones back onto the slides
+    // they copy. Set second, the very first paint would place the deck a slide
+    // out.
+    offsetRef.current = 1;
+    element.scrollLeft = element.clientWidth;
+  }, [looped]);
 
   useEffect(() => {
     const element = track.current;
@@ -175,23 +279,38 @@ export function HeroSection() {
     return () => {
       observer.disconnect();
       cancelAnimationFrame(frame.current);
+      window.clearTimeout(settle.current);
     };
   }, [paint, schedulePaint]);
 
-  const scrollToSlide = useCallback((index: number, wrap = true) => {
+  /**
+   * Scroll to a position on the *track*, clones included.
+   *
+   * Nothing wraps here any more. Asking for one past the end lands on the
+   * trailing clone — which shows the first banner — and `repairSeam` puts the
+   * deck back at the real one a moment later. Going forwards forever is a
+   * sequence of single steps forwards, which is exactly what it should look
+   * like. The clamp only stops a fast drag from asking for track that does not
+   * exist.
+   */
+  const goTo = useCallback((position: number, behavior: ScrollBehavior = "smooth") => {
     const element = track.current;
     if (!element) return;
 
-    // Controls wrap; a drag clamps. For the arrows a dead "next" on the last
-    // slide reads as a broken button, but a drag past the end that teleports
-    // back to the first slide reads as the deck losing its place — the hand is
-    // already at the edge and expects the resistance.
-    const target = wrap
-      ? (index + heroSlides.length) % heroSlides.length
-      : Math.max(0, Math.min(heroSlides.length - 1, index));
+    const last = element.children.length - 1;
+    const target = Math.max(0, Math.min(last, position));
 
-    element.scrollTo({ left: target * element.clientWidth, behavior: "smooth" });
+    element.scrollTo({ left: target * element.clientWidth, behavior });
   }, []);
+
+  /** Where the deck is on the track right now, clones included. */
+  const positionOf = useCallback((element: HTMLElement) => {
+    const width = element.clientWidth;
+    return width ? Math.round(element.scrollLeft / width) : 0;
+  }, []);
+
+  /** A dot names a real slide; the track counts clones too. */
+  const goToSlide = useCallback((real: number) => goTo(real + offsetRef.current), [goTo]);
 
   /**
    * Mouse dragging.
@@ -278,7 +397,7 @@ export function HeroSection() {
     const from = Math.round(state.startScroll / element.clientWidth);
     const committed = Math.abs(travelled) > element.clientWidth * DRAG_COMMIT;
 
-    scrollToSlide(from + (committed ? -Math.sign(travelled) : 0), false);
+    goTo(from + (committed ? -Math.sign(travelled) : 0));
     restoreSnapAfterScroll(element);
   }
 
@@ -293,15 +412,17 @@ export function HeroSection() {
       // Read the position off the element rather than off `active`: the effect
       // must not re-subscribe on every advance, or the interval restarts each
       // time and one slide silently gets a double beat.
-      const current = Math.round(element.scrollLeft / element.clientWidth);
-      element.scrollTo({
-        left: ((current + 1) % heroSlides.length) * element.clientWidth,
-        behavior: "smooth",
-      });
+      //
+      // One step forwards, always. The old `% heroSlides.length` here is what
+      // made the fourth beat scroll all the way back across three banners; with
+      // the clone in front of the last slide there is somewhere to go instead,
+      // and `repairSeam` has already moved the deck off the trailing clone long
+      // before the next beat — `SETTLE_MS` against `AUTOPLAY_MS`.
+      goTo(positionOf(element) + 1);
     }, AUTOPLAY_MS);
 
     return () => window.clearInterval(timer);
-  }, [paused]);
+  }, [paused, goTo, positionOf]);
 
   return (
     <section
@@ -356,12 +477,21 @@ export function HeroSection() {
             // the headline blue instead of moving the deck.
             className="flex cursor-grab snap-x snap-mandatory [scrollbar-width:none] overflow-x-auto overflow-y-hidden select-none active:cursor-grabbing [&::-webkit-scrollbar]:hidden"
           >
-            {heroSlides.map((slide, index) => (
+            {deck.map(({ slide, real, clone }, index) => (
               <div
-                key={slide.key}
-                role="group"
-                aria-roledescription="slide"
-                aria-label={t("slideOf", { index: index + 1, total: heroSlides.length })}
+                key={clone ? `clone-${index}` : slide.key}
+                // A clone is scenery. It is the same banner announced a second
+                // time, so it is hidden from assistive technology entirely and
+                // its link is taken out of the tab order below — otherwise the
+                // deck reports six slides where there are four, and tabbing
+                // through it visits the first banner's button twice.
+                {...(clone
+                  ? { "aria-hidden": true as const }
+                  : {
+                      role: "group",
+                      "aria-roledescription": "slide",
+                      "aria-label": t("slideOf", { index: real + 1, total: heroSlides.length }),
+                    })}
                 className="w-full shrink-0 snap-center"
               >
                 <div
@@ -390,8 +520,10 @@ export function HeroSection() {
                       className="object-cover"
                       // Only the opening banner is LCP-eligible; the other
                       // three are off-screen and must not compete for the
-                      // connection.
-                      priority={index === 0}
+                      // connection. `real`, not `index`: with the clones in
+                      // place the first child is a copy of the *last* banner,
+                      // and priority on that would preload the wrong one.
+                      priority={real === 0 && !clone}
                       sizes="(max-width: 1280px) 125vw, 1520px"
                     />
                   </div>
@@ -417,7 +549,10 @@ export function HeroSection() {
                         decision, and the copy should still be there if the
                         client wants the deck labelled again. */}
                     <div className="max-w-2xl p-6 sm:p-8 lg:p-12">
-                      <SlideHeadline index={index}>
+                      {/* `heading`, not an index test: the trailing clone is
+                          also the first banner, and letting it decide for
+                          itself would put a second `<h1>` on the page. */}
+                      <SlideHeadline heading={real === 0 && !clone}>
                         {t(`slides.${slide.key}.headline`)}
                       </SlideHeadline>
 
@@ -431,8 +566,8 @@ export function HeroSection() {
                         // An off-screen slide is not a tab stop. Without this
                         // the deck buries three more CTAs in the tab order and
                         // reaching the header's next link means passing all of
-                        // them.
-                        tabIndex={index === active ? undefined : -1}
+                        // them. A clone is never a tab stop at all.
+                        tabIndex={real === active && !clone ? undefined : -1}
                       >
                         {t(`slides.${slide.key}.cta`)}
                         <ArrowRight className="size-4 shrink-0" />
@@ -454,7 +589,7 @@ export function HeroSection() {
                   type="button"
                   aria-label={t("goTo", { index: index + 1 })}
                   aria-current={index === active}
-                  onClick={() => scrollToSlide(index)}
+                  onClick={() => goToSlide(index)}
                   className={cn(
                     // A dot, so `rounded-full` is allowed — DESIGN.md §5 rules
                     // out pills for buttons, not for indicators. The active one
@@ -470,15 +605,25 @@ export function HeroSection() {
             </div>
 
             <div className="flex items-center gap-2">
+              {/* Stepping the *track*, not the slide list. From the last
+                  banner "next" walks onto the trailing clone and the seam
+                  repair takes it home — so the arrows wrap without ever
+                  scrolling backwards, same as autoplay. */}
               <SliderArrow
                 side="left"
                 label={t("previous")}
-                onClick={() => scrollToSlide(active - 1)}
+                onClick={() => {
+                  const element = track.current;
+                  if (element) goTo(positionOf(element) - 1);
+                }}
               />
               <SliderArrow
                 side="right"
                 label={t("next")}
-                onClick={() => scrollToSlide(active + 1)}
+                onClick={() => {
+                  const element = track.current;
+                  if (element) goTo(positionOf(element) + 1);
+                }}
               />
             </div>
           </div>
@@ -494,11 +639,11 @@ export function HeroSection() {
  * them to `<h2>` would file them under the lineup section's own heading in the
  * outline. They are styled headlines, not headings.
  */
-function SlideHeadline({ index, children }: { index: number; children: React.ReactNode }) {
+function SlideHeadline({ heading, children }: { heading: boolean; children: React.ReactNode }) {
   const className =
     "mt-3 font-heading text-3xl font-bold tracking-tight text-balance text-brand-white drop-shadow-sm sm:text-4xl lg:text-5xl";
 
-  return index === 0 ? (
+  return heading ? (
     <h1 className={className}>{children}</h1>
   ) : (
     <p className={className}>{children}</p>

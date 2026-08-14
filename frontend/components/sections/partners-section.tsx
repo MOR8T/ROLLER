@@ -59,7 +59,11 @@ export function PartnersSection() {
                   <img
                     src={partner.logo}
                     alt={partner.name}
-                    className="h-full w-full object-contain opacity-60 grayscale transition duration-300 hover:opacity-100 hover:grayscale-0"
+                    // Full colour by client request (2026-08-14). The strip used
+                    // to be desaturated to keep eight brands' palettes from
+                    // competing with a page reduced to black and white; the
+                    // marks now carry their own colour and only lift on hover.
+                    className="h-full w-full object-contain opacity-85 transition duration-300 hover:opacity-100"
                   />
                 ) : (
                   // A partner without a mark falls back to its name set in
