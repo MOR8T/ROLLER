@@ -5,12 +5,12 @@ import { ChevronDown } from "lucide-react";
 import { Link } from "@/i18n/navigation";
 import { navLinks } from "@/lib/site-config";
 import { cn } from "@/lib/utils";
-import { CATALOG_HREF } from "./header-shared";
+import { PRODUCTS_HREF } from "./header-shared";
 
 interface HeaderDesktopNavProps {
-  catalogOpen: boolean;
-  onCatalogOpen: () => void;
-  onCatalogScheduleClose: () => void;
+  productsOpen: boolean;
+  onProductsOpen: () => void;
+  onProductsScheduleClose: () => void;
 }
 
 /**
@@ -29,9 +29,9 @@ interface HeaderDesktopNavProps {
  * the row air back.
  */
 export function HeaderDesktopNav({
-  catalogOpen,
-  onCatalogOpen,
-  onCatalogScheduleClose,
+  productsOpen,
+  onProductsOpen,
+  onProductsScheduleClose,
 }: HeaderDesktopNavProps) {
   const t = useTranslations("nav");
   const tHeader = useTranslations("header");
@@ -39,39 +39,39 @@ export function HeaderDesktopNav({
   return (
     <nav
       aria-label={tHeader("mainNav")}
-      className="hidden min-w-0 items-center gap-3 xl:flex 2xl:gap-5"
+      className="hidden min-w-0 items-center xl:flex gap-7"
     >
       {navLinks.map((link) => {
-        if (link.href === CATALOG_HREF) {
+        if (link.href === PRODUCTS_HREF) {
           return (
             <div
               key={link.href}
               className="relative"
-              onMouseEnter={onCatalogOpen}
-              onMouseLeave={onCatalogScheduleClose}
+              onMouseEnter={onProductsOpen}
+              onMouseLeave={onProductsScheduleClose}
             >
               <Link
                 href={link.href}
-                aria-expanded={catalogOpen}
+                aria-expanded={productsOpen}
                 aria-haspopup="true"
-                aria-controls="catalog-mega-menu"
-                onFocus={onCatalogOpen}
+                aria-controls="products-mega-menu"
+                onFocus={onProductsOpen}
                 className={cn(
                   "group relative inline-flex items-center gap-1 py-2 text-sm font-medium text-brand-black/80 transition-colors hover:text-brand-red focus-visible:rounded-control focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:outline-none",
-                  catalogOpen && "text-brand-red",
+                  productsOpen && "text-brand-red",
                 )}
               >
                 {t(link.key)}
                 <ChevronDown
                   className={cn(
                     "size-3.5 transition-transform duration-200",
-                    catalogOpen && "rotate-180",
+                    productsOpen && "rotate-180",
                   )}
                 />
                 <span
                   className={cn(
                     "absolute bottom-0.5 left-0 h-0.5 bg-brand-red transition-all duration-300",
-                    catalogOpen ? "w-full" : "w-0 group-hover:w-full",
+                    productsOpen ? "w-full" : "w-0 group-hover:w-full",
                   )}
                 />
               </Link>

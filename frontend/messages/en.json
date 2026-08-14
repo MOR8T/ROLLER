@@ -1,1069 +1,1152 @@
 {
   "meta": {
-    "title": "ROLLER — PVC and aluminium profile systems in Tajikistan",
+    "title": "ROLLER — Профильные системы ПВХ и алюминий в Таджикистане",
     "titleTemplate": "%s | ROLLER",
-    "description": "ROLLER is Tajikistan's first manufacturer of PVC materials. PVC windows and doors, aluminium and facade systems. Warmth and comfort for every home."
+    "description": "ROLLER — первый производитель материалов из ПВХ в Таджикистане. Окна и двери ПВХ, алюминиевые и фасадные системы. Тепло и комфорт для каждого дома."
   },
   "common": {
-    "skipToContent": "Skip to main content",
-    "slogan": "Warmth and comfort for every home",
-    "address": "25 Mirali Mahmadali St., Dushanbe",
-    "workingHours": "Mon–Sat: 08:00–18:00",
-    "writeWhatsapp": "Message us on WhatsApp",
-    "call": "Call us",
-    "allCatalog": "Full catalogue"
+    "skipToContent": "Перейти к основному содержимому",
+    "slogan": "Тепло и комфорт для каждого дома",
+    "address": "г. Душанбе, ул. Мирали Махмадали 25",
+    "workingHours": "Пн–Сб: 08:00–18:00",
+    "writeWhatsapp": "Написать в WhatsApp",
+    "call": "Позвонить",
+    "allCatalog": "Весь каталог"
   },
   "nav": {
-    "catalog": "Catalogue",
-    "about": "About",
-    "portfolio": "Portfolio",
-    "calculator": "Calculator",
-    "news": "News",
-    "showroom": "Showrooms",
-    "professionals": "For professionals",
-    "contacts": "Contacts"
+    "main": "Главная",
+    "catalog": "Каталог",
+    "about": "О компании",
+    "products": "Продукция",
+    "calculator": "Калькулятор",
+    "news": "Новости",
+    "showroom": "Шоурумы",
+    "contacts": "Контакты"
   },
   "breadcrumbs": {
-    "aria": "Breadcrumb",
-    "home": "Home"
+    "aria": "Навигационная цепочка",
+    "home": "Главная"
   },
   "header": {
-    "mainNav": "Main navigation",
-    "openMenu": "Menu",
-    "closeMenu": "Close menu",
-    "mobileMenu": "Mobile menu",
-    "languageSwitcher": "Choose language"
+    "mainNav": "Основная навигация",
+    "openMenu": "Меню",
+    "closeMenu": "Закрыть меню",
+    "mobileMenu": "Мобильное меню",
+    "languageSwitcher": "Выбор языка"
   },
   "footer": {
-    "nav": "Footer",
-    "sections": "Sections",
-    "contacts": "Contacts",
-    "social": "Follow us",
-    "onMarketSince": "On the market since {year}",
-    "rights": "© {year} {name}. All rights reserved.",
-    "toTop": "Back to top",
-    "instagram": "ROLLER on Instagram",
-    "telegram": "ROLLER on Telegram",
-    "whatsapp": "ROLLER on WhatsApp"
+    "nav": "Подвал",
+    "sections": "Разделы",
+    "contacts": "Контакты",
+    "social": "Мы в соцсетях",
+    "onMarketSince": "На рынке с {year} года",
+    "rights": "© {year} {name}. Все права защищены.",
+    "toTop": "Наверх",
+    "instagram": "Instagram ROLLER",
+    "telegram": "Telegram ROLLER",
+    "whatsapp": "WhatsApp ROLLER"
   },
   "whatsappFab": {
-    "label": "Message us on WhatsApp"
+    "label": "Написать нам в WhatsApp"
   },
   "materials": {
-    "pvc": "PVC",
-    "aluminium": "aluminium"
+    "pvc": "ПВХ",
+    "aluminium": "алюминий"
   },
   "materialNotes": {
-    "cold": "cold",
-    "warm": "thermally broken"
+    "cold": "холодный",
+    "warm": "тёплый"
   },
   "segments": {
-    "economy": "economy",
-    "mid": "mid-range",
-    "upper-mid": "upper mid-range",
-    "premium": "premium"
+    "economy": "эконом",
+    "mid": "средний",
+    "upper-mid": "выше среднего",
+    "premium": "премиум"
   },
   "colors": {
-    "white": "White",
-    "light-oak": "Light oak",
-    "golden-oak": "Golden oak",
-    "nut": "Walnut",
-    "dark-oak": "Dark oak",
-    "grey": "Grey",
-    "anthracite": "Anthracite",
-    "brown": "Brown"
+    "white": "Белый",
+    "light-oak": "Светлый дуб",
+    "golden-oak": "Золотой дуб",
+    "nut": "Орех",
+    "dark-oak": "Тёмный дуб",
+    "grey": "Серый",
+    "anthracite": "Антрацит",
+    "brown": "Коричневый"
   },
   "hero": {
-    "aria": "Hero",
-    "eyebrow": "Manufacturing profile systems since 2006",
-    "headline": "Warmth and comfort for every home",
-    "subtext": "PVC and aluminium windows, doors and facade systems. Six systems for different budgets and different jobs — from a single flat to the facade of a residential complex.",
-    "imageLabel": "Project photograph — interior or facade",
-    "primaryCta": "Find your system",
-    "secondaryCta": "For professionals"
+    "aria": "Главный экран",
+    "slideOf": "Слайд {index} из {total}",
+    "goTo": "Перейти к слайду {index}",
+    "previous": "Предыдущий слайд",
+    "next": "Следующий слайд",
+    "slides": {
+      "promise": {
+        "eyebrow": "Производство с 2006 года",
+        "headline": "Тепло и комфорт для каждого дома",
+        "cta": "Подобрать систему",
+        "imageLabel": "Жилой дом с панорамным остеклением ROLLER"
+      },
+      "residential": {
+        "eyebrow": "Жилые комплексы",
+        "headline": "Остекление на объёмах застройщика",
+        "cta": "Смотреть объекты",
+        "imageLabel": "Фасад жилого комплекса с остеклением ROLLER"
+      },
+      "commercial": {
+        "eyebrow": "Коммерция",
+        "headline": "Фасады, витрины и входные группы",
+        "cta": "Смотреть алюминий",
+        "imageLabel": "Бизнес-центр с фасадным остеклением ROLLER"
+      },
+      "private": {
+        "eyebrow": "Частный дом",
+        "headline": "Четыре системы под разный бюджет",
+        "cta": "Смотреть ПВХ",
+        "imageLabel": "Частный дом с остеклением ROLLER"
+      }
+    }
+  },
+  "home": {
+    "products": {
+      "title": "Продукция",
+      "all": "Вся продукция",
+      "calculator": "Калькулятор"
+    },
+    "carousel": {
+      "region": "карусель",
+      "slide": "слайд",
+      "goTo": "Перейти к слайду {index}"
+    },
+    "measure": {
+      "title": "Вызвать замерщика бесплатно",
+      "phoneLabel": "Телефон",
+      "phonePlaceholder": "+992",
+      "submit": "Отправить",
+      "submitting": "Отправляем…",
+      "success": "Заявка принята — перезвоним.",
+      "errors": {
+        "phone": "Проверьте номер",
+        "submit": "Не удалось отправить"
+      },
+      "whatsapp": {
+        "intro": "Заявка на замер с сайта ROLLER."
+      }
+    },
+    "about": {
+      "title": "Производим профильные системы в Душанбе с 2006 года",
+      "body": "Полный цикл: экструзия, сборка конструкций, замер, монтаж и сервис. С 2025 года — и алюминий.",
+      "more": "О компании"
+    },
+    "offers": {
+      "title": "Предложения",
+      "tabs": {
+        "apartment": {
+          "label": "Квартира",
+          "cta": "Смотреть ПВХ",
+          "links": {
+            "windows": "Окна ПВХ",
+            "sliding": "Раздвижной балкон",
+            "nets": "Москитные сетки",
+            "calculator": "Калькулятор"
+          }
+        },
+        "house": {
+          "label": "Частный дом",
+          "cta": "Весь каталог",
+          "links": {
+            "stella": "STELLA, 75 мм",
+            "doors": "Двери и входные группы",
+            "sliding": "Раздвижные системы",
+            "showroom": "Шоурум"
+          }
+        },
+        "business": {
+          "label": "Бизнес",
+          "cta": "Смотреть алюминий",
+          "links": {
+            "facade": "Фасадное остекление",
+            "partitions": "Перегородки",
+            "aluminium": "Алюминиевые системы",
+            "portfolio": "Портфолио"
+          }
+        }
+      }
+    },
+    "news": {
+      "title": "Новости",
+      "all": "Все новости"
+    },
+    "partners": {
+      "title": "Партнёры"
+    },
+    "contacts": {
+      "title": "Свяжитесь с нами",
+      "form": {
+        "scenario": "Что вас интересует",
+        "name": "Имя",
+        "namePlaceholder": "Имя",
+        "phone": "Телефон",
+        "phonePlaceholder": "Телефон",
+        "submit": "Отправить",
+        "submitting": "Отправляем…",
+        "success": "Заявка принята — перезвоним.",
+        "again": "Отправить ещё",
+        "errors": {
+          "name": "Укажите имя",
+          "phone": "Проверьте номер",
+          "submit": "Не удалось отправить"
+        },
+        "whatsapp": {
+          "intro": "Заявка с сайта ROLLER.",
+          "scenario": "Тип заявки"
+        }
+      }
+    }
   },
   "brands": {
-    "eyebrow": "System range",
-    "title": "Six systems — <accent>one</accent> for your job",
-    "description": "Four PVC systems and two aluminium ones. They differ in profile depth, chamber count and what they are built for.",
-    "viewSystem": "View system",
-    "depth": "{value} mm",
-    "chambers": "{count, plural, one {# chamber} other {# chambers}}",
-    "imageAlt": "{name} system",
-    "imagePlaceholder": "Render of the {name} system",
+    "eyebrow": "Линейка систем",
+    "title": "Шесть систем — <accent>одна</accent> под вашу задачу",
+    "description": "Четыре системы из ПВХ и две из алюминия. Отличаются глубиной профиля, числом камер и тем, для чего они предназначены.",
+    "viewSystem": "Смотреть систему",
+    "depth": "{value} мм",
+    "chambers": "{count, plural, one {# камера} few {# камеры} many {# камер} other {# камеры}}",
+    "imageAlt": "Система {name}",
+    "imagePlaceholder": "Рендер системы {name}",
     "cardAria": "{name} — {segment}",
     "items": {
       "ecoline": {
-        "name": "ECOLINE",
-        "audience": "When an opening has to be closed reliably and cheaply"
+        "name": "ЭКОЛАЙН",
+        "audience": "Когда нужно закрыть проём надёжно и недорого"
       },
       "roller": {
         "name": "ROLLER",
-        "audience": "The baseline choice for a flat, a house or an office"
+        "audience": "Базовый выбор для квартиры, дома и офиса"
       },
       "unopen": {
         "name": "UNOPEN",
-        "audience": "A reinforced profile for noisy streets and large openings"
+        "audience": "Усиленный профиль для шумной улицы и больших проёмов"
       },
       "stella": {
         "name": "STELLA",
-        "audience": "Maximum warmth and quiet in a private house"
+        "audience": "Максимум тепла и тишины в частном доме"
       },
       "ald-45": {
-        "name": "ALD-45",
-        "audience": "Shopfronts, partitions and unheated terraces"
+        "name": "АЛД-45",
+        "audience": "Витрины, перегородки и террасы без обогрева"
       },
       "thermo-60": {
-        "name": "THERMO 60",
-        "audience": "Facades and panoramic glazing for heated buildings"
+        "name": "ТЕРМО 60",
+        "audience": "Фасады и панорамное остекление отапливаемых зданий"
       }
     }
   },
   "applications": {
-    "eyebrow": "Applications",
-    "title": "Start from the job, not from the material",
-    "description": "Windows, doors, sliding systems and facades. Which profile suits them is our job to work out.",
-    "cta": "Find a solution",
-    "imagePlaceholder": "Project photograph: {title}",
+    "eyebrow": "Применения",
+    "title": "Начните с задачи, а не с материала",
+    "description": "Окна, двери, раздвижные системы и фасады. Какой профиль под это подойдёт — подберём мы.",
+    "cta": "Подобрать решение",
+    "imagePlaceholder": "Контекстное фото: {title}",
     "items": {
       "windows": {
-        "title": "Windows",
-        "description": "PVC and aluminium window systems for flats, private houses and commercial buildings.",
-        "menuDescription": "PVC and aluminium for any opening",
-        "heading": "PVC and aluminium windows in Dushanbe",
-        "intro": "We make windows in our own plant in Dushanbe, from the three-chamber economy series to a premium 75 mm profile. Survey, manufacture, delivery and installation are all done by our own teams.",
-        "metaTitle": "PVC windows in Dushanbe — PVC and aluminium, direct from the maker",
-        "metaDescription": "PVC and aluminium windows in Dushanbe direct from ROLLER: six profile systems, survey, manufacture and installation. Priced per project."
+        "title": "Окна",
+        "description": "Оконные системы из ПВХ и алюминия для квартир, частных домов и коммерческих объектов.",
+        "menuDescription": "ПВХ и алюминий для любых проёмов",
+        "heading": "Пластиковые и алюминиевые окна в Душанбе",
+        "intro": "Окна делаем на собственном заводе в Душанбе: от трёхкамерной эконом-серии до премиального профиля 75 мм. Замер, изготовление, доставка и монтаж — своими бригадами, без посредников.",
+        "metaTitle": "Пластиковые окна в Душанбе — ПВХ и алюминий от производителя",
+        "metaDescription": "Пластиковые и алюминиевые окна в Душанбе от производителя ROLLER: шесть профильных систем, замер, изготовление и монтаж. Цена по расчёту."
       },
       "doors": {
-        "title": "Doors",
-        "description": "Entrance groups, balcony doors and internal doors in PVC and thermally broken aluminium.",
-        "menuDescription": "Entrance groups and balcony doors",
-        "heading": "PVC and aluminium doors in Dushanbe",
-        "intro": "Door sets are built to the opening: thermally broken aluminium entrances for heated buildings, light aluminium doors for shops, and PVC balcony doors.",
-        "metaTitle": "Aluminium doors in Dushanbe — made-to-order PVC and aluminium doors",
-        "metaDescription": "Made-to-order aluminium and PVC doors in Dushanbe: entrance groups, balcony and internal doors from ROLLER. Survey and installation included."
+        "title": "Двери",
+        "description": "Входные группы, балконные и межкомнатные двери из ПВХ и тёплого алюминия.",
+        "menuDescription": "Входные группы и балконные двери",
+        "heading": "Двери из ПВХ и алюминия в Душанбе",
+        "intro": "Изготавливаем дверные группы под проём: входные двери из тёплого алюминия для отапливаемых зданий, лёгкие алюминиевые двери для магазинов и балконные двери из ПВХ.",
+        "metaTitle": "Алюминиевые двери в Душанбе — двери на заказ из ПВХ и алюминия",
+        "metaDescription": "Алюминиевые и ПВХ двери на заказ в Душанбе: входные группы, балконные и межкомнатные двери от производителя ROLLER. Замер и монтаж."
       },
       "sliding-systems": {
-        "title": "Sliding systems",
-        "description": "Sliding windows and doors for balconies, terraces and panoramic openings.",
-        "menuDescription": "Balconies, terraces, panoramic openings",
-        "heading": "Sliding windows and doors in Dushanbe",
-        "intro": "Sliding units save room where a hinged sash has nowhere to swing: on a balcony, on a terrace, in a narrow passage. Built on both cold and thermally broken aluminium profiles.",
-        "metaTitle": "Sliding windows and doors in Dushanbe",
-        "metaDescription": "Aluminium sliding systems for balconies, terraces and panoramic openings in Dushanbe. Made by ROLLER, survey and installation included."
+        "title": "Раздвижные системы",
+        "description": "Раздвижные окна и двери для балконов, террас и панорамных проёмов.",
+        "menuDescription": "Балконы, террасы, панорамные проёмы",
+        "heading": "Раздвижные окна и двери в Душанбе",
+        "intro": "Раздвижные конструкции экономят место там, где створке некуда открываться: на балконе, на террасе, в узком проходе. Делаем на холодном и тёплом алюминиевом профиле.",
+        "metaTitle": "Раздвижные окна и двери в Душанбе",
+        "metaDescription": "Раздвижные алюминиевые системы для балконов, террас и панорамных проёмов в Душанбе. Производство ROLLER, замер и монтаж."
       },
       "facade-glazing": {
-        "title": "Facade glazing",
-        "description": "Facade systems for residential complexes, business centres and retail buildings.",
-        "menuDescription": "Residential, business centres, retail",
-        "heading": "Facade glazing in Dushanbe",
-        "intro": "We work with developers on volume and on schedule: glazing for residential complexes, curtain walling for business centres, entrance groups for retail buildings. Making the profile ourselves is what keeps large batches on time.",
-        "metaTitle": "Facade glazing in Dushanbe — aluminium facade systems",
-        "metaDescription": "Facade glazing for residential complexes and business centres in Dushanbe: cold and thermally broken aluminium systems from ROLLER."
+        "title": "Фасадное остекление",
+        "description": "Фасадные системы для жилых комплексов, бизнес-центров и торговых объектов.",
+        "menuDescription": "ЖК, бизнес-центры, торговые объекты",
+        "heading": "Фасадное остекление в Душанбе",
+        "intro": "Работаем с застройщиками по объёмам и срокам: остекление жилых комплексов, витражи бизнес-центров, входные группы торговых зданий. Собственное производство держит график на больших партиях.",
+        "metaTitle": "Фасадное остекление в Душанбе — алюминиевые фасадные системы",
+        "metaDescription": "Фасадное остекление жилых комплексов и бизнес-центров в Душанбе: тёплые и холодные алюминиевые системы от производителя ROLLER."
       },
       "mosquito-nets": {
-        "title": "Insect screens",
-        "description": "Screens for windows and doors, made to the size of the opening.",
-        "menuDescription": "For windows and doors, made to size",
-        "heading": "Insect screens in Dushanbe",
-        "intro": "Screens are made to one specific opening — framed for windows, hinged for doors. They have no catalogue of their own: the size is taken at the survey along with the window.",
-        "metaTitle": "Insect screens in Dushanbe — for windows and doors",
-        "metaDescription": "Insect screens for windows and doors in Dushanbe, made to the size of the opening. Made by ROLLER, survey and fitting included."
+        "title": "Москитные сетки",
+        "description": "Сетки на окна и двери — изготавливаем по размеру проёма.",
+        "menuDescription": "На окна и двери, по размеру",
+        "heading": "Москитные сетки в Душанбе",
+        "intro": "Сетки делаем под конкретный проём — рамочные на окна и распашные на двери. Отдельного каталога у них нет: размер снимается на замере вместе с окном.",
+        "metaTitle": "Москитные сетки в Душанбе — на окна и двери",
+        "metaDescription": "Москитные сетки на окна и двери в Душанбе по размеру проёма. Производство ROLLER, замер и установка."
       },
       "partitions": {
-        "title": "Partitions",
-        "description": "Office and retail partitions in cold aluminium with a slim profile.",
-        "menuDescription": "Offices, shops, zoning",
-        "heading": "Aluminium partitions in Dushanbe",
-        "intro": "Partitions divide an office, a shop or a showroom without eating the daylight. A slim 45 mm cold profile is the right answer where no heating is needed but geometry and rigidity are.",
-        "metaTitle": "Aluminium partitions in Dushanbe — office and retail",
-        "metaDescription": "Office and retail partitions in aluminium profile, Dushanbe. Made by ROLLER: survey, manufacture and installation."
+        "title": "Перегородки",
+        "description": "Офисные и торговые перегородки из холодного алюминия с тонким профилем.",
+        "menuDescription": "Офисы, магазины, зонирование",
+        "heading": "Алюминиевые перегородки в Душанбе",
+        "intro": "Перегородки делят офис, магазин или шоурум, не съедая свет. Тонкий холодный профиль 45 мм — там, где обогрев не нужен, а нужна геометрия и прочность.",
+        "metaTitle": "Алюминиевые перегородки в Душанбе — офисные и торговые",
+        "metaDescription": "Офисные и торговые перегородки из алюминиевого профиля в Душанбе. Производство ROLLER, замер, изготовление и монтаж."
       }
     }
   },
   "production": {
-    "eyebrow": "Production and scale",
-    "title": "Our own plant, not <accent>resale</accent>",
-    "description": "We extrude the profile ourselves: from extrusion to the finished unit, survey and installation. That is how we hold schedules at developer volumes and answer for the whole result.",
-    "fullCycle": "Full cycle",
-    "suppliers": "Raw materials and equipment",
+    "eyebrow": "Производство и масштаб",
+    "title": "Собственный цех, а не <accent>перепродажа</accent>",
+    "description": "Профиль варим сами: от экструзии до готовой конструкции, замера и монтажа. Это позволяет держать сроки на объёмах застройщика и отвечать за результат целиком.",
+    "fullCycle": "Полный цикл",
+    "suppliers": "Сырьё и оборудование",
     "stats": {
-      "years": "years on the market",
-      "projects": "completed projects",
-      "clients": "clients",
-      "employees": "employees",
-      "tonnage": "tonnes per year"
+      "years": "лет на рынке",
+      "projects": "реализованных объектов",
+      "clients": "клиентов",
+      "employees": "сотрудников",
+      "tonnage": "тонн в год"
     },
     "steps": {
-      "measure": "Survey",
-      "manufacture": "Production",
-      "installation": "Installation",
-      "service": "Service"
+      "measure": "Замер",
+      "manufacture": "Производство",
+      "installation": "Монтаж",
+      "service": "Сервис"
     }
   },
+  "partners": {
+    "aria": "Сырьё и оборудование",
+    "carousel": "карусель",
+    "slide": "слайд",
+    "goTo": "Перейти к слайду {index}"
+  },
   "projects": {
-    "eyebrow": "Projects",
-    "title": "What we have already glazed",
-    "description": "A short cut of projects until the full portfolio launches.",
-    "openPortfolio": "Open the portfolio",
-    "viewCase": "View case study",
+    "eyebrow": "Объекты",
+    "title": "Что мы уже остеклили",
+    "description": "Короткий срез объектов до запуска полного портфолио.",
+    "openPortfolio": "Открыть портфолио",
+    "viewCase": "Смотреть кейс",
     "cardAria": "{title}, {location}",
     "categories": {
-      "residential": "Residential",
-      "commercial": "Commercial",
-      "private": "Private construction"
+      "residential": "Жильё",
+      "commercial": "Коммерция",
+      "private": "Частное строительство"
     },
     "items": {
       "residential-complex-dushanbe": {
-        "title": "Residential complex in Dushanbe",
-        "location": "Dushanbe",
-        "caption": "240 flats glazed with the STELLA system for higher thermal insulation.",
-        "installed": "STELLA, windows and balcony doors",
-        "volume": "240 apartments",
+        "title": "Жилой комплекс в Душанбе",
+        "location": "Душанбе",
+        "caption": "Остекление 240 квартир системой STELLA с повышенной теплоизоляцией.",
+        "installed": "STELLA, окна и балконные двери",
+        "volume": "240 квартир",
         "body": [
-          "The complex was handed over in phases: surveying and fitting ran alongside the floors being completed, so production followed the developer's pace.",
-          "The five-chamber STELLA profile was chosen for the thermal requirements of the upper floors and for one colour across the whole facade."
+          "Объект сдавали очередями: замер и монтаж шли параллельно со сдачей этажей, поэтому график производства строился под темп застройщика.",
+          "Пятикамерный профиль STELLA выбрали из-за требований к теплоизоляции верхних этажей и по единому цвету для всего фасада."
         ]
       },
       "business-center-khujand": {
-        "title": "Business centre in Khujand",
-        "location": "Khujand",
-        "caption": "Facade glazing in the THERMO aluminium system with panoramic openings.",
-        "installed": "THERMO 60, facade glazing",
-        "volume": "1,800 m²",
+        "title": "Бизнес-центр в Худжанде",
+        "location": "Худжанд",
+        "caption": "Фасадное остекление алюминиевой системой ТЕРМО с панорамными проёмами.",
+        "installed": "ТЕРМО 60, фасадное остекление",
+        "volume": "1 800 м²",
         "body": [
-          "The panoramic openings were closed with warm aluminium: a cold system over that area would not have held the heat loss.",
-          "The units were assembled in our own workshop and shipped in batches to match the site's fitting schedule."
+          "Панорамные проёмы закрывали тёплым алюминием: холодная система на такой площади не удержала бы теплопотери.",
+          "Конструкции собирали на собственном производстве и отгружали партиями под монтажный график объекта."
         ]
       },
       "private-house-vahdat": {
-        "title": "Private house in Vahdat",
-        "location": "Vahdat",
-        "caption": "ROLLER windows and doors for a private house with baseline insulation.",
-        "installed": "ROLLER, windows and entrance group",
-        "volume": "38 units",
+        "title": "Частный дом в Вахдате",
+        "location": "Вахдат",
+        "caption": "Окна и двери ROLLER для частного дома с базовой теплоизоляцией.",
+        "installed": "ROLLER, окна и входная группа",
+        "volume": "38 конструкций",
         "body": [
-          "A private house with non-standard openings: half the units were made to individual sizes after the survey.",
-          "The client picked the golden oak lamination to match the tone of the facade finish."
+          "Частный дом с нестандартными проёмами: половина конструкций делалась по индивидуальным размерам после замера.",
+          "Заказчик выбрал ламинацию «золотой дуб» под общий тон отделки фасада."
         ]
       },
       "shopping-mall-bokhtar": {
-        "title": "Shopping centre in Bokhtar",
-        "location": "Bokhtar",
-        "caption": "UNOPEN entrance groups and shopfronts for a shopping centre.",
-        "installed": "UNOPEN and ALD-45, shopfronts and doors",
-        "volume": "1,200 m²",
+        "title": "Торговый центр в Бохтаре",
+        "location": "Бохтар",
+        "caption": "Входные группы и витрины UNOPEN для торгового центра.",
+        "installed": "UNOPEN и АЛД-45, витражи и двери",
+        "volume": "1 200 м²",
         "body": [
-          "Shopfronts and entrance groups for a mall: PVC on the glazed units, cold aluminium on the doors and partitions.",
-          "Two systems on one site is ordinary practice — the material is chosen per detail, not for the building as a whole."
+          "Витрины и входные группы торгового центра: ПВХ на остеклении помещений, холодный алюминий на дверях и перегородках.",
+          "Две системы на одном объекте — обычная практика: материал подбирается под узел, а не под весь объект целиком."
         ]
       },
       "apartment-renovation-dushanbe": {
-        "title": "Flat renovation in Dushanbe",
-        "location": "Dushanbe",
-        "caption": "Window units replaced in 80 flats using the cold glazing system.",
-        "installed": "ALD-45, balcony glazing",
-        "volume": "12 apartments",
+        "title": "Реновация квартир в Душанбе",
+        "location": "Душанбе",
+        "caption": "Замена оконных блоков в 80 квартирах с системой холодного остекления.",
+        "installed": "АЛД-45, остекление лоджий",
+        "volume": "12 квартир",
         "body": [
-          "Balcony glazing in a residential block: a light cold system that puts no load on the slab.",
-          "The work went apartment by apartment so residents could stay at home during the fitting."
+          "Остекление лоджий в жилом доме: лёгкая холодная система без нагрузки на плиту.",
+          "Работы вели по одной квартире, чтобы жильцы оставались в доме на время монтажа."
         ]
       }
     },
     "facts": {
-      "installed": "Installed",
-      "volume": "Volume",
-      "year": "Year",
-      "systems": "Systems used"
+      "installed": "Установлено",
+      "volume": "Объём",
+      "year": "Год",
+      "systems": "Системы на объекте"
     }
   },
   "professionals": {
-    "eyebrow": "For professionals",
-    "title": "Profile <accent>wholesale</accent> and dealership terms",
-    "description": "We work with window manufacturers, dealers and designers: profile shipments, components from stock and technical documentation for every system.",
-    "requestPrice": "Request a price list",
-    "becomeDealer": "Become a dealer",
-    "imageAlt": "Cross-section of the ROLLER profile system",
+    "eyebrow": "Профессионалам",
+    "title": "Профиль <accent>оптом</accent> и условия дилерства",
+    "description": "Работаем с производителями окон, дилерами и проектировщиками: отгрузка профиля, комплектующие со склада и техническая документация по системам.",
+    "requestPrice": "Запросить прайс",
+    "becomeDealer": "Стать дилером",
+    "imageAlt": "Разрез профильной системы ROLLER",
     "offerings": {
       "wholesale": {
-        "title": "Wholesale profile supply",
-        "description": "We ship profile systems to window manufacturers across the country."
+        "title": "Оптовые поставки профиля",
+        "description": "Отгружаем профильные системы производителям окон по всей стране."
       },
       "dealership": {
-        "title": "Dealership",
-        "description": "Partnership terms, project support and installation training."
+        "title": "Дилерство",
+        "description": "Условия партнёрства, поддержка по объектам и обучение монтажу."
       },
       "components": {
-        "title": "Components",
-        "description": "Hardware, seals, reinforcement and related parts from stock."
+        "title": "Комплектующие",
+        "description": "Фурнитура, уплотнители, армирование и сопутствующие детали со склада."
       },
       "documentation": {
-        "title": "Technical documentation",
-        "description": "Junctions, sections, installation drawings and system specifications for design work."
+        "title": "Техническая документация",
+        "description": "Узлы, разрезы, монтажные схемы и характеристики систем для проектирования."
       }
     }
   },
   "leadForm": {
-    "eyebrow": "Enquiry",
-    "title": "We will price a solution for your building",
+    "eyebrow": "Заявка",
+    "title": "Рассчитаем решение под ваш объект",
     "trustPoints": {
-      "measure": "Free survey and quote",
-      "response": "Answer within the day",
-      "warranty": "Manufacturer's warranty"
+      "measure": "Бесплатный замер и расчёт",
+      "response": "Ответ в течение дня",
+      "warranty": "Гарантия производителя"
     }
   },
   "contacts": {
-    "eyebrow": "Contacts",
-    "title": "Get in touch or visit our office",
-    "mapTitle": "Map of the ROLLER office",
+    "eyebrow": "Контакты",
+    "title": "Свяжитесь с нами или приезжайте в офис",
+    "mapTitle": "Карта офиса ROLLER",
     "cards": {
       "address": {
-        "label": "Address",
-        "hint": "Open the map"
+        "label": "Адрес",
+        "hint": "Открыть карту"
       },
       "phone": {
-        "label": "Phone",
-        "hint": "Call us"
+        "label": "Телефон",
+        "hint": "Позвонить"
       },
       "email": {
         "label": "Email",
-        "hint": "Send an email"
+        "hint": "Написать на почту"
       },
       "hours": {
-        "label": "Opening hours"
+        "label": "График работы"
       }
     }
   },
   "catalog": {
-    "metaTitle": "Catalogue of profile systems",
-    "metaDescription": "Six ROLLER profile systems in PVC and aluminium, from economy to premium. Filter by material, segment and application. Priced per project.",
-    "breadcrumb": "Catalogue",
-    "eyebrow": "Catalogue",
-    "title": "PVC and aluminium profile systems",
-    "description": "Six systems, all made in our own plant. Start from the material, from the job, or go straight to the list — we quote per project, so there are no price lists on the site.",
+    "metaTitle": "Каталог профильных систем",
+    "metaDescription": "Шесть профильных систем ROLLER из ПВХ и алюминия — от эконом-сегмента до премиума. Фильтр по материалу, сегменту и применению. Цена по расчёту.",
+    "breadcrumb": "Каталог",
+    "eyebrow": "Каталог",
+    "title": "Профильные системы из ПВХ и алюминия",
+    "description": "Шесть систем собственного производства. Начните с материала, с задачи или сразу переходите к списку — цену считаем под объект, готовых прайсов на сайте нет.",
     "systems": {
-      "eyebrow": "All systems",
-      "title": "Six systems, economy to premium",
-      "description": "Filter by material, segment or application and compare the systems side by side."
+      "eyebrow": "Все системы",
+      "title": "Шесть систем — от эконома до премиума",
+      "description": "Отфильтруйте по материалу, сегменту или применению и сравните системы между собой."
     },
     "filters": {
-      "aria": "Catalogue filters",
-      "category": "Material",
-      "segment": "Segment",
-      "application": "Application",
-      "all": "All",
-      "reset": "Clear filters",
-      "results": "{count, plural, =0 {Nothing found} one {# system} other {# systems}}"
+      "aria": "Фильтры каталога",
+      "category": "Материал",
+      "segment": "Сегмент",
+      "application": "Применение",
+      "all": "Все",
+      "reset": "Сбросить фильтры",
+      "results": "{count, plural, =0 {Ничего не найдено} one {# система} few {# системы} many {# систем} other {# системы}}"
     },
     "empty": {
-      "title": "Nothing found",
-      "description": "No system matches the filters you picked. Clear them, or write to us and we will pick one by hand."
+      "title": "Ничего не найдено",
+      "description": "Под выбранные условия не подходит ни одна система. Сбросьте фильтры или напишите нам — подберём вручную."
     },
-    "categoryEmptyDescription": "Nothing is published in this category yet. Have a look at the full catalogue, or send a request and we will match a system to your building."
+    "categoryEmptyDescription": "В этой категории пока нет опубликованных систем. Загляните в полный каталог или оставьте заявку — подберём под объект."
   },
   "solutions": {
-    "cta": "Send a request",
+    "cta": "Оставить заявку",
     "systems": {
-      "eyebrow": "Suitable systems",
-      "title": "What we fit on jobs like this",
-      "description": "The systems that suit this job. The final choice depends on the size of the opening, the floor and the budget — we will help at the survey."
+      "eyebrow": "Подходящие системы",
+      "title": "Что ставим на такие объекты",
+      "description": "Системы, которые подходят под эту задачу. Окончательный выбор зависит от размеров проёма, этажа и бюджета — поможем на замере."
     },
     "empty": {
-      "title": "Made to your opening",
-      "description": "Nothing is listed in the catalogue yet — these are made to the size of your opening. Send a request and we will quote your version."
+      "title": "Изготавливаем под размер",
+      "description": "Готовых позиций в каталоге пока нет — делаем под проём вашего объекта. Оставьте заявку, и мы посчитаем ваш вариант."
     },
     "other": {
-      "eyebrow": "Other applications",
-      "title": "What else we make"
+      "eyebrow": "Другие применения",
+      "title": "Что мы производим ещё"
     }
   },
   "categories": {
-    "eyebrow": "Catalogue",
-    "viewCategory": "View category",
+    "eyebrow": "Каталог",
+    "viewCategory": "Смотреть категорию",
     "items": {
       "pvc": {
-        "eyebrow": "Windows and doors",
-        "title": "PVC products",
-        "description": "Window and door systems for flats, private houses and commercial buildings.",
-        "heading": "PVC profile systems",
-        "intro": "Four systems on one ladder: ECOLINE closes an opening dependably and cheaply, ROLLER is the baseline choice for a flat, UNOPEN handles a noisy street and large openings, and STELLA gives the most warmth and quiet.",
-        "metaTitle": "PVC profile systems — catalogue",
-        "metaDescription": "Four PVC systems made by ROLLER: ECOLINE, ROLLER, UNOPEN and STELLA — 60 to 75 mm, 3 to 5 chambers. Priced per project."
+        "eyebrow": "Окна и двери",
+        "title": "ПВХ продукция",
+        "description": "Оконные и дверные системы для квартир, частных домов и коммерческих объектов.",
+        "heading": "Профильные системы из ПВХ",
+        "intro": "Четыре системы на одной лестнице: ЭКОЛАЙН закрывает проём надёжно и недорого, ROLLER — базовый выбор для квартиры, UNOPEN держит шумную улицу и большие проёмы, STELLA даёт максимум тепла и тишины.",
+        "metaTitle": "ПВХ профильные системы — каталог",
+        "metaDescription": "Четыре системы из ПВХ производства ROLLER: ЭКОЛАЙН, ROLLER, UNOPEN и STELLA — от 60 до 75 мм, от 3 до 5 камер. Цена по расчёту."
       },
       "aluminium": {
-        "eyebrow": "Facades and glazing",
-        "title": "Aluminium products",
-        "description": "Thermally broken, facade and sliding aluminium solutions for contemporary architecture.",
-        "heading": "Aluminium profile systems",
-        "intro": "Two systems for two jobs: the cold ALD-45 for shopfronts, partitions and unheated terraces, and the thermally broken THERMO 60 for facades and panoramic glazing on heated buildings.",
-        "metaTitle": "Aluminium profile systems — catalogue",
-        "metaDescription": "Aluminium systems made by ROLLER: the cold ALD-45 (45 mm) and the thermally broken THERMO 60 (60 mm) for facades, shopfronts and partitions."
+        "eyebrow": "Фасады и остекление",
+        "title": "Алюминиевая продукция",
+        "description": "Тёплые, фасадные и раздвижные алюминиевые решения для современной архитектуры.",
+        "heading": "Профильные системы из алюминия",
+        "intro": "Две системы под разные задачи: холодный АЛД-45 для витрин, перегородок и террас без обогрева и тёплый ТЕРМО 60 для фасадов и панорамного остекления отапливаемых зданий.",
+        "metaTitle": "Алюминиевые профильные системы — каталог",
+        "metaDescription": "Алюминиевые системы производства ROLLER: холодный АЛД-45 (45 мм) и тёплый ТЕРМО 60 (60 мм) для фасадов, витрин и перегородок."
       }
     }
   },
   "products": {
-    "more": "Learn more",
-    "choose": "Get a quote",
-    "imageAlt": "{name} system",
-    "imagePlaceholder": "Render of the {name} system",
+    "more": "Подробнее",
+    "choose": "Подобрать",
+    "imageAlt": "Система {name}",
+    "imagePlaceholder": "Рендер системы {name}",
     "cardAria": "{name} — {segment}",
     "items": {
       "ecoline": {
-        "heading": "ECOLINE — 60 mm economy PVC profile",
-        "description": "A baseline three-chamber series: it closes the opening dependably and without paying for more. Supplied in white profile only.",
+        "heading": "ЭКОЛАЙН — ПВХ-профиль 60 мм эконом-класса",
+        "description": "Базовая трёхкамерная серия: закрывает проём надёжно и без переплаты. Поставляется только в белом профиле.",
         "specs": [
           {
-            "name": "Profile depth",
-            "value": "60 mm"
+            "name": "Глубина профиля",
+            "value": "60 мм"
           },
           {
-            "name": "Chambers",
+            "name": "Камеры",
             "value": "3"
           },
           {
-            "name": "Glazing unit",
-            "value": "20 mm"
+            "name": "Стеклопакет",
+            "value": "20 мм"
           },
           {
-            "name": "Opening type",
-            "value": "Tilt-and-turn and side-hung"
+            "name": "Тип открывания",
+            "value": "Поворотно-откидное и поворотное"
           },
           {
-            "name": "Warranty",
-            "value": "5 years, white profile"
+            "name": "Гарантия",
+            "value": "5 лет, белый профиль"
           }
         ]
       },
       "roller": {
-        "heading": "ROLLER — 60 mm PVC profile for flats and houses",
-        "description": "A practical series for flats, houses and offices that need a dependable baseline balance of warmth, quiet and cost.",
+        "heading": "ROLLER — ПВХ-профиль 60 мм для квартир и домов",
+        "description": "Практичная серия для квартир, домов и офисов, где нужен надёжный базовый баланс тепла, тишины и стоимости.",
         "specs": [
           {
-            "name": "Profile depth",
-            "value": "60 mm"
+            "name": "Глубина профиля",
+            "value": "60 мм"
           },
           {
-            "name": "Chambers",
+            "name": "Камеры",
             "value": "4"
           },
           {
-            "name": "Glazing unit",
-            "value": "20 mm"
+            "name": "Стеклопакет",
+            "value": "20 мм"
           },
           {
-            "name": "Opening type",
-            "value": "Tilt-and-turn and side-hung"
+            "name": "Тип открывания",
+            "value": "Поворотно-откидное и поворотное"
           },
           {
-            "name": "Warranty",
-            "value": "15 years coloured / 10 years white"
+            "name": "Гарантия",
+            "value": "15 лет цветной / 10 лет белый"
           }
         ]
       },
       "unopen": {
-        "heading": "UNOPEN — reinforced 65 mm PVC profile",
-        "description": "A versatile system for residential and commercial buildings that need a reinforced profile without moving up to premium.",
+        "heading": "UNOPEN — усиленный ПВХ-профиль 65 мм",
+        "description": "Универсальная система для жилых и коммерческих объектов, когда нужен усиленный профиль без перехода в премиальный сегмент.",
         "specs": [
           {
-            "name": "Profile depth",
-            "value": "65 mm"
+            "name": "Глубина профиля",
+            "value": "65 мм"
           },
           {
-            "name": "Chambers",
+            "name": "Камеры",
             "value": "5"
           },
           {
-            "name": "Glazing unit",
-            "value": "20 mm"
+            "name": "Стеклопакет",
+            "value": "20 мм"
           },
           {
-            "name": "Opening type",
-            "value": "Tilt-and-turn and side-hung"
+            "name": "Тип открывания",
+            "value": "Поворотно-откидное и поворотное"
           },
           {
-            "name": "Warranty",
-            "value": "15 years coloured / 10 years white"
+            "name": "Гарантия",
+            "value": "15 лет цветной / 10 лет белый"
           }
         ]
       },
       "stella": {
-        "heading": "STELLA — premium 75 mm PVC profile",
-        "description": "A series for projects with higher demands on thermal insulation, acoustics and tighter profile geometry.",
+        "heading": "STELLA — премиальный ПВХ-профиль 75 мм",
+        "description": "Серия для проектов с повышенными требованиями к теплоизоляции, акустике и более строгой геометрии профиля.",
         "specs": [
           {
-            "name": "Profile depth",
-            "value": "75 mm"
+            "name": "Глубина профиля",
+            "value": "75 мм"
           },
           {
-            "name": "Chambers",
+            "name": "Камеры",
             "value": "5"
           },
           {
-            "name": "Glazing unit",
-            "value": "26–42 mm"
+            "name": "Стеклопакет",
+            "value": "26–42 мм"
           },
           {
-            "name": "Opening type",
-            "value": "Tilt-and-turn and side-hung"
+            "name": "Тип открывания",
+            "value": "Поворотно-откидное и поворотное"
           },
           {
-            "name": "Sealing",
-            "value": "Three contours"
+            "name": "Уплотнитель",
+            "value": "3 контура"
           },
           {
-            "name": "Warranty",
-            "value": "15 years coloured / 10 years white"
+            "name": "Гарантия",
+            "value": "15 лет цветной / 10 лет белый"
           }
         ]
       },
       "ald-45": {
-        "heading": "ALD-45 — 45 mm cold aluminium profile",
-        "description": "A cold aluminium series for partitions, terraces, shopfronts and light commercial structures with a slim profile.",
+        "heading": "АЛД-45 — холодный алюминиевый профиль 45 мм",
+        "description": "Холодная алюминиевая серия для перегородок, террас, витрин и лёгких коммерческих конструкций с тонким профилем.",
         "specs": [
           {
-            "name": "Profile depth",
-            "value": "45 mm"
+            "name": "Глубина профиля",
+            "value": "45 мм"
           },
           {
-            "name": "Chambers",
+            "name": "Камеры",
             "value": "1"
           },
           {
-            "name": "Glazing unit",
-            "value": "20 mm"
+            "name": "Стеклопакет",
+            "value": "20 мм"
           },
           {
-            "name": "Opening type",
-            "value": "Tilt-and-turn and side-hung"
+            "name": "Тип открывания",
+            "value": "Поворотно-откидное и поворотное"
           },
           {
-            "name": "Warranty",
-            "value": "15 years"
+            "name": "Гарантия",
+            "value": "15 лет"
           }
         ]
       },
       "thermo-60": {
-        "heading": "THERMO 60 — 60 mm thermally broken aluminium profile",
-        "description": "Thermally broken aluminium for facades, entrance groups and large openings where architecture and energy efficiency matter.",
+        "heading": "ТЕРМО 60 — тёплый алюминиевый профиль 60 мм",
+        "description": "Тёплый алюминий для фасадов, входных групп и больших проёмов, где важны архитектурность и энергоэффективность.",
         "specs": [
           {
-            "name": "Profile depth",
-            "value": "60 mm"
+            "name": "Глубина профиля",
+            "value": "60 мм"
           },
           {
-            "name": "Chambers",
+            "name": "Камеры",
             "value": "3"
           },
           {
-            "name": "Glazing unit",
-            "value": "4–20 mm"
+            "name": "Стеклопакет",
+            "value": "4–20 мм"
           },
           {
-            "name": "Opening type",
-            "value": "Tilt-and-turn and side-hung"
+            "name": "Тип открывания",
+            "value": "Поворотно-откидное и поворотное"
           },
           {
-            "name": "Warranty",
-            "value": "15 years"
+            "name": "Гарантия",
+            "value": "15 лет"
           }
         ]
       }
     }
   },
   "product": {
-    "eyebrow": "Profile system",
-    "metaTitle": "{name} — {depth} mm profile system",
-    "metaDescription": "{name}: {material} profile, {depth} mm deep. Made in our own plant in Dushanbe, installed and warranted. Priced per project.",
+    "eyebrow": "Профильная система",
+    "metaTitle": "{name} — профильная система {depth} мм",
+    "metaDescription": "{name}: профиль из {material}, глубина {depth} мм. Собственное производство в Душанбе, гарантия и монтаж. Цена по расчёту.",
     "imageAlt": "{name}, {color}",
-    "imagePlaceholder": "Renders of the {name} system are on the way",
+    "imagePlaceholder": "Рендеры системы {name} готовятся",
     "facts": {
-      "depth": "Profile depth",
-      "chambers": "Chambers",
-      "colors": "Lamination colours"
+      "depth": "Глубина профиля",
+      "chambers": "Камеры",
+      "colors": "Цвета ламинации"
     },
     "cta": {
-      "call": "Request a call",
-      "calculator": "Open the calculator"
+      "call": "Заказать звонок",
+      "calculator": "Рассчитать в калькуляторе"
     },
     "gallery": {
-      "aria": "{name} system gallery",
-      "colors": "Lamination colour",
-      "angles": "Views",
-      "angle": "View {index}",
-      "previous": "Previous view",
-      "next": "Next view"
+      "aria": "Галерея системы {name}",
+      "colors": "Цвет ламинации",
+      "angles": "Ракурсы",
+      "angle": "Ракурс {index}",
+      "previous": "Предыдущий ракурс",
+      "next": "Следующий ракурс"
     },
     "specs": {
-      "eyebrow": "Specification",
-      "title": "Technical specification",
-      "description": "The system's parameters. Unit sizes are calculated against your opening at the survey — there are no stock sizes."
+      "eyebrow": "Характеристики",
+      "title": "Технические характеристики",
+      "description": "Параметры системы. Размер конструкции считаем под проём на замере — готовых типоразмеров нет."
     },
     "colors": {
-      "eyebrow": "Colours",
-      "title": "Lamination colours",
-      "description": "Wood-effect lamination and plain finishes. The colour is applied to the profile at the plant, so it does not fade and never needs painting.",
-      "single": "This system ships in white profile only."
+      "eyebrow": "Цвета",
+      "title": "Цвета ламинации",
+      "description": "Ламинация под дерево и однотонные покрытия. Цвет наносится на профиль на производстве, поэтому не выгорает и не требует покраски.",
+      "single": "Система поставляется только в белом профиле."
     },
     "applications": {
-      "eyebrow": "Applications",
-      "title": "Where it is used",
-      "description": "The jobs this system is specified for."
+      "eyebrow": "Применение",
+      "title": "Где используется",
+      "description": "Задачи, под которые ставят эту систему."
     },
     "advantages": {
-      "eyebrow": "Advantages",
-      "title": "What this profile gives you",
+      "eyebrow": "Преимущества",
+      "title": "Что даёт этот профиль",
       "pvc": {
         "thermal": {
-          "title": "Thermal insulation",
-          "description": "A multi-chamber profile keeps heat inside and cuts what you spend on heating."
+          "title": "Теплоизоляция",
+          "description": "Многокамерный профиль удерживает тепло в помещении и снижает расходы на отопление."
         },
         "acoustic": {
-          "title": "Sound insulation",
-          "description": "Sealing contours and the glazing unit noticeably cut street noise."
+          "title": "Шумоизоляция",
+          "description": "Контуры уплотнения и стеклопакет заметно снижают уровень шума с улицы."
         },
         "durability": {
-          "title": "Durability",
-          "description": "PVC does not corrode or rot and never needs painting — shape and colour hold for years."
+          "title": "Долговечность",
+          "description": "ПВХ не корродирует, не гниёт и не требует покраски — форма и цвет держатся годами."
         },
         "aesthetics": {
-          "title": "Colour and texture",
-          "description": "Wood-effect lamination and plain finishes are chosen to match the facade and the interior."
+          "title": "Цвет и текстура",
+          "description": "Ламинация под дерево и однотонные покрытия подбираются под фасад и интерьер."
         },
         "ecology": {
-          "title": "Safety",
-          "description": "The profile contains no toxic substances and is safe for living spaces."
+          "title": "Безопасность",
+          "description": "Профиль не содержит токсичных веществ и безопасен для жилых помещений."
         }
       },
       "aluminium": {
         "strength": {
-          "title": "Light and strong",
-          "description": "Aluminium allows slim frames and a large glazed area at the same rigidity."
+          "title": "Лёгкость и прочность",
+          "description": "Алюминий позволяет делать тонкие рамы и большую площадь остекления при той же жёсткости."
         },
         "spans": {
-          "title": "Large openings",
-          "description": "These units carry the weight of shopfronts and panoramic sashes where PVC no longer works at that size."
+          "title": "Большие проёмы",
+          "description": "Конструкции держат вес витражей и панорамных створок там, где ПВХ уже не проходит по размеру."
         },
         "weather": {
-          "title": "Weather resistance",
-          "description": "The powder coat neither fades nor corrodes, in sun or rain."
+          "title": "Стойкость к погоде",
+          "description": "Порошковое покрытие не выгорает и не корродирует ни на солнце, ни под дождём."
         },
         "maintenance": {
-          "title": "Minimal upkeep",
-          "description": "The surface washes with ordinary cleaners and the coating never needs redoing."
+          "title": "Минимальный уход",
+          "description": "Поверхность моется обычными средствами и не требует обновления покрытия."
         }
       }
     },
     "section": {
-      "eyebrow": "For architects and dealers",
-      "title": "Profile cross-section",
-      "description": "Chambers, reinforcement and how the glazing unit sits — how the system is built inside. Full technical documentation on request.",
-      "imageAlt": "{name} profile cross-section"
+      "eyebrow": "Для архитекторов и дилеров",
+      "title": "Разрез профиля",
+      "description": "Камеры, армирование и посадка стеклопакета — как система устроена внутри. Полную техдокументацию высылаем по запросу.",
+      "imageAlt": "Разрез профиля {name}"
     },
     "warranty": {
-      "eyebrow": "Warranty",
-      "title": "Warranty terms",
-      "scope": "The terms below apply to PVC profiles made by ROLLER.",
-      "coveredTitle": "What is covered",
-      "covered": "Light fastness, structural integrity and manufacturing defects. Where a defect covered by the warranty is found, the manufacturer undertakes to replace the faulty item with a new one.",
-      "excludedTitle": "What is not covered",
-      "excluded": "Hardware, glazing units, and errors made while assembling and installing the windows and doors.",
-      "conditionsTitle": "When the warranty does not apply",
-      "conditions": "If the operating instructions are not followed, the customer cannot claim under the warranty."
+      "eyebrow": "Гарантия",
+      "title": "Условия гарантии",
+      "scope": "Условия ниже относятся к ПВХ-профилям производства ROLLER.",
+      "coveredTitle": "Что покрывает",
+      "covered": "Светостойкость, целостность и производственные дефекты. При выявлении недостатка, входящего в гарантию, производитель обязуется заменить дефектный товар на новый.",
+      "excludedTitle": "Что не входит",
+      "excluded": "Фурнитура, стеклопакеты, а также ошибки, допущенные при сборке и установке окон и дверей.",
+      "conditionsTitle": "Когда гарантия не действует",
+      "conditions": "При несоблюдении инструкции по эксплуатации клиент не может потребовать выполнения гарантийных условий."
     },
     "related": {
-      "eyebrow": "Other systems",
-      "title": "Neighbouring systems",
-      "description": "Systems in the same material — the closest rungs of the ladder come first."
+      "eyebrow": "Другие системы",
+      "title": "Соседние системы",
+      "description": "Системы из того же материала — ближайшие по сегменту идут первыми."
     }
   },
   "news": {
-    "eyebrow": "News and articles",
-    "title": "Short notes on production, projects and service",
-    "allNews": "All news",
-    "readArticle": "Read the article",
-    "read": "Read",
-    "moreMaterials": "More reading",
+    "eyebrow": "Новости и статьи",
+    "title": "Короткие заметки о производстве, проектах и сервисе",
+    "allNews": "Все новости",
+    "readArticle": "Читать статью",
+    "read": "Читать",
+    "moreMaterials": "Ещё материалы",
     "items": {
       "new-stella-line-launch": {
-        "title": "STELLA production line launched",
-        "excerpt": "We have expanded output of the five-chamber STELLA profile for projects with higher thermal insulation requirements.",
+        "title": "Запуск производственной линии STELLA",
+        "excerpt": "Расширили выпуск пятикамерного профиля STELLA для проектов с повышенными требованиями к теплоизоляции.",
         "body": [
-          "We expanded production of the five-chamber STELLA profile: the line serves projects with raised thermal requirements.",
-          "The profile is available across the full lamination palette; lead times for a developer's volume are confirmed with the costing."
+          "Расширили выпуск пятикамерного профиля STELLA: линия работает на объектах, где к теплоизоляции предъявляют повышенные требования.",
+          "Профиль доступен во всей палитре ламинации, сроки производства под объём застройщика уточняются при расчёте."
         ]
       },
       "thermo-facade-project": {
-        "title": "THERMO aluminium facades in a new business centre",
-        "excerpt": "A look at a facade glazing project using the thermally broken aluminium profile and panoramic openings.",
+        "title": "Алюминиевые фасады ТЕРМО в новом бизнес-центре",
+        "excerpt": "Рассказываем о проекте фасадного остекления с тёплым алюминиевым профилем и панорамными проёмами.",
         "body": [
-          "We closed a business centre's facade with warm THERMO 60 aluminium — panoramic openings without breaking the thermal envelope.",
-          "The units were assembled in our own workshop and shipped in batches to match the site's fitting schedule."
+          "Закрыли фасадное остекление бизнес-центра тёплым алюминием ТЕРМО 60 — панорамные проёмы с сохранением теплового контура.",
+          "Конструкции собирали на собственном производстве и отгружали партиями под монтажный график объекта."
         ]
       },
       "service-expansion-2026": {
-        "title": "Expanding our project service coverage",
-        "excerpt": "We have added scheduled maintenance and window adjustment in Dushanbe, Khujand and Bokhtar.",
+        "title": "Расширяем сервисное сопровождение объектов",
+        "excerpt": "Добавили плановое обслуживание и регулировку оконных систем в Душанбе, Худжанде и Бохтаре.",
         "body": [
-          "We added scheduled servicing and adjustment of window systems in Dushanbe, Khujand and Bokhtar.",
-          "A service request can be left through the form on the site or over WhatsApp — the technician agrees a time to come out."
+          "Добавили плановое обслуживание и регулировку оконных систем в Душанбе, Худжанде и Бохтаре.",
+          "Заявку на сервис можно оставить через форму на сайте или в WhatsApp — мастер согласует время выезда."
         ]
       }
     }
   },
   "advantages": {
     "own-production": {
-      "title": "In-house production",
-      "description": "Quality control at every stage: from the profile to the finished unit."
+      "title": "Собственное производство",
+      "description": "Контроль качества на каждом этапе: от профиля до готовой конструкции."
     },
     "materials": {
-      "title": "Quality materials",
-      "description": "Profile systems, hardware and components from vetted suppliers."
+      "title": "Качественные материалы",
+      "description": "Профильные системы, фурнитура и комплектующие от проверенных поставщиков."
     },
     "warranty": {
-      "title": "Warranty",
-      "description": "We put our obligations in writing and stay with the project after installation."
+      "title": "Гарантия",
+      "description": "Фиксируем обязательства и сопровождаем объект после установки."
     },
     "measurement": {
-      "title": "Fast survey",
-      "description": "A specialist visits the site and helps you choose the right system."
+      "title": "Быстрый замер",
+      "description": "Специалист выезжает на объект и помогает выбрать подходящую систему."
     },
     "installation": {
-      "title": "Professional installation",
-      "description": "Installation crews work to technical charts and standards."
+      "title": "Профессиональный монтаж",
+      "description": "Монтажные бригады работают по технологическим картам и стандартам."
     },
     "delivery": {
-      "title": "Delivery",
-      "description": "We arrange careful delivery of the units to site on the agreed date."
+      "title": "Доставка",
+      "description": "Организуем аккуратную доставку конструкций на объект в согласованный срок."
     },
     "service": {
-      "title": "Service",
-      "description": "We help with adjustment, advice and scheduled maintenance."
+      "title": "Сервис",
+      "description": "Помогаем с регулировкой, консультациями и плановым обслуживанием."
     }
   },
   "notFound": {
-    "title": "Page not found",
-    "description": "This page does not exist or has moved. Go back to the homepage or take a look at the catalogue.",
-    "home": "Back to the homepage"
+    "title": "Страница не найдена",
+    "description": "Такой страницы нет или она переехала. Вернитесь на главную или загляните в каталог.",
+    "home": "На главную"
   },
   "requestForm": {
-    "formAria": "Request form",
-    "scenarioLabel": "What do you need",
+    "formAria": "Форма заявки",
+    "scenarioLabel": "Что вас интересует",
     "scenarios": {
       "calculate": {
-        "label": "Get a calculation",
-        "hint": "We will pick a system, come out to measure and cost it for your opening."
+        "label": "Рассчитать",
+        "hint": "Подберём систему, приедем на замер и посчитаем под ваш проём."
       },
       "quote": {
-        "label": "Request a quote",
-        "hint": "We will send a commercial proposal for the project: volumes, lead times, specification."
+        "label": "Получить КП",
+        "hint": "Пришлём коммерческое предложение по объекту: объёмы, сроки, комплектация."
       },
       "dealer": {
-        "label": "Become a dealer",
-        "hint": "We will explain wholesale and dealership terms and send the profile price list."
+        "label": "Стать дилером",
+        "hint": "Расскажем об условиях опта и дилерства, пришлём прайс на профиль."
       }
     },
     "fields": {
-      "name": "Name",
-      "phone": "Phone",
-      "city": "City",
-      "productType": "Product type",
-      "comment": "Comment",
-      "configuration": "Configuration"
+      "name": "Имя",
+      "phone": "Телефон",
+      "city": "Город",
+      "productType": "Тип продукции",
+      "comment": "Комментарий",
+      "configuration": "Конфигурация"
     },
     "placeholders": {
-      "name": "Your name",
+      "name": "Ваше имя",
       "phone": "+992",
-      "comment": "Describe the project, timeline or question — optional"
+      "comment": "Опишите объект, сроки или вопрос — необязательно"
     },
-    "optional": "(optional)",
-    "selectPlaceholder": "Choose an option",
+    "optional": "(необязательно)",
+    "selectPlaceholder": "Выберите вариант",
     "cities": {
-      "dushanbe": "Dushanbe",
-      "khujand": "Khujand",
-      "bokhtar": "Bokhtar",
-      "kulob": "Kulob",
-      "other": "Another city"
+      "dushanbe": "Душанбе",
+      "khujand": "Худжанд",
+      "bokhtar": "Бохтар",
+      "kulob": "Куляб",
+      "other": "Другой город"
     },
     "productTypes": {
-      "pvc": "PVC products",
-      "aluminium": "Aluminium products",
-      "consultation": "Survey / consultation"
+      "pvc": "ПВХ продукция",
+      "aluminium": "Алюминиевая продукция",
+      "consultation": "Замер / консультация"
     },
     "errors": {
-      "name": "Enter your name",
-      "phoneRequired": "Enter your phone number",
-      "phoneInvalid": "Check the phone number",
-      "city": "Choose a city",
-      "productType": "Choose a product type",
-      "submit": "The request could not be sent. Try again or call us."
+      "name": "Укажите имя",
+      "phoneRequired": "Укажите телефон",
+      "phoneInvalid": "Проверьте номер телефона",
+      "city": "Выберите город",
+      "productType": "Выберите тип продукции",
+      "submit": "Не удалось отправить заявку. Попробуйте ещё раз или позвоните нам."
     },
-    "submit": "Send the request",
-    "submitting": "Sending…",
-    "note": "The request is stored with us first, then WhatsApp opens with the message ready. We show no prices on the site — every project is costed individually.",
+    "submit": "Отправить заявку",
+    "submitting": "Отправляем…",
+    "note": "Заявка сначала сохраняется у нас, затем открывается WhatsApp с готовым текстом. Цены на сайте не показываем — считаем под объект.",
     "success": {
-      "title": "Request received",
-      "description": "We stored your request and opened WhatsApp with the message ready. If the window did not open, use the button below.",
-      "openWhatsapp": "Open WhatsApp",
-      "again": "Send another one"
+      "title": "Заявка принята",
+      "description": "Мы сохранили заявку и открыли WhatsApp с готовым сообщением. Если окно не открылось, нажмите кнопку ниже.",
+      "openWhatsapp": "Открыть WhatsApp",
+      "again": "Отправить ещё одну"
     },
     "whatsapp": {
-      "intro": "Hello! A request from the ROLLER website.",
-      "scenario": "Request type"
+      "intro": "Здравствуйте! Заявка с сайта ROLLER.",
+      "scenario": "Тип заявки"
     }
   },
   "about": {
-    "metaTitle": "About the company",
-    "metaDescription": "ROLLER manufactures PVC and aluminium profile systems in Tajikistan since 2006: own workshop, 400 employees, over 10,000 tonnes of aluminium a year.",
-    "breadcrumb": "About",
-    "eyebrow": "About the company",
-    "title": "Twenty years of making profile systems in Tajikistan",
-    "description": "We started in 2006 with PVC profile and grew into a full cycle: extrusion, unit assembly, surveying, installation and service. The promise has not changed — warmth and comfort for every home.",
+    "metaTitle": "О компании",
+    "metaDescription": "ROLLER — производитель профильных систем ПВХ и алюминия в Таджикистане с 2006 года: собственный цех, 400 сотрудников, более 10 000 тонн алюминия в год.",
+    "breadcrumb": "О компании",
+    "eyebrow": "О компании",
+    "title": "Двадцать лет производим профильные системы в Таджикистане",
+    "description": "Начали в 2006 году с ПВХ-профиля и выросли до полного цикла: экструзия, сборка конструкций, замер, монтаж и сервис. Слоган остаётся прежним — тепло и комфорт для каждого дома.",
     "timeline": {
-      "eyebrow": "History",
-      "title": "How the company grew",
-      "description": "Four points that show what separates today's ROLLER from the workshop of 2006.",
+      "eyebrow": "История",
+      "title": "Как компания росла",
+      "description": "Четыре точки, по которым видно, чем ROLLER сегодня отличается от мастерской 2006 года.",
       "items": [
         {
           "year": "2006",
-          "title": "The start",
-          "description": "Founded as a manufacturer of PVC materials — the first in Tajikistan."
+          "title": "Начало",
+          "description": "Компания основана как производитель материалов из ПВХ — первый в Таджикистане."
         },
         {
-          "year": "2010s",
-          "title": "A range of brands",
-          "description": "From one series to four: ECOLINE, ROLLER, UNOPEN and STELLA, economy through premium."
+          "year": "2010-е",
+          "title": "Линейка брендов",
+          "description": "От одной серии к четырём: ЭКОЛАЙН, ROLLER, UNOPEN и STELLA — от эконома до премиума."
         },
         {
           "year": "2025",
-          "title": "Alumini Avvalin LLC",
-          "description": "A new step: aluminium profile systems — the cold ALD-45 and the warm THERMO 60."
+          "title": "ООО «Алюмини Аввалин»",
+          "description": "Новый этап: алюминиевые профильные системы, холодная АЛД-45 и тёплая ТЕРМО 60."
         },
         {
           "year": "2026",
-          "title": "Scale",
-          "description": "1000+ completed projects, 400 employees, over 10,000 tonnes of aluminium a year."
+          "title": "Масштаб",
+          "description": "1000+ сданных объектов, 400 сотрудников, более 10 000 тонн алюминия в год."
         }
       ]
     },
     "capabilities": {
-      "eyebrow": "What we have",
-      "title": "A full cycle, not resale",
-      "description": "We extrude the profile, assemble the units and fit them with our own crews — which is why we answer for the result end to end.",
+      "eyebrow": "Что у нас есть",
+      "title": "Полный цикл, а не перепродажа",
+      "description": "Профиль варим сами, конструкции собираем сами, ставим своими бригадами — поэтому за результат отвечаем целиком.",
       "items": {
         "production": {
-          "title": "Own production",
-          "description": "Profile extrusion and unit assembly on our own site, with checks at every stage."
+          "title": "Собственное производство",
+          "description": "Экструзия профиля и сборка конструкций на своей площадке, с контролем на каждом этапе."
         },
         "installation": {
-          "title": "Fitting crews",
-          "description": "Our own crews work to method statements, with no outside subcontracting."
+          "title": "Монтажные бригады",
+          "description": "Свои бригады работают по технологическим картам, без подряда со стороны."
         },
         "showroom": {
-          "title": "Showroom",
-          "description": "The systems can be seen in person at the production address in Dushanbe."
+          "title": "Шоурум",
+          "description": "Системы можно посмотреть вживую по адресу производства в Душанбе."
         },
         "warranty": {
-          "title": "Warranty and service",
-          "description": "We put the obligations in writing and stay with the project after handover."
+          "title": "Гарантия и сервис",
+          "description": "Фиксируем обязательства и сопровождаем объект после сдачи — регулировка и обслуживание."
         }
       }
     },
     "partners": {
-      "eyebrow": "Materials and equipment",
-      "title": "Who we work with",
-      "description": "Equipment and raw materials come from the industry's established suppliers."
+      "eyebrow": "Сырьё и оборудование",
+      "title": "С кем работаем",
+      "description": "Оборудование и сырьё — от профильных поставщиков отрасли."
     },
     "warranty": {
-      "eyebrow": "Warranty",
-      "title": "Warranty terms",
-      "intro": "The warranty covers profile systems of our own manufacture, provided the installation and use conditions are met.",
+      "eyebrow": "Гарантия",
+      "title": "Условия гарантии",
+      "intro": "Гарантия распространяется на профильные системы собственного производства при соблюдении условий монтажа и эксплуатации.",
       "terms": [
-        "White PVC profile — 5 years from the date the project is handed over.",
-        "Laminated profile and aluminium systems — on the terms recorded in the contract for the project.",
-        "Hardware and components are covered to the extent of the hardware manufacturer's own warranty.",
-        "The warranty holds where the units were fitted by the company or by a certified crew and the use conditions are observed.",
-        "It does not cover mechanical damage, unauthorised alterations to the unit, or the consequences of misuse."
+        "Гарантия на белый ПВХ-профиль — 5 лет с даты передачи объекта.",
+        "Гарантия на ламинированный профиль и алюминиевые системы — по условиям, зафиксированным в договоре на объект.",
+        "Гарантия на фурнитуру и комплектующие действует в объёме гарантии производителя фурнитуры.",
+        "Гарантия сохраняется при монтаже силами компании или аттестованной бригады и при соблюдении правил эксплуатации.",
+        "Гарантия не распространяется на механические повреждения, самостоятельные переделки конструкции и последствия нарушений условий эксплуатации."
       ],
-      "note": "Exact durations and the scope of the obligations for a given project are recorded in the contract — ask when the costing is prepared."
+      "note": "Точные сроки и объём обязательств по конкретному объекту фиксируются в договоре — уточняйте при расчёте."
     }
   },
   "portfolio": {
-    "metaTitle": "Project portfolio",
-    "metaDescription": "ROLLER projects: residential complexes, commercial buildings and private houses — what was installed, in what volume and on which systems.",
-    "breadcrumb": "Portfolio",
-    "eyebrow": "Portfolio",
-    "title": "Buildings we have glazed",
-    "description": "Housing, commercial buildings and private construction. Each object shows which system went in and in what volume — which is the answer to “can you handle our volume”.",
+    "metaTitle": "Портфолио объектов",
+    "metaDescription": "Объекты ROLLER: жилые комплексы, коммерция и частные дома. Что установлено, в каком объёме и на каких системах.",
+    "breadcrumb": "Портфолио",
+    "eyebrow": "Портфолио",
+    "title": "Объекты, которые мы остеклили",
+    "description": "Жильё, коммерция и частное строительство. У каждого объекта видно, какая система стоит и в каком объёме — это и есть ответ на вопрос «потянете ли вы наш объём».",
     "other": {
-      "eyebrow": "Other projects",
-      "title": "See also"
+      "eyebrow": "Другие объекты",
+      "title": "Смотрите также"
     }
   },
   "newsPage": {
-    "metaTitle": "News and articles",
-    "metaDescription": "ROLLER news: production, projects, service and updates to the product range.",
-    "breadcrumb": "News",
-    "eyebrow": "News",
-    "title": "What is happening in the workshop and on site",
-    "description": "Short notes on systems, completed projects and service. The section is run from the admin panel."
-  },
-  "professionalsPage": {
-    "metaTitle": "For professionals: wholesale, dealership, documentation",
-    "metaDescription": "Wholesale profile supply, dealership terms, components from stock and technical documentation for ROLLER systems.",
-    "breadcrumb": "For professionals",
-    "eyebrow": "For professionals",
-    "title": "Wholesale profile, dealership and technical documentation",
-    "description": "The section for window makers, dealers and specifiers. Profile shipments, components and details — no retail framing.",
-    "components": {
-      "eyebrow": "Components",
-      "title": "What ships from stock",
-      "description": "Beyond the profile itself — the parts without which a project cannot be assembled.",
-      "items": [
-        "PVC and aluminium profile systems — all six series",
-        "Windowsills and trim",
-        "Cable trunking",
-        "Tracks and guides",
-        "Cylinders and hardware",
-        "Mosquito net profile and mesh"
-      ]
-    },
-    "documentation": {
-      "eyebrow": "Documentation",
-      "title": "The technical side",
-      "description": "For detailing and specification — system data, cutaways and installation drawings.",
-      "items": [
-        "Profile cutaways and junction details",
-        "Technical data for each system",
-        "Installation drawings and guidance",
-        "Lamination palette and available colours"
-      ],
-      "note": "The full documentation set for a given system is sent on request — name the system in your enquiry."
-    },
-    "cutaways": {
-      "eyebrow": "Cutaways",
-      "title": "How the profile is built",
-      "description": "Chambers, reinforcement and the glazing bead — deliberately kept off the first screen of the client-facing pages.",
-      "imageAlt": "Cutaway of the {name} profile system"
-    },
-    "request": {
-      "eyebrow": "Enquiry",
-      "title": "Ask for the price list or dealership terms",
-      "description": "Tell us the volume and the region and we will come back with terms. There are no retail prices on this site."
-    }
+    "metaTitle": "Новости и статьи",
+    "metaDescription": "Новости ROLLER: производство, объекты, сервис и обновления продуктовой линейки.",
+    "breadcrumb": "Новости",
+    "eyebrow": "Новости",
+    "title": "Что происходит на производстве и объектах",
+    "description": "Короткие заметки о выпуске систем, сданных объектах и сервисе. Раздел ведётся через админ-панель."
   },
   "contactsPage": {
-    "metaTitle": "Contacts",
-    "metaDescription": "Address, phone, WhatsApp, Telegram and opening hours of ROLLER in Dushanbe. Survey and costing on request.",
-    "breadcrumb": "Contacts",
-    "eyebrow": "Contacts",
-    "title": "How to reach us",
-    "description": "Call, write on WhatsApp, or come to the production site — the showroom is there too. A manager reads every request and comes back with a costing.",
+    "metaTitle": "Контакты",
+    "metaDescription": "Адрес, телефон, WhatsApp, Telegram и график работы ROLLER в Душанбе. Замер и расчёт по заявке.",
+    "breadcrumb": "Контакты",
+    "eyebrow": "Контакты",
+    "title": "Как с нами связаться",
+    "description": "Звоните, пишите в WhatsApp или приезжайте на производство — там же шоурум. Заявку с сайта разбирает менеджер и возвращается с расчётом.",
     "social": {
       "instagram": {
         "title": "Instagram",
-        "description": "Projects, products and the workshop in the feed."
+        "description": "Объекты, продукция и производство в ленте."
       },
       "telegram": {
         "title": "Telegram",
-        "description": "The company channel and a line to the call centre."
+        "description": "Канал компании и связь с колл-центром."
       }
     }
   },
   "showroom": {
-    "metaTitle": "Showroom",
-    "metaDescription": "The ROLLER showroom in Dushanbe: see the profile systems, lamination colours and hardware in person.",
-    "breadcrumb": "Showroom",
-    "eyebrow": "Showroom",
-    "title": "See the systems in person",
-    "description": "The showroom is at the production address. Come by — we will show the profile in section, the lamination palette and assembled units.",
+    "metaTitle": "Шоурум",
+    "metaDescription": "Шоурум ROLLER в Душанбе: посмотреть профильные системы, цвета ламинации и фурнитуру вживую.",
+    "breadcrumb": "Шоурум",
+    "eyebrow": "Шоурум",
+    "title": "Посмотрите системы вживую",
+    "description": "Шоурум работает по адресу производства. Приезжайте — покажем профиль в разрезе, палитру ламинации и собранные конструкции.",
     "facts": {
-      "address": "Address",
-      "hours": "Opening hours",
-      "phone": "Phone"
+      "address": "Адрес",
+      "hours": "График работы",
+      "phone": "Телефон"
     },
     "see": {
-      "eyebrow": "What to see",
-      "title": "What is in the showroom",
+      "eyebrow": "Что посмотреть",
+      "title": "Что есть в шоуруме",
       "items": [
-        "All six profile series — in section and assembled",
-        "The lamination palette: how a colour looks on profile rather than on a screen",
-        "Hardware and the ways a sash can open",
-        "Components: windowsills, mosquito nets, trim"
+        "Профильные системы всех шести серий — в разрезе и в сборе",
+        "Палитра ламинации: как цвет выглядит на профиле, а не на экране",
+        "Фурнитура и варианты открывания створки",
+        "Комплектующие: подоконники, москитные сетки, отделочные элементы"
       ]
     },
-    "mapTitle": "Map of the ROLLER showroom"
+    "mapTitle": "Карта шоурума ROLLER"
   },
   "calculator": {
-    "metaTitle": "Window and door calculator",
-    "metaDescription": "Assemble your unit: system, dimensions, sashes, glazing unit and colour. Every project is costed individually — no prices on the site.",
-    "breadcrumb": "Calculator",
-    "eyebrow": "Calculator",
-    "title": "Assemble your unit",
-    "description": "Pick the system, the dimensions, the number of sashes and how each one opens — the drawing redraws as you go. Send the request at the end: we come out to measure and cost it.",
-    "noPrice": "We show no prices on the site: the cost depends on the survey, the specification and the installation. The calculator assembles the unit; the calculation comes from a manager.",
+    "metaTitle": "Калькулятор окон и дверей",
+    "metaDescription": "Соберите конструкцию: система, размеры, створки, стеклопакет и цвет. Цену считаем под объект — на сайте её нет.",
+    "breadcrumb": "Калькулятор",
+    "eyebrow": "Калькулятор",
+    "title": "Соберите свою конструкцию",
+    "description": "Выберите систему, размеры, число створок и тип открывания — схема перестраивается сразу. В конце отправьте заявку: приедем на замер и посчитаем.",
+    "noPrice": "Цены на сайте не показываем: стоимость зависит от замера, комплектации и монтажа. Калькулятор собирает конструкцию, расчёт присылает менеджер.",
     "construction": {
-      "window": "Window",
-      "door": "Door"
+      "window": "Окно",
+      "door": "Дверь"
     },
     "labels": {
-      "construction": "Unit",
-      "material": "Material",
-      "system": "System",
-      "sashCount": "Sashes",
-      "sashes": "Sashes",
-      "sash": "Sash {index}",
-      "opening": "Opening type",
-      "layout": "Door type",
-      "width": "Width",
-      "height": "Height",
-      "glazing": "Glazing unit",
-      "color": "Lamination colour",
-      "accessories": "Accessories",
-      "quantity": "Quantity"
+      "construction": "Конструкция",
+      "material": "Материал",
+      "system": "Система",
+      "sashCount": "Створок",
+      "sashes": "Створки",
+      "sash": "Створка {index}",
+      "opening": "Тип открывания",
+      "layout": "Тип двери",
+      "width": "Ширина",
+      "height": "Высота",
+      "glazing": "Стеклопакет",
+      "color": "Цвет ламинации",
+      "accessories": "Комплектующие",
+      "quantity": "Количество"
     },
     "openings": {
-      "fixed": "Fixed",
-      "casement": "Side-hung",
-      "tilt-turn": "Tilt and turn"
+      "fixed": "Глухая",
+      "casement": "Поворотная",
+      "tilt-turn": "Поворотно-откидная"
     },
     "layouts": {
-      "single": "Single leaf",
-      "double": "Double leaf",
-      "transom": "With a transom"
+      "single": "Одностворчатая",
+      "double": "Двустворчатая",
+      "transom": "С фрамугой"
     },
     "glazing": {
-      "single-glass": "Single glass",
-      "single-chamber": "Single-chamber unit",
-      "double-chamber": "Double-chamber unit",
-      "double-chamber-energy": "Double-chamber low-E unit"
+      "single-glass": "Одинарное стекло",
+      "single-chamber": "Однокамерный стеклопакет",
+      "double-chamber": "Двухкамерный стеклопакет",
+      "double-chamber-energy": "Двухкамерный энергосберегающий"
     },
     "accessories": {
-      "windowsill": "Windowsill",
-      "mosquito-net": "Mosquito net"
+      "windowsill": "Подоконник",
+      "mosquito-net": "Москитная сетка"
     },
     "units": {
-      "mm": "mm",
-      "pcs": "pcs"
+      "mm": "мм",
+      "pcs": "шт."
     },
     "item": {
-      "legend": "Item {index}",
-      "remove": "Remove",
-      "add": "Add another",
-      "addHint": "One request can carry several units.",
-      "addLimit": "One request holds at most {max} items.",
-      "decrease": "Decrease quantity",
-      "increase": "Increase quantity"
+      "legend": "Позиция {index}",
+      "remove": "Удалить",
+      "add": "Добавить ещё",
+      "addHint": "В одну заявку можно собрать несколько конструкций.",
+      "addLimit": "В одной заявке — не больше {max} позиций.",
+      "decrease": "Уменьшить количество",
+      "increase": "Увеличить количество"
     },
-    "colorSingleNote": "This system is supplied in white profile only.",
-    "previewAria": "{construction}, {width} × {height} mm",
+    "colorSingleNote": "Эта система поставляется только в белом профиле.",
+    "previewAria": "{construction}, {width} × {height} мм",
     "summary": {
-      "title": "Your configuration"
+      "title": "Ваша конфигурация"
     },
     "request": {
-      "eyebrow": "Request",
-      "title": "Send us the configuration",
-      "description": "The unit travels with the request — a manager sees all of it and comes back with the costing."
+      "eyebrow": "Заявка",
+      "title": "Отправьте конфигурацию нам",
+      "description": "Конструкция уйдёт вместе с заявкой — менеджер увидит её целиком и вернётся с расчётом."
     }
   }
 }

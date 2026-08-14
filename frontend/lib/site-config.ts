@@ -1,11 +1,3 @@
-/**
- * Locale-independent facts about the company.
- *
- * Anything that reads differently in Russian, Tajik, English or Turkish has
- * moved to `messages/*.json`: the slogan, the street address and the working
- * hours all used to sit here as Russian literals. What is left is the same in
- * every locale — phone numbers, links, the legal founding year.
- */
 export const siteConfig = {
   name: "ROLLER",
   foundedYear: 2006,
@@ -23,29 +15,12 @@ export const siteConfig = {
   },
 } as const;
 
-/**
- * Primary navigation. `key` indexes `nav.*` in the message catalogue; `href` is
- * the same Latin slug on every locale (plan §"Решения, которые не
- * пересматриваются"), and the locale prefix is added by `@/i18n/navigation`.
- *
- * ⚠️ `/showroom` is open question №7 in `project_plan/00-overview.md`: it
- * appears in neither the brief nor the plan. Kept here unchanged and translated
- * along with the rest; removing it is the client's call, not ours.
- */
 export const navLinks = [
-  { key: "catalog", href: "/catalog" },
+  // { key: "main", href: "/" },
   { key: "about", href: "/about" },
-  { key: "portfolio", href: "/portfolio" },
-  // «Калькулятор» / `/calculator` at the client's explicit request. The plan
-  // (§06 "Заметки") argued for «Конфигуратор», because the word "calculator"
-  // promises a figure and the page shows none — prices are forbidden by brief
-  // §5.3. The naming is the client's call; the page itself still shows no price
-  // and ends in a request, and its copy says so twice.
+  { key: "products", href: "/products" },
   { key: "calculator", href: "/calculator" },
   { key: "news", href: "/news" },
   { key: "showroom", href: "/showroom" },
-  // Added in stage 07: the plan puts the link to «Профессионалам» in the header
-  // as well as in the homepage section of the same name.
-  { key: "professionals", href: "/professionals" },
   { key: "contacts", href: "/contacts" },
 ] as const;

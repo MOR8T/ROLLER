@@ -3,9 +3,12 @@
   "configurations": [
     {
       "name": "roller-frontend",
-      "runtimeExecutable": "npm",
-      "runtimeArgs": ["--prefix", "frontend", "run", "dev"],
-      "port": 3031
+      "runtimeExecutable": "sh",
+      "runtimeArgs": [
+        "-c",
+        "cd /Users/shahrom/Documents/Developer/Order/Praviz/frontend && npm exec -- next dev"
+      ],
+      "autoPort": true
     }
   ]
 }

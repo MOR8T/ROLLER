@@ -1,0 +1,61 @@
+import { useTranslations } from "next-intl";
+import { ArrowRight } from "lucide-react";
+
+import { CountUp } from "@/components/sections/count-up";
+import { HomeSection, PillLink } from "@/components/sections/home-kit";
+import { Reveal, RevealGroup, RevealItem } from "@/components/ui/reveal";
+import { homeStats } from "@/data/home";
+
+/**
+ * "О компании" — two sentences and four numbers.
+ *
+ * The numbers are set as large as the heading and stand on rules rather than in
+ * cards. Four boxed figures read as a dashboard; four figures separated by
+ * hairlines read as a claim, which is what they are.
+ *
+ * The production chain (Замер → Производство → Монтаж → Сервис) that used to
+ * close this block is gone from the homepage: it is four more labels saying
+ * what the two sentences above already say, and `/about` sets it out properly.
+ */
+export function AboutStatsSection() {
+  const t = useTranslations("home.about");
+  const tProduction = useTranslations("production");
+
+  return (
+    <HomeSection id="about" tone="muted">
+      <Reveal className="max-w-3xl">
+        <h2 className="text-3xl font-bold tracking-tight text-brand-black sm:text-4xl lg:text-[2.75rem] lg:leading-[1.1]">
+          {t("title")}
+        </h2>
+        <p className="mt-6 text-lg leading-8 text-brand-black/60">{t("body")}</p>
+
+        <PillLink href="/about" className="mt-8">
+          {t("more")}
+          <ArrowRight className="size-4 shrink-0" aria-hidden />
+        </PillLink>
+      </Reveal>
+
+      {/* A rule above each figure rather than a box around it, and no vertical
+          dividers: a column rule has to know where the row ends, and that
+          answer changes at every breakpoint. A top rule per cell is correct at
+          two columns and at four without knowing either. */}
+      <RevealGroup className="mt-16 grid grid-cols-2 gap-x-8 gap-y-10 lg:grid-cols-4 lg:gap-x-12">
+        {homeStats.map((stat) => (
+          <RevealItem key={stat.key} className="border-t border-brand-black/15 pt-6">
+            {/* `tabular-nums` is load-bearing here, not typographic taste: the
+                digits change every frame while counting, and proportional
+                figures would make the whole row jitter sideways as they do. */}
+            <CountUp
+              value={stat.value}
+              suffix={stat.suffix}
+              className="block font-heading text-4xl font-bold tracking-tight text-brand-black tabular-nums sm:text-5xl lg:text-6xl"
+            />
+            <p className="mt-3 text-sm leading-6 text-brand-black/50">
+              {tProduction(`stats.${stat.key}`)}
+            </p>
+          </RevealItem>
+        ))}
+      </RevealGroup>
+    </HomeSection>
+  );
+}

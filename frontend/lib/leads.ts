@@ -56,6 +56,56 @@ export async function submitLead(lead: Lead): Promise<LeadReceipt> {
 }
 
 /**
+ * A phone number, and at most a name and a scenario — the homepage's two short
+ * forms (the "вызвать замерщика" strip and the block that closes the page).
+ *
+ * It is a separate call rather than a `Lead` with blank fields because the two
+ * make different promises. `submitLead` refuses an incomplete payload on
+ * purpose: a form that reports success on nothing is the failure this ordering
+ * exists to prevent. A form that asks for one field is not incomplete — it is a
+ * different, deliberately smaller request, and the call centre gets the city
+ * and the product on the phone. The stub still refuses a number that cannot be
+ * one, which is the only field either form actually has.
+ *
+ * Same order as `submitLead`: store first, WhatsApp second.
+ */
+export interface QuickLead {
+  phone: string;
+  name?: string;
+  scenario?: LeadScenario;
+}
+
+export async function submitQuickLead(lead: QuickLead): Promise<LeadReceipt> {
+  if (!isPlausiblePhone(lead.phone)) {
+    throw new LeadSubmitError("Implausible phone number");
+  }
+
+  await new Promise((resolve) => setTimeout(resolve, 400));
+
+  return { id: `local-quick-${Date.now()}` };
+}
+
+/**
+ * The WhatsApp text for a quick lead. Every label is already translated by the
+ * caller, and the optional lines are omitted rather than sent empty — a message
+ * reading "Имя:" with nothing after it tells the call centre less than no line
+ * at all.
+ */
+export function buildQuickLeadMessage(
+  lead: QuickLead,
+  labels: { intro: string; phone: string; name?: string; scenario?: string },
+  scenarioLabel?: string,
+): string {
+  const lines = [labels.intro, ""];
+
+  if (labels.scenario && scenarioLabel) lines.push(`${labels.scenario}: ${scenarioLabel}`);
+  if (labels.name && lead.name) lines.push(`${labels.name}: ${lead.name}`);
+  lines.push(`${labels.phone}: ${lead.phone}`);
+
+  return lines.join("\n");
+}
+
+/**
  * The WhatsApp message. Every line is already translated by the caller — the
  * call centre reads the request in the language the visitor was reading, and
  * the scenario is spelled out because a human, not a workflow, routes it.
