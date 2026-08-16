@@ -5,7 +5,7 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import { ApplicationCard } from "@/components/catalog/application-card";
 import { PageHeader } from "@/components/layout/page-header";
 import { EmptyState, ProductGrid } from "@/components/catalog/product-grid";
-import { LeadFormSection } from "@/components/sections/lead-form-section";
+import { ContactsLeadSection } from "@/components/sections/contacts-lead-section";
 import { SectionHeading } from "@/components/sections/section-heading";
 import { ButtonLink } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
@@ -151,7 +151,7 @@ export default async function ApplicationPage({
         </Container>
       </Section>
 
-      <LeadFormSection />
+      <ContactsLeadSection />
     </>
   );
 }

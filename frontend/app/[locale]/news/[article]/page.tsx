@@ -4,7 +4,7 @@ import { getFormatter, getTranslations, setRequestLocale } from "next-intl/serve
 
 import { Breadcrumbs } from "@/components/catalog/breadcrumbs";
 import { ArticleCard } from "@/components/news/article-card";
-import { LeadFormSection } from "@/components/sections/lead-form-section";
+import { ContactsLeadSection } from "@/components/sections/contacts-lead-section";
 import { SectionHeading } from "@/components/sections/section-heading";
 import { Container } from "@/components/ui/container";
 import { MediaFrame } from "@/components/ui/media-frame";
@@ -110,7 +110,7 @@ export default async function ArticlePage({ params }: PageProps<"/[locale]/news/
         </Section>
       ) : null}
 
-      <LeadFormSection />
+      <ContactsLeadSection />
     </>
   );
 }

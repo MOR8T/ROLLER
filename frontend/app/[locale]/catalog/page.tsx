@@ -5,7 +5,7 @@ import { ApplicationCard } from "@/components/catalog/application-card";
 import { CatalogBrowser } from "@/components/catalog/catalog-browser";
 import { CategoryCard } from "@/components/catalog/category-card";
 import { PageHeader } from "@/components/layout/page-header";
-import { LeadFormSection } from "@/components/sections/lead-form-section";
+import { ContactsLeadSection } from "@/components/sections/contacts-lead-section";
 import { SectionHeading } from "@/components/sections/section-heading";
 import { Container } from "@/components/ui/container";
 import { Reveal, RevealGroup, RevealItem } from "@/components/ui/reveal";
@@ -101,7 +101,7 @@ export default async function CatalogPage({ params }: PageProps<"/[locale]/catal
         </Container>
       </Section>
 
-      <LeadFormSection />
+      <ContactsLeadSection />
     </>
   );
 }

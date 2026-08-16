@@ -3,7 +3,7 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 
 import { PageHeader } from "@/components/layout/page-header";
 import { ProjectCard } from "@/components/portfolio/project-card";
-import { LeadFormSection } from "@/components/sections/lead-form-section";
+import { ContactsLeadSection } from "@/components/sections/contacts-lead-section";
 import { Container } from "@/components/ui/container";
 import { RevealGroup, RevealItem } from "@/components/ui/reveal";
 import { Section } from "@/components/ui/section";
@@ -45,7 +45,7 @@ export default async function PortfolioPage({ params }: PageProps<"/[locale]/pro
         </Container>
       </Section>
 
-      <LeadFormSection />
+      <ContactsLeadSection />
     </>
   );
 }

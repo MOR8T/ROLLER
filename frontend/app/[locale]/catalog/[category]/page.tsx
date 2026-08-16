@@ -4,7 +4,7 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 
 import { PageHeader } from "@/components/layout/page-header";
 import { EmptyState, ProductGrid } from "@/components/catalog/product-grid";
-import { LeadFormSection } from "@/components/sections/lead-form-section";
+import { ContactsLeadSection } from "@/components/sections/contacts-lead-section";
 import { ButtonLink } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
 import { Section } from "@/components/ui/section";
@@ -89,7 +89,7 @@ export default async function CategoryPage({ params }: PageProps<"/[locale]/cata
         </Container>
       </Section>
 
-      <LeadFormSection />
+      <ContactsLeadSection />
     </>
   );
 }

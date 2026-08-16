@@ -69,14 +69,22 @@ export function HomeSection({
 /**
  * A heading and, optionally, the one link that belongs beside it. No eyebrow
  * and no description — see the note at the top of the file.
+ *
+ * `control` is for a section whose heading row carries an input as well as the
+ * link — the city picker in `ShowroomsSection` is the only one. It sits on the
+ * left of the action so the pair reads "choose, then go", and it exists as a
+ * slot rather than as its own copy of the `<h2>` classes so that the homepage
+ * keeps one heading size in one file.
  */
 export function HomeHeading({
   title,
   action,
+  control,
   className,
 }: {
   title: string;
   action?: { label: string; href: string };
+  control?: ReactNode;
   className?: string;
 }) {
   return (
@@ -90,11 +98,17 @@ export function HomeHeading({
         {title}
       </h2>
 
-      {action ? (
-        <PillLink href={action.href} className="shrink-0">
-          {action.label}
-          <ArrowRight className="size-4 shrink-0" aria-hidden />
-        </PillLink>
+      {control || action ? (
+        <div className="flex shrink-0 flex-wrap items-center gap-3">
+          {control}
+
+          {action ? (
+            <PillLink href={action.href}>
+              {action.label}
+              <ArrowRight className="size-4 shrink-0" aria-hidden />
+            </PillLink>
+          ) : null}
+        </div>
       ) : null}
     </div>
   );

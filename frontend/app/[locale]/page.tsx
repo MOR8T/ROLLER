@@ -7,6 +7,7 @@ import { NewsSection } from "@/components/sections/news-section";
 import { OffersTabsSection } from "@/components/sections/offers-tabs-section";
 import { PartnersSection } from "@/components/sections/partners-section";
 import { ProductsGridSection } from "@/components/sections/products-grid-section";
+import { ShowroomsSection } from "@/components/sections/showrooms-section";
 
 /**
  * The homepage, recomposed on 2026-08-13 against imzo.uz at the client's
@@ -21,7 +22,12 @@ import { ProductsGridSection } from "@/components/sections/products-grid-section
  *   offers    — three audiences, three sets of pages written for them.
  *   news      — dated, because a site with no dates on it looks abandoned.
  *   partners  — the suppliers' marks, an argument the visitor already trusts.
+ *   showrooms — the map: which city, and whether it is the visitor's own.
  *   contacts  — where we are, and the form, in one screen.
+ *
+ * Showrooms sit immediately before contacts on purpose: it answers "can I come
+ * and look at it" while the form that asks "shall we call you" is the next
+ * thing on the screen.
  *
  * ⚠️ Four sections came off in the same pass: "Линейка систем", "Применения",
  * "Объекты" and "Производство и масштаб". The first two are answered by the
@@ -79,6 +85,7 @@ export default async function Home({ params }: PageProps<"/[locale]">) {
       <OffersTabsSection />
       <NewsSection />
       <PartnersSection />
+      <ShowroomsSection />
       <ContactsLeadSection />
     </div>
   );

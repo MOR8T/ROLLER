@@ -39,8 +39,19 @@ type Field = "name" | "phone";
  * come from `requestForm.scenarios.*`, so the two never drift.
  *
  * Submit order is the site's: store first, WhatsApp second (`lib/leads.ts`).
+ *
+ * ── Why it is on every page ─────────────────────────────────────────────────
+ *
+ * It replaced `LeadFormSection` site-wide on 2026-08-16 at the client's
+ * request, so this is now the one request block on the site and `RequestForm`
+ * survives only inside the calculator, where the visitor has already described
+ * a construction and the long form has something to carry.
+ *
+ * `id` is a prop because of `/contacts`: `ContactsSection` already owns
+ * `id="contacts"` on that page, and two elements answering to one fragment is
+ * a broken anchor and a duplicate id in the same stroke.
  */
-export function ContactsLeadSection() {
+export function ContactsLeadSection({ id = "contacts" }: { id?: string } = {}) {
   const t = useTranslations("home.contacts");
   const tScenarios = useTranslations("requestForm.scenarios");
   const tCommon = useTranslations("common");
@@ -110,7 +121,7 @@ export function ContactsLeadSection() {
   const submitting = status === "submitting";
 
   return (
-    <HomeSection id="contacts" tone="muted">
+    <HomeSection id={id} tone="muted">
       <div className="grid gap-12 lg:grid-cols-[1fr_1fr] lg:gap-20">
         <div>
           <h2 className="text-3xl font-bold tracking-tight text-brand-black sm:text-4xl lg:text-[2.75rem] lg:leading-[1.1]">

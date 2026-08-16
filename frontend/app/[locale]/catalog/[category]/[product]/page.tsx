@@ -11,7 +11,7 @@ import { ColorSwatches } from "@/components/catalog/color-swatches";
 import { ProductGallery } from "@/components/catalog/product-gallery";
 import { RelatedProducts } from "@/components/catalog/related-products";
 import { SpecTable } from "@/components/catalog/spec-table";
-import { LeadFormSection } from "@/components/sections/lead-form-section";
+import { ContactsLeadSection } from "@/components/sections/contacts-lead-section";
 import { SectionHeading } from "@/components/sections/section-heading";
 import { Badge } from "@/components/ui/badge";
 import { ButtonLink } from "@/components/ui/button";
@@ -366,7 +366,7 @@ export default async function ProductPage({
 
       <RelatedProducts product={product} chooseHref={CALCULATOR_HREF} />
 
-      <LeadFormSection />
+      <ContactsLeadSection />
     </>
   );
 }

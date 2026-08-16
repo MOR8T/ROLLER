@@ -4,7 +4,7 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 
 import { Breadcrumbs } from "@/components/catalog/breadcrumbs";
 import { ProjectCard } from "@/components/portfolio/project-card";
-import { LeadFormSection } from "@/components/sections/lead-form-section";
+import { ContactsLeadSection } from "@/components/sections/contacts-lead-section";
 import { SectionHeading } from "@/components/sections/section-heading";
 import { Badge } from "@/components/ui/badge";
 import { ButtonLink } from "@/components/ui/button";
@@ -167,7 +167,7 @@ export default async function ProjectPage({ params }: PageProps<"/[locale]/produ
         </Section>
       ) : null}
 
-      <LeadFormSection />
+      <ContactsLeadSection />
     </>
   );
 }
