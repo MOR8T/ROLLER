@@ -37,10 +37,7 @@ export function HeaderDesktopNav({
   const tHeader = useTranslations("header");
 
   return (
-    <nav
-      aria-label={tHeader("mainNav")}
-      className="hidden min-w-0 items-center xl:flex gap-7"
-    >
+    <nav aria-label={tHeader("mainNav")} className="hidden min-w-0 items-center gap-7 xl:flex">
       {navLinks.map((link) => {
         if (link.href === PRODUCTS_HREF) {
           return (

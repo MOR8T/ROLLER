@@ -243,8 +243,15 @@ export type ProductCardBadgeVariant = "red" | "black" | "outline";
  * `ProjectTeaser` and `NewsTeaser` lived here until stage 07. They were
  * homepage-only shapes carrying a prebuilt `href`, and `/portfolio` and `/news`
  * need a slug they can route on instead — see `ProjectRecord` in
- * `data/portfolio.ts` and `ArticleRecord` in `data/news.ts`. The domain
- * contracts the backend must satisfy stay `Project` and `Article` above.
+ * `data/portfolio.ts` and `NewsArticle` in `lib/news.ts`. The domain contracts
+ * the backend must satisfy stay `Project` and `Article` above.
+ *
+ * ⚠️ `NewsArticle` is the one that has moved ahead of its contract: since
+ * 2026-08-17 the news feed is read through `lib/news.ts`, which is shaped like
+ * the API response rather than like `Article` here — `publishedAt` matches, but
+ * its `body` is an array of paragraphs where `Article.body` is a single string
+ * of rendered rich text. Whichever the admin panel's editor produces at stage
+ * 12 is the one that survives.
  */
 
 export interface Partner {

@@ -1,11 +1,12 @@
 import Image from "next/image";
-import { useFormatter, useTranslations } from "next-intl";
+import { useFormatter } from "next-intl";
+import { getLocale, getTranslations } from "next-intl/server";
 
 import { HomeCarousel } from "@/components/sections/home-carousel";
 import { HomeHeading, HomeSection, homeCard } from "@/components/sections/home-kit";
 import { Reveal } from "@/components/ui/reveal";
 import { Link } from "@/i18n/navigation";
-import { articleHref, articles, type ArticleRecord } from "@/data/news";
+import { articleHref, fetchLatestNews, type NewsArticle } from "@/lib/news";
 
 /**
  * "Новости" — a photograph, a date and a headline, on a strip that loops and
@@ -13,26 +14,23 @@ import { articleHref, articles, type ArticleRecord } from "@/data/news";
  *
  * The excerpt and the «Читать» link are gone. What the homepage needs from this
  * block is the date: it is the only thing on the page that proves the company
- * is still there. The headline earns the click, and `/news` carries the summary
+ * is still there. The headline earns the click, and `/news` carries the rest
  * for anyone comparing several at once.
  *
  * The covers are the client's own photographs rather than the catalogue renders
- * they used to be — see the note on `articles` in `data/news.ts`.
+ * they used to be — see the note on the feed in `data/news/ru.json`.
+ *
+ * Six slides, not the whole feed: the list is fifteen entries and paged since
+ * 2026-08-17, and a carousel that never comes back round is a scroll trap. Six
+ * is two loops of three on desktop.
  */
-function useNewsDate() {
+function NewsCard({ article }: { article: NewsArticle }) {
   const format = useFormatter();
 
-  return (isoDate: string) => {
-    const parsed = new Date(isoDate);
-    if (Number.isNaN(parsed.getTime())) return isoDate;
-    return format.dateTime(parsed, { day: "numeric", month: "long", year: "numeric" });
-  };
-}
-
-function NewsCard({ article }: { article: ArticleRecord }) {
-  const t = useTranslations("news");
-  const formatNewsDate = useNewsDate();
-  const title = t(`items.${article.id}.title`);
+  const parsed = new Date(article.publishedAt);
+  const date = Number.isNaN(parsed.getTime())
+    ? article.publishedAt
+    : format.dateTime(parsed, { day: "numeric", month: "long", year: "numeric" });
 
   return (
     <Link
@@ -53,20 +51,22 @@ function NewsCard({ article }: { article: ArticleRecord }) {
           header: the date is the whole point of the block, so it gets the
           accent and everything around it stays black. */}
       <time
-        dateTime={article.date}
+        dateTime={article.publishedAt}
         className="mt-6 block text-xs font-semibold tracking-[0.18em] text-brand-red uppercase"
       >
-        {formatNewsDate(article.date)}
+        {date}
       </time>
       <h3 className="mt-3 font-heading text-xl font-bold tracking-tight text-brand-black transition-colors group-hover:text-brand-black/55">
-        {title}
+        {article.title}
       </h3>
     </Link>
   );
 }
 
-export function NewsSection() {
-  const t = useTranslations("home.news");
+export async function NewsSection() {
+  const t = await getTranslations("home.news");
+  const locale = await getLocale();
+  const articles = await fetchLatestNews(locale, 6);
 
   return (
     <HomeSection id="news" tone="muted">
@@ -83,7 +83,7 @@ export function NewsSection() {
           // pass, and eight marks do not.
           autoplayDelay={5000}
           slides={articles.map((article) => ({
-            key: article.id,
+            key: article.slug,
             node: <NewsCard article={article} />,
           }))}
         />

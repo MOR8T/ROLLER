@@ -323,5 +323,7 @@ export const proOfferingKeys = ["wholesale", "dealership", "components", "docume
  * ⚠️ The portfolio and the news list moved to `data/portfolio.ts` and
  * `data/news.ts` in stage 07. They stopped being homepage mock data the moment
  * `/portfolio` and `/news` started reading them — the same move the catalog
- * made in stage 04.
+ * made in stage 04. News moved once more on 2026-08-17: the entries and their
+ * text now live in `data/news/<locale>.json` behind `lib/news.ts`, which is the
+ * seam the admin panel's API will replace.
  */
