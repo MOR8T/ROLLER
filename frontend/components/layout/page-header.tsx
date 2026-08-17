@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 
-import { Breadcrumbs, type Crumb } from "@/components/catalog/breadcrumbs";
+import { Breadcrumbs, type Crumb } from "@/components/products/breadcrumbs";
 import { Container } from "@/components/ui/container";
 import { Reveal } from "@/components/ui/reveal";
 import { cn } from "@/lib/utils";

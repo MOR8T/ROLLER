@@ -31,7 +31,7 @@ export interface NavLink {
 export const navLinks: NavLink[] = [
   // { key: "main", href: "/" },
   { key: "about", href: "/about" },
-  { key: "products", href: "/catalog", menu: true },
+  { key: "products", href: "/products", menu: true },
   { key: "calculator", href: "/calculator" },
   { key: "news", href: "/news" },
   { key: "showroom", href: "/showroom" },

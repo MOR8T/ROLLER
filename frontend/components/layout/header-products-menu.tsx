@@ -4,7 +4,7 @@ import { useTranslations } from "next-intl";
 import { AnimatePresence, motion, useReducedMotion, type Variants } from "framer-motion";
 import { Container } from "@/components/ui/container";
 import { Link } from "@/i18n/navigation";
-import { categories, productHref, productsByCategory } from "@/data/catalog";
+import { categories, productHref, productsByCategory } from "@/data/products";
 import { PRODUCTS_MENU_ID } from "./header-shared";
 
 interface HeaderProductsMenuProps {

@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
 import { Section } from "@/components/ui/section";
 import { SectionHeading } from "@/components/sections/section-heading";
-import { colorSwatches } from "@/data/catalog";
+import { colorSwatches } from "@/data/products";
 import {
   MAX_ITEMS,
   MAX_QUANTITY,

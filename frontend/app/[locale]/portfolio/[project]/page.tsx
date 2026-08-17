@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 
-import { Breadcrumbs } from "@/components/catalog/breadcrumbs";
+import { Breadcrumbs } from "@/components/products/breadcrumbs";
 import { ProjectCard } from "@/components/portfolio/project-card";
 import { ContactsLeadSection } from "@/components/sections/contacts-lead-section";
 import { SectionHeading } from "@/components/sections/section-heading";
@@ -12,7 +12,7 @@ import { Container } from "@/components/ui/container";
 import { MediaFrame } from "@/components/ui/media-frame";
 import { Reveal, RevealGroup, RevealItem } from "@/components/ui/reveal";
 import { Section } from "@/components/ui/section";
-import { productHref, products } from "@/data/catalog";
+import { productHref, products } from "@/data/products";
 import { findProjectBySlug, projectParams, relatedProjects } from "@/data/portfolio";
 
 export function generateStaticParams() {
@@ -21,7 +21,7 @@ export function generateStaticParams() {
 
 export async function generateMetadata({
   params,
-}: PageProps<"/[locale]/products/[project]">): Promise<Metadata> {
+}: PageProps<"/[locale]/portfolio/[project]">): Promise<Metadata> {
   const { locale, project: slug } = await params;
   const project = findProjectBySlug(slug);
   if (!project) return {};
@@ -42,7 +42,7 @@ export async function generateMetadata({
  * and a lightbox would be JavaScript spent on placeholder images. It becomes
  * worth building when real photography arrives.
  */
-export default async function ProjectPage({ params }: PageProps<"/[locale]/products/[project]">) {
+export default async function ProjectPage({ params }: PageProps<"/[locale]/portfolio/[project]">) {
   const { locale, project: slug } = await params;
   const project = findProjectBySlug(slug);
   if (!project) notFound();

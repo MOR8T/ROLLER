@@ -45,7 +45,7 @@ export type ProjectCategory = "residential" | "commercial" | "private";
  *    products — and it is what the admin panel edits.
  *  - it is many-to-many. ROLLER goes into windows *and* doors, so a product
  *    appears under every category that claims it, and its URL carries no
- *    category at all (`/catalog/[product]`).
+ *    category at all (`/products/[product]`).
  */
 export interface Category {
   slug: string;
@@ -93,7 +93,7 @@ export type ProductKind = "system" | "component";
  * unrelated picture.
  *
  * `color` is a locale-independent key — labels live under `colors.*` in the
- * message catalogue, swatch values in `colorSwatches` (`data/catalog.ts`).
+ * message catalogue, swatch values in `colorSwatches` (`data/products.ts`).
  */
 export interface Colorway {
   color: string;

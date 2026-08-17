@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 
-import { CategoryCard } from "@/components/catalog/category-card";
+import { CategoryCard } from "@/components/products/category-card";
 import { PageHeader } from "@/components/layout/page-header";
-import { EmptyState, ProductGrid } from "@/components/catalog/product-grid";
+import { EmptyState, ProductGrid } from "@/components/products/product-grid";
 import { ContactsLeadSection } from "@/components/sections/contacts-lead-section";
 import { SectionHeading } from "@/components/sections/section-heading";
 import { ButtonLink } from "@/components/ui/button";
@@ -12,7 +12,7 @@ import { Container } from "@/components/ui/container";
 import { MediaFrame } from "@/components/ui/media-frame";
 import { Reveal, RevealGroup, RevealItem } from "@/components/ui/reveal";
 import { Section } from "@/components/ui/section";
-import { categories, isCategorySlug, productsByCategory } from "@/data/catalog";
+import { categories, isCategorySlug, productsByCategory } from "@/data/products";
 
 const LEAD_FORM_ANCHOR = "#lead-form";
 const CALCULATOR_HREF = "/calculator";
@@ -46,7 +46,7 @@ export async function generateMetadata({
  *
  * ⚠️ The route is still `/solutions/[category]` — it was `[application]` until
  * the two axes became one on 2026-08-17. The folder was renamed, the URLs were
- * not: these are the indexed landings, and `/catalog/[slug]` is a product now,
+ * not: these are the indexed landings, and `/products/[slug]` is a product now,
  * so the category cannot move there anyway.
  *
  * No FAQ block. The plan asks for one "при наличии контента" and there is none
@@ -73,7 +73,7 @@ export default async function CategoryPage({
     <>
       <Section>
         <PageHeader
-          breadcrumbs={[{ label: tCatalog("breadcrumb"), href: "/catalog" }, { label: title }]}
+          breadcrumbs={[{ label: tCatalog("breadcrumb"), href: "/products" }, { label: title }]}
           eyebrow={t("eyebrow")}
           title={t(`items.${category}.heading`)}
           description={t(`items.${category}.intro`)}
@@ -82,7 +82,7 @@ export default async function CategoryPage({
             <ButtonLink href={LEAD_FORM_ANCHOR} size="lg">
               {tSolutions("cta")}
             </ButtonLink>
-            <ButtonLink href="/catalog" variant="outline" size="lg">
+            <ButtonLink href="/products" variant="outline" size="lg">
               {tCatalog("breadcrumb")}
             </ButtonLink>
           </div>

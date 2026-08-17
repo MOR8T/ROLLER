@@ -1,6 +1,6 @@
 import { useTranslations } from "next-intl";
 
-import { colorSwatches } from "@/data/catalog";
+import { colorSwatches } from "@/data/products";
 
 /**
  * The lamination palette a system is sold in.

@@ -3,7 +3,7 @@
 import { FormEvent, useId, useState } from "react";
 import { useTranslations } from "next-intl";
 
-import { categories } from "@/data/catalog";
+import { categories } from "@/data/products";
 import { AlertCircle, CheckCircle2, Loader2, Send } from "lucide-react";
 
 import { Button } from "@/components/ui/button";

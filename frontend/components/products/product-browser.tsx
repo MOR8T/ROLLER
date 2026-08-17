@@ -3,10 +3,10 @@
 import { useMemo, useState } from "react";
 import { useTranslations } from "next-intl";
 
-import { EmptyState, ProductGrid } from "@/components/catalog/product-grid";
+import { EmptyState, ProductGrid } from "@/components/products/product-grid";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { categories, productsByCategory, products, segments } from "@/data/catalog";
+import { categories, productsByCategory, products, segments } from "@/data/products";
 import type { Segment } from "@/types";
 
 /**
@@ -77,7 +77,7 @@ function FilterRow<T extends string>({
   );
 }
 
-export function CatalogBrowser({ chooseHref }: { chooseHref: string }) {
+export function ProductBrowser({ chooseHref }: { chooseHref: string }) {
   const t = useTranslations("catalog");
   const tSegments = useTranslations("segments");
   const tCategories = useTranslations("categories");

@@ -1,11 +1,11 @@
 import { useTranslations } from "next-intl";
 import { ArrowUpRight } from "lucide-react";
 
-import { BrandMark } from "@/components/catalog/brand-mark";
+import { BrandMark } from "@/components/products/brand-mark";
 import { Badge } from "@/components/ui/badge";
 import { MediaFrame } from "@/components/ui/media-frame";
 import { Link } from "@/i18n/navigation";
-import { productHref, type ProductBase } from "@/data/catalog";
+import { productHref, type ProductBase } from "@/data/products";
 import { isExternalHref } from "@/lib/utils";
 import type { ProductCardBadgeVariant, Segment, Spec } from "@/types";
 

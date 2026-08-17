@@ -8,7 +8,7 @@ import { ChevronDown, MessageCircle, Phone, X } from "lucide-react";
 import { ButtonLink } from "@/components/ui/button";
 import { BrandLogo } from "@/components/ui/brand-logo";
 import { Link } from "@/i18n/navigation";
-import { categories, productHref, productsByCategory } from "@/data/catalog";
+import { categories, productHref, productsByCategory } from "@/data/products";
 import { navLinks, siteConfig } from "@/lib/site-config";
 import { cn } from "@/lib/utils";
 import { LanguageSwitcher } from "./language-switcher";

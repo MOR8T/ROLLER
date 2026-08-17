@@ -6,7 +6,7 @@ import { useTranslations } from "next-intl";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 import { MediaFrame } from "@/components/ui/media-frame";
-import { colorSwatches } from "@/data/catalog";
+import { colorSwatches } from "@/data/products";
 import { cn } from "@/lib/utils";
 import type { Colorway } from "@/types";
 

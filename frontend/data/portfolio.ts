@@ -85,7 +85,7 @@ export const projects: ProjectRecord[] = [
 export const projectCategories: ProjectCategory[] = ["residential", "commercial", "private"];
 
 export function projectHref(slug: string): string {
-  return `/products/${slug}`;
+  return `/portfolio/${slug}`;
 }
 
 export function findProjectBySlug(slug: string): ProjectRecord | undefined {

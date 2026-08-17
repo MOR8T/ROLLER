@@ -39,7 +39,7 @@ import type { HeroSlide, Partner } from "@/types";
  * message catalogue supplies, so the contract stays visible in one place.
  *
  * ⚠️ The catalog itself — categories, applications and the six profile systems —
- * moved to `data/catalog.ts` in stage 04. It stopped being homepage mock data
+ * moved to `data/products.ts` in stage 04. It stopped being homepage mock data
  * the moment `/catalog` and `/solutions/[application]` started reading it, and
  * the homepage's brand lineup now renders the same `products` array the catalog
  * grid does rather than a second copy of the six systems.
@@ -154,13 +154,13 @@ export const homeProductTiles: HomeProductTile[] = [
   // ⚠️ The only tile with copy of its own, and the only one whose destination
   // is a placeholder. There is no accessories page: `ProductKind` already has
   // the `"component"` member for handles, windowsills, trunking and cylinders,
-  // and `data/catalog.ts` says outright that none of them are in the catalogue
+  // and `data/products.ts` says outright that none of them are in the catalogue
   // at launch. So this points at `/catalog`, which is where they will appear.
   // Give it the real route the moment that content exists.
   {
     kind: "custom",
     key: "accessories",
-    href: "/catalog",
+    href: "/products",
     icon: Blinds,
     image: "/home/accessories.jpg",
   },
@@ -206,9 +206,9 @@ export const homeOffers: HomeOffer[] = [
   {
     key: "house",
     icon: Store,
-    cta: "/catalog",
+    cta: "/products",
     links: [
-      { key: "stella", href: "/catalog/stella" },
+      { key: "stella", href: "/products/stella" },
       { key: "doors", href: "/solutions/doors" },
       { key: "sliding", href: "/solutions/sliding-systems" },
       { key: "showroom", href: "/showroom" },
@@ -221,8 +221,8 @@ export const homeOffers: HomeOffer[] = [
     links: [
       { key: "facade", href: "/solutions/facade-glazing" },
       { key: "partitions", href: "/solutions/partitions" },
-      { key: "systems", href: "/catalog" },
-      { key: "portfolio", href: "/products" },
+      { key: "systems", href: "/products" },
+      { key: "portfolio", href: "/portfolio" },
     ],
   },
 ];
@@ -300,7 +300,7 @@ export const heroSlides: HeroSlide[] = [
   {
     key: "residential",
     image: "/banners/banner_2.jpg",
-    cta: "/products",
+    cta: "/portfolio",
   },
   {
     key: "commercial",

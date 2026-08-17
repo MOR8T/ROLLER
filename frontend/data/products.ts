@@ -304,13 +304,13 @@ export function isCategorySlug(value: string): boolean {
  * Flat is not a simplification here; it is the only honest form.
  */
 export function productHref(product: ProductBase): string {
-  return `/catalog/${product.slug}`;
+  return `/products/${product.slug}`;
 }
 
 /**
  * The category landing.
  *
- * ⚠️ Still `/solutions/…`, not `/catalog/…`: `/catalog/[slug]` now addresses a
+ * ⚠️ Still `/solutions/…`, not `/products/…`: `/products/[slug]` now addresses a
  * *product*, and one dynamic segment cannot mean both. These pages also carry
  * the brief's search terms (§14.2) at URLs that have not changed since stage
  * 04, so keeping them is what protects the indexing, not inertia.
@@ -367,10 +367,10 @@ export function relatedProducts(product: ProductBase): ProductBase[] {
     );
 }
 
-/** The product at `/catalog/[product]`, or `undefined`. */
+/** The product at `/products/[product]`, or `undefined`. */
 export function findProduct(slug: string): ProductBase | undefined {
   return products.find((product) => product.slug === slug);
 }
 
-/** Every `/catalog/[product]`, for `generateStaticParams`. */
+/** Every `/products/[product]`, for `generateStaticParams`. */
 export const productParams = products.map((product) => ({ product: product.slug }));

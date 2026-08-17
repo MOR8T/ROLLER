@@ -3,7 +3,7 @@ import { ArrowUpRight } from "lucide-react";
 
 import { MediaFrame } from "@/components/ui/media-frame";
 import { Link } from "@/i18n/navigation";
-import { categoryHref, type CategoryBase } from "@/data/catalog";
+import { categoryHref, type CategoryBase } from "@/data/products";
 
 /**
  * A category as an entry point — the card on the homepage, on `/catalog` and on

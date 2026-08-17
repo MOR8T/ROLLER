@@ -6,7 +6,7 @@ import { HomeCarousel } from "@/components/sections/home-carousel";
 import { HomeHeading, HomeSection, homeCard } from "@/components/sections/home-kit";
 import { Reveal } from "@/components/ui/reveal";
 import { Link } from "@/i18n/navigation";
-import { categoryHref } from "@/data/catalog";
+import { categoryHref } from "@/data/products";
 import { homeProductTiles, type HomeProductTile } from "@/data/home";
 
 /**
@@ -94,7 +94,7 @@ export function ProductsGridSection() {
   return (
     <HomeSection id="products">
       <Reveal>
-        <HomeHeading title={t("title")} action={{ label: t("all"), href: "/catalog" }} />
+        <HomeHeading title={t("title")} action={{ label: t("all"), href: "/products" }} />
       </Reveal>
 
       <Reveal className="mt-12">

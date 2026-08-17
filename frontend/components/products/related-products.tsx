@@ -1,11 +1,11 @@
 import { useTranslations } from "next-intl";
 
-import { ProductGrid } from "@/components/catalog/product-grid";
+import { ProductGrid } from "@/components/products/product-grid";
 import { SectionHeading } from "@/components/sections/section-heading";
 import { Container } from "@/components/ui/container";
 import { Reveal } from "@/components/ui/reveal";
 import { Section } from "@/components/ui/section";
-import { relatedProducts, type ProductBase } from "@/data/catalog";
+import { relatedProducts, type ProductBase } from "@/data/products";
 
 /**
  * "Другие системы" — the same-material neighbours of the system on screen,

@@ -1,4 +1,4 @@
-import { products, productsByCategory, type ProductBase } from "@/data/catalog";
+import { products, productsByCategory, type ProductBase } from "@/data/products";
 
 /**
  * Option lists for the calculator (`project_plan/06-*.md`).
@@ -50,7 +50,7 @@ export interface SystemOptions {
  * system allows.
  *
  * ЭКОЛАЙН is the case that proves it works. Its palette is `["white"]` in
- * `data/catalog.ts` (the client's own warranty text covers white profile only),
+ * `data/products.ts` (the client's own warranty text covers white profile only),
  * so choosing it collapses the colour row to a single swatch without any rule
  * being written here — the colours come from the catalog, not from this file.
  *
@@ -129,7 +129,7 @@ export const accessories: { key: AccessoryKey; constructions: ConstructionKind[]
 export interface ConfiguredItem {
   id: string;
   construction: ConstructionKind;
-  /** Product slug from `data/catalog.ts`. */
+  /** Product slug from `data/products.ts`. */
   system: string;
   /** One entry per sash, in left-to-right order. Windows only. */
   sashes: OpeningType[];

@@ -3,7 +3,7 @@ import Image from "next/image";
 import { notFound } from "next/navigation";
 import { getFormatter, getTranslations, setRequestLocale } from "next-intl/server";
 
-import { Breadcrumbs } from "@/components/catalog/breadcrumbs";
+import { Breadcrumbs } from "@/components/products/breadcrumbs";
 import { ArticleCard } from "@/components/news/article-card";
 import { ContactsLeadSection } from "@/components/sections/contacts-lead-section";
 import { SectionHeading } from "@/components/sections/section-heading";

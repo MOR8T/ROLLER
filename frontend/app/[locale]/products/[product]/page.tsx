@@ -4,13 +4,13 @@ import { notFound } from "next/navigation";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { ArrowUpRight } from "lucide-react";
 
-import { CategoryCard } from "@/components/catalog/category-card";
-import { BrandMark } from "@/components/catalog/brand-mark";
-import { Breadcrumbs } from "@/components/catalog/breadcrumbs";
-import { ColorSwatches } from "@/components/catalog/color-swatches";
-import { ProductGallery } from "@/components/catalog/product-gallery";
-import { RelatedProducts } from "@/components/catalog/related-products";
-import { SpecTable } from "@/components/catalog/spec-table";
+import { CategoryCard } from "@/components/products/category-card";
+import { BrandMark } from "@/components/products/brand-mark";
+import { Breadcrumbs } from "@/components/products/breadcrumbs";
+import { ColorSwatches } from "@/components/products/color-swatches";
+import { ProductGallery } from "@/components/products/product-gallery";
+import { RelatedProducts } from "@/components/products/related-products";
+import { SpecTable } from "@/components/products/spec-table";
 import { ContactsLeadSection } from "@/components/sections/contacts-lead-section";
 import { SectionHeading } from "@/components/sections/section-heading";
 import { Badge } from "@/components/ui/badge";
@@ -18,7 +18,7 @@ import { ButtonLink } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
 import { Reveal, RevealGroup, RevealItem } from "@/components/ui/reveal";
 import { Section } from "@/components/ui/section";
-import { categoriesOfProduct, findProduct, productParams } from "@/data/catalog";
+import { categoriesOfProduct, findProduct, productParams } from "@/data/products";
 import { cn } from "@/lib/utils";
 import type { ProductCardBadgeVariant, Segment, Spec } from "@/types";
 
@@ -50,7 +50,7 @@ export function generateStaticParams() {
 
 export async function generateMetadata({
   params,
-}: PageProps<"/[locale]/catalog/[product]">): Promise<Metadata> {
+}: PageProps<"/[locale]/products/[product]">): Promise<Metadata> {
   const { locale, product: slug } = await params;
   const product = findProduct(slug);
   if (!product) return {};
@@ -91,7 +91,7 @@ export async function generateMetadata({
  * ЭКОЛАЙН has no renders at all, so the gallery, the cutaway block and the card
  * image all have to degrade rather than break.
  */
-export default async function ProductPage({ params }: PageProps<"/[locale]/catalog/[product]">) {
+export default async function ProductPage({ params }: PageProps<"/[locale]/products/[product]">) {
   const { locale, product: slug } = await params;
   const product = findProduct(slug);
   if (!product) notFound();
@@ -128,7 +128,7 @@ export default async function ProductPage({ params }: PageProps<"/[locale]/catal
             // Каталог → система. There is no category crumb: a system is in
             // several categories at once, so no single one of them is "the"
             // parent, and the URL says the same.
-            items={[{ label: tCatalog("breadcrumb"), href: "/catalog" }, { label: name }]}
+            items={[{ label: tCatalog("breadcrumb"), href: "/products" }, { label: name }]}
           />
 
           <div className="mt-8 grid gap-10 lg:grid-cols-2 lg:items-start lg:gap-12">
