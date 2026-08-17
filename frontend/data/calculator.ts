@@ -1,4 +1,4 @@
-import { products, type ProductBase } from "@/data/catalog";
+import { products, productsByCategory, type ProductBase } from "@/data/catalog";
 
 /**
  * Option lists for the calculator (`project_plan/06-*.md`).
@@ -143,16 +143,14 @@ export interface ConfiguredItem {
   quantity: number;
 }
 
-/** The application slug that makes a system available as this construction. */
-const applicationOf: Record<ConstructionKind, string> = {
+/** The category slug that makes a system available as this construction. */
+const categoryOf: Record<ConstructionKind, string> = {
   window: "windows",
   door: "doors",
 };
 
 export function systemsFor(construction: ConstructionKind): ProductBase[] {
-  return products.filter((product) =>
-    product.applicationSlugs.includes(applicationOf[construction]),
-  );
+  return productsByCategory(categoryOf[construction]);
 }
 
 export function findSystem(slug: string): ProductBase | undefined {

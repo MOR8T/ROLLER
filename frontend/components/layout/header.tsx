@@ -46,6 +46,7 @@ export function Header() {
   const tCommon = useTranslations("common");
 
   const productsCloseTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const headerRef = useRef<HTMLElement>(null);
 
   const openProducts = useCallback(() => {
     if (productsCloseTimer.current) {
@@ -84,6 +85,17 @@ export function Header() {
     return () => window.removeEventListener("keydown", onKey);
   }, [productsOpen]);
 
+  // Opened by click, the panel cannot rely on the pointer leaving it to close
+  // again — a tap on the page has to do it.
+  useEffect(() => {
+    if (!productsOpen) return;
+    const onPointerDown = (event: PointerEvent) => {
+      if (!headerRef.current?.contains(event.target as Node)) setProductsOpen(false);
+    };
+    document.addEventListener("pointerdown", onPointerDown);
+    return () => document.removeEventListener("pointerdown", onPointerDown);
+  }, [productsOpen]);
+
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > SCROLL_THRESHOLD);
     onScroll();
@@ -97,6 +109,7 @@ export function Header() {
 
   return (
     <header
+      ref={headerRef}
       className={cn(
         "sticky top-0 z-50 border-b border-brand-black/10 bg-surface/95 text-brand-black backdrop-blur transition-shadow duration-300",
         elevated && "shadow-[0_8px_30px_-12px_rgba(29,29,27,0.18)]",

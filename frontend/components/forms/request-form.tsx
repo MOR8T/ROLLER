@@ -2,6 +2,8 @@
 
 import { FormEvent, useId, useState } from "react";
 import { useTranslations } from "next-intl";
+
+import { categories } from "@/data/catalog";
 import { AlertCircle, CheckCircle2, Loader2, Send } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -31,7 +33,11 @@ import type { Lead, LeadScenario } from "@/types";
 // catalogue at render time, so the call centre reads the request in the
 // language the visitor was reading.
 const cityKeys = ["dushanbe", "khujand", "bokhtar", "kulob", "other"] as const;
-const productTypeKeys = ["pvc", "aluminium", "consultation"] as const;
+
+// ⚠️ «Что интересует» used to offer ПВХ / алюминий / консультация. The client
+// removed the material split on 2026-08-17, so the options are the catalog's
+// categories — read from the catalogue rather than listed here, because the
+// admin panel edits that list — plus the one option that is not a product.
 
 type Field = "name" | "phone" | "city" | "productType";
 type Status = "idle" | "submitting" | "success" | "error";
@@ -60,6 +66,7 @@ export function RequestForm({
   className,
 }: RequestFormProps) {
   const t = useTranslations("requestForm");
+  const tCategories = useTranslations("categories");
   const uid = useId();
 
   const [scenario, setScenario] = useState<LeadScenario>(defaultScenario ?? scenarios[0]);
@@ -316,9 +323,10 @@ export function RequestForm({
             <option value="" disabled>
               {t("selectPlaceholder")}
             </option>
-            {productTypeKeys.map((key) => (
-              <option key={key}>{t(`productTypes.${key}`)}</option>
+            {categories.map((category) => (
+              <option key={category.slug}>{tCategories(`items.${category.slug}.title`)}</option>
             ))}
+            <option>{t("productTypes.consultation")}</option>
           </Select>
         </Field>
 

@@ -26,19 +26,34 @@ export type Segment = "economy" | "mid" | "upper-mid" | "premium";
 export type ProjectCategory = "residential" | "commercial" | "private";
 
 /**
- * A catalog category is the **material**, and nothing else — there are exactly
- * two of them and they are a product's "home" and its URL
- * (`project_plan/04-catalog-and-applications.md`).
+ * A catalog category — «Окна», «Двери», «Раздвижные системы» — and the only
+ * axis the catalog has.
  *
- * The slug is `Material`, not `string`: the plan warns that an older draft
- * wrote `pvh` where the code writes `pvc`, and typing the slug is what stops
- * that ever being expressible again.
+ * ⚠️ It used to be the **material**: exactly two categories, `pvc` and
+ * `aluminium`, one per product, and the product's URL. The client removed that
+ * split on 2026-08-17: «не должно быть разделения на ПВХ и алюминиевую
+ * продукцию». Material survives as `Product.material` — a characteristic in the
+ * spec table — and structures nothing.
+ *
+ * Three consequences follow, and all of them are the point:
+ *
+ *  - `slug` is `string`, not a union. The list is admin-managed: categories get
+ *    added, renamed and removed through the panel, so no set of them can be
+ *    fixed in the type system.
+ *  - the link lives here, as `productSlugs`, not on the product. That is the
+ *    shape the API will deliver — a list of categories, each carrying its
+ *    products — and it is what the admin panel edits.
+ *  - it is many-to-many. ROLLER goes into windows *and* doors, so a product
+ *    appears under every category that claims it, and its URL carries no
+ *    category at all (`/catalog/[product]`).
  */
 export interface Category {
-  slug: Material;
+  slug: string;
   title: string;
   description: string;
-  image: string;
+  image: string | null;
+  /** Products in this category, in display order. Many-to-many. */
+  productSlugs: string[];
 }
 
 /**
@@ -87,20 +102,22 @@ export interface Colorway {
 }
 
 /**
- * A product is a **profile system**. It lives in exactly one category (its
- * material) and is linked many-to-many to applications, because one system —
- * ROLLER, say — goes into both windows and doors and cannot honestly be filed
- * under "PVC windows".
+ * A product is a **profile system**. It belongs to no category of its own:
+ * `Category.productSlugs` is the one place the link is written, so a system is
+ * in as many categories as claim it and in none by default.
  */
 export interface Product {
   slug: string;
   /** Brand name. Translated: `ТЕРМО 60` on RU/TG, `THERMO 60` on EN/TR. */
   name: string;
   kind: ProductKind;
-  categorySlug: Material;
+  /**
+   * What the profile is made of. A characteristic, nothing more — it names no
+   * page, no URL segment and no filter since the split was removed.
+   */
+  material: Material;
   /** Only meaningful for the aluminium systems: with or without a thermal break. */
   materialNote?: MaterialNote;
-  applicationSlugs: string[];
   segment: Segment;
   /** Structural depth in millimetres. The unit is a word, so it is joined per locale. */
   depthMm: number;
@@ -211,24 +228,12 @@ export interface HeroSlide {
 }
 
 /**
- * The second axis of the catalog: a facet on `Product` *and* an SEO landing of
- * its own (`project_plan/04-catalog-and-applications.md`).
- *
- * It exists because the category axis cannot carry the brief's search terms.
- * "Пластиковые окна Душанбе" and "алюминиевые двери Душанбе" (brief §14.2) are
- * queries about what the thing *does*, and every one of the six systems does
- * several of those things — so the query gets a landing page, not a category.
- *
- * It is also the entry point a flat owner can actually use. "PVC or
- * aluminium?" is a manufacturer's question (DESIGN.md §7); "windows or a
- * facade?" is not.
+ * ⚠️ `Application` was the catalog's second axis — a facet on `Product` and an
+ * SEO landing of its own — while `Category` meant the material. Since
+ * 2026-08-17 there is only one axis: those applications *are* the categories,
+ * and `Category` above carries them. The landings kept their `/solutions/…`
+ * URLs, which is what still answers the brief's search terms (§14.2).
  */
-export interface Application {
-  slug: string;
-  title: string;
-  description: string;
-  image: string | null;
-}
 
 /** A "Профессионалам" offering — wholesale, dealership, components, docs. */
 export interface ProOffering {

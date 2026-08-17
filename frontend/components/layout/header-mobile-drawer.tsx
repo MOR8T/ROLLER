@@ -8,11 +8,10 @@ import { ChevronDown, MessageCircle, Phone, X } from "lucide-react";
 import { ButtonLink } from "@/components/ui/button";
 import { BrandLogo } from "@/components/ui/brand-logo";
 import { Link } from "@/i18n/navigation";
-import { applicationHref, applications, categories, categoryHref } from "@/data/catalog";
+import { categories, productHref, productsByCategory } from "@/data/catalog";
 import { navLinks, siteConfig } from "@/lib/site-config";
 import { cn } from "@/lib/utils";
 import { LanguageSwitcher } from "./language-switcher";
-import { PRODUCTS_HREF } from "./header-shared";
 
 const emptySubscribe = () => () => {};
 
@@ -45,8 +44,8 @@ export function HeaderMobileDrawer({ open, onClose }: HeaderMobileDrawerProps) {
   const t = useTranslations("header");
   const tNav = useTranslations("nav");
   const tCommon = useTranslations("common");
-  const tApplications = useTranslations("applications");
   const tCategories = useTranslations("categories");
+  const tBrands = useTranslations("brands");
 
   const close = () => {
     setCatalogOpen(false);
@@ -180,9 +179,9 @@ export function HeaderMobileDrawer({ open, onClose }: HeaderMobileDrawerProps) {
               }}
             >
               {navLinks.map((link) => {
-                if (link.href === PRODUCTS_HREF) {
+                if (link.menu) {
                   return (
-                    <motion.div key={link.href} variants={itemVariants} className="flex flex-col">
+                    <motion.div key={link.key} variants={itemVariants} className="flex flex-col">
                       <button
                         type="button"
                         aria-expanded={catalogOpen}
@@ -210,37 +209,32 @@ export function HeaderMobileDrawer({ open, onClose }: HeaderMobileDrawerProps) {
                             transition={{ duration: 0.2 }}
                             className="overflow-hidden"
                           >
+                            {/* The same list as the desktop panel, stacked:
+                                the systems under each category that claims
+                                them. Every row ends on a page of its own —
+                                there is no "весь каталог" link here any more,
+                                because the item that used to open one is now a
+                                button. */}
                             <div className="mb-2 ml-2 flex flex-col gap-0.5 border-l border-brand-black/10 pl-3">
-                              {applications.map((application) => (
-                                <Link
-                                  key={application.slug}
-                                  href={applicationHref(application.slug)}
-                                  onClick={close}
-                                  className="rounded-control px-3 py-2.5 text-sm text-brand-black/70 transition-colors hover:bg-brand-black/5 hover:text-brand-red focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:outline-none"
-                                >
-                                  {tApplications(`items.${application.slug}.title`)}
-                                </Link>
-                              ))}
-                              {/* The material split sits below the applications
-                                  and above "весь каталог", mirroring the
-                                  desktop mega-menu's two columns. */}
-                              {categories.map((category) => (
-                                <Link
-                                  key={category.slug}
-                                  href={categoryHref(category.slug)}
-                                  onClick={close}
-                                  className="rounded-control px-3 py-2.5 text-sm text-brand-black/70 transition-colors hover:bg-brand-black/5 hover:text-brand-red focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:outline-none"
-                                >
-                                  {tCategories(`items.${category.slug}.title`)}
-                                </Link>
-                              ))}
-                              <Link
-                                href={PRODUCTS_HREF}
-                                onClick={close}
-                                className="rounded-control px-3 py-2.5 text-sm font-semibold text-brand-black transition-colors hover:bg-brand-black/5 hover:text-brand-red focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:outline-none"
-                              >
-                                {tCommon("allCatalog")}
-                              </Link>
+                              {categories
+                                .filter((category) => category.productSlugs.length > 0)
+                                .map((category) => (
+                                  <div key={category.slug} className="pt-2 first:pt-0">
+                                    <p className="px-3 py-1 text-[11px] font-medium tracking-[0.18em] text-brand-black/45 uppercase">
+                                      {tCategories(`items.${category.slug}.title`)}
+                                    </p>
+                                    {productsByCategory(category.slug).map((product) => (
+                                      <Link
+                                        key={product.slug}
+                                        href={productHref(product)}
+                                        onClick={close}
+                                        className="block rounded-control px-3 py-2.5 text-sm font-semibold text-brand-black/80 transition-colors hover:bg-brand-black/5 hover:text-brand-red focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:outline-none"
+                                      >
+                                        {tBrands(`items.${product.slug}.name`)}
+                                      </Link>
+                                    ))}
+                                  </div>
+                                ))}
                             </div>
                           </motion.div>
                         )}

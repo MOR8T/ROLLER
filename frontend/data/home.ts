@@ -126,27 +126,27 @@ export const homeStats: CompanyStat[] = homeStatKeys.map((key) =>
  * two cards flagged above are the ones most likely to be swapped.
  */
 export type HomeProductTile = { icon: LucideIcon; image: string } & (
-  { kind: "application"; slug: string } | { kind: "custom"; key: string; href: string }
+  { kind: "category"; slug: string } | { kind: "custom"; key: string; href: string }
 );
 
 export const homeProductTiles: HomeProductTile[] = [
-  { kind: "application", slug: "windows", icon: AppWindow, image: "/home/windows.jpg" },
-  { kind: "application", slug: "doors", icon: DoorOpen, image: "/home/doors.jpg" },
+  { kind: "category", slug: "windows", icon: AppWindow, image: "/home/windows.jpg" },
+  { kind: "category", slug: "doors", icon: DoorOpen, image: "/home/doors.jpg" },
   {
-    kind: "application",
+    kind: "category",
     slug: "sliding-systems",
     icon: MoveHorizontal,
     image: "/home/sliding-systems.jpg",
   },
   {
-    kind: "application",
+    kind: "category",
     slug: "facade-glazing",
     icon: Building2,
     image: "/home/facade-glazing.jpg",
   },
-  { kind: "application", slug: "partitions", icon: Columns3, image: "/home/partitions.jpg" },
+  { kind: "category", slug: "partitions", icon: Columns3, image: "/home/partitions.jpg" },
   {
-    kind: "application",
+    kind: "category",
     slug: "mosquito-nets",
     icon: Grid2x2,
     image: "/home/mosquito-nets.jpg",
@@ -195,7 +195,7 @@ export const homeOffers: HomeOffer[] = [
   {
     key: "apartment",
     icon: Home,
-    cta: "/catalog/pvc",
+    cta: "/solutions/windows",
     links: [
       { key: "windows", href: "/solutions/windows" },
       { key: "sliding", href: "/solutions/sliding-systems" },
@@ -208,7 +208,7 @@ export const homeOffers: HomeOffer[] = [
     icon: Store,
     cta: "/catalog",
     links: [
-      { key: "stella", href: "/catalog/pvc/stella" },
+      { key: "stella", href: "/catalog/stella" },
       { key: "doors", href: "/solutions/doors" },
       { key: "sliding", href: "/solutions/sliding-systems" },
       { key: "showroom", href: "/showroom" },
@@ -217,11 +217,11 @@ export const homeOffers: HomeOffer[] = [
   {
     key: "business",
     icon: Briefcase,
-    cta: "/catalog/aluminium",
+    cta: "/solutions/facade-glazing",
     links: [
       { key: "facade", href: "/solutions/facade-glazing" },
       { key: "partitions", href: "/solutions/partitions" },
-      { key: "aluminium", href: "/catalog/aluminium" },
+      { key: "systems", href: "/catalog" },
       { key: "portfolio", href: "/products" },
     ],
   },
@@ -305,12 +305,12 @@ export const heroSlides: HeroSlide[] = [
   {
     key: "commercial",
     image: "/banners/banner_3.jpg",
-    cta: "/catalog/aluminium",
+    cta: "/solutions/facade-glazing",
   },
   {
     key: "private",
     image: "/banners/banner_4.jpg",
-    cta: "/catalog/pvc",
+    cta: "/solutions/windows",
   },
 ];
 
