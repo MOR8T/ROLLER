@@ -157,14 +157,6 @@ export interface Article {
   publishedAt: string;
 }
 
-export interface Project {
-  slug: string;
-  title: string;
-  city: string;
-  description: string;
-  images: string[];
-}
-
 /**
  * Which of the three requests the visitor is making. The brief asks for one
  * form with a choice of scenario — «рассчитать» / «получить КП» /
@@ -249,7 +241,9 @@ export type ProductCardBadgeVariant = "red" | "black" | "outline";
  * homepage-only shapes carrying a prebuilt `href`, and `/portfolio` and `/news`
  * need a slug they can route on instead — see `ProjectRecord` in
  * `data/portfolio.ts` and `NewsArticle` in `lib/news.ts`. The domain contracts
- * the backend must satisfy stay `Project` and `Article` above.
+ * the backend must satisfy stay `Article` above; `Project` went with them —
+ * the portfolio pages read `ProjectRecord`, and a contract nothing checks is
+ * documentation pretending to be code.
  *
  * ⚠️ `NewsArticle` is the one that has moved ahead of its contract: since
  * 2026-08-17 the news feed is read through `lib/news.ts`, which is shaped like

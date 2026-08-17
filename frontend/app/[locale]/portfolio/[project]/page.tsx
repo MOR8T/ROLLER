@@ -68,7 +68,7 @@ export default async function ProjectPage({ params }: PageProps<"/[locale]/portf
       <Section>
         <Container>
           <Breadcrumbs
-            items={[{ label: tPortfolio("breadcrumb"), href: "/products" }, { label: title }]}
+            items={[{ label: tPortfolio("breadcrumb"), href: "/portfolio" }, { label: title }]}
           />
 
           <div className="mt-8 grid gap-10 lg:grid-cols-2 lg:items-start lg:gap-12">
