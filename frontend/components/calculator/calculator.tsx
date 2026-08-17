@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
 import { Section } from "@/components/ui/section";
 import { SectionHeading } from "@/components/sections/section-heading";
-import { colorSwatches } from "@/data/catalog";
+import { colorSwatches } from "@/data/products";
 import {
   MAX_ITEMS,
   MAX_QUANTITY,
@@ -21,7 +21,6 @@ import {
   constructionKinds,
   createItem,
   doorLayouts,
-  findSystem,
   optionsOf,
   reconcile,
   sizeLimits,
@@ -33,7 +32,6 @@ import {
   type Range as SizeRange,
 } from "@/data/calculator";
 import { cn } from "@/lib/utils";
-import type { Material } from "@/types";
 
 /**
  * The calculator (`project_plan/06-*.md`, decision 14).
@@ -171,14 +169,15 @@ function ItemEditor({
   onRemove: () => void;
 }) {
   const t = useTranslations("calculator");
-  const tMaterials = useTranslations("materials");
   const tBrands = useTranslations("brands");
   const tColors = useTranslations("colors");
 
   const options = optionsOf(item.system);
+  // ⚠️ One list, not a material chip row feeding a system chip row. The client
+  // removed the ПВХ/алюминий split on 2026-08-17, and a step that asks which
+  // material you want before it shows you a system is that split with another
+  // name.
   const available = systemsFor(item.construction);
-  const materials = [...new Set(available.map((system) => system.categorySlug))] as Material[];
-  const material = findSystem(item.system)?.categorySlug ?? materials[0];
   const colors = colorsOf(item.system);
   const limits = sizeLimits[item.construction];
   const possibleAccessories = accessoriesFor(item.construction);
@@ -240,24 +239,8 @@ function ItemEditor({
           />
 
           <ChipGroup
-            label={t("labels.material")}
-            options={materials}
-            value={material}
-            onChange={(next: Material) => {
-              // Switching material picks that material's first system; the rest
-              // of the cascade (glazing, colour, opening) then falls out of
-              // `reconcile`.
-              const first = available.find((system) => system.categorySlug === next);
-              if (first) onChange({ system: first.slug });
-            }}
-            optionLabel={(slug) => tMaterials(slug)}
-          />
-
-          <ChipGroup
             label={t("labels.system")}
-            options={available
-              .filter((system) => system.categorySlug === material)
-              .map((system) => system.slug)}
+            options={available.map((system) => system.slug)}
             value={item.system}
             onChange={(system: string) => onChange({ system })}
             optionLabel={(slug) => tBrands(`items.${slug}.name`)}

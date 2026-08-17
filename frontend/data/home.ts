@@ -39,7 +39,7 @@ import type { HeroSlide, Partner } from "@/types";
  * message catalogue supplies, so the contract stays visible in one place.
  *
  * ⚠️ The catalog itself — categories, applications and the six profile systems —
- * moved to `data/catalog.ts` in stage 04. It stopped being homepage mock data
+ * moved to `data/products.ts` in stage 04. It stopped being homepage mock data
  * the moment `/catalog` and `/solutions/[application]` started reading it, and
  * the homepage's brand lineup now renders the same `products` array the catalog
  * grid does rather than a second copy of the six systems.
@@ -126,27 +126,27 @@ export const homeStats: CompanyStat[] = homeStatKeys.map((key) =>
  * two cards flagged above are the ones most likely to be swapped.
  */
 export type HomeProductTile = { icon: LucideIcon; image: string } & (
-  { kind: "application"; slug: string } | { kind: "custom"; key: string; href: string }
+  { kind: "category"; slug: string } | { kind: "custom"; key: string; href: string }
 );
 
 export const homeProductTiles: HomeProductTile[] = [
-  { kind: "application", slug: "windows", icon: AppWindow, image: "/home/windows.jpg" },
-  { kind: "application", slug: "doors", icon: DoorOpen, image: "/home/doors.jpg" },
+  { kind: "category", slug: "windows", icon: AppWindow, image: "/home/windows.jpg" },
+  { kind: "category", slug: "doors", icon: DoorOpen, image: "/home/doors.jpg" },
   {
-    kind: "application",
+    kind: "category",
     slug: "sliding-systems",
     icon: MoveHorizontal,
     image: "/home/sliding-systems.jpg",
   },
   {
-    kind: "application",
+    kind: "category",
     slug: "facade-glazing",
     icon: Building2,
     image: "/home/facade-glazing.jpg",
   },
-  { kind: "application", slug: "partitions", icon: Columns3, image: "/home/partitions.jpg" },
+  { kind: "category", slug: "partitions", icon: Columns3, image: "/home/partitions.jpg" },
   {
-    kind: "application",
+    kind: "category",
     slug: "mosquito-nets",
     icon: Grid2x2,
     image: "/home/mosquito-nets.jpg",
@@ -154,13 +154,13 @@ export const homeProductTiles: HomeProductTile[] = [
   // ⚠️ The only tile with copy of its own, and the only one whose destination
   // is a placeholder. There is no accessories page: `ProductKind` already has
   // the `"component"` member for handles, windowsills, trunking and cylinders,
-  // and `data/catalog.ts` says outright that none of them are in the catalogue
+  // and `data/products.ts` says outright that none of them are in the catalogue
   // at launch. So this points at `/catalog`, which is where they will appear.
   // Give it the real route the moment that content exists.
   {
     kind: "custom",
     key: "accessories",
-    href: "/catalog",
+    href: "/products",
     icon: Blinds,
     image: "/home/accessories.jpg",
   },
@@ -195,7 +195,7 @@ export const homeOffers: HomeOffer[] = [
   {
     key: "apartment",
     icon: Home,
-    cta: "/catalog/pvc",
+    cta: "/solutions/windows",
     links: [
       { key: "windows", href: "/solutions/windows" },
       { key: "sliding", href: "/solutions/sliding-systems" },
@@ -206,9 +206,9 @@ export const homeOffers: HomeOffer[] = [
   {
     key: "house",
     icon: Store,
-    cta: "/catalog",
+    cta: "/products",
     links: [
-      { key: "stella", href: "/catalog/pvc/stella" },
+      { key: "stella", href: "/products/stella" },
       { key: "doors", href: "/solutions/doors" },
       { key: "sliding", href: "/solutions/sliding-systems" },
       { key: "showroom", href: "/showroom" },
@@ -217,12 +217,12 @@ export const homeOffers: HomeOffer[] = [
   {
     key: "business",
     icon: Briefcase,
-    cta: "/catalog/aluminium",
+    cta: "/solutions/facade-glazing",
     links: [
       { key: "facade", href: "/solutions/facade-glazing" },
       { key: "partitions", href: "/solutions/partitions" },
-      { key: "aluminium", href: "/catalog/aluminium" },
-      { key: "portfolio", href: "/products" },
+      { key: "systems", href: "/products" },
+      { key: "portfolio", href: "/portfolio" },
     ],
   },
 ];
@@ -300,17 +300,17 @@ export const heroSlides: HeroSlide[] = [
   {
     key: "residential",
     image: "/banners/banner_2.jpg",
-    cta: "/products",
+    cta: "/portfolio",
   },
   {
     key: "commercial",
     image: "/banners/banner_3.jpg",
-    cta: "/catalog/aluminium",
+    cta: "/solutions/facade-glazing",
   },
   {
     key: "private",
     image: "/banners/banner_4.jpg",
-    cta: "/catalog/pvc",
+    cta: "/solutions/windows",
   },
 ];
 
@@ -323,5 +323,7 @@ export const proOfferingKeys = ["wholesale", "dealership", "components", "docume
  * ⚠️ The portfolio and the news list moved to `data/portfolio.ts` and
  * `data/news.ts` in stage 07. They stopped being homepage mock data the moment
  * `/portfolio` and `/news` started reading them — the same move the catalog
- * made in stage 04.
+ * made in stage 04. News moved once more on 2026-08-17: the entries and their
+ * text now live in `data/news/<locale>.json` behind `lib/news.ts`, which is the
+ * seam the admin panel's API will replace.
  */

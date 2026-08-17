@@ -2,83 +2,87 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 
-import { ApplicationCard } from "@/components/catalog/application-card";
+import { CategoryCard } from "@/components/products/category-card";
 import { PageHeader } from "@/components/layout/page-header";
-import { EmptyState, ProductGrid } from "@/components/catalog/product-grid";
-import { LeadFormSection } from "@/components/sections/lead-form-section";
+import { EmptyState, ProductGrid } from "@/components/products/product-grid";
+import { ContactsLeadSection } from "@/components/sections/contacts-lead-section";
 import { SectionHeading } from "@/components/sections/section-heading";
 import { ButtonLink } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
 import { MediaFrame } from "@/components/ui/media-frame";
 import { Reveal, RevealGroup, RevealItem } from "@/components/ui/reveal";
 import { Section } from "@/components/ui/section";
-import { applications, isApplicationSlug, productsByApplication } from "@/data/catalog";
+import { categories, isCategorySlug, productsByCategory } from "@/data/products";
 
 const LEAD_FORM_ANCHOR = "#lead-form";
 const CALCULATOR_HREF = "/calculator";
 
 export function generateStaticParams() {
-  return applications.map((application) => ({ application: application.slug }));
+  return categories.map((category) => ({ category: category.slug }));
 }
 
 export async function generateMetadata({
   params,
-}: PageProps<"/[locale]/solutions/[application]">): Promise<Metadata> {
-  const { locale, application } = await params;
-  if (!isApplicationSlug(application)) return {};
+}: PageProps<"/[locale]/solutions/[category]">): Promise<Metadata> {
+  const { locale, category } = await params;
+  if (!isCategorySlug(category)) return {};
 
-  const t = await getTranslations({ locale, namespace: "applications" });
+  const t = await getTranslations({ locale, namespace: "categories" });
 
   return {
-    title: t(`items.${application}.metaTitle`),
-    description: t(`items.${application}.metaDescription`),
+    title: t(`items.${category}.metaTitle`),
+    description: t(`items.${category}.metaDescription`),
   };
 }
 
 /**
- * An application landing — the page that answers a search query.
+ * A category landing — the page that answers a search query.
  *
  * The brief's targets (§14.2) are phrased by product and by city — "пластиковые
  * окна Душанбе", "алюминиевые двери Душанбе", "фасадное остекление" — and none
- * of them maps onto a material category, because every system serves several of
- * them. So the `<h1>` here carries the query and the body lists whichever
- * systems are linked to this application, drawn from the many-to-many field
- * rather than from a category.
+ * of them maps onto a material, because every system serves several of them.
+ * So the `<h1>` here carries the query and the body lists whichever systems the
+ * category claims.
+ *
+ * ⚠️ The route is still `/solutions/[category]` — it was `[application]` until
+ * the two axes became one on 2026-08-17. The folder was renamed, the URLs were
+ * not: these are the indexed landings, and `/products/[slug]` is a product now,
+ * so the category cannot move there anyway.
  *
  * No FAQ block. The plan asks for one "при наличии контента" and there is none
  * in the brief; inventing answers about warranty terms or lead times on the
  * client's behalf is worse than the missing section.
  */
-export default async function ApplicationPage({
+export default async function CategoryPage({
   params,
-}: PageProps<"/[locale]/solutions/[application]">) {
-  const { locale, application } = await params;
-  if (!isApplicationSlug(application)) notFound();
+}: PageProps<"/[locale]/solutions/[category]">) {
+  const { locale, category } = await params;
+  if (!isCategorySlug(category)) notFound();
   setRequestLocale(locale);
 
-  const t = await getTranslations({ locale, namespace: "applications" });
+  const t = await getTranslations({ locale, namespace: "categories" });
   const tCatalog = await getTranslations({ locale, namespace: "catalog" });
   const tSolutions = await getTranslations({ locale, namespace: "solutions" });
 
-  const title = t(`items.${application}.title`);
-  const items = productsByApplication(application);
-  const others = applications.filter((item) => item.slug !== application);
-  const image = applications.find((item) => item.slug === application)?.image ?? null;
+  const title = t(`items.${category}.title`);
+  const items = productsByCategory(category);
+  const others = categories.filter((item) => item.slug !== category);
+  const image = categories.find((item) => item.slug === category)?.image ?? null;
 
   return (
     <>
       <Section>
         <PageHeader
-          breadcrumbs={[{ label: tCatalog("breadcrumb"), href: "/catalog" }, { label: title }]}
+          breadcrumbs={[{ label: tCatalog("breadcrumb"), href: "/products" }, { label: title }]}
           eyebrow={t("eyebrow")}
-          title={t(`items.${application}.heading`)}
-          description={t(`items.${application}.intro`)}
+          title={t(`items.${category}.heading`)}
+          description={t(`items.${category}.intro`)}
         >
           <div className="mt-8 flex flex-wrap gap-3">
             <ButtonLink href={LEAD_FORM_ANCHOR} size="lg">
               {tSolutions("cta")}
             </ButtonLink>
-            <ButtonLink href="/catalog" variant="outline" size="lg">
+            <ButtonLink href="/products" variant="outline" size="lg">
               {tCatalog("breadcrumb")}
             </ButtonLink>
           </div>
@@ -144,14 +148,14 @@ export default async function ApplicationPage({
           <RevealGroup className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3 lg:gap-5">
             {others.map((item) => (
               <RevealItem key={item.slug} className="h-full">
-                <ApplicationCard application={item} />
+                <CategoryCard category={item} />
               </RevealItem>
             ))}
           </RevealGroup>
         </Container>
       </Section>
 
-      <LeadFormSection />
+      <ContactsLeadSection />
     </>
   );
 }

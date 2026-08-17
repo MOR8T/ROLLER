@@ -1,11 +1,11 @@
 import { useTranslations } from "next-intl";
 import { ArrowUpRight } from "lucide-react";
 
-import { BrandMark } from "@/components/catalog/brand-mark";
+import { BrandMark } from "@/components/products/brand-mark";
 import { Badge } from "@/components/ui/badge";
 import { MediaFrame } from "@/components/ui/media-frame";
 import { Link } from "@/i18n/navigation";
-import { productHref, type ProductBase } from "@/data/catalog";
+import { productHref, type ProductBase } from "@/data/products";
 import { isExternalHref } from "@/lib/utils";
 import type { ProductCardBadgeVariant, Segment, Spec } from "@/types";
 
@@ -13,9 +13,8 @@ const chooseClasses =
   "inline-flex items-center text-sm font-semibold text-brand-red transition-colors hover:text-brand-red/80 focus-visible:rounded-control focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:outline-none";
 
 /**
- * The catalog card for a profile system. Used by `/catalog`, by the category
- * pages and by the application landings, so a system reads the same wherever it
- * is listed.
+ * The catalog card for a profile system. Used by `/catalog` and by the category
+ * landings, so a system reads the same wherever it is listed.
  *
  * Contents are fixed by `project_plan/04-catalog-and-applications.md`: render,
  * name, brand logo where one exists, segment, material, two or three key
@@ -61,7 +60,7 @@ export function ProductCard({ product, chooseHref, sizes }: ProductCardProps) {
   const specs = (t.raw(`items.${product.slug}.specs`) as Spec[]).slice(0, 3);
 
   const materialLabel = [
-    tMaterials(product.categorySlug),
+    tMaterials(product.material),
     ...(product.materialNote ? [tMaterialNotes(product.materialNote)] : []),
   ].join(" · ");
 

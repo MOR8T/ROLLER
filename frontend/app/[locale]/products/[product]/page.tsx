@@ -4,21 +4,21 @@ import { notFound } from "next/navigation";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { ArrowUpRight } from "lucide-react";
 
-import { ApplicationCard } from "@/components/catalog/application-card";
-import { BrandMark } from "@/components/catalog/brand-mark";
-import { Breadcrumbs } from "@/components/catalog/breadcrumbs";
-import { ColorSwatches } from "@/components/catalog/color-swatches";
-import { ProductGallery } from "@/components/catalog/product-gallery";
-import { RelatedProducts } from "@/components/catalog/related-products";
-import { SpecTable } from "@/components/catalog/spec-table";
-import { LeadFormSection } from "@/components/sections/lead-form-section";
+import { CategoryCard } from "@/components/products/category-card";
+import { BrandMark } from "@/components/products/brand-mark";
+import { Breadcrumbs } from "@/components/products/breadcrumbs";
+import { ColorSwatches } from "@/components/products/color-swatches";
+import { ProductGallery } from "@/components/products/product-gallery";
+import { RelatedProducts } from "@/components/products/related-products";
+import { SpecTable } from "@/components/products/spec-table";
+import { ContactsLeadSection } from "@/components/sections/contacts-lead-section";
 import { SectionHeading } from "@/components/sections/section-heading";
 import { Badge } from "@/components/ui/badge";
 import { ButtonLink } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
 import { Reveal, RevealGroup, RevealItem } from "@/components/ui/reveal";
 import { Section } from "@/components/ui/section";
-import { applicationsOfProduct, findProduct, productParams } from "@/data/catalog";
+import { categoriesOfProduct, findProduct, productParams } from "@/data/products";
 import { cn } from "@/lib/utils";
 import type { ProductCardBadgeVariant, Segment, Spec } from "@/types";
 
@@ -50,9 +50,9 @@ export function generateStaticParams() {
 
 export async function generateMetadata({
   params,
-}: PageProps<"/[locale]/catalog/[category]/[product]">): Promise<Metadata> {
-  const { locale, category, product: slug } = await params;
-  const product = findProduct(category, slug);
+}: PageProps<"/[locale]/products/[product]">): Promise<Metadata> {
+  const { locale, product: slug } = await params;
+  const product = findProduct(slug);
   if (!product) return {};
 
   const t = await getTranslations({ locale, namespace: "product" });
@@ -64,7 +64,7 @@ export async function generateMetadata({
   // owns titles, descriptions, canonicals and hreflang together.
   const values = {
     name: tBrands(`items.${slug}.name`),
-    material: tMaterials(product.categorySlug),
+    material: tMaterials(product.material),
     depth: product.depthMm,
   };
 
@@ -91,11 +91,9 @@ export async function generateMetadata({
  * ЭКОЛАЙН has no renders at all, so the gallery, the cutaway block and the card
  * image all have to degrade rather than break.
  */
-export default async function ProductPage({
-  params,
-}: PageProps<"/[locale]/catalog/[category]/[product]">) {
-  const { locale, category, product: slug } = await params;
-  const product = findProduct(category, slug);
+export default async function ProductPage({ params }: PageProps<"/[locale]/products/[product]">) {
+  const { locale, product: slug } = await params;
+  const product = findProduct(slug);
   if (!product) notFound();
   setRequestLocale(locale);
 
@@ -103,17 +101,16 @@ export default async function ProductPage({
   const tProducts = await getTranslations({ locale, namespace: "products" });
   const tBrands = await getTranslations({ locale, namespace: "brands" });
   const tCatalog = await getTranslations({ locale, namespace: "catalog" });
-  const tCategories = await getTranslations({ locale, namespace: "categories" });
   const tMaterials = await getTranslations({ locale, namespace: "materials" });
   const tMaterialNotes = await getTranslations({ locale, namespace: "materialNotes" });
   const tSegments = await getTranslations({ locale, namespace: "segments" });
 
   const name = tBrands(`items.${slug}.name`);
   const specs = tProducts.raw(`items.${slug}.specs`) as Spec[];
-  const applications = applicationsOfProduct(product);
+  const productCategories = categoriesOfProduct(product);
 
   const materialLabel = [
-    tMaterials(product.categorySlug),
+    tMaterials(product.material),
     ...(product.materialNote ? [tMaterialNotes(product.materialNote)] : []),
   ].join(" · ");
 
@@ -128,14 +125,10 @@ export default async function ProductPage({
       <Section>
         <Container>
           <Breadcrumbs
-            items={[
-              { label: tCatalog("breadcrumb"), href: "/catalog" },
-              {
-                label: tCategories(`items.${product.categorySlug}.title`),
-                href: `/catalog/${product.categorySlug}`,
-              },
-              { label: name },
-            ]}
+            // Каталог → система. There is no category crumb: a system is in
+            // several categories at once, so no single one of them is "the"
+            // parent, and the URL says the same.
+            items={[{ label: tCatalog("breadcrumb"), href: "/products" }, { label: name }]}
           />
 
           <div className="mt-8 grid gap-10 lg:grid-cols-2 lg:items-start lg:gap-12">
@@ -239,9 +232,9 @@ export default async function ProductPage({
           </Reveal>
 
           <RevealGroup className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3 lg:gap-5">
-            {applications.map((application) => (
-              <RevealItem key={application.slug} className="h-full">
-                <ApplicationCard application={application} />
+            {productCategories.map((category) => (
+              <RevealItem key={category.slug} className="h-full">
+                <CategoryCard category={category} />
               </RevealItem>
             ))}
           </RevealGroup>
@@ -255,14 +248,14 @@ export default async function ProductPage({
           </Reveal>
 
           <RevealGroup className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3 lg:gap-5">
-            {advantageKeys[product.categorySlug].map((key) => (
+            {advantageKeys[product.material].map((key) => (
               <RevealItem key={key} className="h-full">
                 <div className="h-full rounded-card border border-brand-black/10 bg-surface p-6">
                   <h3 className="font-heading text-lg font-semibold text-brand-black">
-                    {t(`advantages.${product.categorySlug}.${key}.title`)}
+                    {t(`advantages.${product.material}.${key}.title`)}
                   </h3>
                   <p className="mt-3 text-sm leading-6 text-brand-black/70">
-                    {t(`advantages.${product.categorySlug}.${key}.description`)}
+                    {t(`advantages.${product.material}.${key}.description`)}
                   </p>
                 </div>
               </RevealItem>
@@ -327,7 +320,7 @@ export default async function ProductPage({
           profiles and says so in its first sentence, so it is shown for the PVC
           systems only; the aluminium pair carries its term in the spec table
           above and nothing is invented to fill the gap. */}
-      {product.categorySlug === "pvc" ? (
+      {product.material === "pvc" ? (
         <Section>
           <Container>
             <Reveal className="max-w-3xl">
@@ -366,7 +359,7 @@ export default async function ProductPage({
 
       <RelatedProducts product={product} chooseHref={CALCULATOR_HREF} />
 
-      <LeadFormSection />
+      <ContactsLeadSection />
     </>
   );
 }

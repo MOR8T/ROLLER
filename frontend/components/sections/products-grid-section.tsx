@@ -6,7 +6,7 @@ import { HomeCarousel } from "@/components/sections/home-carousel";
 import { HomeHeading, HomeSection, homeCard } from "@/components/sections/home-kit";
 import { Reveal } from "@/components/ui/reveal";
 import { Link } from "@/i18n/navigation";
-import { applicationHref } from "@/data/catalog";
+import { categoryHref } from "@/data/products";
 import { homeProductTiles, type HomeProductTile } from "@/data/home";
 
 /**
@@ -18,9 +18,9 @@ import { homeProductTiles, type HomeProductTile } from "@/data/home";
  * that before a sentence can. The line that used to sit under each one still
  * exists on `/solutions/<slug>`, which is where anyone who wants it has gone.
  *
- * Six of the seven take their title from `applications.*`, the same messages
- * the catalog page and the header menu read, so a card's name is translated
- * once; "Аксессуары" is the one with copy of its own.
+ * Six of the seven take their title from `categories.*`, the same messages the
+ * catalog page and the header menu read, so a card's name is translated once;
+ * "Аксессуары" is the one with copy of its own.
  */
 function ProductCard({
   tile,
@@ -79,14 +79,14 @@ function ProductCard({
 
 export function ProductsGridSection() {
   const t = useTranslations("home.products");
-  const tApplications = useTranslations("applications");
+  const tCategories = useTranslations("categories");
 
   function resolve(tile: HomeProductTile) {
-    return tile.kind === "application"
+    return tile.kind === "category"
       ? {
           key: tile.slug,
-          href: applicationHref(tile.slug),
-          title: tApplications(`items.${tile.slug}.title`),
+          href: categoryHref(tile.slug),
+          title: tCategories(`items.${tile.slug}.title`),
         }
       : { key: tile.key, href: tile.href, title: t(tile.key) };
   }
@@ -94,7 +94,7 @@ export function ProductsGridSection() {
   return (
     <HomeSection id="products">
       <Reveal>
-        <HomeHeading title={t("title")} action={{ label: t("all"), href: "/catalog" }} />
+        <HomeHeading title={t("title")} action={{ label: t("all"), href: "/products" }} />
       </Reveal>
 
       <Reveal className="mt-12">

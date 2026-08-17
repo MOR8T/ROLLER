@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 
-import { Breadcrumbs } from "@/components/catalog/breadcrumbs";
+import { Breadcrumbs } from "@/components/products/breadcrumbs";
 import { ProjectCard } from "@/components/portfolio/project-card";
-import { LeadFormSection } from "@/components/sections/lead-form-section";
+import { ContactsLeadSection } from "@/components/sections/contacts-lead-section";
 import { SectionHeading } from "@/components/sections/section-heading";
 import { Badge } from "@/components/ui/badge";
 import { ButtonLink } from "@/components/ui/button";
@@ -12,7 +12,7 @@ import { Container } from "@/components/ui/container";
 import { MediaFrame } from "@/components/ui/media-frame";
 import { Reveal, RevealGroup, RevealItem } from "@/components/ui/reveal";
 import { Section } from "@/components/ui/section";
-import { productHref, products } from "@/data/catalog";
+import { productHref, products } from "@/data/products";
 import { findProjectBySlug, projectParams, relatedProjects } from "@/data/portfolio";
 
 export function generateStaticParams() {
@@ -21,7 +21,7 @@ export function generateStaticParams() {
 
 export async function generateMetadata({
   params,
-}: PageProps<"/[locale]/products/[project]">): Promise<Metadata> {
+}: PageProps<"/[locale]/portfolio/[project]">): Promise<Metadata> {
   const { locale, project: slug } = await params;
   const project = findProjectBySlug(slug);
   if (!project) return {};
@@ -42,7 +42,7 @@ export async function generateMetadata({
  * and a lightbox would be JavaScript spent on placeholder images. It becomes
  * worth building when real photography arrives.
  */
-export default async function ProjectPage({ params }: PageProps<"/[locale]/products/[project]">) {
+export default async function ProjectPage({ params }: PageProps<"/[locale]/portfolio/[project]">) {
   const { locale, project: slug } = await params;
   const project = findProjectBySlug(slug);
   if (!project) notFound();
@@ -68,7 +68,7 @@ export default async function ProjectPage({ params }: PageProps<"/[locale]/produ
       <Section>
         <Container>
           <Breadcrumbs
-            items={[{ label: tPortfolio("breadcrumb"), href: "/products" }, { label: title }]}
+            items={[{ label: tPortfolio("breadcrumb"), href: "/portfolio" }, { label: title }]}
           />
 
           <div className="mt-8 grid gap-10 lg:grid-cols-2 lg:items-start lg:gap-12">
@@ -167,7 +167,7 @@ export default async function ProjectPage({ params }: PageProps<"/[locale]/produ
         </Section>
       ) : null}
 
-      <LeadFormSection />
+      <ContactsLeadSection />
     </>
   );
 }

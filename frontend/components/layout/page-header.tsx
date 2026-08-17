@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 
-import { Breadcrumbs, type Crumb } from "@/components/catalog/breadcrumbs";
+import { Breadcrumbs, type Crumb } from "@/components/products/breadcrumbs";
 import { Container } from "@/components/ui/container";
 import { Reveal } from "@/components/ui/reveal";
 import { cn } from "@/lib/utils";
@@ -23,7 +23,12 @@ export function PageHeader({
   children,
 }: {
   breadcrumbs: Crumb[];
-  eyebrow: string;
+  /**
+   * Optional since 2026-08-16: `/showroom` was rebuilt against imzo.uz, whose
+   * page opens on the heading itself. Every other caller still passes one, so
+   * the eyebrow remains the norm rather than the exception.
+   */
+  eyebrow?: string;
   title: string;
   description: string;
   /** `dark` is for the one dark page on the site — «Профессионалам». */
@@ -37,17 +42,20 @@ export function PageHeader({
       <Breadcrumbs items={breadcrumbs} tone={tone} />
 
       <Reveal className="mt-8 max-w-3xl">
-        <p
-          className={cn(
-            "font-heading text-sm font-semibold tracking-[0.24em] uppercase",
-            dark ? "text-brand-white/60" : "text-brand-black/55",
-          )}
-        >
-          {eyebrow}
-        </p>
+        {eyebrow ? (
+          <p
+            className={cn(
+              "font-heading text-sm font-semibold tracking-[0.24em] uppercase",
+              dark ? "text-brand-white/60" : "text-brand-black/55",
+            )}
+          >
+            {eyebrow}
+          </p>
+        ) : null}
         <h1
           className={cn(
-            "mt-3 text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl",
+            "text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl",
+            eyebrow && "mt-3",
             dark ? "text-brand-white" : "text-brand-black",
           )}
         >

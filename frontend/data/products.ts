@@ -1,22 +1,24 @@
-import type { Application, Category, Colorway, Material, Product, Segment } from "@/types";
+import type { Category, Colorway, Product, Segment } from "@/types";
 
 /**
- * The catalog: two categories, six applications, six profile systems.
+ * The catalog: six categories and six profile systems, on one axis.
  *
- * Structure — `project_plan/04-catalog-and-applications.md`, two axes:
+ * ⚠️ It had two axes until 2026-08-17 — **category** meaning the material
+ * (`pvc` / `aluminium`, one per product, and the product's URL) and
+ * **application** meaning what the system is for. The client removed the first
+ * one: «не должно быть разделения на ПВХ и алюминиевую продукцию». So the
+ * applications *became* the categories, material dropped to a characteristic
+ * (`Product.material`), and the product URL lost its category segment — see
+ * `productHref`.
  *
- *   **Category** = the material (`pvc`, `aluminium`). Exactly two, and a
- *   product belongs to exactly one. This is the product's home and its URL.
- *
- *   **Application** = a facet *and* an SEO landing. Many-to-many with products,
- *   because ROLLER goes into windows and doors alike; filing it under "PVC
- *   windows" would be a lie about the domain, while the brief's search terms
- *   ("пластиковые окна Душанбе", "алюминиевые двери Душанбе") still have to be
- *   answered by *some* page. That page is `/solutions/[application]`.
+ * What is left is the shape the API will return and the admin panel will edit:
+ * a list of categories, each carrying the slugs of its products, many-to-many
+ * and free to grow. Nothing in this file may treat six as the number of
+ * categories or `windows` as a category that must exist.
  *
  * Same split as `data/home.ts` and for the same reason: this file holds only
  * what is identical in all four locales — slugs, image paths, numbers, the
- * product↔application links. Every word lives in `messages/{ru,tg,en,tr}.json`
+ * category↔product links. Every word lives in `messages/{ru,tg,en,tr}.json`
  * and is looked up by slug. On the backend the text half becomes JSONB
  * (`project_plan/10-database-schema.md`), so components already consume the two
  * halves the way they will once the API exists.
@@ -25,49 +27,58 @@ import type { Application, Category, Colorway, Material, Product, Segment } from
  * message catalogue supplies, so the contract stays visible in one place.
  */
 
-/** Copy: `categories.items.<slug>`. */
-export type CategoryBase = Omit<Category, "title" | "description"> & {
-  /** The dot on the category card — brand red for PVC, black for aluminium. */
-  accent: string;
-};
-
-export const categories: CategoryBase[] = [
-  {
-    slug: "pvc",
-    image: "/products/stella/stella-main.png",
-    accent: "bg-brand-red",
-  },
-  {
-    slug: "aluminium",
-    image: "/products/thermo-60/thermo-60-anthracite.png",
-    accent: "bg-brand-black",
-  },
-];
-
 /**
- * Copy: `applications.items.<slug>`.
+ * Copy: `categories.items.<slug>`.
  *
- * The list is the plan's, in the plan's order. It replaced an earlier set of
- * *situations* (`apartment`, `house`, `commercial`, `facade`) that the homepage
- * shipped in stage 02: a situation cannot be a facet on a product — every
- * system suits every situation — so it could never satisfy the many-to-many
- * link this axis exists for. DESIGN.md §7 asks that the visitor's first choice
- * not be a material, and "windows or a facade?" answers that just as well.
+ * The list is the plan's application axis, in the plan's order. It replaced an
+ * earlier set of *situations* (`apartment`, `house`, `commercial`, `facade`)
+ * that the homepage shipped in stage 02: a situation cannot be a facet on a
+ * product — every system suits every situation — so it could never satisfy the
+ * many-to-many link this axis exists for.
  *
  * `image` is `null` throughout: context-layer photography (interiors, facades,
  * finished objects) does not exist yet, and DESIGN.md §6 п.2 requires those
  * slots to be data fields the client fills through the admin panel rather than
  * hardcoded paths.
+ *
+ * `productSlugs` is the former `Product.applicationSlugs`, read the other way
+ * round. Same links, same order of systems as `products` below — the ladder
+ * from economy to premium — but written where the API and the admin panel will
+ * keep them.
  */
-export type ApplicationBase = Omit<Application, "title" | "description">;
+export type CategoryBase = Omit<Category, "title" | "description">;
 
-export const applications: ApplicationBase[] = [
-  { slug: "windows", image: null },
-  { slug: "doors", image: null },
-  { slug: "sliding-systems", image: null },
-  { slug: "facade-glazing", image: null },
-  { slug: "mosquito-nets", image: null },
-  { slug: "partitions", image: null },
+export const categories: CategoryBase[] = [
+  {
+    slug: "windows",
+    image: null,
+    productSlugs: ["ecoline", "roller", "unopen", "stella", "thermo-60"],
+  },
+  {
+    slug: "doors",
+    image: null,
+    productSlugs: ["ecoline", "roller", "unopen", "stella", "ald-45", "thermo-60"],
+  },
+  {
+    slug: "sliding-systems",
+    image: null,
+    productSlugs: ["unopen", "ald-45", "thermo-60"],
+  },
+  {
+    slug: "facade-glazing",
+    image: null,
+    productSlugs: ["ald-45", "thermo-60"],
+  },
+  {
+    slug: "mosquito-nets",
+    image: null,
+    productSlugs: [],
+  },
+  {
+    slug: "partitions",
+    image: null,
+    productSlugs: ["ald-45"],
+  },
 ];
 
 /**
@@ -165,9 +176,8 @@ export const products: ProductBase[] = [
   {
     slug: "ecoline",
     kind: "system",
-    categorySlug: "pvc",
+    material: "pvc",
     segment: "economy",
-    applicationSlugs: ["windows", "doors"],
     depthMm: 60,
     chambers: 3,
     // Warranty covers the white profile only — ЭКОЛАЙН ships in no other
@@ -188,9 +198,8 @@ export const products: ProductBase[] = [
   {
     slug: "roller",
     kind: "system",
-    categorySlug: "pvc",
+    material: "pvc",
     segment: "mid",
-    applicationSlugs: ["windows", "doors"],
     depthMm: 60,
     chambers: 4,
     colors: [...PVC_PALETTE],
@@ -203,9 +212,8 @@ export const products: ProductBase[] = [
   {
     slug: "unopen",
     kind: "system",
-    categorySlug: "pvc",
+    material: "pvc",
     segment: "upper-mid",
-    applicationSlugs: ["windows", "doors", "sliding-systems"],
     depthMm: 65,
     chambers: 5,
     colors: [...PVC_PALETTE],
@@ -222,9 +230,8 @@ export const products: ProductBase[] = [
   {
     slug: "stella",
     kind: "system",
-    categorySlug: "pvc",
+    material: "pvc",
     segment: "premium",
-    applicationSlugs: ["windows", "doors"],
     depthMm: 75,
     chambers: 5,
     colors: [...PVC_PALETTE],
@@ -237,10 +244,9 @@ export const products: ProductBase[] = [
   {
     slug: "ald-45",
     kind: "system",
-    categorySlug: "aluminium",
+    material: "aluminium",
     materialNote: "cold",
     segment: "economy",
-    applicationSlugs: ["doors", "sliding-systems", "partitions", "facade-glazing"],
     depthMm: 45,
     chambers: 1,
     colors: [...ALUMINIUM_PALETTE],
@@ -258,10 +264,9 @@ export const products: ProductBase[] = [
   {
     slug: "thermo-60",
     kind: "system",
-    categorySlug: "aluminium",
+    material: "aluminium",
     materialNote: "warm",
     segment: "premium",
-    applicationSlugs: ["windows", "doors", "sliding-systems", "facade-glazing"],
     depthMm: 60,
     chambers: 3,
     colors: [...ALUMINIUM_PALETTE],
@@ -284,40 +289,53 @@ export const products: ProductBase[] = [
 export const segments: Segment[] = ["economy", "mid", "upper-mid", "premium"];
 
 export const categorySlugs = categories.map((category) => category.slug);
-export const applicationSlugs = applications.map((application) => application.slug);
 
-export function isCategorySlug(value: string): value is Material {
-  return categorySlugs.some((slug) => slug === value);
+export function isCategorySlug(value: string): boolean {
+  return categorySlugs.includes(value);
 }
 
-export function isApplicationSlug(value: string): boolean {
-  return applicationSlugs.includes(value);
-}
-
-/** Catalog → category → product. The one place the product URL is built. */
+/**
+ * The one place the product URL is built — and it carries no category.
+ *
+ * It used to be `/catalog/[category]/[product]`, which only worked while a
+ * product had exactly one category. Now that ROLLER is in both «Окна» and
+ * «Двери», that address would exist twice over, and two URLs for one page is
+ * the thing `localePrefix: "always"` was chosen to avoid in `i18n/routing.ts`.
+ * Flat is not a simplification here; it is the only honest form.
+ */
 export function productHref(product: ProductBase): string {
-  return `/catalog/${product.categorySlug}/${product.slug}`;
+  return `/products/${product.slug}`;
 }
 
-export function categoryHref(slug: Material): string {
-  return `/catalog/${slug}`;
-}
-
-export function applicationHref(slug: string): string {
+/**
+ * The category landing.
+ *
+ * ⚠️ Still `/solutions/…`, not `/products/…`: `/products/[slug]` now addresses a
+ * *product*, and one dynamic segment cannot mean both. These pages also carry
+ * the brief's search terms (§14.2) at URLs that have not changed since stage
+ * 04, so keeping them is what protects the indexing, not inertia.
+ */
+export function categoryHref(slug: string): string {
   return `/solutions/${slug}`;
 }
 
-export function productsByCategory(slug: Material): ProductBase[] {
-  return products.filter((product) => product.categorySlug === slug);
+export function findCategory(slug: string): CategoryBase | undefined {
+  return categories.find((category) => category.slug === slug);
 }
 
-export function productsByApplication(slug: string): ProductBase[] {
-  return products.filter((product) => product.applicationSlugs.includes(slug));
+/** The products of a category, in the order the category lists them. */
+export function productsByCategory(slug: string): ProductBase[] {
+  const category = findCategory(slug);
+  if (!category) return [];
+
+  return category.productSlugs
+    .map((productSlug) => products.find((product) => product.slug === productSlug))
+    .filter((product): product is ProductBase => Boolean(product));
 }
 
-/** The applications a product is listed under, in the canonical list order. */
-export function applicationsOfProduct(product: ProductBase): ApplicationBase[] {
-  return applications.filter((application) => product.applicationSlugs.includes(application.slug));
+/** The categories a product is listed in, in the canonical list order. */
+export function categoriesOfProduct(product: ProductBase): CategoryBase[] {
+  return categories.filter((category) => category.productSlugs.includes(product.slug));
 }
 
 /**
@@ -328,29 +346,31 @@ export function applicationsOfProduct(product: ProductBase): ApplicationBase[] {
  * repeat most of the first. Ordering by distance along the segment ladder is
  * what makes it a neighbour list — from ROLLER, UNOPEN is one rung away and
  * ЭКОЛАЙН one rung the other way, and both come before STELLA.
+ *
+ * "По категории" now means *sharing* a category rather than living in the same
+ * one, since a system has several. A system that shares none still appears —
+ * after the ones that do — because six systems cannot fill a grid twice and an
+ * empty "другие системы" block would be worse than a loose neighbour.
  */
 export function relatedProducts(product: ProductBase): ProductBase[] {
+  const own = categoriesOfProduct(product).map((category) => category.slug);
+  const shares = (candidate: ProductBase) =>
+    categoriesOfProduct(candidate).some((category) => own.includes(category.slug)) ? 0 : 1;
   const rung = (candidate: ProductBase) => segments.indexOf(candidate.segment);
 
-  return productsByCategory(product.categorySlug)
+  return products
     .filter((candidate) => candidate.slug !== product.slug)
-    .sort((a, b) => Math.abs(rung(a) - rung(product)) - Math.abs(rung(b) - rung(product)));
+    .sort(
+      (a, b) =>
+        shares(a) - shares(b) ||
+        Math.abs(rung(a) - rung(product)) - Math.abs(rung(b) - rung(product)),
+    );
 }
 
-/**
- * The product at `/catalog/[category]/[product]`, or `undefined`.
- *
- * Both segments are checked, not just the slug: `/catalog/aluminium/roller`
- * addresses a system that exists under a category it does not belong to, and
- * answering it would give the page two URLs — the one thing `localePrefix:
- * "always"` was chosen to avoid in `i18n/routing.ts`.
- */
-export function findProduct(category: string, slug: string): ProductBase | undefined {
-  return products.find((product) => product.categorySlug === category && product.slug === slug);
+/** The product at `/products/[product]`, or `undefined`. */
+export function findProduct(slug: string): ProductBase | undefined {
+  return products.find((product) => product.slug === slug);
 }
 
-/** Every `/catalog/[category]/[product]` pair, for `generateStaticParams`. */
-export const productParams = products.map((product) => ({
-  category: product.categorySlug,
-  product: product.slug,
-}));
+/** Every `/products/[product]`, for `generateStaticParams`. */
+export const productParams = products.map((product) => ({ product: product.slug }));

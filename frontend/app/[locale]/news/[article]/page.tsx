@@ -1,39 +1,42 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import { notFound } from "next/navigation";
 import { getFormatter, getTranslations, setRequestLocale } from "next-intl/server";
 
-import { Breadcrumbs } from "@/components/catalog/breadcrumbs";
+import { Breadcrumbs } from "@/components/products/breadcrumbs";
 import { ArticleCard } from "@/components/news/article-card";
-import { LeadFormSection } from "@/components/sections/lead-form-section";
+import { ContactsLeadSection } from "@/components/sections/contacts-lead-section";
 import { SectionHeading } from "@/components/sections/section-heading";
 import { Container } from "@/components/ui/container";
-import { MediaFrame } from "@/components/ui/media-frame";
 import { Reveal, RevealGroup, RevealItem } from "@/components/ui/reveal";
 import { Section } from "@/components/ui/section";
-import { articleParams, findArticleBySlug, otherArticles } from "@/data/news";
+import { fetchArticle, fetchLatestNews, newsParams } from "@/lib/news";
 
 export function generateStaticParams() {
-  return articleParams;
+  return newsParams();
 }
 
 export async function generateMetadata({
   params,
 }: PageProps<"/[locale]/news/[article]">): Promise<Metadata> {
   const { locale, article: slug } = await params;
-  const article = findArticleBySlug(slug);
+  const article = await fetchArticle(locale, slug);
   if (!article) return {};
 
-  const t = await getTranslations({ locale, namespace: "news" });
-
-  return {
-    title: t(`items.${article.id}.title`),
-    description: t(`items.${article.id}.excerpt`),
-  };
+  return { title: article.title, description: article.excerpt };
 }
 
+/**
+ * One article. Header, cover, body, then the three newest other entries.
+ *
+ * The cover is a full-bleed photograph rather than the `MediaFrame` render on
+ * grey it used to be — same change as on the cards, and for the same reason
+ * (see `ArticleCard`). The body arrives as paragraphs from `lib/news.ts`; when
+ * the admin panel ships rich text, this map is what changes.
+ */
 export default async function ArticlePage({ params }: PageProps<"/[locale]/news/[article]">) {
   const { locale, article: slug } = await params;
-  const article = findArticleBySlug(slug);
+  const article = await fetchArticle(locale, slug);
   if (!article) notFound();
   setRequestLocale(locale);
 
@@ -41,10 +44,8 @@ export default async function ArticlePage({ params }: PageProps<"/[locale]/news/
   const tPage = await getTranslations({ locale, namespace: "newsPage" });
   const format = await getFormatter({ locale });
 
-  const title = t(`items.${article.id}.title`);
-  const body = t.raw(`items.${article.id}.body`) as string[];
-  const others = otherArticles(article);
-  const date = format.dateTime(new Date(article.date), {
+  const others = await fetchLatestNews(locale, 3, article.slug);
+  const date = format.dateTime(new Date(article.publishedAt), {
     day: "numeric",
     month: "long",
     year: "numeric",
@@ -54,38 +55,36 @@ export default async function ArticlePage({ params }: PageProps<"/[locale]/news/
     <>
       <Section>
         <Container>
-          <Breadcrumbs items={[{ label: tPage("breadcrumb"), href: "/news" }, { label: title }]} />
+          <Breadcrumbs
+            items={[{ label: tPage("breadcrumb"), href: "/news" }, { label: article.title }]}
+          />
 
           <Reveal className="mt-8 max-w-3xl">
             <time
-              dateTime={article.date}
+              dateTime={article.publishedAt}
               className="text-xs font-semibold tracking-[0.18em] text-brand-red uppercase"
             >
               {date}
             </time>
             <h1 className="mt-3 text-3xl font-bold tracking-tight text-brand-black sm:text-4xl">
-              {title}
+              {article.title}
             </h1>
-            <p className="mt-5 text-lg leading-8 text-brand-black/65">
-              {t(`items.${article.id}.excerpt`)}
-            </p>
+            <p className="mt-5 text-lg leading-8 text-brand-black/65">{article.excerpt}</p>
           </Reveal>
 
-          <div className="mt-10">
-            <MediaFrame
+          <div className="relative mt-10 aspect-16/9 overflow-hidden rounded-card bg-neutral-100">
+            <Image
               src={article.cover}
-              alt={title}
-              width={1440}
-              height={720}
-              objectFit="contain"
-              sizes="100vw"
-              containerClassName="bg-surface-muted"
-              className="p-8"
+              alt=""
+              fill
+              priority
+              sizes="(max-width: 1280px) 100vw, 1280px"
+              className="object-cover"
             />
           </div>
 
           <div className="mt-10 max-w-3xl space-y-5 text-base leading-7 text-brand-black/75">
-            {body.map((paragraph) => (
+            {article.body.map((paragraph) => (
               <p key={paragraph}>{paragraph}</p>
             ))}
           </div>
@@ -110,7 +109,7 @@ export default async function ArticlePage({ params }: PageProps<"/[locale]/news/
         </Section>
       ) : null}
 
-      <LeadFormSection />
+      <ContactsLeadSection />
     </>
   );
 }

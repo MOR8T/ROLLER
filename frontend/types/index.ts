@@ -26,19 +26,34 @@ export type Segment = "economy" | "mid" | "upper-mid" | "premium";
 export type ProjectCategory = "residential" | "commercial" | "private";
 
 /**
- * A catalog category is the **material**, and nothing else — there are exactly
- * two of them and they are a product's "home" and its URL
- * (`project_plan/04-catalog-and-applications.md`).
+ * A catalog category — «Окна», «Двери», «Раздвижные системы» — and the only
+ * axis the catalog has.
  *
- * The slug is `Material`, not `string`: the plan warns that an older draft
- * wrote `pvh` where the code writes `pvc`, and typing the slug is what stops
- * that ever being expressible again.
+ * ⚠️ It used to be the **material**: exactly two categories, `pvc` and
+ * `aluminium`, one per product, and the product's URL. The client removed that
+ * split on 2026-08-17: «не должно быть разделения на ПВХ и алюминиевую
+ * продукцию». Material survives as `Product.material` — a characteristic in the
+ * spec table — and structures nothing.
+ *
+ * Three consequences follow, and all of them are the point:
+ *
+ *  - `slug` is `string`, not a union. The list is admin-managed: categories get
+ *    added, renamed and removed through the panel, so no set of them can be
+ *    fixed in the type system.
+ *  - the link lives here, as `productSlugs`, not on the product. That is the
+ *    shape the API will deliver — a list of categories, each carrying its
+ *    products — and it is what the admin panel edits.
+ *  - it is many-to-many. ROLLER goes into windows *and* doors, so a product
+ *    appears under every category that claims it, and its URL carries no
+ *    category at all (`/products/[product]`).
  */
 export interface Category {
-  slug: Material;
+  slug: string;
   title: string;
   description: string;
-  image: string;
+  image: string | null;
+  /** Products in this category, in display order. Many-to-many. */
+  productSlugs: string[];
 }
 
 /**
@@ -78,7 +93,7 @@ export type ProductKind = "system" | "component";
  * unrelated picture.
  *
  * `color` is a locale-independent key — labels live under `colors.*` in the
- * message catalogue, swatch values in `colorSwatches` (`data/catalog.ts`).
+ * message catalogue, swatch values in `colorSwatches` (`data/products.ts`).
  */
 export interface Colorway {
   color: string;
@@ -87,20 +102,22 @@ export interface Colorway {
 }
 
 /**
- * A product is a **profile system**. It lives in exactly one category (its
- * material) and is linked many-to-many to applications, because one system —
- * ROLLER, say — goes into both windows and doors and cannot honestly be filed
- * under "PVC windows".
+ * A product is a **profile system**. It belongs to no category of its own:
+ * `Category.productSlugs` is the one place the link is written, so a system is
+ * in as many categories as claim it and in none by default.
  */
 export interface Product {
   slug: string;
   /** Brand name. Translated: `ТЕРМО 60` on RU/TG, `THERMO 60` on EN/TR. */
   name: string;
   kind: ProductKind;
-  categorySlug: Material;
+  /**
+   * What the profile is made of. A characteristic, nothing more — it names no
+   * page, no URL segment and no filter since the split was removed.
+   */
+  material: Material;
   /** Only meaningful for the aluminium systems: with or without a thermal break. */
   materialNote?: MaterialNote;
-  applicationSlugs: string[];
   segment: Segment;
   /** Structural depth in millimetres. The unit is a word, so it is joined per locale. */
   depthMm: number;
@@ -138,14 +155,6 @@ export interface Article {
   body: string;
   cover: string;
   publishedAt: string;
-}
-
-export interface Project {
-  slug: string;
-  title: string;
-  city: string;
-  description: string;
-  images: string[];
 }
 
 /**
@@ -211,24 +220,12 @@ export interface HeroSlide {
 }
 
 /**
- * The second axis of the catalog: a facet on `Product` *and* an SEO landing of
- * its own (`project_plan/04-catalog-and-applications.md`).
- *
- * It exists because the category axis cannot carry the brief's search terms.
- * "Пластиковые окна Душанбе" and "алюминиевые двери Душанбе" (brief §14.2) are
- * queries about what the thing *does*, and every one of the six systems does
- * several of those things — so the query gets a landing page, not a category.
- *
- * It is also the entry point a flat owner can actually use. "PVC or
- * aluminium?" is a manufacturer's question (DESIGN.md §7); "windows or a
- * facade?" is not.
+ * ⚠️ `Application` was the catalog's second axis — a facet on `Product` and an
+ * SEO landing of its own — while `Category` meant the material. Since
+ * 2026-08-17 there is only one axis: those applications *are* the categories,
+ * and `Category` above carries them. The landings kept their `/solutions/…`
+ * URLs, which is what still answers the brief's search terms (§14.2).
  */
-export interface Application {
-  slug: string;
-  title: string;
-  description: string;
-  image: string | null;
-}
 
 /** A "Профессионалам" offering — wholesale, dealership, components, docs. */
 export interface ProOffering {
@@ -243,11 +240,56 @@ export type ProductCardBadgeVariant = "red" | "black" | "outline";
  * `ProjectTeaser` and `NewsTeaser` lived here until stage 07. They were
  * homepage-only shapes carrying a prebuilt `href`, and `/portfolio` and `/news`
  * need a slug they can route on instead — see `ProjectRecord` in
- * `data/portfolio.ts` and `ArticleRecord` in `data/news.ts`. The domain
- * contracts the backend must satisfy stay `Project` and `Article` above.
+ * `data/portfolio.ts` and `NewsArticle` in `lib/news.ts`. The domain contracts
+ * the backend must satisfy stay `Article` above; `Project` went with them —
+ * the portfolio pages read `ProjectRecord`, and a contract nothing checks is
+ * documentation pretending to be code.
+ *
+ * ⚠️ `NewsArticle` is the one that has moved ahead of its contract: since
+ * 2026-08-17 the news feed is read through `lib/news.ts`, which is shaped like
+ * the API response rather than like `Article` here — `publishedAt` matches, but
+ * its `body` is an array of paragraphs where `Article.body` is a single string
+ * of rendered rich text. Whichever the admin panel's editor produces at stage
+ * 12 is the one that survives.
  */
 
 export interface Partner {
   name: string;
   logo: string | null;
+}
+
+/**
+ * A showroom pin on the homepage map (`ShowroomsSection`).
+ *
+ * ⚠️ `coordinates` is `[lng, lat]`, not `[lat, lng]`. Yandex JS API 3 broke
+ * with 2.1 here — 2.1 took `[lat, lng]` and v3 takes GeoJSON order — and the
+ * two are silently swappable for Tajikistan only in the sense that both are
+ * plausible numbers: `[38.5, 68.7]` lands in the Arabian Sea instead of
+ * Dushanbe, with no error. The `LngLat` name in the JS API types is the whole
+ * warning it gives you.
+ *
+ * Nothing here is translated. The city name, street address and opening hours
+ * live in `messages/*.json` under `home.showrooms.points.<id>` — an address in
+ * Tajik is not the same string as an address in Russian, and the map has to
+ * speak the locale the rest of the page is in.
+ */
+export interface Showroom {
+  /** Also the message key under `showrooms.points`. */
+  id: string;
+  /** `[lng, lat]` — see the note above. */
+  coordinates: [number, number];
+  phone: string;
+  phoneHref: string;
+  /** Deep link into Yandex Maps: the "проложить маршрут" affordance. */
+  routeUrl: string;
+  /**
+   * Photograph of the showroom, shown at the top of its card in the list view
+   * of `/showroom`.
+   *
+   * `null` until the client's own shoot lands — DESIGN.md §6 п.2 is the rule
+   * this follows, and `MediaFrame` renders the neutral hatched panel in the
+   * meantime. The slot keeps its size either way, so the page does not reflow
+   * on the day the photographs arrive.
+   */
+  photo: string | null;
 }

@@ -3,7 +3,7 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import { Factory, MapPin, ShieldCheck, Wrench } from "lucide-react";
 
 import { PageHeader } from "@/components/layout/page-header";
-import { LeadFormSection } from "@/components/sections/lead-form-section";
+import { ContactsLeadSection } from "@/components/sections/contacts-lead-section";
 import { PartnersGrid } from "@/components/sections/partners-grid";
 import { SectionHeading } from "@/components/sections/section-heading";
 import { Container } from "@/components/ui/container";
@@ -189,7 +189,7 @@ export default async function AboutPage({ params }: PageProps<"/[locale]/about">
         </Container>
       </Section>
 
-      <LeadFormSection />
+      <ContactsLeadSection />
     </>
   );
 }

@@ -1,4 +1,4 @@
-import { colorSwatches } from "@/data/catalog";
+import { colorSwatches } from "@/data/products";
 import type { ConfiguredItem, OpeningType } from "@/data/calculator";
 import { cn } from "@/lib/utils";
 

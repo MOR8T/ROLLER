@@ -1,8 +1,8 @@
 import type { ReactNode } from "react";
 
-import { ProductCard } from "@/components/catalog/product-card";
+import { ProductCard } from "@/components/products/product-card";
 import { cn } from "@/lib/utils";
-import type { ProductBase } from "@/data/catalog";
+import type { ProductBase } from "@/data/products";
 
 /**
  * The one grid of system cards, shared by `/catalog`, the category pages and

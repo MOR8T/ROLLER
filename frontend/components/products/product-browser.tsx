@@ -3,20 +3,21 @@
 import { useMemo, useState } from "react";
 import { useTranslations } from "next-intl";
 
-import { EmptyState, ProductGrid } from "@/components/catalog/product-grid";
+import { EmptyState, ProductGrid } from "@/components/products/product-grid";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { applications, categories, products, segments } from "@/data/catalog";
-import type { Material, Segment } from "@/types";
+import { categories, productsByCategory, products, segments } from "@/data/products";
+import type { Segment } from "@/types";
 
 /**
  * The catalog's filter row and grid.
  *
- * Three facets, exactly the ones the brief asks for: material, segment and
- * application. State is local rather than in the URL — the catalog holds six
+ * Two facets: category and segment. Material was the third until 2026-08-17 and
+ * went with the rest of the split — it is a line in the spec table now, not a
+ * way to browse. State is local rather than in the URL: the catalog holds six
  * systems, so filtering is instant and there is nothing to fetch, while the
- * pages worth sharing and indexing are `/catalog/[category]` and
- * `/solutions/[application]`, which are real routes with their own copy.
+ * page worth sharing and indexing is `/solutions/[category]`, a real route with
+ * its own copy.
  *
  * No `RevealGroup` around the grid. Its reveal is a scroll-driven CSS
  * animation, and a card that mounts already past the trigger range stays at
@@ -76,33 +77,27 @@ function FilterRow<T extends string>({
   );
 }
 
-export function CatalogBrowser({ chooseHref }: { chooseHref: string }) {
+export function ProductBrowser({ chooseHref }: { chooseHref: string }) {
   const t = useTranslations("catalog");
-  const tMaterials = useTranslations("materials");
   const tSegments = useTranslations("segments");
-  const tApplications = useTranslations("applications");
+  const tCategories = useTranslations("categories");
 
-  const [category, setCategory] = useState<Filter<Material>>(ALL);
+  const [category, setCategory] = useState<Filter<string>>(ALL);
   const [segment, setSegment] = useState<Filter<Segment>>(ALL);
-  const [application, setApplication] = useState<Filter<string>>(ALL);
 
-  const visible = useMemo(
-    () =>
-      products.filter(
-        (product) =>
-          (category === ALL || product.categorySlug === category) &&
-          (segment === ALL || product.segment === segment) &&
-          (application === ALL || product.applicationSlugs.includes(application)),
-      ),
-    [category, segment, application],
-  );
+  const visible = useMemo(() => {
+    // The category owns the link, so membership is read from its own list
+    // rather than from a field on the product.
+    const inCategory = category === ALL ? products : productsByCategory(category);
 
-  const dirty = category !== ALL || segment !== ALL || application !== ALL;
+    return inCategory.filter((product) => segment === ALL || product.segment === segment);
+  }, [category, segment]);
+
+  const dirty = category !== ALL || segment !== ALL;
 
   const reset = () => {
     setCategory(ALL);
     setSegment(ALL);
-    setApplication(ALL);
   };
 
   return (
@@ -117,7 +112,7 @@ export function CatalogBrowser({ chooseHref }: { chooseHref: string }) {
           options={categories.map((item) => item.slug)}
           value={category}
           onChange={setCategory}
-          optionLabel={(slug) => tMaterials(slug)}
+          optionLabel={(slug) => tCategories(`items.${slug}.title`)}
           allLabel={t("filters.all")}
         />
         <FilterRow
@@ -126,14 +121,6 @@ export function CatalogBrowser({ chooseHref }: { chooseHref: string }) {
           value={segment}
           onChange={setSegment}
           optionLabel={(slug) => tSegments(slug)}
-          allLabel={t("filters.all")}
-        />
-        <FilterRow
-          label={t("filters.application")}
-          options={applications.map((item) => item.slug)}
-          value={application}
-          onChange={setApplication}
-          optionLabel={(slug) => tApplications(`items.${slug}.title`)}
           allLabel={t("filters.all")}
         />
       </div>

@@ -15,12 +15,25 @@ export const siteConfig = {
   },
 } as const;
 
-export const navLinks = [
+export interface NavLink {
+  /** Label key inside the `nav` namespace. */
+  key: string;
+  href: string;
+  /**
+   * The item opens the products mega-menu instead of navigating. The header
+   * renders it as a `<button>`, so `href` is never followed there — it only
+   * serves places that cannot open a panel, namely the footer's list of
+   * sections.
+   */
+  menu?: true;
+}
+
+export const navLinks: NavLink[] = [
   // { key: "main", href: "/" },
   { key: "about", href: "/about" },
-  { key: "products", href: "/products" },
+  { key: "products", href: "/products", menu: true },
   { key: "calculator", href: "/calculator" },
   { key: "news", href: "/news" },
   { key: "showroom", href: "/showroom" },
   { key: "contacts", href: "/contacts" },
-] as const;
+];

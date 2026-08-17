@@ -5,7 +5,7 @@ import { ChevronDown } from "lucide-react";
 import { Link } from "@/i18n/navigation";
 import { navLinks } from "@/lib/site-config";
 import { cn } from "@/lib/utils";
-import { PRODUCTS_HREF } from "./header-shared";
+import { PRODUCTS_MENU_ID } from "./header-shared";
 
 interface HeaderDesktopNavProps {
   productsOpen: boolean;
@@ -27,6 +27,14 @@ interface HeaderDesktopNavProps {
  * ⚠️ Eight is the ceiling for this layout. If the client keeps `/showroom`
  * (open question №7) the bar stays this tight; dropping it is what would give
  * the row air back.
+ *
+ * «Продукция» is a `<button>`, not a link: there is no page listing everything
+ * at once, so the item's only job is to open the panel.
+ *
+ * Click and focus both *open* rather than toggle. A toggle would fight the
+ * hover: on a mouse the pointer has already opened the panel by the time the
+ * click lands, so the click would read as "close". Closing is the pointer
+ * leaving, Escape, a tap outside (all in `Header`), or following a link.
  */
 export function HeaderDesktopNav({
   productsOpen,
@@ -37,27 +45,25 @@ export function HeaderDesktopNav({
   const tHeader = useTranslations("header");
 
   return (
-    <nav
-      aria-label={tHeader("mainNav")}
-      className="hidden min-w-0 items-center xl:flex gap-7"
-    >
+    <nav aria-label={tHeader("mainNav")} className="hidden min-w-0 items-center gap-7 xl:flex">
       {navLinks.map((link) => {
-        if (link.href === PRODUCTS_HREF) {
+        if (link.menu) {
           return (
             <div
-              key={link.href}
+              key={link.key}
               className="relative"
               onMouseEnter={onProductsOpen}
               onMouseLeave={onProductsScheduleClose}
             >
-              <Link
-                href={link.href}
+              <button
+                type="button"
                 aria-expanded={productsOpen}
                 aria-haspopup="true"
-                aria-controls="products-mega-menu"
+                aria-controls={PRODUCTS_MENU_ID}
+                onClick={onProductsOpen}
                 onFocus={onProductsOpen}
                 className={cn(
-                  "group relative inline-flex items-center gap-1 py-2 text-sm font-medium text-brand-black/80 transition-colors hover:text-brand-red focus-visible:rounded-control focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:outline-none",
+                  "group relative inline-flex cursor-pointer items-center gap-1 py-2 text-sm font-medium text-brand-black/80 transition-colors hover:text-brand-red focus-visible:rounded-control focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:outline-none",
                   productsOpen && "text-brand-red",
                 )}
               >
@@ -74,7 +80,7 @@ export function HeaderDesktopNav({
                     productsOpen ? "w-full" : "w-0 group-hover:w-full",
                   )}
                 />
-              </Link>
+              </button>
             </div>
           );
         }
