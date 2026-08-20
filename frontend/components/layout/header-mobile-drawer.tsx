@@ -226,7 +226,7 @@ export function HeaderMobileDrawer({ open, onClose }: HeaderMobileDrawerProps) {
                                     {productsByCategory(category.slug).map((product) => (
                                       <Link
                                         key={product.slug}
-                                        href={productHref(product)}
+                                        href={productHref(product, category.slug)}
                                         onClick={close}
                                         className="block rounded-control px-3 py-2.5 text-sm font-semibold text-brand-black/80 transition-colors hover:bg-brand-black/5 hover:text-brand-red focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:outline-none"
                                       >

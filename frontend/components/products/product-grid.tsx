@@ -16,11 +16,14 @@ import type { ProductBase } from "@/data/products";
 export function ProductGrid({
   products,
   chooseHref,
+  categorySlug,
   empty,
   className,
 }: {
   products: ProductBase[];
   chooseHref: string;
+  /** The category this grid is the list of, if it is one. */
+  categorySlug?: string;
   empty: ReactNode;
   className?: string;
 }) {
@@ -29,7 +32,12 @@ export function ProductGrid({
   return (
     <div className={cn("grid gap-4 sm:grid-cols-2 lg:grid-cols-3 lg:gap-5", className)}>
       {products.map((product) => (
-        <ProductCard key={product.slug} product={product} chooseHref={chooseHref} />
+        <ProductCard
+          key={product.slug}
+          product={product}
+          chooseHref={chooseHref}
+          categorySlug={categorySlug}
+        />
       ))}
     </div>
   );
