@@ -8,8 +8,8 @@ import type { Category, Colorway, Product, Segment } from "@/types";
  * **application** meaning what the system is for. The client removed the first
  * one: «не должно быть разделения на ПВХ и алюминиевую продукцию». So the
  * applications *became* the categories, material dropped to a characteristic
- * (`Product.material`), and the product URL lost its category segment — see
- * `productHref`.
+ * (`Product.material`), and the product URL briefly lost its category segment —
+ * it came back on 2026-08-20, once per claim, see `productHref`.
  *
  * What is left is the shape the API will return and the admin panel will edit:
  * a list of categories, each carrying the slugs of its products, many-to-many
@@ -295,25 +295,35 @@ export function isCategorySlug(value: string): boolean {
 }
 
 /**
- * The one place the product URL is built — and it carries no category.
+ * The one place the product URL is built: `/products/<category>/<product>`.
  *
- * It used to be `/catalog/[category]/[product]`, which only worked while a
- * product had exactly one category. Now that ROLLER is in both «Окна» and
- * «Двери», that address would exist twice over, and two URLs for one page is
- * the thing `localePrefix: "always"` was chosen to avoid in `i18n/routing.ts`.
- * Flat is not a simplification here; it is the only honest form.
+ * ⚠️ It was flat — `/products/<product>` — until 2026-08-20, because a system
+ * belongs to several categories and no single one of them is "the" parent. The
+ * client asked for the category back in the address, so a system now has as
+ * many URLs as it has categories and every one of them renders. `category`
+ * therefore says *which link the visitor followed*, not what the product is:
+ * pass the category whose list the link sits in, and the page keeps the
+ * visitor's context.
+ *
+ * With no category given the product's first one stands in. A product in no
+ * category has no product URL at all and the catalog index answers instead —
+ * an empty category is a normal state between creating one and filling it,
+ * and a link to `/products/undefined/roller` would not be.
  */
-export function productHref(product: ProductBase): string {
-  return `/products/${product.slug}`;
+export function productHref(product: ProductBase, categorySlug?: string): string {
+  const category = categorySlug ?? categoriesOfProduct(product)[0]?.slug;
+  if (!category) return "/products";
+
+  return `/products/${category}/${product.slug}`;
 }
 
 /**
  * The category landing.
  *
- * ⚠️ Still `/solutions/…`, not `/products/…`: `/products/[slug]` now addresses a
- * *product*, and one dynamic segment cannot mean both. These pages also carry
- * the brief's search terms (§14.2) at URLs that have not changed since stage
- * 04, so keeping them is what protects the indexing, not inertia.
+ * ⚠️ Still `/solutions/…`, not `/products/…`. `/products/[category]` is not a
+ * page — the category segment there only prefixes a product — and these landings
+ * carry the brief's search terms (§14.2) at URLs that have not changed since
+ * stage 04, so keeping them is what protects the indexing, not inertia.
  */
 export function categoryHref(slug: string): string {
   return `/solutions/${slug}`;
@@ -367,10 +377,17 @@ export function relatedProducts(product: ProductBase): ProductBase[] {
     );
 }
 
-/** The product at `/products/[product]`, or `undefined`. */
+/** The product at `/products/[category]/[product]`, or `undefined`. */
 export function findProduct(slug: string): ProductBase | undefined {
   return products.find((product) => product.slug === slug);
 }
 
-/** Every `/products/[product]`, for `generateStaticParams`. */
-export const productParams = products.map((product) => ({ product: product.slug }));
+/**
+ * Every `/products/[category]/[product]`, for `generateStaticParams`.
+ *
+ * A pair per link, not per product: ROLLER is in «Окна» and «Двери» and is
+ * prerendered under both.
+ */
+export const productParams = categories.flatMap((category) =>
+  category.productSlugs.map((product) => ({ category: category.slug, product })),
+);

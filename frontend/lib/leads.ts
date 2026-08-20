@@ -1,5 +1,5 @@
 import { siteConfig } from "@/lib/site-config";
-import type { Lead, LeadScenario } from "@/types";
+import type { Lead } from "@/types";
 
 /**
  * Lead submission — the one place the order of operations is decided.
@@ -14,12 +14,6 @@ import type { Lead, LeadScenario } from "@/types";
  * real call will have, so stage 13 replaces the body of one function and no
  * form is rewritten.
  */
-
-export const leadScenarios = [
-  "calculate",
-  "quote",
-  "dealer",
-] as const satisfies readonly LeadScenario[];
 
 export interface LeadReceipt {
   id: string;
@@ -59,6 +53,10 @@ export async function submitLead(lead: Lead): Promise<LeadReceipt> {
  * A phone number, and at most a name and a scenario — the homepage's two short
  * forms (the "вызвать замерщика" strip and the block that closes the page).
  *
+ * ⚠️ It carried a `scenario` («Рассчитать» / «Получить КП» / «Стать дилером»)
+ * until 2026-08-20, when the client removed those chips from the form. The
+ * long `Lead` still has one — `RequestForm` still asks.
+ *
  * It is a separate call rather than a `Lead` with blank fields because the two
  * make different promises. `submitLead` refuses an incomplete payload on
  * purpose: a form that reports success on nothing is the failure this ordering
@@ -72,7 +70,19 @@ export async function submitLead(lead: Lead): Promise<LeadReceipt> {
 export interface QuickLead {
   phone: string;
   name?: string;
-  scenario?: LeadScenario;
+  /**
+   * Catalog categories the visitor ticked, as slugs. Optional because the form
+   * does not require them: a request with a phone number and nothing else is
+   * still a request, and the call centre asks the rest.
+   */
+  interests?: string[];
+  /**
+   * Where the request came from, already written for a human — «Система
+   * ROLLER». The page supplies it; the form never guesses.
+   */
+  context?: string;
+  /** Whatever the visitor wanted to add. Optional, and usually empty. */
+  message?: string;
 }
 
 export async function submitQuickLead(lead: QuickLead): Promise<LeadReceipt> {
@@ -93,14 +103,29 @@ export async function submitQuickLead(lead: QuickLead): Promise<LeadReceipt> {
  */
 export function buildQuickLeadMessage(
   lead: QuickLead,
-  labels: { intro: string; phone: string; name?: string; scenario?: string },
-  scenarioLabel?: string,
+  labels: {
+    intro: string;
+    phone: string;
+    name?: string;
+    interests?: string;
+    context?: string;
+    message?: string;
+  },
+  /** The ticked categories, translated by the caller, in display order. */
+  interestLabels: string[] = [],
 ): string {
   const lines = [labels.intro, ""];
 
-  if (labels.scenario && scenarioLabel) lines.push(`${labels.scenario}: ${scenarioLabel}`);
+  if (labels.context && lead.context) lines.push(`${labels.context}: ${lead.context}`);
+  if (labels.interests && interestLabels.length > 0) {
+    lines.push(`${labels.interests}: ${interestLabels.join(", ")}`);
+  }
   if (labels.name && lead.name) lines.push(`${labels.name}: ${lead.name}`);
   lines.push(`${labels.phone}: ${lead.phone}`);
+
+  // Last, and on its own lines: a comment can run to several sentences, and
+  // wedging it between two labelled fields makes the short ones hard to find.
+  if (labels.message && lead.message) lines.push("", `${labels.message}:`, lead.message);
 
   return lines.join("\n");
 }

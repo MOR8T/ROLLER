@@ -5,16 +5,15 @@ import { useTranslations } from "next-intl";
 import { Loader2 } from "lucide-react";
 
 import { HomeSection, homeCard, pillClass } from "@/components/sections/home-kit";
+import { categories } from "@/data/products";
 import {
   buildQuickLeadMessage,
   buildWhatsAppUrl,
   isPlausiblePhone,
-  leadScenarios,
   submitQuickLead,
 } from "@/lib/leads";
 import { siteConfig } from "@/lib/site-config";
 import { cn } from "@/lib/utils";
-import type { LeadScenario } from "@/types";
 
 type Status = "idle" | "submitting" | "success" | "error";
 type Field = "name" | "phone";
@@ -34,9 +33,11 @@ type Field = "name" | "phone";
  * phone, through `submitQuickLead`. `RequestForm` is untouched and still runs
  * every other page.
  *
- * The scenario chips survive because they are the one question that changes who
- * reads the request, and they are the same three the full form offers — labels
- * come from `requestForm.scenarios.*`, so the two never drift.
+ * ⚠️ The block used to open with three scenario chips — «Рассчитать» /
+ * «Получить КП» / «Стать дилером». The client removed them on 2026-08-20: the
+ * categories below answer what the request is about, and the chips asked the
+ * same visitor a second question they had already answered. `RequestForm` still
+ * offers them where the long form is warranted.
  *
  * Submit order is the site's: store first, WhatsApp second (`lib/leads.ts`).
  *
@@ -50,14 +51,37 @@ type Field = "name" | "phone";
  * `id` is a prop because of `/contacts`: `ContactsSection` already owns
  * `id="contacts"` on that page, and two elements answering to one fragment is
  * a broken anchor and a duplicate id in the same stroke.
+ *
+ * ── What a page may add ────────────────────────────────────────────────────
+ *
+ * `title`, `description` and `context` exist because the block now closes pages
+ * that know more than the homepage does. A product page says which system the
+ * visitor was reading; the homepage passes none of the three and reads exactly
+ * as before. `context` never appears on screen — it travels with the request,
+ * so the call centre opens WhatsApp already knowing the page.
  */
-export function ContactsLeadSection({ id = "contacts" }: { id?: string } = {}) {
+
+export interface ContactsLeadSectionProps {
+  id?: string;
+  /** Overrides `home.contacts.title`. */
+  title?: string;
+  /** A line under the heading. The homepage has none. */
+  description?: string;
+  /** Where the request came from, written for a human: «Система ROLLER». */
+  context?: string;
+}
+export function ContactsLeadSection({
+  id = "contacts",
+  title,
+  description,
+  context,
+}: ContactsLeadSectionProps = {}) {
   const t = useTranslations("home.contacts");
-  const tScenarios = useTranslations("requestForm.scenarios");
+  const tCategories = useTranslations("categories");
   const tCommon = useTranslations("common");
   const uid = useId();
 
-  const [scenario, setScenario] = useState<LeadScenario>(leadScenarios[0]);
+  const [interests, setInterests] = useState<string[]>([]);
   const [status, setStatus] = useState<Status>("idle");
   const [errors, setErrors] = useState<Partial<Record<Field, string>>>({});
   const [failure, setFailure] = useState<string | null>(null);
@@ -77,6 +101,7 @@ export function ContactsLeadSection({ id = "contacts" }: { id?: string } = {}) {
     const data = new FormData(form);
     const name = String(data.get("name") ?? "").trim();
     const phone = String(data.get("phone") ?? "").trim();
+    const message = String(data.get("message") ?? "").trim();
 
     const nextErrors: Partial<Record<Field, string>> = {};
     if (!name) nextErrors.name = t("form.errors.name");
@@ -93,7 +118,7 @@ export function ContactsLeadSection({ id = "contacts" }: { id?: string } = {}) {
     setFailure(null);
 
     try {
-      await submitQuickLead({ phone, name, scenario });
+      await submitQuickLead({ phone, name, interests, context, message });
     } catch {
       setStatus("error");
       setFailure(t("form.errors.submit"));
@@ -102,31 +127,137 @@ export function ContactsLeadSection({ id = "contacts" }: { id?: string } = {}) {
 
     const url = buildWhatsAppUrl(
       buildQuickLeadMessage(
-        { phone, name, scenario },
+        { phone, name, interests, context, message },
         {
           intro: t("form.whatsapp.intro"),
-          scenario: t("form.whatsapp.scenario"),
+          interests: t("form.whatsapp.interests"),
+          context: t("form.whatsapp.context"),
           name: t("form.name"),
           phone: t("form.phone"),
+          message: t("form.whatsapp.message"),
         },
-        tScenarios(`${scenario}.label`),
+        interests.map((slug) => tCategories(`items.${slug}.title`)),
       ),
     );
 
     setStatus("success");
     form.reset();
+    setInterests([]);
     window.open(url, "_blank", "noopener,noreferrer");
   }
 
   const submitting = status === "submitting";
+
+  function toggleInterest(slug: string, checked: boolean) {
+    setInterests((current) =>
+      checked ? [...current, slug] : current.filter((item) => item !== slug),
+    );
+  }
+
+  const success = (
+    <div role="status" aria-live="polite">
+      <p className="font-heading text-2xl font-bold text-brand-black">{t("form.success")}</p>
+      <button
+        type="button"
+        onClick={() => setStatus("idle")}
+        className={pillClass("light", "mt-8")}
+      >
+        {t("form.again")}
+      </button>
+    </div>
+  );
+
+  const form = (
+    <form onSubmit={handleSubmit} noValidate aria-label={t("title")}>
+      {/* «Что вас интересует?» — the catalog's own categories, not a second
+          list to keep in step with it. Several may be ticked: a visitor
+          replacing the windows of a house is usually asking about the doors in
+          the same breath. */}
+      <fieldset>
+        <legend className="text-xs font-semibold tracking-[0.18em] text-brand-black/45 uppercase">
+          {t("form.interests")}
+        </legend>
+
+        <div className="mt-4 grid gap-x-6 gap-y-3 sm:grid-cols-2">
+          {categories.map((category) => {
+            const checkboxId = `${uid}-interest-${category.slug}`;
+            const checked = interests.includes(category.slug);
+            const label = tCategories(`items.${category.slug}.title`);
+
+            return (
+              <Checkbox
+                key={category.slug}
+                id={checkboxId}
+                checked={checked}
+                label={label}
+                onChange={(next) => toggleInterest(category.slug, next)}
+              />
+            );
+          })}
+        </div>
+      </fieldset>
+
+      <div className="mt-8 flex flex-col gap-4">
+        <Field
+          id={`${uid}-name`}
+          name="name"
+          label={t("form.name")}
+          placeholder={t("form.namePlaceholder")}
+          autoComplete="name"
+          error={errors.name}
+        />
+        <Field
+          id={`${uid}-phone`}
+          name="phone"
+          type="tel"
+          inputMode="tel"
+          label={t("form.phone")}
+          placeholder={t("form.phonePlaceholder")}
+          autoComplete="tel"
+          error={errors.phone}
+        />
+
+        {/* Optional, and unvalidated: the two fields above are what the call
+            centre cannot start without, and a comment box that can reject a
+            request would undo that. */}
+        <TextField
+          id={`${uid}-message`}
+          name="message"
+          label={t("form.message")}
+          placeholder={t("form.messagePlaceholder")}
+        />
+      </div>
+
+      <button type="submit" disabled={submitting} className={pillClass("dark", "mt-8 w-full")}>
+        {submitting ? (
+          <>
+            <Loader2 className="size-4 shrink-0 animate-spin" aria-hidden />
+            {t("form.submitting")}
+          </>
+        ) : (
+          t("form.submit")
+        )}
+      </button>
+
+      {failure ? (
+        <p role="alert" className="mt-4 text-sm font-medium text-brand-red">
+          {failure}
+        </p>
+      ) : null}
+    </form>
+  );
 
   return (
     <HomeSection id={id} tone="muted">
       <div className="grid gap-12 lg:grid-cols-[1fr_1fr] lg:gap-20">
         <div>
           <h2 className="text-3xl font-bold tracking-tight text-brand-black sm:text-4xl lg:text-[2.75rem] lg:leading-[1.1]">
-            {t("title")}
+            {title ?? t("title")}
           </h2>
+
+          {description ? (
+            <p className="mt-5 max-w-xl text-base leading-7 text-brand-black/65">{description}</p>
+          ) : null}
 
           <ul className="mt-10">
             {contacts.map((contact) => (
@@ -145,95 +276,65 @@ export function ContactsLeadSection({ id = "contacts" }: { id?: string } = {}) {
         </div>
 
         <div className={cn("bg-brand-white p-7 sm:p-10", homeCard)}>
-          {status === "success" ? (
-            <div role="status" aria-live="polite">
-              <p className="font-heading text-2xl font-bold text-brand-black">
-                {t("form.success")}
-              </p>
-              <button
-                type="button"
-                onClick={() => setStatus("idle")}
-                className={pillClass("light", "mt-8")}
-              >
-                {t("form.again")}
-              </button>
-            </div>
-          ) : (
-            <form onSubmit={handleSubmit} noValidate aria-label={t("title")}>
-              <fieldset>
-                <legend className="text-xs font-semibold tracking-[0.18em] text-brand-black/45 uppercase">
-                  {t("form.scenario")}
-                </legend>
-                <div className="mt-4 flex flex-wrap gap-2">
-                  {leadScenarios.map((option) => {
-                    const selected = option === scenario;
-
-                    return (
-                      <button
-                        key={option}
-                        type="button"
-                        aria-pressed={selected}
-                        onClick={() => setScenario(option)}
-                        className={cn(
-                          "min-h-11 rounded-full border px-5 text-sm font-medium transition-colors focus-visible:ring-2 focus-visible:ring-brand-black focus-visible:ring-offset-2 focus-visible:outline-none",
-                          selected
-                            ? "border-brand-black bg-brand-black text-brand-white"
-                            : "border-brand-black/15 text-brand-black/65 hover:border-brand-black/45",
-                        )}
-                      >
-                        {tScenarios(`${option}.label`)}
-                      </button>
-                    );
-                  })}
-                </div>
-              </fieldset>
-
-              <div className="mt-8 flex flex-col gap-4">
-                <Field
-                  id={`${uid}-name`}
-                  name="name"
-                  label={t("form.name")}
-                  placeholder={t("form.namePlaceholder")}
-                  autoComplete="name"
-                  error={errors.name}
-                />
-                <Field
-                  id={`${uid}-phone`}
-                  name="phone"
-                  type="tel"
-                  inputMode="tel"
-                  label={t("form.phone")}
-                  placeholder={t("form.phonePlaceholder")}
-                  autoComplete="tel"
-                  error={errors.phone}
-                />
-              </div>
-
-              <button
-                type="submit"
-                disabled={submitting}
-                className={pillClass("dark", "mt-8 w-full")}
-              >
-                {submitting ? (
-                  <>
-                    <Loader2 className="size-4 shrink-0 animate-spin" aria-hidden />
-                    {t("form.submitting")}
-                  </>
-                ) : (
-                  t("form.submit")
-                )}
-              </button>
-
-              {failure ? (
-                <p role="alert" className="mt-4 text-sm font-medium text-brand-red">
-                  {failure}
-                </p>
-              ) : null}
-            </form>
-          )}
+          {status === "success" ? success : form}
         </div>
       </div>
     </HomeSection>
+  );
+}
+
+/** One ticked category. */
+function Checkbox({
+  id,
+  checked,
+  label,
+  onChange,
+}: {
+  id: string;
+  checked: boolean;
+  label: string;
+  onChange: (checked: boolean) => void;
+}) {
+  return (
+    <div className="flex items-center gap-3">
+      <input
+        id={id}
+        type="checkbox"
+        checked={checked}
+        onChange={(event) => onChange(event.target.checked)}
+        className="size-4 shrink-0 cursor-pointer accent-brand-black focus-visible:ring-2 focus-visible:ring-brand-black focus-visible:ring-offset-2 focus-visible:outline-none"
+      />
+      <label htmlFor={id} className="cursor-pointer text-sm leading-6 text-brand-black/75">
+        {label}
+      </label>
+    </div>
+  );
+}
+
+/**
+ * The comment box.
+ *
+ * Not a `Field` with `as="textarea"`: the shapes genuinely differ — a pill
+ * cannot hold four lines, so this one takes the card's radius instead — and one
+ * branch inside `Field` would be there to save four lines of markup.
+ */
+function TextField({
+  id,
+  label,
+  ...props
+}: React.TextareaHTMLAttributes<HTMLTextAreaElement> & { id: string; label: string }) {
+  return (
+    <div>
+      <label htmlFor={id} className="sr-only">
+        {label}
+      </label>
+      <textarea
+        id={id}
+        rows={4}
+        className="w-full rounded-[1.75rem] border border-brand-black/20 bg-brand-white px-6 py-4 text-sm transition-colors outline-none focus:border-brand-black focus-visible:ring-2 focus-visible:ring-brand-black focus-visible:ring-offset-2"
+        {...props}
+      />
+    </div>
   );
 }
 
