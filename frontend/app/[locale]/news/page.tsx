@@ -68,7 +68,7 @@ export default async function NewsPage({ params, searchParams }: PageProps<"/[lo
 
   return (
     <>
-      <Section>
+      <Section className="pt-12!">
         <PageHeader
           breadcrumbs={[{ label: t("breadcrumb") }]}
           title={t("title")}

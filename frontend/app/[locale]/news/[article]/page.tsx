@@ -53,7 +53,7 @@ export default async function ArticlePage({ params }: PageProps<"/[locale]/news/
 
   return (
     <>
-      <Section>
+      <Section className="pt-12!">
         <Container>
           <Breadcrumbs
             items={[{ label: tPage("breadcrumb"), href: "/news" }, { label: article.title }]}

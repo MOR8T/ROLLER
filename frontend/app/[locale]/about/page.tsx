@@ -4,12 +4,12 @@ import { Factory, MapPin, ShieldCheck, Wrench } from "lucide-react";
 
 import { PageHeader } from "@/components/layout/page-header";
 import { ContactsLeadSection } from "@/components/sections/contacts-lead-section";
-import { PartnersGrid } from "@/components/sections/partners-grid";
 import { SectionHeading } from "@/components/sections/section-heading";
 import { Container } from "@/components/ui/container";
 import { Reveal, RevealGroup, RevealItem } from "@/components/ui/reveal";
 import { Section } from "@/components/ui/section";
 import { companyStats } from "@/data/home";
+import { PartnersSection } from "@/components/sections/partners-section";
 
 const capabilityIcons = {
   production: Factory,
@@ -59,16 +59,15 @@ export default async function AboutPage({ params }: PageProps<"/[locale]/about">
 
   return (
     <>
-      <Section>
+      <Section className="pt-12!">
         <PageHeader
           breadcrumbs={[{ label: t("breadcrumb") }]}
-          eyebrow={t("eyebrow")}
           title={t("title")}
           description={t("description")}
         />
 
         <Container>
-          <RevealGroup className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-5 lg:gap-5">
+          <RevealGroup className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-4 lg:gap-5">
             {companyStats.map((stat) => (
               <RevealItem key={stat.key}>
                 <div className="h-full rounded-card border border-brand-black/10 bg-surface p-5">
@@ -90,7 +89,6 @@ export default async function AboutPage({ params }: PageProps<"/[locale]/about">
         <Container>
           <Reveal>
             <SectionHeading
-              eyebrow={t("timeline.eyebrow")}
               title={t("timeline.title")}
               description={t("timeline.description")}
             />
@@ -120,7 +118,6 @@ export default async function AboutPage({ params }: PageProps<"/[locale]/about">
         <Container>
           <Reveal>
             <SectionHeading
-              eyebrow={t("capabilities.eyebrow")}
               title={t("capabilities.title")}
               description={t("capabilities.description")}
             />
@@ -133,7 +130,7 @@ export default async function AboutPage({ params }: PageProps<"/[locale]/about">
               return (
                 <RevealItem key={key} className="h-full">
                   <article className="flex h-full gap-4 rounded-card border border-brand-black/10 bg-surface p-6">
-                    <span className="rounded-control bg-brand-red/10 p-3 text-brand-red">
+                    <span className="rounded-control mb-auto bg-brand-red/10 p-3 text-brand-red">
                       <Icon className="size-6 shrink-0" aria-hidden />
                     </span>
                     <div>
@@ -152,18 +149,8 @@ export default async function AboutPage({ params }: PageProps<"/[locale]/about">
         </Container>
       </Section>
 
-      <Section tone="muted">
-        <Container>
-          <Reveal>
-            <SectionHeading
-              eyebrow={t("partners.eyebrow")}
-              title={t("partners.title")}
-              description={t("partners.description")}
-            />
-          </Reveal>
-
-          <PartnersGrid className="mt-10" />
-        </Container>
+      <Section tone="muted" className="!py-0">
+        <PartnersSection />
       </Section>
 
       <Section>

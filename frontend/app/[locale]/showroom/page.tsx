@@ -48,7 +48,7 @@ export default async function ShowroomPage({ params }: PageProps<"/[locale]/show
 
   return (
     <>
-      <Section className="pb-0">
+      <Section className="pb-0 pt-12!">
         <PageHeader
           breadcrumbs={[{ label: t("breadcrumb") }]}
           title={t("title")}
