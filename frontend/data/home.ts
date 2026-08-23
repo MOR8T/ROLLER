@@ -19,7 +19,7 @@ import {
   Wrench,
   type LucideIcon,
 } from "lucide-react";
-import type { HeroSlide, Partner } from "@/types";
+import type { Partner } from "@/types";
 
 /**
  * Mock content for the homepage.
@@ -274,45 +274,6 @@ export const serviceHighlights = [
   { key: "installation", icon: Wrench },
   { key: "service", icon: Headphones },
 ] as const;
-
-/**
- * The first screen — one banner, one line and one action per slide.
- *
- * The order is a funnel, not a gallery: the promise first, then the two
- * audiences the brief names (застройщик, коммерция), then the private client.
- * It stops at four because that is the whole set the client shot; the deck is
- * an override of DESIGN.md §2 (see `HeroSlide` in `@/types`) and growing it
- * past its source material is how it would become the promo carousel §2
- * actually warned about.
- *
- * Slide 1's CTA is a same-page fragment and carries no locale prefix —
- * `ButtonLink` routes it through a plain `<a>` — while the rest point at real
- * routes and go through the locale-aware `Link`.
- *
- * Copy: `hero.slides.<key>.{eyebrow,headline,cta,imageLabel}`.
- */
-export const heroSlides: HeroSlide[] = [
-  {
-    key: "promise",
-    image: "/banners/banner_1.jpg",
-    cta: "#products",
-  },
-  {
-    key: "residential",
-    image: "/banners/banner_2.jpg",
-    cta: "/portfolio",
-  },
-  {
-    key: "commercial",
-    image: "/banners/banner_3.jpg",
-    cta: "/solutions/facade-glazing",
-  },
-  {
-    key: "private",
-    image: "/banners/banner_4.jpg",
-    cta: "/solutions/windows",
-  },
-];
 
 // "Профессионалам" — the one dark section on the page. The dark ground is the
 // marker that the audience has changed (DESIGN.md §3 п.2), not decoration.

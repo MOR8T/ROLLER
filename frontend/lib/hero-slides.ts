@@ -1,5 +1,3 @@
-import { getTranslations } from "next-intl/server";
-import { heroSlides as staticHeroSlides } from "@/data/home";
 import { BACKEND_API_URL } from "@/lib/admin-auth";
 import { defaultLocale, type Locale } from "@/i18n/routing";
 
@@ -10,6 +8,10 @@ import { defaultLocale, type Locale } from "@/i18n/routing";
  * — see `RawHeroSlide`); this module picks out the one `locale` needs.
  * `imageSrc` is always a ready-to-use `<Image src>`: either an absolute URL
  * into the backend's `/uploads`, or a local `public/` path.
+ *
+ * An empty array means "no slides yet" — there is no static fallback deck
+ * anymore. `hero-section.tsx` renders a skeleton in that case instead of
+ * fabricated content.
  */
 export interface HeroSlideDto {
   id: number;
@@ -49,40 +51,28 @@ function resolveImageSrc(imagePath: string): string {
 }
 
 /**
- * Reads the live slides from the backend. Falls back to the four static
- * banners in `data/home.ts` — translated into `locale` — whenever the
- * backend is unreachable or has no slides yet, so the homepage never ships
- * an empty deck while content is still being set up in the admin panel.
+ * Reads the live slides from the backend. Returns an empty array — never a
+ * fabricated placeholder — if the backend is unreachable or has no slides
+ * yet; the caller is responsible for showing a loading/empty state.
  */
 export async function getHeroSlides(locale: string): Promise<HeroSlideDto[]> {
   try {
     const res = await fetch(`${BACKEND_API_URL}/api/hero-slides`, {
       next: { revalidate: 60, tags: ["hero-slides"] },
     });
+    if (!res.ok) return [];
 
-    if (res.ok) {
-      const data: RawHeroSlide[] = await res.json();
-      if (data.length > 0) {
-        return data
-          .slice()
-          .sort((a, b) => a.position - b.position)
-          .map((raw) => ({
-            id: raw.id,
-            title: titleForLocale(raw, locale),
-            imageSrc: resolveImageSrc(raw.image_path),
-            productLink: raw.product_link,
-          }));
-      }
-    }
+    const data: RawHeroSlide[] = await res.json();
+    return data
+      .slice()
+      .sort((a, b) => a.position - b.position)
+      .map((raw) => ({
+        id: raw.id,
+        title: titleForLocale(raw, locale),
+        imageSrc: resolveImageSrc(raw.image_path),
+        productLink: raw.product_link,
+      }));
   } catch {
-    // Backend unreachable — fall through to the static fixture below.
+    return [];
   }
-
-  const t = await getTranslations({ locale, namespace: "hero" });
-  return staticHeroSlides.map((slide, index) => ({
-    id: -(index + 1),
-    title: t(`slides.${slide.key}.headline`),
-    imageSrc: slide.image,
-    productLink: slide.cta,
-  }));
 }

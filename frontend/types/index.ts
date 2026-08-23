@@ -191,38 +191,6 @@ export interface Cta {
 }
 
 /**
- * One slide of the homepage first screen.
- *
- * ⚠️ DESIGN.md §7 described the hero in the singular and §2 ruled out the
- * IMZO-style promo carousel outright. The client overrode both on 2026-08-11:
- * a single static panel could only ever say one thing, and the two halves of
- * the offer — ПВХ and алюминий — never reached the first screen at all. The
- * override is narrow: still one promise, one action *per slide*, and the
- * carousel stays inside the page container rather than taking the full screen,
- * so §5's rule that the next section's top edge is visible without scrolling
- * survives.
- */
-export interface HeroSlide {
-  /** Looks up `hero.slides.<key>.*` in the message catalogue. */
-  key: string;
-  /**
-   * The "context" layer DESIGN.md §6 asks for — an interior, facade or
-   * finished object. Every other image slot on the site is nullable because
-   * this photography did not exist; the client delivered it on 2026-08-11 as
-   * `public/banners/*.jpg`, so here it is required. §11's ban on profile
-   * cutaways over the first screen is satisfied rather than overridden: these
-   * are finished objects, and the renders they replaced were exactly what §11
-   * meant.
-   *
-   * The banners carry the ROLLER mark and the brand's red/black corner
-   * graphics in the pixels, which is why slide copy sits along the bottom edge
-   * — see `hero-section.tsx`.
-   */
-  image: string;
-  cta: Cta["href"];
-}
-
-/**
  * ⚠️ `Application` was the catalog's second axis — a facet on `Product` and an
  * SEO landing of its own — while `Category` meant the material. Since
  * 2026-08-17 there is only one axis: those applications *are* the categories,
