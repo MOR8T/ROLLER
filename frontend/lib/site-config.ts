@@ -8,7 +8,7 @@ export const siteConfig = {
   email: "rollerunopen2006@gmail.com",
   mapUrl: "https://yandex.tj/maps/-/CTVRvHm1",
   mapEmbedUrl:
-    "https://yandex.tj/map-widget/v1/?ll=68.776335%2C38.546573&mode=search&text=ROLLER%2C%20%D0%B3.%20%D0%94%D1%83%D1%88%D0%B0%D0%BD%D0%B1%D0%B5%2C%20%D1%83%D0%BB.%20%D0%9C%D0%B8%D1%80%D0%B0%D0%BB%D0%B8%20%D0%9C%D0%B0%D1%85%D0%BC%D0%B0%D0%B4%D0%B0%D0%BB%D0%B8%2025&z=16",
+    "https://yandex.tj/map-widget/v1/?ll=68.776126%2C38.546627&mode=search&text=ROLLER%2C%20%D0%B3.%20%D0%94%D1%83%D1%88%D0%B0%D0%BD%D0%B1%D0%B5%2C%20%D1%83%D0%BB.%20%D0%9C%D0%B8%D1%80%D0%B0%D0%BB%D0%B8%20%D0%9C%D0%B0%D1%85%D0%BC%D0%B0%D0%B4%D0%B0%D0%BB%D0%B8%2025&z=16",
   social: {
     instagram: "https://instagram.com/roller.tj",
     telegram: "https://t.me/ROLLERcallcenter",

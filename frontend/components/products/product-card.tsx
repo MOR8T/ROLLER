@@ -40,10 +40,17 @@ interface ProductCardProps {
    * странице товара"). A page-local fragment is still accepted.
    */
   chooseHref: string;
+  /**
+   * The category whose list this card sits in. It becomes the category segment
+   * of the product URL, so a visitor who opened «Двери» stays in «Двери».
+   * Omitted on the catalog index, where the card belongs to no one list and the
+   * product's first category stands in.
+   */
+  categorySlug?: string;
   sizes?: string;
 }
 
-export function ProductCard({ product, chooseHref, sizes }: ProductCardProps) {
+export function ProductCard({ product, chooseHref, categorySlug, sizes }: ProductCardProps) {
   const t = useTranslations("products");
   const tBrands = useTranslations("brands");
   const tMaterials = useTranslations("materials");
@@ -52,7 +59,7 @@ export function ProductCard({ product, chooseHref, sizes }: ProductCardProps) {
 
   const name = tBrands(`items.${product.slug}.name`);
   const segment = tSegments(product.segment);
-  const href = productHref(product);
+  const href = productHref(product, categorySlug);
 
   // Two or three pairs off the front of the flexible spec list — never a fixed
   // set of columns. A component (a net, a windowsill) declares different pairs

@@ -81,34 +81,34 @@ export function HeaderProductsMenu({
           className="absolute inset-x-0 top-full hidden border-b border-brand-black/10 bg-brand-white shadow-[0_18px_40px_-20px_rgba(29,29,27,0.28)] xl:block"
         >
           <Container className="py-8">
-            {/* Four across, wrapping. The number of categories is admin-managed
-                and will not stay at six, so the grid is fixed in columns and
-                free in rows rather than one column per category. */}
-            <div className="grid gap-x-8 gap-y-8 xl:grid-cols-3 2xl:grid-cols-4">
+            {/* Columns wrap: the number of categories is admin-managed and will
+                not stay at six, so the grid is fixed in columns and free in
+                rows rather than one column per category. Name-only rows are
+                short enough for five across even at 1280px. */}
+            <div className="grid gap-x-8 gap-y-8 xl:grid-cols-5 2xl:gap-x-10">
               {filled.map((category) => (
                 <div key={category.slug}>
-                  <p className="px-4 text-xs font-medium tracking-[0.18em] text-brand-black/45 uppercase">
+                  <p className="text-xs font-semibold tracking-[0.16em] text-brand-black/55 uppercase">
                     {t(`items.${category.slug}.title`)}
                   </p>
 
-                  <ul className="mt-2 grid gap-0.5">
+                  {/* Name only, and the name carries weight: at 15px/600 in full
+                      brand black a system reads at a glance, while the category
+                      above it stays the quieter label. The depth/chambers line
+                      under each system was the panel repeating the product page
+                      inside a menu: three numbers per row, five columns of them,
+                      and the visitor still has to open the system to compare
+                      properly. The specs live on the product page; the menu is a
+                      list of names. */}
+                  <ul className="mt-3 grid gap-px">
                     {productsByCategory(category.slug).map((product) => (
                       <li key={product.slug}>
                         <Link
-                          href={productHref(product)}
+                          href={productHref(product, category.slug)}
                           onClick={onClose}
-                          className="group flex flex-col gap-0.5 rounded-card px-4 py-2 transition-colors hover:bg-brand-black/4 focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:outline-none"
+                          className="block rounded-control py-1.5 text-[0.9375rem] font-semibold text-brand-black transition-colors hover:text-brand-red focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:outline-none"
                         >
-                          <span className="text-sm font-semibold text-brand-black transition-colors group-hover:text-brand-red">
-                            {tBrands(`items.${product.slug}.name`)}
-                          </span>
-                          {/* Depth and chambers rather than the marketing line:
-                              one row, and it is the number the visitor is
-                              comparing the systems on. */}
-                          <span className="text-xs leading-5 text-brand-black/55">
-                            {tBrands("depth", { value: product.depthMm })} ·{" "}
-                            {tBrands("chambers", { count: product.chambers })}
-                          </span>
+                          {tBrands(`items.${product.slug}.name`)}
                         </Link>
                       </li>
                     ))}

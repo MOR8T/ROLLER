@@ -9,18 +9,17 @@ import type { Showroom } from "@/types";
  * a language-independent string. See the note on `Showroom` in `types/index.ts`
  * for why the pairs are `[lng, lat]`.
  *
- * ⚠️ Dushanbe is the office address the brief gives (`common.address`), read
- * off the `mapEmbedUrl` already in `site-config.ts` — so the pin and the
- * iframe on `/contacts` cannot drift apart. **Khujand is a placeholder**: the
- * client has not supplied a street address, and the pair below is the city
- * centre, accurate to the city and to nothing smaller. It is marked here rather
- * than quietly shipped so that whoever gets the real address knows there is
- * exactly one line to change.
+ * Both pairs are the ones the client sent on 2026-08-20, read off the Google
+ * Maps links they supplied and transposed into `[lng, lat]`. Dushanbe is the
+ * office address the brief gives (`common.address`); the `ll` of `mapEmbedUrl`
+ * in `site-config.ts` is centred on the same point, so the pin and the iframe
+ * on `/contacts` cannot drift apart. Khujand was the city centre until this
+ * date and is now the showroom itself.
  */
 export const showrooms: Showroom[] = [
   {
     id: "dushanbe",
-    coordinates: [68.776335, 38.546573],
+    coordinates: [68.776126, 38.546627],
     phone: siteConfig.phone,
     phoneHref: siteConfig.phoneHref,
     routeUrl: siteConfig.mapUrl,
@@ -33,12 +32,10 @@ export const showrooms: Showroom[] = [
   },
   {
     id: "khujand",
-    // ⚠️ Placeholder — city centre, not the showroom. Replace with the real
-    // pair the moment the client sends the address.
-    coordinates: [69.622192, 40.283271],
+    coordinates: [69.678147, 40.255865],
     phone: siteConfig.phone,
     phoneHref: siteConfig.phoneHref,
-    routeUrl: "https://yandex.tj/maps/?ll=69.622192%2C40.283271&z=15",
+    routeUrl: "https://yandex.tj/maps/?ll=69.678147%2C40.255865&z=16&pt=69.678147%2C40.255865",
     photo: "/showrooms/khujand.jpg",
   },
 ];

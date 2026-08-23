@@ -80,7 +80,8 @@ export default async function Home({ params }: PageProps<"/[locale]">) {
 
       <HeroSection />
       <ProductsGridSection />
-      <MeasureStripSection />
+      {/* Вызвать замерщика бесплатно */}
+      {/* <MeasureStripSection />  */}
       <AboutStatsSection />
       <OffersTabsSection />
       <NewsSection />

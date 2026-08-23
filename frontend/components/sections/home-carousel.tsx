@@ -1,17 +1,20 @@
 "use client";
 
-import { ReactNode } from "react";
+import { ReactNode, useState } from "react";
 import { useTranslations } from "next-intl";
-import { A11y, Autoplay, Pagination } from "swiper/modules";
+import type SwiperInstance from "swiper";
+import { A11y, Autoplay } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 
+import { SliderArrow } from "@/components/ui/slider-arrow";
 import { cn } from "@/lib/utils";
 
-// Core only. `swiper/css/pagination` is deliberately left out: it arrives
-// unlayered, and unlayered CSS outranks everything in Tailwind's
-// `@layer utilities` no matter how specific the utility is — it silently pins
-// the active dot back to a circle. Nothing competes once it is gone, so the
-// indicator below is plain Tailwind.
+// Core only. Neither `swiper/css/pagination` nor Swiper's `Pagination` module
+// is here: the dots and arrows below are the site's own controls, the same row
+// `expo-slider.tsx` puts under the hero deck. Swiper's pagination stylesheet
+// also arrives unlayered, which outranks everything in Tailwind's
+// `@layer utilities` no matter how specific the utility is — it used to pin the
+// active dot back to a circle. Nothing competes once both are gone.
 import "swiper/css";
 
 export interface HomeCarouselSlide {
@@ -33,7 +36,9 @@ interface HomeCarouselProps {
 
 /**
  * The homepage's carousel: loops, plays itself, drags under the cursor, and
- * pages with dots.
+ * steps from a row of dots and arrows under the strip — the same control row
+ * `expo-slider.tsx` puts under the hero deck, so every slider on the page is
+ * driven the same way.
  *
  * ── Why Swiper and not a scroll-snap track ──────────────────────────────────
  *
@@ -101,100 +106,113 @@ export function HomeCarousel({
 
   const [baseView, smView, lgView] = perView;
 
+  // The dots count *real* slides, never the repeats: `rendered` may hold the
+  // same list two or three times over, and a row of dots that counts copies is
+  // a row that lies about how much there is to see.
+  const [swiper, setSwiper] = useState<SwiperInstance | null>(null);
+  const [active, setActive] = useState(0);
+
   return (
-    <Swiper
-      modules={[Autoplay, Pagination, A11y]}
-      slidesPerView={baseView}
-      // One slide per step everywhere. Paging by a whole screenful makes the
-      // autoplay lurch, and it also makes a dot mean "page", which stops being
-      // a useful unit the moment the page size changes with the breakpoint.
-      slidesPerGroup={1}
-      spaceBetween={gap}
-      // `grabCursor` is repeated in every breakpoint on purpose. Swiper compares
-      // the incoming breakpoint's value against the current one, and an absent
-      // key reads as "off" — so crossing 640px would strip the grab cursor and
-      // leave a strip that still drags but no longer says it does.
-      breakpoints={{
-        640: { slidesPerView: smView, grabCursor: true },
-        1024: { slidesPerView: lgView, grabCursor: true },
-      }}
-      loop
-      loopAdditionalSlides={buffer}
-      grabCursor
-      autoplay={{
-        delay: autoplayDelay,
-        // The strip keeps going after a drag. Stopping for good on first touch
-        // is Swiper's default and it makes an autoplaying carousel look broken
-        // the moment anyone brushes it.
-        disableOnInteraction: false,
-        // But it does hold still while the pointer is over it — nobody can read
-        // a headline that is sliding away from them.
-        pauseOnMouseEnter: true,
-      }}
-      // ⚠️ Plain bullets, never `dynamicBullets`. That mode scales and shifts
-      // the dots through `swiper-pagination-bullet-active-{main,prev,next}`,
-      // and every one of those rules lives in `swiper/css/pagination` — the
-      // stylesheet this file deliberately does not import, because it arrives
-      // unlayered and outranks the Tailwind below. Turning it on without that
-      // CSS is what left the dot row misaligned, worst on a narrow screen.
-      pagination={{ clickable: true }}
-      a11y={{
-        // Swiper interpolates `{{index}}` itself, so the placeholder has to
-        // survive `next-intl` intact — passing it as the value does that and
-        // keeps the sentence, and its word order, in the message catalogue.
-        paginationBulletMessage: t("goTo", { index: "{{index}}" }),
-        containerRoleDescriptionMessage: t("region"),
-        itemRoleDescriptionMessage: t("slide"),
-      }}
-      aria-label={label}
-      // Room below the cards for the dots is inline, not a `pb-*` utility:
-      // `swiper/css` ships unlayered and its own `.swiper { padding: 0px }`
-      // outranks anything in `@layer utilities` regardless of class order or
-      // specificity. Same trap as the slide height in `partners-grid.tsx`.
-      style={{ paddingBottom: "3rem" }}
-      className={cn(
+    <div className={cn("relative", className)}>
+      <Swiper
+        onSwiper={setSwiper}
+        // `realIndex` indexes `rendered`, so a strip that repeats its list
+        // reports 5 for the second copy of slide 2 — the modulo folds the
+        // copies back onto the slide they duplicate.
+        onSlideChange={(instance) => setActive(instance.realIndex % slides.length)}
+        modules={[Autoplay, A11y]}
+        slidesPerView={baseView}
+        // One slide per step everywhere. Paging by a whole screenful makes the
+        // autoplay lurch, and it also makes a dot mean "page", which stops being
+        // a useful unit the moment the page size changes with the breakpoint.
+        slidesPerGroup={1}
+        spaceBetween={gap}
+        // `grabCursor` is repeated in every breakpoint on purpose. Swiper compares
+        // the incoming breakpoint's value against the current one, and an absent
+        // key reads as "off" — so crossing 640px would strip the grab cursor and
+        // leave a strip that still drags but no longer says it does.
+        breakpoints={{
+          640: { slidesPerView: smView, grabCursor: true },
+          1024: { slidesPerView: lgView, grabCursor: true },
+        }}
+        loop
+        loopAdditionalSlides={buffer}
+        grabCursor
+        autoplay={{
+          delay: autoplayDelay,
+          // The strip keeps going after a drag, and after an arrow. Stopping for
+          // good on first touch is Swiper's default and it makes an autoplaying
+          // carousel look broken the moment anyone brushes it.
+          disableOnInteraction: false,
+          // But it does hold still while the pointer is over it — nobody can read
+          // a headline that is sliding away from them.
+          pauseOnMouseEnter: true,
+        }}
+        a11y={{
+          containerRoleDescriptionMessage: t("region"),
+          itemRoleDescriptionMessage: t("slide"),
+        }}
+        aria-label={label}
         // The grab cursor is set here rather than left to `grabCursor`. That
         // option writes `style.cursor` on the root at init, and React blows the
         // inline style away on the next render of this component — measured:
         // `params.grabCursor` was true while `el.style.cursor` was empty. As
         // classes it survives, and `:active` covers the "grabbing" half that
         // Swiper would otherwise swap in on pointerdown.
-        "cursor-grab active:cursor-grabbing",
-        // Swiper positions the pagination absolutely against the root — so once
-        // the root has its own padding, `bottom-0` lands inside that padding,
-        // under the strip, rather than over it.
-        "[&_.swiper-pagination]:absolute [&_.swiper-pagination]:inset-x-0 [&_.swiper-pagination]:bottom-0 [&_.swiper-pagination]:flex [&_.swiper-pagination]:items-center [&_.swiper-pagination]:justify-center [&_.swiper-pagination]:gap-2",
-        // A dot, so `rounded-full` is allowed. Black, not red: the homepage
-        // spends its one accent on the news date (`home-kit.tsx`).
-        "[&_.swiper-pagination-bullet]:h-2 [&_.swiper-pagination-bullet]:cursor-pointer [&_.swiper-pagination-bullet]:rounded-full [&_.swiper-pagination-bullet]:transition-all [&_.swiper-pagination-bullet]:duration-300 [&_.swiper-pagination-bullet]:focus-visible:ring-2 [&_.swiper-pagination-bullet]:focus-visible:ring-brand-black [&_.swiper-pagination-bullet]:focus-visible:ring-offset-2 [&_.swiper-pagination-bullet]:focus-visible:outline-none",
-        // Idle and current are styled through mutually exclusive selectors on
-        // purpose. Both set `width` and `background`, and two utilities of the
-        // same property leave the winner to stylesheet order — `:not()` makes
-        // them incapable of matching the same dot, so the cascade never has to
-        // break the tie.
-        "[&_.swiper-pagination-bullet:not(.swiper-pagination-bullet-active)]:w-2 [&_.swiper-pagination-bullet:not(.swiper-pagination-bullet-active)]:bg-brand-black/20",
-        "[&_.swiper-pagination-bullet:not(.swiper-pagination-bullet-active):hover]:bg-brand-black/45",
-        // The current page stretches rather than only changing colour, which
-        // survives both a small screen and a colour-blind reading.
-        "[&_.swiper-pagination-bullet-active]:w-8 [&_.swiper-pagination-bullet-active]:bg-brand-black",
-        className,
-      )}
-    >
-      {rendered.map((slide) => (
-        <SwiperSlide
-          key={`${slide.key}-${slide.pass}`}
-          // `h-auto`, because `swiper/css` sets `.swiper-slide { height: 100% }`
-          // unlayered and a card that has to size itself would collapse.
-          style={{ height: "auto" }}
-          className={slideClassName}
-          aria-hidden={slide.pass > 0 || undefined}
-          // A repeat must not be a tab stop, or the keyboard walks the same
-          // three links twice.
-          inert={slide.pass > 0 || undefined}
-        >
-          {slide.node}
-        </SwiperSlide>
-      ))}
-    </Swiper>
+        className="cursor-grab active:cursor-grabbing"
+      >
+        {rendered.map((slide) => (
+          <SwiperSlide
+            key={`${slide.key}-${slide.pass}`}
+            // `h-auto`, because `swiper/css` sets `.swiper-slide { height: 100% }`
+            // unlayered and a card that has to size itself would collapse.
+            style={{ height: "auto" }}
+            className={slideClassName}
+            aria-hidden={slide.pass > 0 || undefined}
+            // A repeat must not be a tab stop, or the keyboard walks the same
+            // three links twice.
+            inert={slide.pass > 0 || undefined}
+          >
+            {slide.node}
+          </SwiperSlide>
+        ))}
+      </Swiper>
+
+      {slides.length > 1 ? (
+        <div className="mt-6 flex items-center justify-between gap-4">
+          <div className="flex items-center gap-2">
+            {slides.map((slide, index) => (
+              <button
+                key={slide.key}
+                type="button"
+                aria-label={t("goTo", { index: index + 1 })}
+                aria-current={index === active}
+                // `slideToLoop` takes a real index and finds whichever copy of
+                // it is nearest, so a dot stays one short hop away even on a
+                // strip whose list is repeated.
+                onClick={() => swiper?.slideToLoop(index)}
+                className={cn(
+                  // A dot, so `rounded-full` is allowed — DESIGN.md §5 rules out
+                  // pills for buttons, not for indicators. The current one
+                  // stretches rather than only changing colour, which survives
+                  // both a small screen and a colour-blind reading.
+                  "h-2 cursor-pointer rounded-full transition-all duration-300 focus-visible:ring-2 focus-visible:ring-brand-black focus-visible:ring-offset-2 focus-visible:outline-none",
+                  index === active
+                    ? "w-8 bg-brand-black"
+                    : "w-2 bg-brand-black/20 hover:bg-brand-black/40",
+                )}
+              />
+            ))}
+          </div>
+
+          <div className="flex items-center gap-2">
+            {/* The strip loops, so neither arrow is ever a dead end — no
+                disabled state to reach. */}
+            <SliderArrow side="left" label={t("previous")} onClick={() => swiper?.slidePrev()} />
+            <SliderArrow side="right" label={t("next")} onClick={() => swiper?.slideNext()} />
+          </div>
+        </div>
+      ) : null}
+    </div>
   );
 }

@@ -44,8 +44,9 @@ export type ProjectCategory = "residential" | "commercial" | "private";
  *    shape the API will deliver — a list of categories, each carrying its
  *    products — and it is what the admin panel edits.
  *  - it is many-to-many. ROLLER goes into windows *and* doors, so a product
- *    appears under every category that claims it, and its URL carries no
- *    category at all (`/products/[product]`).
+ *    appears under every category that claims it — and, since 2026-08-20, at
+ *    one URL per claim: `/products/windows/roller` and `/products/doors/roller`
+ *    are the same system reached through two lists.
  */
 export interface Category {
   slug: string;
@@ -104,7 +105,9 @@ export interface Colorway {
 /**
  * A product is a **profile system**. It belongs to no category of its own:
  * `Category.productSlugs` is the one place the link is written, so a system is
- * in as many categories as claim it and in none by default.
+ * in as many categories as claim it and in none by default. The category
+ * segment of its URL therefore says which list the visitor came through, not
+ * what the system *is* — see `productHref`.
  */
 export interface Product {
   slug: string;

@@ -46,8 +46,8 @@ export async function generateMetadata({
  *
  * ⚠️ The route is still `/solutions/[category]` — it was `[application]` until
  * the two axes became one on 2026-08-17. The folder was renamed, the URLs were
- * not: these are the indexed landings, and `/products/[slug]` is a product now,
- * so the category cannot move there anyway.
+ * not: these are the indexed landings, and under `/products/` a category is
+ * only the first half of a product address, never a page of its own.
  *
  * No FAQ block. The plan asks for one "при наличии контента" and there is none
  * in the brief; inventing answers about warranty terms or lead times on the
@@ -121,6 +121,7 @@ export default async function CategoryPage({
             className="mt-10"
             products={items}
             chooseHref={CALCULATOR_HREF}
+            categorySlug={category}
             empty={
               <EmptyState
                 title={tSolutions("empty.title")}
