@@ -64,10 +64,10 @@ export interface CompanyStat {
 }
 
 export const companyStats: CompanyStat[] = [
-  { key: "years", value: 20, suffix: "" },
+  { key: "years", value: 20, suffix: "+" },
   { key: "projects", value: 1000, suffix: "+" },
   { key: "clients", value: 1000, suffix: "+" },
-  { key: "employees", value: 400, suffix: "" },
+  { key: "employees", value: 400, suffix: "+" },
   { key: "tonnage", value: 10000, suffix: "+" },
 ];
 

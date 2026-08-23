@@ -30,7 +30,7 @@ import { ExpoSlider } from "@/components/ui/expo-slider";
  */
 
 /** Long enough to read a four-word headline and reach for the button. */
-const AUTOPLAY_MS = 7000;
+const AUTOPLAY_MS = 3500;
 
 export function HeroSection() {
   const t = useTranslations("hero");

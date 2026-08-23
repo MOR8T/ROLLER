@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useTranslations } from "next-intl";
-import { ArrowUpRight, Clock, MapPin, Phone } from "lucide-react";
+import { ArrowUpRight, Check, Clock, MapPin, Phone } from "lucide-react";
 
 import { CitySelect } from "@/components/sections/city-select";
 import { pillClass } from "@/components/sections/home-kit";
@@ -36,8 +36,17 @@ type View = "map" | "list";
  * a map is a poor way to read seventy addresses. We have two, so the list is
  * short — but it is the only place on the site that states both addresses, both
  * sets of hours and both phones together, which is what a visitor arriving from
- * the "Шоурумы" menu item came for. The map stays the default, because "where
- * is it" is the more common question.
+ * the "Шоурумы" menu item came for, and that is why the list opens first. The
+ * map is one tap away for the visitor whose question is "where is it".
+ *
+ * ── One city picker per view ────────────────────────────────────────────────
+ *
+ * The dropdown only ships with the map, because on the map a city is a *camera
+ * position*: there is one viewport and something has to say which of the two
+ * pins it flies to. The list has no camera — both cards are on the page, both
+ * are readable, and a dropdown above them would be a control that hides nothing
+ * and reveals nothing. There the cards are the picker: tapping one selects that
+ * city, and the choice is what the map opens on when the visitor switches over.
  *
  * ⚠️ imzo.uz has a second filter beside the city — "Официальные", separating
  * their own showrooms from partners' and franchisees'. Both of ours are our
@@ -46,7 +55,7 @@ type View = "map" | "list";
  */
 export function ShowroomsDirectory() {
   const t = useTranslations("showrooms");
-  const [view, setView] = useState<View>("map");
+  const [view, setView] = useState<View>("list");
   const [activeId, setActiveId] = useState(showrooms[0].id);
 
   const options = showrooms.map((showroom) => ({
@@ -67,7 +76,7 @@ export function ShowroomsDirectory() {
             aria-label={t("title")}
             className="flex w-fit gap-1 rounded-full bg-brand-black/6 p-1"
           >
-            {(["map", "list"] as const).map((option) => (
+            {(["list", "map"] as const).map((option) => (
               <button
                 key={option}
                 type="button"
@@ -85,12 +94,15 @@ export function ShowroomsDirectory() {
             ))}
           </div>
 
-          <CitySelect
-            options={options}
-            value={activeId}
-            onChange={setActiveId}
-            label={t("title")}
-          />
+          {/* Map only — see the note above. */}
+          {view === "map" ? (
+            <CitySelect
+              options={options}
+              value={activeId}
+              onChange={setActiveId}
+              label={t("title")}
+            />
+          ) : null}
         </Reveal>
 
         <Reveal className="relative z-0 mt-8">
@@ -114,6 +126,7 @@ export function ShowroomsDirectory() {
                     showroom={showroom}
                     city={cities[showroom.id]}
                     selected={showroom.id === activeId}
+                    onSelect={() => setActiveId(showroom.id)}
                   />
                 </li>
               ))}
@@ -142,16 +155,32 @@ export function ShowroomsDirectory() {
  *
  * That is also why an unselected card is no longer `bg-brand-white/60`. A
  * gradient ending in translucent white over a grey section reads as a smear;
- * selection is carried by the border alone now.
+ * selection is carried by the card's edge instead.
+ *
+ * ── Selecting ───────────────────────────────────────────────────────────────
+ *
+ * The whole card is the hit area, through a transparent button laid over it —
+ * the card cannot *be* a button, because it already contains two links and
+ * nesting those inside one is invalid HTML and unreachable by a keyboard. The
+ * overlay sits under the actions row, so "Позвонить" and "Проложить маршрут"
+ * keep their own clicks, and it carries `aria-pressed`, so a screen reader gets
+ * the selected state rather than a heading that looks the same either way.
+ *
+ * The state is said three ways, because a border alone is a poor answer to
+ * "which one is chosen": a black edge doubled by a ring, a deeper shadow, and a
+ * badge in words over the photograph. The words are what survive a colour-blind
+ * reading and a phone in sunlight.
  */
 function ShowroomCard({
   showroom,
   city,
   selected,
+  onSelect,
 }: {
   showroom: Showroom;
   city: string;
   selected: boolean;
+  onSelect: () => void;
 }) {
   const t = useTranslations("showrooms");
   const tCommon = useTranslations("common");
@@ -161,11 +190,30 @@ function ShowroomCard({
       className={cn(
         // No padding on the article: the photograph runs to the card's edges and
         // `overflow-hidden` clips it into the corners. The text carries its own.
-        "flex h-full flex-col overflow-hidden rounded-[2rem] border bg-brand-white transition-colors",
-        "shadow-[0_24px_60px_-28px_rgba(29,29,27,0.45)]",
-        selected ? "border-brand-black" : "border-brand-black/10",
+        "relative flex h-full flex-col overflow-hidden rounded-[2rem] border bg-brand-white",
+        "transition-[border-color,box-shadow] duration-300",
+        selected
+          ? // `ring-1` and not `border-2`: a ring is painted outside the border
+            // box, so the edge reads as twice as thick without the card's contents
+            // shifting a pixel when the selection moves.
+            "border-brand-black shadow-[0_28px_70px_-24px_rgba(29,29,27,0.55)] ring-1 ring-brand-black"
+          : "border-brand-black/10 shadow-[0_24px_60px_-28px_rgba(29,29,27,0.45)] hover:border-brand-black/35",
       )}
     >
+      {/* First in the DOM so a keyboard reaches "select this one" before the
+          two links inside the card, and `z-10` because that order would
+          otherwise put it *under* the photograph, which is positioned too.
+          `z-20` on the actions row keeps the links on top of it. No focus ring
+          offset — the card's own edge is where the ring belongs, and an offset
+          one would sit on the grey section outside it. */}
+      <button
+        type="button"
+        aria-pressed={selected}
+        aria-label={t("select", { city })}
+        onClick={onSelect}
+        className="absolute inset-0 z-10 cursor-pointer rounded-[2rem] focus-visible:ring-2 focus-visible:ring-brand-black focus-visible:outline-none focus-visible:ring-inset"
+      />
+
       {/* More than 60% of the card, per the client's brief and measured rather
           than assumed. Three ratios, because the text below is a near-constant
           height and so claims a bigger share of a narrow card than of a wide
@@ -209,6 +257,16 @@ function ShowroomCard({
           <span className="sr-only">{t("labels.hours")}: </span>
           {t(`points.${showroom.id}.hours`)}
         </p>
+
+        {/* Opposite the hours badge, and solid rather than translucent: this one
+            is a state, not a fact about the place, and it has to win the glance
+            against whatever photograph is underneath it. */}
+        {selected ? (
+          <p className="absolute top-5 right-5 inline-flex items-center gap-2 rounded-full bg-brand-black px-4 py-2 text-xs font-semibold text-brand-white">
+            <Check className="size-3.5 shrink-0" aria-hidden />
+            {t("selectedBadge")}
+          </p>
+        ) : null}
       </div>
 
       {/* `-mt-10` lifts the heading into the fade — see the note above. */}
@@ -221,7 +279,9 @@ function ShowroomCard({
           {t(`points.${showroom.id}.address`)}
         </p>
 
-        <div className="mt-7 flex flex-wrap gap-3">
+        {/* `relative z-20` keeps both links above the selection overlay — see
+            the note on the component. */}
+        <div className="relative z-20 mt-7 flex flex-wrap gap-3">
           <a href={showroom.phoneHref} className={pillClass("dark")}>
             <Phone className="size-4 shrink-0" aria-hidden />
             {tCommon("call")}

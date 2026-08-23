@@ -2,8 +2,8 @@
 
 import { useCallback, useEffect, useRef, useState, type ReactNode } from "react";
 import Image from "next/image";
-import { ChevronLeft, ChevronRight } from "lucide-react";
 
+import { SliderArrow } from "@/components/ui/slider-arrow";
 import { useIsomorphicLayoutEffect } from "@/lib/use-isomorphic-layout-effect";
 import { cn } from "@/lib/utils";
 
@@ -609,35 +609,5 @@ export function ExpoSlider({
         )
       ) : null}
     </div>
-  );
-}
-
-function SliderArrow({
-  side,
-  label,
-  overlay = false,
-  onClick,
-}: {
-  side: "left" | "right";
-  label: string;
-  overlay?: boolean;
-  onClick: () => void;
-}) {
-  const Icon = side === "left" ? ChevronLeft : ChevronRight;
-
-  return (
-    <button
-      type="button"
-      aria-label={label}
-      onClick={onClick}
-      className={cn(
-        "inline-flex items-center justify-center rounded-full transition-colors focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none",
-        overlay
-          ? "size-12 bg-white text-black shadow-[0_4px_16px_rgba(0,0,0,0.16)] hover:bg-black hover:text-white focus-visible:ring-black"
-          : "size-11 border border-brand-black/15 bg-brand-white text-brand-black hover:border-brand-black/45 focus-visible:ring-brand-black",
-      )}
-    >
-      <Icon aria-hidden className="size-5" />
-    </button>
   );
 }
