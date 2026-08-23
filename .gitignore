@@ -4,3 +4,7 @@ notes/
 .cursor/
 tabplate/
 graphify-out/
+
+# env files (can opt-in for committing if needed)
+.env*
+!.env.example

@@ -1,10 +1,19 @@
+import logging
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.database import Base, engine
 from app.routes import auth_router, users_router
+from app.startup import seed_initial_admin
+
+# Ensures `app.startup`'s seed log line is visible under `docker compose logs`
+# regardless of whether `database.py`'s `echo=True` (which incidentally also
+# triggers a logging config) stays as-is.
+logging.basicConfig(level=logging.INFO)
 
 # Создание таблиц
 Base.metadata.create_all(bind=engine)
+seed_initial_admin()
 
 app = FastAPI(
     title="FastAPI Auth Service",
