@@ -1,5 +1,5 @@
 {
-  "$comment": "Temporary news payload. One file per locale, shaped exactly like the response GET /api/news?locale=tg will return once stage 12 lands — read it only through lib/news.ts, never import it directly. The copy below is still Russian: messages/tg.json is untranslated too, and the two must not drift apart.",
+  "$comment": "Temporary news payload. One file per locale, shaped exactly like the response GET /api/news?locale=tj will return once stage 12 lands — read it only through lib/news.ts, never import it directly. The copy below is still Russian: messages/tj.json is untranslated too, and the two must not drift apart.",
   "items": [
     {
       "slug": "unopen-balcony-glazing",

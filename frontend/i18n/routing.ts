@@ -14,7 +14,7 @@ import { defineRouting } from "next-intl/routing";
  * and a brand name does not translate into Tajik, English or Turkish.
  */
 export const routing = defineRouting({
-  locales: ["ru", "tg", "en", "tr"],
+  locales: ["ru", "tj", "en", "tr"],
   defaultLocale: "ru",
   localePrefix: "always",
 });

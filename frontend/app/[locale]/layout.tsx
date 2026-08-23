@@ -23,7 +23,7 @@ import { routing } from "@/i18n/routing";
  * module graph*, not for the instance whose className is applied, and all four
  * locales share this one route module. Both shapes were built and measured:
  * four bindings side by side here, and four separate modules behind a dynamic
- * `import()`. Each preloaded the union — 12 files on every one of `/ru`, `/tg`,
+ * `import()`. Each preloaded the union — 12 files on every one of `/ru`, `/tj`,
  * `/en`, `/tr` — which is precisely the doubling the plan set out to avoid.
  *
  * So the list is global, and the budget is spent differently instead.

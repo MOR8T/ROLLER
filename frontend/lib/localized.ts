@@ -7,7 +7,7 @@ import { defaultLocale, locales, type Locale } from "@/i18n/routing";
  * component asks `useTranslations` for the *current* locale and never sees the
  * others — that is what `next-intl` is for. The product page is built the other
  * way round on the client's instruction: one state object holds the whole page,
- * and every string inside it carries every locale (`{ru, tg, en, tr}`), so the
+ * and every string inside it carries every locale (`{ru, tj, en, tr}`), so the
  * sections receive data rather than translation keys.
  *
  * Nothing else may adopt this shape without the same instruction: four

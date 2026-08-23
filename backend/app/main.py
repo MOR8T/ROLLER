@@ -2,8 +2,9 @@ import logging
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 from app.database import Base, engine
-from app.routes import auth_router, users_router
+from app.routes import auth_router, users_router, hero_slides_router
 from app.startup import seed_initial_admin
 
 # Ensures `app.startup`'s seed log line is visible under `docker compose logs`
@@ -30,9 +31,14 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# Загруженные файлы (изображения слайдов и т.д.) — путь совпадает с
+# `UPLOAD_DIR` в app/routes/hero_slides.py, которая уже создаёт директорию.
+app.mount("/uploads", StaticFiles(directory="uploads"), name="uploads")
+
 # Включение маршрутов
 app.include_router(auth_router)
 app.include_router(users_router)
+app.include_router(hero_slides_router)
 
 @app.get("/")
 async def root():

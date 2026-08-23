@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
  * Catch-all under `[locale]`, so an unknown path renders the *localized* 404
  * from `app/[locale]/not-found.tsx` instead of Next's built-in English one.
  *
- * Without it every 404 on the site — `/tg/katalog`, a stale link, a typo —
+ * Without it every 404 on the site — `/tj/katalog`, a stale link, a typo —
  * lands on an unstyled English page with no header, no footer and no way back,
  * on all four locales.
  *

@@ -31,6 +31,8 @@ services:
       INITIAL_ADMIN_USERNAME: ${INITIAL_ADMIN_USERNAME}
       INITIAL_ADMIN_EMAIL: ${INITIAL_ADMIN_EMAIL}
       INITIAL_ADMIN_PASSWORD: ${INITIAL_ADMIN_PASSWORD}
+    volumes:
+      - backend_uploads:/app/uploads
     depends_on:
       db:
         condition: service_healthy
@@ -43,6 +45,14 @@ services:
     restart: unless-stopped
     environment:
       BACKEND_API_URL: http://backend:8000
+      # Server-to-server calls use the line above (Docker's internal DNS,
+      # unreachable from a browser). This one is what browser <img> src
+      # attributes get built from, so it has to resolve from *outside* the
+      # compose network. `localhost:8000` only works because
+      # docker-compose.override.yml publishes the backend on the host — a
+      # real deployment needs a real public backend URL (reverse proxy or
+      # domain) and must set this explicitly once one exists.
+      BACKEND_PUBLIC_URL: ${BACKEND_PUBLIC_URL:-http://localhost:8000}
     ports:
       - "3031:3031"
     depends_on:
@@ -51,3 +61,4 @@ services:
 
 volumes:
   postgres_data:
+  backend_uploads:

@@ -1,7 +1,7 @@
 import { defaultLocale, locales, type Locale } from "@/i18n/routing";
 import en from "@/messages/en.json";
 import ru from "@/messages/ru.json";
-import tg from "@/messages/tg.json";
+import tj from "@/messages/tj.json";
 import tr from "@/messages/tr.json";
 import type { LocalizedPair, LocalizedText } from "@/lib/localized";
 
@@ -15,7 +15,7 @@ import type { LocalizedPair, LocalizedText } from "@/lib/localized";
  * `lib/localized.ts` and nothing in `components/` imports this file.
  */
 
-const catalogues: Record<Locale, unknown> = { ru, tg, en, tr };
+const catalogues: Record<Locale, unknown> = { ru, tj, en, tr };
 
 function resolve(catalogue: unknown, path: string): unknown {
   return path.split(".").reduce<unknown>((node, key) => {

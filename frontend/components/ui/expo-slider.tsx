@@ -98,6 +98,14 @@ export interface ExpoSlide {
   /** Only the opening slide may be LCP-eligible. */
   priority?: boolean;
   /**
+   * Skips `next/image`'s optimizer. Needed for images served by a backend
+   * that only the *browser* can reach (e.g. the hero slider's admin-uploaded
+   * photos, proxied through a Docker-published port) — the optimizer runs
+   * server-side and would try the same URL from inside the container, where
+   * it does not resolve. Local `public/` images stay optimized.
+   */
+  unoptimized?: boolean;
+  /**
    * Anything drawn over the photograph — a headline, a button. Receives the
    * slide's own state so a caller can keep off-screen links out of the tab
    * order, or promote only the first real slide's line to an `<h1>`.
@@ -540,6 +548,7 @@ export function ExpoSlider({
                     priority={slide.priority && !clone}
                     loading={slide.priority && !clone ? undefined : "lazy"}
                     sizes={imageSizes}
+                    unoptimized={slide.unoptimized}
                   />
                 </div>
 

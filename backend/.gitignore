@@ -45,3 +45,7 @@ next-env.d.ts
 # python (scripts/)
 __pycache__/
 *.pyc
+
+# user-uploaded files (hero slide images, etc.) — persisted via the
+# `backend_uploads` Docker volume, not committed
+/uploads/

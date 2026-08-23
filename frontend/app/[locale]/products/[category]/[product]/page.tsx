@@ -82,7 +82,7 @@ export async function generateMetadata({
  *
  * The whole page as one value. `buildPageData` reads `data/products.ts` and all
  * four message catalogues and returns a `ProductPageData`: seven sections, every
- * string carrying `{ru, tg, en, tr}`. `ProductPageView` holds it in state and
+ * string carrying `{ru, tj, en, tr}`. `ProductPageView` holds it in state and
  * hands each section its slice, so no section knows about routes, catalogues or
  * the data layer — which is the structure the client asked for, and the seam the
  * API replaces in stage 11.

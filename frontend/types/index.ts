@@ -111,7 +111,7 @@ export interface Colorway {
  */
 export interface Product {
   slug: string;
-  /** Brand name. Translated: `ТЕРМО 60` on RU/TG, `THERMO 60` on EN/TR. */
+  /** Brand name. Translated: `ТЕРМО 60` on RU/TJ, `THERMO 60` on EN/TR. */
   name: string;
   kind: ProductKind;
   /**

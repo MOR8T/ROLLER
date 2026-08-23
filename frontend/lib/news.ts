@@ -3,7 +3,7 @@ import { hasLocale } from "next-intl";
 import { defaultLocale, routing, type Locale } from "@/i18n/routing";
 import en from "@/data/news/en.json";
 import ru from "@/data/news/ru.json";
-import tg from "@/data/news/tg.json";
+import tj from "@/data/news/tj.json";
 import tr from "@/data/news/tr.json";
 
 /**
@@ -52,7 +52,7 @@ interface NewsFeed {
   items: NewsArticle[];
 }
 
-const feeds: Record<Locale, NewsFeed> = { ru, tg, en, tr };
+const feeds: Record<Locale, NewsFeed> = { ru, tj, en, tr };
 
 /**
  * Cards per page on `/news` — imzo.uz's own figure, and it lands on our grid:

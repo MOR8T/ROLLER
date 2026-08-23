@@ -3,10 +3,10 @@
 import { useTranslations } from "next-intl";
 import { ArrowRight } from "lucide-react";
 
-import { heroSlides } from "@/data/home";
 import { PillLink } from "@/components/sections/home-kit";
 import { Container } from "@/components/ui/container";
 import { ExpoSlider } from "@/components/ui/expo-slider";
+import type { HeroSlideDto } from "@/lib/hero-slides";
 
 /**
  * The first screen: the client's four banners, one line and one action each.
@@ -27,13 +27,27 @@ import { ExpoSlider } from "@/components/ui/expo-slider";
  * the seamless loop, the mouse dragging and the autoplay all live there now and
  * are documented there; this file is the homepage's *content* — which banners,
  * which copy, which shapes.
+ *
+ * ⚠️ Slides moved from the static `heroSlides` fixture to the admin panel on
+ * 2026-08-24 (`lib/hero-slides.ts` fetches them; `app/[locale]/page.tsx`
+ * fetches once and passes them down as `slides`). They come back in Russian
+ * only — there is no `hero.slides.*` per-locale lookup for admin-authored
+ * content — and carry no separate button label, so every slide shares the
+ * generic `products.more` translation for its pill instead of its own
+ * `hero.slides.*.cta`. The static fixture and its full per-locale copy still
+ * exist as the fallback for when the backend has nothing yet.
  */
 
 /** Long enough to read a four-word headline and reach for the button. */
 const AUTOPLAY_MS = 3500;
 
-export function HeroSection() {
+interface HeroSectionProps {
+  slides: HeroSlideDto[];
+}
+
+export function HeroSection({ slides }: HeroSectionProps) {
   const t = useTranslations("hero");
+  const tProducts = useTranslations("products");
 
   return (
     <section
@@ -48,33 +62,28 @@ export function HeroSection() {
     >
       <Container>
         <ExpoSlider
-          slides={heroSlides.map((slide, index) => ({
-            key: slide.key,
-            image: slide.image,
-            alt: t(`slides.${slide.key}.imageLabel`),
+          slides={slides.map((slide, index) => ({
+            key: String(slide.id),
+            image: slide.imageSrc,
+            alt: slide.title,
+            // Admin-uploaded photos are absolute URLs into the backend;
+            // `next/image`'s optimizer runs server-side and can't reach that
+            // URL from inside the container — see `ExpoSlide.unoptimized`.
+            unoptimized: slide.imageSrc.startsWith("http"),
             // Only the opening banner is LCP-eligible; the other three are
             // off-screen and must not compete for the connection.
             priority: index === 0,
             content: ({ active, clone, index: real }) => (
-              /* Headline and action, and nothing else. The eyebrow
-                 ("ЖИЛЫЕ КОМПЛЕКСЫ") is deliberately not rendered: the homepage
-                 was cut back to a heading and a link per block, and a slide that
-                 says its audience out loud is the one line the picture already
-                 makes. `hero.slides.*.eyebrow` is kept in the catalogue — this is
-                 a composition decision, and the copy should still be there if the
-                 client wants the deck labelled again. */
               <div className="max-w-2xl p-6 sm:p-8 lg:p-12">
                 {/* `heading`, not an index test: the trailing clone is also the
                     first banner, and letting it decide for itself would put a
                     second `<h1>` on the page. */}
-                <SlideHeadline heading={real === 0 && !clone}>
-                  {t(`slides.${slide.key}.headline`)}
-                </SlideHeadline>
+                <SlideHeadline heading={real === 0 && !clone}>{slide.title}</SlideHeadline>
 
                 {/* White pill on the photograph — the homepage's own action
                     shape. `ButtonLink` still serves every other page. */}
                 <PillLink
-                  href={slide.cta}
+                  href={slide.productLink}
                   tone="white"
                   className="mt-7 lg:mt-8"
                   // An off-screen slide is not a tab stop. Without this the deck
@@ -82,7 +91,7 @@ export function HeroSection() {
                   // header's next link means passing all of them.
                   tabIndex={active ? undefined : -1}
                 >
-                  {t(`slides.${slide.key}.cta`)}
+                  {tProducts("more")}
                   <ArrowRight className="size-4 shrink-0" />
                 </PillLink>
               </div>

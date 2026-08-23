@@ -18,7 +18,7 @@ import type { Category, Colorway, Product, Segment } from "@/types";
  *
  * Same split as `data/home.ts` and for the same reason: this file holds only
  * what is identical in all four locales — slugs, image paths, numbers, the
- * category↔product links. Every word lives in `messages/{ru,tg,en,tr}.json`
+ * category↔product links. Every word lives in `messages/{ru,tj,en,tr}.json`
  * and is looked up by slug. On the backend the text half becomes JSONB
  * (`project_plan/10-database-schema.md`), so components already consume the two
  * halves the way they will once the API exists.

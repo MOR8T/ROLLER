@@ -26,7 +26,7 @@ import type { HeroSlide, Partner } from "@/types";
  *
  * Since stage 03 this file holds only what is **the same in all four locales**:
  * slugs, routes, image paths, icons and numbers. Every word on screen lives in
- * `messages/{ru,tg,en,tr}.json` and is looked up by the `slug` / `key` fields
+ * `messages/{ru,tj,en,tr}.json` and is looked up by the `slug` / `key` fields
  * below.
  *
  * The split is not cosmetic. `data/` is the stand-in for the API, and the API
