@@ -1066,75 +1066,84 @@
     }
   },
   "calculator": {
-    "metaTitle": "Калькулятор окон и дверей",
-    "metaDescription": "Соберите конструкцию: система, размеры, створки, стеклопакет и цвет. Цену считаем под объект — на сайте её нет.",
-    "breadcrumb": "Калькулятор",
-    "eyebrow": "Калькулятор",
-    "title": "Соберите свою конструкцию",
-    "description": "Выберите систему, размеры, число створок и тип открывания — схема перестраивается сразу. В конце отправьте заявку: приедем на замер и посчитаем.",
-    "noPrice": "Цены на сайте не показываем: стоимость зависит от замера, комплектации и монтажа. Калькулятор собирает конструкцию, расчёт присылает менеджер.",
+    "metaTitle": "Window and door calculator",
+    "metaDescription": "Build the construction: type, size, profile series, glazing unit and lamination. We price it after a survey — there are no prices on the site.",
+    "breadcrumb": "Calculator",
+    "title": "Calculator",
+    "noPrice": "We do not publish prices: the cost depends on the survey, the specification and the fitting. The calculator builds the construction; a manager sends the quote.",
     "construction": {
-      "window": "Окно",
-      "door": "Дверь"
+      "window": "Window",
+      "door": "Door"
+    },
+    "materials": {
+      "pvc": "PVC",
+      "aluminium": "Aluminium"
+    },
+    "groups": {
+      "window": {
+        "1": "Single sash",
+        "2": "Two sashes",
+        "3": "Three sashes",
+        "4": "Four sashes",
+        "5": "Five sashes"
+      },
+      "door": {
+        "1": "Single leaf",
+        "2": "Double leaf"
+      }
+    },
+    "chooseVariant": "choose a variant",
+    "details": {
+      "title": "Specification"
     },
     "labels": {
-      "construction": "Конструкция",
-      "material": "Материал",
-      "system": "Система",
-      "sashCount": "Створок",
-      "sashes": "Створки",
-      "sash": "Створка {index}",
-      "opening": "Тип открывания",
-      "layout": "Тип двери",
-      "width": "Ширина",
-      "height": "Высота",
-      "glazing": "Стеклопакет",
-      "color": "Цвет ламинации",
-      "accessories": "Комплектующие",
-      "quantity": "Количество"
-    },
-    "openings": {
-      "fixed": "Глухая",
-      "casement": "Поворотная",
-      "tilt-turn": "Поворотно-откидная"
-    },
-    "layouts": {
-      "single": "Одностворчатая",
-      "double": "Двустворчатая",
-      "transom": "С фрамугой"
+      "construction": "Construction",
+      "material": "Profile type",
+      "series": "Profile series",
+      "glazing": "Glazing unit",
+      "mechanism": "Mechanism",
+      "lamination": "Lamination",
+      "hardware": "Hardware colour",
+      "accessories": "Extras",
+      "quantity": "Quantity, pcs",
+      "width": "Width",
+      "height": "Height"
     },
     "glazing": {
-      "single-glass": "Одинарное стекло",
-      "single-chamber": "Однокамерный стеклопакет",
-      "double-chamber": "Двухкамерный стеклопакет",
-      "double-chamber-energy": "Двухкамерный энергосберегающий"
+      "single-glass": "Single glass",
+      "single-chamber": "Single chamber",
+      "double-chamber": "Double chamber",
+      "double-chamber-energy": "Double chamber, low-E"
+    },
+    "mechanisms": {
+      "standard": "Standard hardware"
     },
     "accessories": {
-      "windowsill": "Подоконник",
-      "mosquito-net": "Москитная сетка"
+      "windowsill": "Windowsill",
+      "mosquito-net": "Mosquito net",
+      "drip": "Drip sill"
     },
     "units": {
-      "mm": "мм",
-      "pcs": "шт."
+      "mm": "mm",
+      "pcs": "pcs"
     },
     "item": {
-      "legend": "Позиция {index}",
-      "remove": "Удалить",
-      "add": "Добавить ещё",
-      "addHint": "В одну заявку можно собрать несколько конструкций.",
-      "addLimit": "В одной заявке — не больше {max} позиций.",
-      "decrease": "Уменьшить количество",
-      "increase": "Увеличить количество"
+      "legend": "No. {index}",
+      "remove": "Remove position",
+      "add": "Add another",
+      "collapse": "Collapse position",
+      "expand": "Expand position"
     },
-    "colorSingleNote": "Эта система поставляется только в белом профиле.",
-    "previewAria": "{construction}, {width} × {height} мм",
+    "submit": "Send",
+    "previewAria": "{construction}, {width} × {height} mm",
     "summary": {
-      "title": "Ваша конфигурация"
+      "title": "Your configuration"
     },
     "request": {
-      "eyebrow": "Заявка",
-      "title": "Отправьте конфигурацию нам",
-      "description": "Конструкция уйдёт вместе с заявкой — менеджер увидит её целиком и вернётся с расчётом."
-    }
+      "title": "Send us your configuration",
+      "description": "The construction travels with the request — a manager sees all of it and comes back with a quote.",
+      "close": "Close"
+    },
+    "variantCode": "Scheme {code}"
   }
 }

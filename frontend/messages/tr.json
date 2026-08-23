@@ -1066,75 +1066,84 @@
     }
   },
   "calculator": {
-    "metaTitle": "Калькулятор окон и дверей",
-    "metaDescription": "Соберите конструкцию: система, размеры, створки, стеклопакет и цвет. Цену считаем под объект — на сайте её нет.",
-    "breadcrumb": "Калькулятор",
-    "eyebrow": "Калькулятор",
-    "title": "Соберите свою конструкцию",
-    "description": "Выберите систему, размеры, число створок и тип открывания — схема перестраивается сразу. В конце отправьте заявку: приедем на замер и посчитаем.",
-    "noPrice": "Цены на сайте не показываем: стоимость зависит от замера, комплектации и монтажа. Калькулятор собирает конструкцию, расчёт присылает менеджер.",
+    "metaTitle": "Pencere ve kapı hesaplayıcı",
+    "metaDescription": "Konstrüksiyonu kurun: tip, ölçü, profil serisi, cam ünitesi ve laminasyon. Fiyatı keşiften sonra hesaplıyoruz — sitede fiyat yok.",
+    "breadcrumb": "Hesaplayıcı",
+    "title": "Hesaplayıcı",
+    "noPrice": "Sitede fiyat göstermiyoruz: maliyet keşfe, donanıma ve montaja bağlıdır. Hesaplayıcı konstrüksiyonu kurar, teklifi yönetici gönderir.",
     "construction": {
-      "window": "Окно",
-      "door": "Дверь"
+      "window": "Pencere",
+      "door": "Kapı"
+    },
+    "materials": {
+      "pvc": "PVC",
+      "aluminium": "Alüminyum"
+    },
+    "groups": {
+      "window": {
+        "1": "Tek kanatlı",
+        "2": "İki kanatlı",
+        "3": "Üç kanatlı",
+        "4": "Dört kanatlı",
+        "5": "Beş kanatlı"
+      },
+      "door": {
+        "1": "Tek kanatlı",
+        "2": "Çift kanatlı"
+      }
+    },
+    "chooseVariant": "varyant seçin",
+    "details": {
+      "title": "Hesap ayrıntıları"
     },
     "labels": {
-      "construction": "Конструкция",
-      "material": "Материал",
-      "system": "Система",
-      "sashCount": "Створок",
-      "sashes": "Створки",
-      "sash": "Створка {index}",
-      "opening": "Тип открывания",
-      "layout": "Тип двери",
-      "width": "Ширина",
-      "height": "Высота",
-      "glazing": "Стеклопакет",
-      "color": "Цвет ламинации",
-      "accessories": "Комплектующие",
-      "quantity": "Количество"
-    },
-    "openings": {
-      "fixed": "Глухая",
-      "casement": "Поворотная",
-      "tilt-turn": "Поворотно-откидная"
-    },
-    "layouts": {
-      "single": "Одностворчатая",
-      "double": "Двустворчатая",
-      "transom": "С фрамугой"
+      "construction": "Konstrüksiyon",
+      "material": "Profil tipi",
+      "series": "Profil serisi",
+      "glazing": "Cam ünitesi",
+      "mechanism": "Mekanizma",
+      "lamination": "Laminasyon",
+      "hardware": "Aksesuar rengi",
+      "accessories": "Ek donanım",
+      "quantity": "Adet",
+      "width": "Genişlik",
+      "height": "Yükseklik"
     },
     "glazing": {
-      "single-glass": "Одинарное стекло",
-      "single-chamber": "Однокамерный стеклопакет",
-      "double-chamber": "Двухкамерный стеклопакет",
-      "double-chamber-energy": "Двухкамерный энергосберегающий"
+      "single-glass": "Tek cam",
+      "single-chamber": "Tek odacıklı",
+      "double-chamber": "Çift odacıklı",
+      "double-chamber-energy": "Çift odacıklı, ısı yalıtımlı"
+    },
+    "mechanisms": {
+      "standard": "Standart aksesuar"
     },
     "accessories": {
-      "windowsill": "Подоконник",
-      "mosquito-net": "Москитная сетка"
+      "windowsill": "Denizlik",
+      "mosquito-net": "Sineklik",
+      "drip": "Dış damlalık"
     },
     "units": {
-      "mm": "мм",
-      "pcs": "шт."
+      "mm": "mm",
+      "pcs": "adet"
     },
     "item": {
-      "legend": "Позиция {index}",
-      "remove": "Удалить",
-      "add": "Добавить ещё",
-      "addHint": "В одну заявку можно собрать несколько конструкций.",
-      "addLimit": "В одной заявке — не больше {max} позиций.",
-      "decrease": "Уменьшить количество",
-      "increase": "Увеличить количество"
+      "legend": "No {index}",
+      "remove": "Pozisyonu sil",
+      "add": "Yeni ekle",
+      "collapse": "Daralt",
+      "expand": "Genişlet"
     },
-    "colorSingleNote": "Эта система поставляется только в белом профиле.",
-    "previewAria": "{construction}, {width} × {height} мм",
+    "submit": "Gönder",
+    "previewAria": "{construction}, {width} × {height} mm",
     "summary": {
-      "title": "Ваша конфигурация"
+      "title": "Yapılandırmanız"
     },
     "request": {
-      "eyebrow": "Заявка",
-      "title": "Отправьте конфигурацию нам",
-      "description": "Конструкция уйдёт вместе с заявкой — менеджер увидит её целиком и вернётся с расчётом."
-    }
+      "title": "Yapılandırmanızı bize gönderin",
+      "description": "Konstrüksiyon talebinizle birlikte iletilir — yönetici tamamını görür ve teklifle döner.",
+      "close": "Kapat"
+    },
+    "variantCode": "Şema {code}"
   }
 }

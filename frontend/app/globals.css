@@ -173,3 +173,77 @@ h6 {
     }
   }
 }
+
+/* ---------------------------------------------------------------------------
+   Calculator sliders.
+
+   One control on both axes: a hairline track and a round thumb. The vertical
+   one is a native vertical range (`writing-mode`), not a rotated horizontal
+   one — rotation breaks the hit area, arrow keys and touch dragging, and a
+   size control that only responds to a mouse is not a size control.
+   --------------------------------------------------------------------------- */
+.cal-range {
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+  cursor: pointer;
+}
+
+.cal-range:focus-visible {
+  outline: 2px solid var(--color-brand-red);
+  outline-offset: 6px;
+  border-radius: 999px;
+}
+
+.cal-range::-webkit-slider-runnable-track {
+  height: 2px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--color-brand-black) 22%, transparent);
+}
+
+.cal-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 15px;
+  height: 15px;
+  margin-top: -6.5px;
+  border-radius: 999px;
+  background: var(--color-brand-red);
+  box-shadow: 0 1px 3px rgb(0 0 0 / 0.28);
+}
+
+.cal-range::-moz-range-track {
+  height: 2px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--color-brand-black) 22%, transparent);
+}
+
+.cal-range::-moz-range-thumb {
+  width: 15px;
+  height: 15px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--color-brand-red);
+  box-shadow: 0 1px 3px rgb(0 0 0 / 0.28);
+}
+
+.cal-range--vertical {
+  writing-mode: vertical-lr;
+  direction: rtl;
+  width: 15px;
+}
+
+.cal-range--vertical::-webkit-slider-runnable-track {
+  width: 2px;
+  height: 100%;
+}
+
+.cal-range--vertical::-webkit-slider-thumb {
+  margin-top: 0;
+  margin-left: -6.5px;
+}
+
+.cal-range--vertical::-moz-range-track {
+  width: 2px;
+  height: 100%;
+}

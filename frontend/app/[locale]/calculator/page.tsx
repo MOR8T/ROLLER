@@ -2,9 +2,8 @@ import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 
 import { Calculator } from "@/components/calculator/calculator";
-import { PageHeader } from "@/components/layout/page-header";
+import { Breadcrumbs } from "@/components/products/breadcrumbs";
 import { Container } from "@/components/ui/container";
-import { Section } from "@/components/ui/section";
 
 export async function generateMetadata({
   params,
@@ -18,9 +17,15 @@ export async function generateMetadata({
 /**
  * `/calculator` — `project_plan/06-*.md`.
  *
- * The route is not `/calculator` and the menu item is not «Калькулятор»: the
- * word promises a number, and this page deliberately never shows one. It
- * assembles a construction and ends in a request.
+ * The page is the configurator and nothing else, the way `imzo.uz/calculator`
+ * is: no eyebrow, no lead paragraph, no hero. Only the trail and the `<h1>`
+ * survive from `PageHeader`, and they survive because every page owes the site
+ * one heading (DESIGN.md §4) and a way back up the tree — imzo's own page is
+ * poorer for having neither.
+ *
+ * The word «Калькулятор» promises a number the page never shows. It stays
+ * because it is what visitors search for and what the brief calls it (§2.1);
+ * the reason there is no number is spelled out under «Отправить».
  */
 export default async function CalculatorPage({ params }: PageProps<"/[locale]/calculator">) {
   const { locale } = await params;
@@ -30,19 +35,12 @@ export default async function CalculatorPage({ params }: PageProps<"/[locale]/ca
 
   return (
     <>
-      <Section className="pb-0">
-        <PageHeader
-          breadcrumbs={[{ label: t("breadcrumb") }]}
-          eyebrow={t("eyebrow")}
-          title={t("title")}
-          description={t("description")}
-        />
-        <Container>
-          <p className="mt-6 max-w-3xl rounded-card border border-brand-black/10 bg-surface-muted p-5 text-sm leading-6 text-brand-black/65">
-            {t("noPrice")}
-          </p>
-        </Container>
-      </Section>
+      <Container className="pt-10">
+        <Breadcrumbs items={[{ label: t("breadcrumb") }]} />
+        <h1 className="mt-6 text-2xl font-bold tracking-tight text-brand-black sm:text-3xl">
+          {t("title")}
+        </h1>
+      </Container>
 
       <Calculator />
     </>
