@@ -18,49 +18,6 @@ import { cn } from "@/lib/utils";
 type Status = "idle" | "submitting" | "success" | "error";
 type Field = "name" | "phone";
 
-/**
- * The block that closes the homepage: three contacts on the left, three fields
- * on the right.
- *
- * ── Why not `RequestForm` ───────────────────────────────────────────────────
- *
- * The site's form asks for name, phone, city, product type and a comment, and
- * carries a scenario hint and a two-line note about how the request is handled.
- * That is right on a product page, where the visitor has read about one system
- * and is ready to describe an object. It is eleven lines of text at the foot of
- * a page whose whole brief was to have almost none — so the homepage asks the
- * two things the call centre cannot start without and gets the rest on the
- * phone, through `submitQuickLead`. `RequestForm` is untouched and still runs
- * every other page.
- *
- * ⚠️ The block used to open with three scenario chips — «Рассчитать» /
- * «Получить КП» / «Стать дилером». The client removed them on 2026-08-20: the
- * categories below answer what the request is about, and the chips asked the
- * same visitor a second question they had already answered. `RequestForm` still
- * offers them where the long form is warranted.
- *
- * Submit order is the site's: store first, WhatsApp second (`lib/leads.ts`).
- *
- * ── Why it is on every page ─────────────────────────────────────────────────
- *
- * It replaced `LeadFormSection` site-wide on 2026-08-16 at the client's
- * request, so this is now the one request block on the site and `RequestForm`
- * survives only inside the calculator, where the visitor has already described
- * a construction and the long form has something to carry.
- *
- * `id` is a prop because of `/contacts`: `ContactsSection` already owns
- * `id="contacts"` on that page, and two elements answering to one fragment is
- * a broken anchor and a duplicate id in the same stroke.
- *
- * ── What a page may add ────────────────────────────────────────────────────
- *
- * `title`, `description` and `context` exist because the block now closes pages
- * that know more than the homepage does. A product page says which system the
- * visitor was reading; the homepage passes none of the three and reads exactly
- * as before. `context` never appears on screen — it travels with the request,
- * so the call centre opens WhatsApp already knowing the page.
- */
-
 export interface ContactsLeadSectionProps {
   id?: string;
   /** Overrides `home.contacts.title`. */
