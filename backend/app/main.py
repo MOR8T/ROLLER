@@ -4,7 +4,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from app.database import Base, engine
-from app.routes import auth_router, users_router, hero_slides_router
+from app.routes import auth_router, users_router, hero_slides_router, partners_router
 from app.startup import seed_initial_admin
 
 # Ensures `app.startup`'s seed log line is visible under `docker compose logs`
@@ -39,6 +39,7 @@ app.mount("/uploads", StaticFiles(directory="uploads"), name="uploads")
 app.include_router(auth_router)
 app.include_router(users_router)
 app.include_router(hero_slides_router)
+app.include_router(partners_router)
 
 @app.get("/")
 async def root():

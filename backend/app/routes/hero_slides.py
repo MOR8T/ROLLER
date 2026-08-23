@@ -139,10 +139,13 @@ async def update_hero_slide(
         slide.title_tr = title_tr
     if product_link is not None:
         slide.product_link = product_link
-    # A form submitted without a new file still sends an `image` part — just
-    # an empty one (no filename). That means "keep the current photo", not
-    # "replace it with nothing", so an empty filename is treated as absent.
-    if image is not None and image.filename:
+    # A form submitted without a new file still sends an `image` part. A
+    # plain HTML form leaves it with an empty filename; going through a
+    # Next.js server action (as the admin form does) instead turns it into a
+    # zero-byte file literally named "undefined" — either way it means "keep
+    # the current photo", not "replace it with nothing", so `size` is the
+    # reliable signal, not `filename`.
+    if image is not None and image.size:
         old_image_path = slide.image_path
         slide.image_path = _save_image(image)
         _delete_image(old_image_path)
