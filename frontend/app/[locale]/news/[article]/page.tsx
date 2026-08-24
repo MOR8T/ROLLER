@@ -12,7 +12,7 @@ import { Reveal, RevealGroup, RevealItem } from "@/components/ui/reveal";
 import { Section } from "@/components/ui/section";
 import { fetchArticle, fetchLatestNews, newsParams } from "@/lib/news";
 
-export function generateStaticParams() {
+export async function generateStaticParams() {
   return newsParams();
 }
 
@@ -79,15 +79,21 @@ export default async function ArticlePage({ params }: PageProps<"/[locale]/news/
               fill
               priority
               sizes="(max-width: 1280px) 100vw, 1280px"
+              // Admin-uploaded covers are absolute URLs into the backend;
+              // the optimizer runs server-side and can't reach that URL from
+              // inside a Docker container — see `HeroSection`'s own note.
+              unoptimized={article.cover.startsWith("http")}
               className="object-cover"
             />
           </div>
 
-          <div className="mt-10 max-w-3xl space-y-5 text-base leading-7 text-brand-black/75">
-            {article.body.map((paragraph) => (
-              <p key={paragraph}>{paragraph}</p>
-            ))}
-          </div>
+          {/* `body` is Tiptap's own HTML, authored in the admin panel — not
+              user input — and `.rich-text` (app/globals.css) is the same
+              class the editor itself renders with, so the two match. */}
+          <div
+            className="rich-text mt-10 max-w-3xl text-base leading-7 text-brand-black/75"
+            dangerouslySetInnerHTML={{ __html: article.body }}
+          />
         </Container>
       </Section>
 

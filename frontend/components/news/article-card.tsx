@@ -61,6 +61,10 @@ export function ArticleCard({
             fill
             sizes="(max-width: 640px) 92vw, (max-width: 1024px) 46vw, 30vw"
             priority={priority}
+            // Admin-uploaded covers are absolute URLs into the backend; the
+            // optimizer runs server-side and can't reach that URL from
+            // inside a Docker container — see `HeroSection`'s own note.
+            unoptimized={article.cover.startsWith("http")}
             className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
           />
         </div>

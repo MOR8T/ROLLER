@@ -76,19 +76,50 @@ export default async function NewsPage({ params, searchParams }: PageProps<"/[lo
         />
 
         <Container>
-          <RevealGroup className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3 lg:gap-5">
-            {items.map((article, index) => (
-              <RevealItem key={article.slug} className="h-full">
-                <ArticleCard article={article} priority={current === 1 && index < 3} />
-              </RevealItem>
-            ))}
-          </RevealGroup>
+          {items.length === 0 ? (
+            <NewsGridSkeleton />
+          ) : (
+            <>
+              <RevealGroup className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3 lg:gap-5">
+                {items.map((article, index) => (
+                  <RevealItem key={article.slug} className="h-full">
+                    <ArticleCard article={article} priority={current === 1 && index < 3} />
+                  </RevealItem>
+                ))}
+              </RevealGroup>
 
-          <NewsPagination page={current} pageCount={pageCount} />
+              <NewsPagination page={current} pageCount={pageCount} />
+            </>
+          )}
         </Container>
       </Section>
 
       <ContactsLeadSection />
     </>
+  );
+}
+
+/**
+ * Stands in for the grid while there is nothing to show — same card frame as
+ * `ArticleCard` (photo, then a black panel with a date line and a headline),
+ * repeated six times, so the swap to real content doesn't jolt the layout.
+ * Pulses as one unit rather than per-piece, same treatment as
+ * `NewsSection`'s own skeleton on the homepage.
+ */
+function NewsGridSkeleton() {
+  return (
+    <div className="mt-12 animate-pulse" style={{ animationDuration: "3.2s" }}>
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 lg:gap-5">
+        {Array.from({ length: 6 }).map((_, index) => (
+          <div key={index} className="overflow-hidden rounded-card bg-brand-black">
+            <div className="aspect-5/3 bg-brand-white/10" />
+            <div className="space-y-3 p-5 sm:p-6">
+              <div className="h-2.5 w-20 rounded-control bg-brand-white/15" />
+              <div className="h-5 w-4/5 rounded-control bg-brand-white/15" />
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
   );
 }
