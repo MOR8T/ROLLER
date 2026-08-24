@@ -6,6 +6,7 @@ class Settings(BaseSettings):
     secret_key: str
     algorithm: str = "HS256"
     access_token_expire_minutes: int = 30
+    refresh_token_expire_hours: int = 8
 
     # Optional — only used by `app.startup.seed_initial_admin` to create the
     # first admin user on a fresh database (there is no `/register` endpoint).

@@ -1,15 +1,18 @@
 import { cookies } from "next/headers";
+import { ADMIN_SESSION_COOKIE, BACKEND_API_URL } from "@/lib/admin-session";
 
 /**
  * Server-only session helpers for the admin area (`app/admin`, `app/login`,
  * `app/api/auth/*`). The JWT itself lives only in an httpOnly cookie set by
  * `app/api/auth/login/route.ts` — it is never exposed to client-side JS, so
  * there is no localStorage/token-in-JS path anywhere in this app.
+ *
+ * The cookie name and refresh call live in `lib/admin-session.ts` instead of
+ * here, and are re-exported below, because `middleware.ts` (Edge runtime)
+ * needs them too and can't import this file's `next/headers` usage.
  */
 
-export const ADMIN_SESSION_COOKIE = "admin_session";
-
-export const BACKEND_API_URL = process.env.BACKEND_API_URL ?? "http://127.0.0.1:8000";
+export { ADMIN_SESSION_COOKIE, BACKEND_API_URL };
 
 export interface AdminUser {
   id: number;

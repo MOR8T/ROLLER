@@ -1,5 +1,10 @@
 import { NextResponse } from "next/server";
-import { ADMIN_SESSION_COOKIE, BACKEND_API_URL } from "@/lib/admin-auth";
+import {
+  ADMIN_SESSION_COOKIE,
+  ADMIN_REFRESH_COOKIE,
+  BACKEND_API_URL,
+  REFRESH_TOKEN_MAX_AGE_SECONDS,
+} from "@/lib/admin-session";
 
 /**
  * Proxies the login form to the FastAPI backend and stores the returned JWT
@@ -38,16 +43,20 @@ export async function POST(request: Request) {
   const data = await backendRes.json();
   const response = NextResponse.json({ ok: true });
 
-  response.cookies.set(ADMIN_SESSION_COOKIE, data.access_token, {
+  // Both cookies get the refresh token's lifetime as their outer bound —
+  // the access cookie's *contents* are refreshed transparently by
+  // `middleware.ts` well before the short-lived JWT inside it expires, so
+  // there's no need to cap it at the access token's own 30-minute expiry.
+  const cookieOptions = {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
-    sameSite: "lax",
+    sameSite: "lax" as const,
     path: "/",
-    // An outer bound for the cookie itself — the backend's own JWT expiry
-    // (30 min by default, see backend/.env) is the real access boundary,
-    // checked on every request in `getAdminUser`.
-    maxAge: 60 * 60 * 24 * 7,
-  });
+    maxAge: REFRESH_TOKEN_MAX_AGE_SECONDS,
+  };
+
+  response.cookies.set(ADMIN_SESSION_COOKIE, data.access_token, cookieOptions);
+  response.cookies.set(ADMIN_REFRESH_COOKIE, data.refresh_token, cookieOptions);
 
   return response;
 }

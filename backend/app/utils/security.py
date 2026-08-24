@@ -15,35 +15,49 @@ def verify_password(plain_password: str, hashed_password: str) -> bool:
     return pwd_context.verify(plain_password, hashed_password)
 
 def create_access_token(data: dict, expires_delta: timedelta | None = None) -> str:
-    """Создание JWT токена"""
-    to_encode = data.copy()
-    
-    if expires_delta:
-        expire = datetime.utcnow() + expires_delta
-    else:
-        expire = datetime.utcnow() + timedelta(
-            minutes=settings.access_token_expire_minutes
-        )
-    
-    to_encode.update({"exp": expire})
-    encoded_jwt = jwt.encode(
-        to_encode,
-        settings.secret_key,
-        algorithm=settings.algorithm
+    """Создание access JWT токена (короткоживущий, для Authorization: Bearer)"""
+    expire = datetime.utcnow() + (
+        expires_delta or timedelta(minutes=settings.access_token_expire_minutes)
     )
-    return encoded_jwt
+    to_encode = {**data, "type": "access", "exp": expire}
+    return jwt.encode(to_encode, settings.secret_key, algorithm=settings.algorithm)
 
-def decode_access_token(token: str) -> dict | None:
-    """Декодирование JWT токена"""
+def create_refresh_token(data: dict, expires_delta: timedelta | None = None) -> str:
+    """Создание refresh JWT токена (долгоживущий, годится только для /api/auth/refresh)"""
+    expire = datetime.utcnow() + (
+        expires_delta or timedelta(hours=settings.refresh_token_expire_hours)
+    )
+    to_encode = {**data, "type": "refresh", "exp": expire}
+    return jwt.encode(to_encode, settings.secret_key, algorithm=settings.algorithm)
+
+def _decode_token(token: str, expected_type: str) -> dict | None:
+    """
+    Общая логика декодирования. `expected_type` не даёт refresh-токену
+    пройти как access (и наоборот) — без этой проверки refresh-токен можно
+    было бы подставить в Authorization и пользоваться им как access-токеном
+    все 30 дней его жизни.
+    """
     try:
         payload = jwt.decode(
             token,
             settings.secret_key,
             algorithms=[settings.algorithm]
         )
-        username: str = payload.get("sub")
-        if username is None:
-            return None
-        return {"username": username}
     except JWTError:
         return None
+
+    if payload.get("type") != expected_type:
+        return None
+
+    username: str = payload.get("sub")
+    if username is None:
+        return None
+    return {"username": username}
+
+def decode_access_token(token: str) -> dict | None:
+    """Декодирование access JWT токена"""
+    return _decode_token(token, "access")
+
+def decode_refresh_token(token: str) -> dict | None:
+    """Декодирование refresh JWT токена"""
+    return _decode_token(token, "refresh")
