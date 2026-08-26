@@ -10,6 +10,7 @@ from app.routes import (
     hero_slides_router,
     partners_router,
     news_router,
+    product_categories_router,
 )
 from app.startup import seed_initial_admin
 
@@ -47,6 +48,7 @@ app.include_router(users_router)
 app.include_router(hero_slides_router)
 app.include_router(partners_router)
 app.include_router(news_router)
+app.include_router(product_categories_router)
 
 @app.get("/")
 async def root():

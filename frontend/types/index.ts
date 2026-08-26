@@ -224,11 +224,6 @@ export type ProductCardBadgeVariant = "red" | "black" | "outline";
  * 12 is the one that survives.
  */
 
-export interface Partner {
-  name: string;
-  logo: string | null;
-}
-
 /**
  * A showroom pin on the homepage map (`ShowroomsSection`).
  *

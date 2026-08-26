@@ -19,8 +19,6 @@ import {
   Wrench,
   type LucideIcon,
 } from "lucide-react";
-import type { Partner } from "@/types";
-
 /**
  * Mock content for the homepage.
  *
@@ -226,41 +224,6 @@ export const homeOffers: HomeOffer[] = [
     ],
   },
 ];
-
-export const partners: Partner[] = [
-  {
-    name: "Krauss Maffei",
-    logo: "/partners_logo/akpen_2.png",
-  },
-  {
-    name: "Renolit",
-    logo: "/partners_logo/akpen.png",
-  },
-  {
-    name: "Mikrosan",
-    logo: "/partners_logo/celikas.png",
-  },
-  {
-    name: "Akdeniz",
-    logo: "/partners_logo/dogus_iki.png",
-  },
-  {
-    name: "Dow",
-    logo: "/partners_logo/fornax_2.png",
-  },
-  {
-    name: "Kronos",
-    logo: "/partners_logo/fornax.png",
-  },
-  {
-    name: "Baerlocher",
-    logo: "/partners_logo/heywin.png",
-  },
-  {
-    name: "CNT Conta",
-    logo: "/partners_logo/winax.png",
-  },
-] as const;
 
 /**
  * Copy: `production.steps.<key>`. Rendered by the homepage's "О компании" block
