@@ -225,37 +225,11 @@ export type ProductCardBadgeVariant = "red" | "black" | "outline";
  */
 
 /**
- * A showroom pin on the homepage map (`ShowroomsSection`).
- *
- * ⚠️ `coordinates` is `[lng, lat]`, not `[lat, lng]`. Yandex JS API 3 broke
- * with 2.1 here — 2.1 took `[lat, lng]` and v3 takes GeoJSON order — and the
- * two are silently swappable for Tajikistan only in the sense that both are
- * plausible numbers: `[38.5, 68.7]` lands in the Arabian Sea instead of
- * Dushanbe, with no error. The `LngLat` name in the JS API types is the whole
- * warning it gives you.
- *
- * Nothing here is translated. The city name, street address and opening hours
- * live in `messages/*.json` under `home.showrooms.points.<id>` — an address in
- * Tajik is not the same string as an address in Russian, and the map has to
- * speak the locale the rest of the page is in.
+ * Showrooms moved to the backend on 2026-08-26, the same day as this note —
+ * see `ShowroomDto` in `lib/showrooms.ts`, which is what `ShowroomMap`,
+ * `ShowroomsSection` and `ShowroomsDirectory` actually render. Unlike
+ * `Article` above, there is no separate "domain contract" type left here:
+ * `ShowroomDto` already is the API response shape, city/address/hours
+ * included, so a second interface saying the same thing would only drift
+ * from it.
  */
-export interface Showroom {
-  /** Also the message key under `showrooms.points`. */
-  id: string;
-  /** `[lng, lat]` — see the note above. */
-  coordinates: [number, number];
-  phone: string;
-  phoneHref: string;
-  /** Deep link into Yandex Maps: the "проложить маршрут" affordance. */
-  routeUrl: string;
-  /**
-   * Photograph of the showroom, shown at the top of its card in the list view
-   * of `/showroom`.
-   *
-   * `null` until the client's own shoot lands — DESIGN.md §6 п.2 is the rule
-   * this follows, and `MediaFrame` renders the neutral hatched panel in the
-   * meantime. The slot keeps its size either way, so the page does not reflow
-   * on the day the photographs arrive.
-   */
-  photo: string | null;
-}

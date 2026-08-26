@@ -20,6 +20,14 @@ interface MediaFrameProps {
    * the client's own shoot lands via the admin panel (DESIGN.md §6 п.2).
    */
   placeholderLabel?: string;
+  /**
+   * Admin-uploaded photos are absolute URLs into the backend; `next/image`'s
+   * optimizer runs server-side and can't reach that URL from inside the
+   * container (see the same note on `unoptimized` in `hero-section.tsx`).
+   * Callers pass `src.startsWith("http")` for those; local `/public` paths
+   * leave this `false` and keep the optimizer.
+   */
+  unoptimized?: boolean;
 }
 
 export function MediaFrame({
@@ -35,6 +43,7 @@ export function MediaFrame({
   sizes,
   onError,
   placeholderLabel,
+  unoptimized = false,
 }: MediaFrameProps) {
   return (
     <div
@@ -56,6 +65,7 @@ export function MediaFrame({
           priority={priority}
           sizes={sizes ?? (fill ? "100vw" : `(max-width: 640px) 100vw, ${width}px`)}
           onError={onError}
+          unoptimized={unoptimized}
         />
       ) : (
         <div

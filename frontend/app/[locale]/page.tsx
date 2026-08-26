@@ -9,6 +9,7 @@ import { PartnersSection } from "@/components/sections/partners-section";
 import { ProductsGridSection } from "@/components/sections/products-grid-section";
 import { ShowroomsSection } from "@/components/sections/showrooms-section";
 import { getHeroSlides } from "@/lib/hero-slides";
+import { getShowrooms } from "@/lib/showrooms";
 
 /**
  * The homepage, recomposed on 2026-08-13 against imzo.uz at the client's
@@ -40,6 +41,7 @@ export default async function Home({ params }: PageProps<"/[locale]">) {
   const { locale } = await params;
   setRequestLocale(locale);
   const heroSlides = await getHeroSlides(locale);
+  const showrooms = await getShowrooms(locale);
 
   return (
     // `isolate` is what makes the watermark work. It opens a stacking context,
@@ -88,7 +90,7 @@ export default async function Home({ params }: PageProps<"/[locale]">) {
       <OffersTabsSection />
       <NewsSection />
       <PartnersSection />
-      <ShowroomsSection />
+      <ShowroomsSection showrooms={showrooms} />
       <ContactsLeadSection />
     </div>
   );

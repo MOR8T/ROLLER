@@ -7,7 +7,7 @@ import { CitySelect } from "@/components/sections/city-select";
 import { HomeHeading, HomeSection } from "@/components/sections/home-kit";
 import { ShowroomMap } from "@/components/sections/showroom-map";
 import { Reveal } from "@/components/ui/reveal";
-import { showrooms } from "@/data/showrooms";
+import type { ShowroomDto } from "@/lib/showrooms";
 
 /**
  * "Шоурумы" — the map block, added on the client's brief to match the section
@@ -37,22 +37,30 @@ import { showrooms } from "@/data/showrooms";
  * next section on the page is `ContactsLeadSection`, which lists the address
  * and the phone, and `/showroom` behind "Подробнее" has both plus the hours.
  * A pin on a map is the one thing neither of those can show, and it is now all
- * this section claims to do. The strings stay in `messages/*.json` — the
- * picker still reads `points.<id>.city` from them.
+ * this section claims to do.
  *
  * Picker and map stay in step in both directions: choosing a city flies the
  * map, and clicking a pin moves the picker.
+ *
+ * ⚠️ Showrooms moved from the static `data/showrooms.ts` fixture to the admin
+ * panel on 2026-08-26 (`lib/showrooms.ts` fetches them; managed from
+ * `app/admin/(dashboard)/showrooms/page.tsx`) — `showrooms` is now a prop,
+ * fetched by the page (`app/[locale]/page.tsx`) same as `heroSlides`. City,
+ * address and hours are resolved server-side per locale, so this component no
+ * longer reads them out of the `showrooms` message namespace.
  */
-export function ShowroomsSection() {
-  // The `showrooms` namespace, not `home.*`: `/showroom` reads the same city
-  // names and addresses through `ShowroomsDirectory`, and one set of strings
-  // is the only way the two stay in agreement.
+export function ShowroomsSection({ showrooms }: { showrooms: ShowroomDto[] }) {
+  // The `showrooms` namespace, not `home.*`: `/showroom` reads the same
+  // chrome text through `ShowroomsDirectory`, and one set of strings is the
+  // only way the two stay in agreement.
   const t = useTranslations("showrooms");
-  const [activeId, setActiveId] = useState(showrooms[0].id);
+  const [activeId, setActiveId] = useState(showrooms[0]?.id);
+
+  if (showrooms.length === 0 || !activeId) return null;
 
   const options = showrooms.map((showroom) => ({
     id: showroom.id,
-    label: t(`points.${showroom.id}.city`),
+    label: showroom.city,
   }));
   const cities = Object.fromEntries(options.map((option) => [option.id, option.label]));
 

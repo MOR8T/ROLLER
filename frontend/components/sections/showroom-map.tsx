@@ -3,15 +3,28 @@
 import { useEffect, useMemo, useState } from "react";
 import { useLocale } from "next-intl";
 
-import { showroomWidgetUrl } from "@/data/showrooms";
+import type { ShowroomDto } from "@/lib/showrooms";
 import { loadYMaps, type YMapsReact } from "@/lib/ymaps";
 import { cn } from "@/lib/utils";
-import type { Showroom } from "@/types";
 
 /** How close the map sits once it has settled on a showroom. */
 const ZOOM = 16;
 /** Milliseconds the JS API spends flying between two showrooms. */
 const FLIGHT = 600;
+
+/**
+ * The keyless fallback: Yandex's map *widget*, an iframe that needs no
+ * developer key, centred on one showroom with a pin on it. Kept here rather
+ * than in `lib/showrooms.ts` — that module imports `next/headers` through
+ * `lib/admin-auth.ts`, which a "use client" file like this one cannot pull
+ * into the browser bundle even for one pure, server-independent function.
+ *
+ * `pm2rdm` is Yandex's own red medium pin.
+ */
+function showroomWidgetUrl([lng, lat]: [number, number]): string {
+  const point = `${lng},${lat}`;
+  return `https://yandex.tj/map-widget/v1/?ll=${encodeURIComponent(point)}&z=16&pt=${encodeURIComponent(`${point},pm2rdm`)}`;
+}
 
 /**
  * The map itself.
@@ -47,7 +60,7 @@ export function ShowroomMap({
   labels,
   className,
 }: {
-  showrooms: Showroom[];
+  showrooms: ShowroomDto[];
   activeId: string;
   onSelect: (id: string) => void;
   /** `city` per showroom id, for the marker's accessible name. */

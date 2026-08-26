@@ -11,9 +11,8 @@ import { Container } from "@/components/ui/container";
 import { MediaFrame } from "@/components/ui/media-frame";
 import { Reveal } from "@/components/ui/reveal";
 import { Section } from "@/components/ui/section";
-import { showrooms } from "@/data/showrooms";
+import type { ShowroomDto } from "@/lib/showrooms";
 import { cn } from "@/lib/utils";
-import type { Showroom } from "@/types";
 
 type View = "map" | "list";
 
@@ -52,15 +51,23 @@ type View = "map" | "list";
  * their own showrooms from partners' and franchisees'. Both of ours are our
  * own, so that control would have exactly one option; it is left out rather
  * than shipped as a dropdown that cannot change anything.
+ *
+ * ⚠️ Showrooms moved from the static `data/showrooms.ts` fixture to the admin
+ * panel on 2026-08-26 — `showrooms` is now a prop, fetched server-side by
+ * `app/[locale]/showroom/page.tsx` through `lib/showrooms.ts`. City, address
+ * and hours arrive already resolved for the current locale, so this
+ * component no longer reads them out of the `showrooms` message namespace.
  */
-export function ShowroomsDirectory() {
+export function ShowroomsDirectory({ showrooms }: { showrooms: ShowroomDto[] }) {
   const t = useTranslations("showrooms");
   const [view, setView] = useState<View>("list");
-  const [activeId, setActiveId] = useState(showrooms[0].id);
+  const [activeId, setActiveId] = useState(showrooms[0]?.id);
+
+  if (showrooms.length === 0 || !activeId) return null;
 
   const options = showrooms.map((showroom) => ({
     id: showroom.id,
-    label: t(`points.${showroom.id}.city`),
+    label: showroom.city,
   }));
   const cities = Object.fromEntries(options.map((option) => [option.id, option.label]));
 
@@ -177,7 +184,7 @@ function ShowroomCard({
   selected,
   onSelect,
 }: {
-  showroom: Showroom;
+  showroom: ShowroomDto;
   city: string;
   selected: boolean;
   onSelect: () => void;
@@ -228,6 +235,7 @@ function ShowroomCard({
           alt={t("photoAlt", { city })}
           placeholderLabel={t("photoPlaceholder")}
           sizes="(max-width: 640px) 92vw, (max-width: 1024px) 46vw, 600px"
+          unoptimized={showroom.photo.startsWith("http")}
         />
 
         {/* The dissolve.
@@ -255,7 +263,7 @@ function ShowroomCard({
         <p className="absolute top-5 left-5 inline-flex items-center gap-2 rounded-full bg-brand-black/70 px-4 py-2 text-xs font-semibold text-brand-white backdrop-blur-sm">
           <Clock className="size-3.5 shrink-0" aria-hidden />
           <span className="sr-only">{t("labels.hours")}: </span>
-          {t(`points.${showroom.id}.hours`)}
+          {showroom.hours}
         </p>
 
         {/* Opposite the hours badge, and solid rather than translucent: this one
@@ -276,7 +284,7 @@ function ShowroomCard({
         <p className="mt-3 flex items-start gap-2.5 text-sm leading-relaxed text-brand-black/65">
           <MapPin className="mt-0.5 size-4 shrink-0 text-brand-black/35" aria-hidden />
           <span className="sr-only">{t("labels.address")}: </span>
-          {t(`points.${showroom.id}.address`)}
+          {showroom.address}
         </p>
 
         {/* `relative z-20` keeps both links above the selection overlay — see
