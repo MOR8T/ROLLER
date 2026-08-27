@@ -80,8 +80,7 @@
   "home": {
     "products": {
       "title": "Продукция",
-      "all": "Вся продукция",
-      "accessories": "Аксессуары"
+      "all": "Вся продукция"
     },
     "carousel": {
       "region": "карусель",
