@@ -5,6 +5,9 @@ from app.routes.partners import router as partners_router
 from app.routes.news import router as news_router
 from app.routes.product_categories import router as product_categories_router
 from app.routes.showrooms import router as showrooms_router
+from app.routes.about_content import router as about_content_router
+from app.routes.about_timeline import router as about_timeline_router
+from app.routes.about_certificates import router as about_certificates_router
 
 __all__ = [
     "auth_router",
@@ -14,4 +17,7 @@ __all__ = [
     "news_router",
     "product_categories_router",
     "showrooms_router",
+    "about_content_router",
+    "about_timeline_router",
+    "about_certificates_router",
 ]

@@ -54,36 +54,6 @@ export const advantages = [
   { key: "service", icon: Headphones },
 ] as const;
 
-/** Copy: `production.stats.<key>`. Values are formatted per locale on render. */
-export interface CompanyStat {
-  key: string;
-  value: number;
-  suffix: string;
-}
-
-export const companyStats: CompanyStat[] = [
-  { key: "years", value: 20, suffix: "+" },
-  { key: "projects", value: 1000, suffix: "+" },
-  // { key: "clients", value: 1000, suffix: "+" },
-  { key: "employees", value: 400, suffix: "+" },
-  { key: "tonnage", value: 10000, suffix: "+" },
-];
-
-/**
- * The four numbers the homepage's "О компании" block shows, in IMZO's shape:
- * one big figure per claim, four across.
- *
- * It is a selection of `companyStats`, not a second list — `/about` still shows
- * all five, and two lists of the same facts is exactly how they drift apart.
- * `clients` is the one left out: "1000+ клиентов" and "1000+ объектов" are the
- * same claim twice, and a four-up row has no room for a duplicate.
- */
-export const homeStatKeys = ["years", "projects", "employees", "tonnage"] as const;
-
-export const homeStats: CompanyStat[] = homeStatKeys.map((key) =>
-  companyStats.find((stat) => stat.key === key)!,
-);
-
 /**
  * The "Продукция" strip — seven photo cards, the way IMZO opens its catalogue
  * on the homepage rather than hiding it behind the menu.

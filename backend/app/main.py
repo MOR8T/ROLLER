@@ -12,8 +12,16 @@ from app.routes import (
     news_router,
     product_categories_router,
     showrooms_router,
+    about_content_router,
+    about_timeline_router,
+    about_certificates_router,
 )
-from app.startup import seed_initial_admin
+from app.startup import (
+    seed_initial_admin,
+    seed_about_content,
+    seed_about_timeline,
+    seed_about_certificates,
+)
 
 # Ensures `app.startup`'s seed log line is visible under `docker compose logs`
 # regardless of whether `database.py`'s `echo=True` (which incidentally also
@@ -23,6 +31,9 @@ logging.basicConfig(level=logging.INFO)
 # Создание таблиц
 Base.metadata.create_all(bind=engine)
 seed_initial_admin()
+seed_about_content()
+seed_about_timeline()
+seed_about_certificates()
 
 app = FastAPI(
     title="FastAPI Auth Service",
@@ -51,6 +62,9 @@ app.include_router(partners_router)
 app.include_router(news_router)
 app.include_router(product_categories_router)
 app.include_router(showrooms_router)
+app.include_router(about_content_router)
+app.include_router(about_timeline_router)
+app.include_router(about_certificates_router)
 
 @app.get("/")
 async def root():

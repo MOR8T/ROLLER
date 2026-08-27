@@ -1,0 +1,341 @@
+"use client";
+
+import { useOptimistic, useState, useTransition, type FormEvent } from "react";
+import { useRouter } from "next/navigation";
+import { ArrowDown, ArrowUp, Trash2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { locales, type Locale } from "@/i18n/routing";
+import { localeLabels } from "@/i18n/locale-labels";
+import { cn } from "@/lib/utils";
+import type { AdminAboutTimelineItemDto } from "@/app/admin/(dashboard)/about-timeline-actions";
+import {
+  createTimelineItemAction,
+  deleteTimelineItemAction,
+  reorderTimelineItemsAction,
+  updateTimelineItemAction,
+} from "@/app/admin/(dashboard)/about-timeline-actions";
+
+interface AboutTimelineManagerProps {
+  initialItems: AdminAboutTimelineItemDto[];
+}
+
+/**
+ * `/about`'s "Как компания росла" timeline — same
+ * list/reorder/edit/delete shape as `PartnersManager`, minus the image and
+ * with each item's three fields (year/title/description) locale-tabbed like
+ * `NewsManager`'s `ArticleFields`, since a milestone's "2010-е" is Russian-
+ * specific (English reads "2010s") rather than a locale-independent number.
+ *
+ * Reordering is optimistic (`useOptimistic`), same as `PartnersManager`;
+ * create/edit/delete wait for the round trip and let the server-refreshed
+ * `initialItems` prop carry the result back down.
+ */
+export function AboutTimelineManager({ initialItems }: AboutTimelineManagerProps) {
+  const router = useRouter();
+  const [items, setItems] = useOptimistic(initialItems);
+  const [isPending, startTransition] = useTransition();
+  const [error, setError] = useState<string | null>(null);
+  const [editingId, setEditingId] = useState<number | null>(null);
+  const [showAddForm, setShowAddForm] = useState(false);
+
+  function move(index: number, direction: -1 | 1) {
+    const target = index + direction;
+    if (target < 0 || target >= items.length) return;
+
+    const reordered = items.slice();
+    [reordered[index], reordered[target]] = [reordered[target], reordered[index]];
+
+    setError(null);
+    startTransition(async () => {
+      setItems(reordered);
+      const result = await reorderTimelineItemsAction(reordered.map((item) => item.id));
+      if (!result.success) {
+        setError(result.error);
+        router.refresh();
+      }
+    });
+  }
+
+  function remove(id: number) {
+    if (!window.confirm("Удалить этот этап?")) return;
+
+    setError(null);
+    startTransition(async () => {
+      setItems(items.filter((item) => item.id !== id));
+      const result = await deleteTimelineItemAction(id);
+      if (!result.success) {
+        setError(result.error);
+        router.refresh();
+      }
+    });
+  }
+
+  function submitCreate(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const form = event.currentTarget;
+    const formData = new FormData(form);
+
+    setError(null);
+    startTransition(async () => {
+      const result = await createTimelineItemAction(formData);
+      if (!result.success) {
+        setError(result.error);
+        return;
+      }
+      form.reset();
+      setShowAddForm(false);
+    });
+  }
+
+  function submitEdit(id: number, event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const formData = new FormData(event.currentTarget);
+
+    setError(null);
+    startTransition(async () => {
+      const result = await updateTimelineItemAction(id, formData);
+      if (!result.success) {
+        setError(result.error);
+        router.refresh();
+        return;
+      }
+      setEditingId(null);
+    });
+  }
+
+  return (
+    <section className="mt-10 border-t border-brand-black/10 pt-8">
+      <div className="flex items-center justify-between gap-4">
+        <div>
+          <h2 className="text-lg font-semibold text-brand-black">Таймлайн</h2>
+          <p className="mt-1 text-sm text-neutral-500">
+            Этапы в разделе «Как компания росла» — год, заголовок и описание на каждом языке.
+          </p>
+        </div>
+        <Button
+          type="button"
+          size="sm"
+          variant={showAddForm ? "outline" : "primary"}
+          onClick={() => setShowAddForm((v) => !v)}
+        >
+          {showAddForm ? "Отмена" : "Добавить этап"}
+        </Button>
+      </div>
+
+      {error ? (
+        <p role="alert" className="mt-4 text-sm text-brand-red">
+          {error}
+        </p>
+      ) : null}
+
+      {showAddForm ? (
+        <form
+          onSubmit={submitCreate}
+          className="mt-5 rounded-card border border-brand-black/10 p-5"
+        >
+          <TimelineItemFields disabled={isPending} />
+          <Button type="submit" disabled={isPending} className="mt-4">
+            {isPending ? "Сохранение..." : "Добавить"}
+          </Button>
+        </form>
+      ) : null}
+
+      <ul className="mt-6 space-y-3">
+        {items.length === 0 ? (
+          <p className="text-sm text-neutral-500">Этапов пока нет.</p>
+        ) : (
+          items.map((item, index) =>
+            editingId === item.id ? (
+              <li key={item.id} className="rounded-card border border-brand-black/10 p-5">
+                <form onSubmit={(event) => submitEdit(item.id, event)}>
+                  <TimelineItemFields disabled={isPending} item={item} />
+                  <div className="mt-4 flex gap-2">
+                    <Button type="submit" size="sm" disabled={isPending}>
+                      {isPending ? "Сохранение..." : "Сохранить"}
+                    </Button>
+                    <Button
+                      type="button"
+                      size="sm"
+                      variant="outline"
+                      onClick={() => setEditingId(null)}
+                      disabled={isPending}
+                    >
+                      Отмена
+                    </Button>
+                  </div>
+                </form>
+              </li>
+            ) : (
+              <li
+                key={item.id}
+                className="flex items-center gap-4 rounded-card border border-brand-black/10 p-4"
+              >
+                <p className="w-16 shrink-0 font-heading text-sm font-bold text-brand-red">
+                  {item.year.ru}
+                </p>
+                <div className="min-w-0 flex-1">
+                  <p className="truncate font-medium text-brand-black">{item.title.ru}</p>
+                  <p className="truncate text-sm text-neutral-500">{item.description.ru}</p>
+                </div>
+                <div className="flex shrink-0 items-center gap-1">
+                  <IconButton
+                    label="Выше"
+                    onClick={() => move(index, -1)}
+                    disabled={isPending || index === 0}
+                  >
+                    <ArrowUp className="size-4" />
+                  </IconButton>
+                  <IconButton
+                    label="Ниже"
+                    onClick={() => move(index, 1)}
+                    disabled={isPending || index === items.length - 1}
+                  >
+                    <ArrowDown className="size-4" />
+                  </IconButton>
+                  <Button
+                    type="button"
+                    size="sm"
+                    variant="outline"
+                    onClick={() => setEditingId(item.id)}
+                    disabled={isPending}
+                  >
+                    Изменить
+                  </Button>
+                  <IconButton
+                    label="Удалить"
+                    onClick={() => remove(item.id)}
+                    disabled={isPending}
+                    tone="danger"
+                  >
+                    <Trash2 className="size-4" />
+                  </IconButton>
+                </div>
+              </li>
+            ),
+          )
+        )}
+      </ul>
+    </section>
+  );
+}
+
+function TimelineItemFields({
+  disabled,
+  item,
+}: {
+  disabled: boolean;
+  item?: AdminAboutTimelineItemDto;
+}) {
+  const [activeLocale, setActiveLocale] = useState<Locale>("ru");
+
+  return (
+    <div>
+      <div className="flex flex-wrap gap-1.5 border-b border-brand-black/10">
+        {locales.map((locale) => (
+          <button
+            key={locale}
+            type="button"
+            onClick={() => setActiveLocale(locale)}
+            className={cn(
+              "-mb-px rounded-t-control border-b-2 px-3 py-2 text-sm font-medium transition-colors",
+              activeLocale === locale
+                ? "border-brand-red text-brand-black"
+                : "border-transparent text-neutral-500 hover:text-brand-black",
+            )}
+          >
+            {locale.toUpperCase()} · {localeLabels[locale]}
+          </button>
+        ))}
+      </div>
+
+      {locales.map((locale) => (
+        <div
+          key={locale}
+          hidden={activeLocale !== locale}
+          className="grid gap-4 pt-4 sm:grid-cols-2"
+        >
+          <div>
+            <label
+              htmlFor={`year_${locale}`}
+              className="mb-1.5 block text-sm font-medium text-brand-black"
+            >
+              Год
+            </label>
+            <Input
+              id={`year_${locale}`}
+              name={`year_${locale}`}
+              required
+              defaultValue={item?.year[locale]}
+              disabled={disabled}
+            />
+          </div>
+          <div>
+            <label
+              htmlFor={`title_${locale}`}
+              className="mb-1.5 block text-sm font-medium text-brand-black"
+            >
+              Заголовок
+            </label>
+            <Input
+              id={`title_${locale}`}
+              name={`title_${locale}`}
+              required
+              defaultValue={item?.title[locale]}
+              disabled={disabled}
+            />
+          </div>
+          <div className="sm:col-span-2">
+            <label
+              htmlFor={`description_${locale}`}
+              className="mb-1.5 block text-sm font-medium text-brand-black"
+            >
+              Описание
+            </label>
+            <Textarea
+              id={`description_${locale}`}
+              name={`description_${locale}`}
+              rows={2}
+              required
+              defaultValue={item?.description[locale]}
+              disabled={disabled}
+            />
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function IconButton({
+  label,
+  onClick,
+  disabled,
+  tone = "default",
+  children,
+}: {
+  label: string;
+  onClick: () => void;
+  disabled?: boolean;
+  tone?: "default" | "danger";
+  children: React.ReactNode;
+}) {
+  return (
+    <button
+      type="button"
+      aria-label={label}
+      title={label}
+      onClick={onClick}
+      disabled={disabled}
+      className={cn(
+        "grid size-9 place-items-center rounded-control transition-colors focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:outline-none disabled:pointer-events-none disabled:opacity-40",
+        tone === "danger"
+          ? "text-brand-red hover:bg-brand-red/10"
+          : "text-brand-black hover:bg-brand-black/5",
+      )}
+    >
+      {children}
+    </button>
+  );
+}

@@ -8,6 +8,7 @@ import { OffersTabsSection } from "@/components/sections/offers-tabs-section";
 import { PartnersSection } from "@/components/sections/partners-section";
 import { ProductsGridSection } from "@/components/sections/products-grid-section";
 import { ShowroomsSection } from "@/components/sections/showrooms-section";
+import { getAboutContent } from "@/lib/about";
 import { getHeroSlides } from "@/lib/hero-slides";
 import { getShowrooms } from "@/lib/showrooms";
 
@@ -42,6 +43,7 @@ export default async function Home({ params }: PageProps<"/[locale]">) {
   setRequestLocale(locale);
   const heroSlides = await getHeroSlides(locale);
   const showrooms = await getShowrooms(locale);
+  const aboutContent = await getAboutContent(locale);
 
   return (
     // `isolate` is what makes the watermark work. It opens a stacking context,
@@ -86,7 +88,7 @@ export default async function Home({ params }: PageProps<"/[locale]">) {
       <ProductsGridSection />
       {/* Вызвать замерщика бесплатно */}
       {/* <MeasureStripSection />  */}
-      <AboutStatsSection />
+      <AboutStatsSection stats={aboutContent?.stats ?? []} />
       <OffersTabsSection />
       <NewsSection />
       <PartnersSection />

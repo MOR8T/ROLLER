@@ -4,7 +4,7 @@ import { ArrowRight } from "lucide-react";
 import { CountUp } from "@/components/sections/count-up";
 import { HomeSection, PillLink } from "@/components/sections/home-kit";
 import { Reveal, RevealGroup, RevealItem } from "@/components/ui/reveal";
-import { homeStats } from "@/data/home";
+import type { AboutStat } from "@/lib/about";
 
 /**
  * "О компании" — two sentences and four numbers.
@@ -16,8 +16,13 @@ import { homeStats } from "@/data/home";
  * The production chain (Замер → Производство → Монтаж → Сервис) that used to
  * close this block is gone from the homepage: it is four more labels saying
  * what the two sentences above already say, and `/about` sets it out properly.
+ *
+ * `stats` comes from `lib/about.ts`'s `getAboutContent` (the same singleton
+ * `/about` reads) since 2026-08-27, fetched by the page and passed down — an
+ * empty array (backend unreachable) just skips the numbers row rather than
+ * fabricating one.
  */
-export function AboutStatsSection() {
+export function AboutStatsSection({ stats }: { stats: AboutStat[] }) {
   const t = useTranslations("home.about");
   const tProduction = useTranslations("production");
 
@@ -39,23 +44,48 @@ export function AboutStatsSection() {
           dividers: a column rule has to know where the row ends, and that
           answer changes at every breakpoint. A top rule per cell is correct at
           two columns and at four without knowing either. */}
-      <RevealGroup className="mt-16 grid grid-cols-2 gap-x-8 gap-y-10 lg:grid-cols-4 lg:gap-x-12">
-        {homeStats.map((stat) => (
-          <RevealItem key={stat.key} className="border-t border-brand-black/15 pt-6">
-            {/* `tabular-nums` is load-bearing here, not typographic taste: the
-                digits change every frame while counting, and proportional
-                figures would make the whole row jitter sideways as they do. */}
-            <CountUp
-              value={stat.value}
-              suffix={stat.suffix}
-              className="block font-heading text-4xl font-bold tracking-tight text-brand-black tabular-nums sm:text-5xl lg:text-6xl"
-            />
-            <p className="mt-3 text-sm leading-6 text-brand-black/50">
-              {tProduction(`stats.${stat.key}`)}
-            </p>
-          </RevealItem>
-        ))}
-      </RevealGroup>
+      {stats.length > 0 ? (
+        <RevealGroup className="mt-16 grid grid-cols-2 gap-x-8 gap-y-10 lg:grid-cols-4 lg:gap-x-12">
+          {stats.map((stat) => (
+            <RevealItem key={stat.key} className="border-t border-brand-black/15 pt-6">
+              {/* `tabular-nums` is load-bearing here, not typographic taste: the
+                  digits change every frame while counting, and proportional
+                  figures would make the whole row jitter sideways as they do. */}
+              <CountUp
+                value={stat.value}
+                suffix={stat.suffix}
+                className="block font-heading text-4xl font-bold tracking-tight text-brand-black tabular-nums sm:text-5xl lg:text-6xl"
+              />
+              <p className="mt-3 text-sm leading-6 text-brand-black/50">
+                {tProduction(`stats.${stat.key}`)}
+              </p>
+            </RevealItem>
+          ))}
+        </RevealGroup>
+      ) : (
+        <AboutStatsSkeleton />
+      )}
     </HomeSection>
+  );
+}
+
+/**
+ * Stands in for the four numbers while the backend has nothing yet — same
+ * rule-topped frame, same treatment as `HeroSection`'s/`PartnersSection`'s
+ * own skeletons: pulses as one unit, no fabricated figures.
+ */
+function AboutStatsSkeleton() {
+  return (
+    <div
+      className="mt-16 grid animate-pulse grid-cols-2 gap-x-8 gap-y-10 lg:grid-cols-4 lg:gap-x-12"
+      style={{ animationDuration: "3.2s" }}
+    >
+      {Array.from({ length: 4 }).map((_, index) => (
+        <div key={index} className="border-t border-brand-black/15 pt-6">
+          <div className="h-10 w-20 rounded-control bg-brand-black/10 sm:h-12 lg:h-14" />
+          <div className="mt-3 h-3 w-28 rounded-control bg-brand-black/10" />
+        </div>
+      ))}
+    </div>
   );
 }
