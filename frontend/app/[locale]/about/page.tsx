@@ -142,10 +142,6 @@ export default async function AboutPage({ params }: PageProps<"/[locale]/about">
         </Container>
       </Section>
 
-      <Section tone="muted" className="!py-0">
-        <PartnersSection />
-      </Section>
-
       <Section>
         <Container>
           {certificates.length > 0 ? (
@@ -166,6 +162,10 @@ export default async function AboutPage({ params }: PageProps<"/[locale]/about">
             <CertificatesSkeleton />
           )}
         </Container>
+      </Section>
+
+      <Section tone="muted" className="py-0!">
+        <PartnersSection />
       </Section>
 
       <Section tone="muted">
