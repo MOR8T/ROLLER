@@ -1,8 +1,9 @@
-import { useTranslations } from "next-intl";
+import { getLocale, getTranslations } from "next-intl/server";
 import { ArrowUp, Clock, Mail, MapPin, Phone } from "lucide-react";
 import { Container } from "@/components/ui/container";
 import { BrandLogo } from "@/components/ui/brand-logo";
 import { Link } from "@/i18n/navigation";
+import { getContactInfo } from "@/lib/contact-info";
 import { navLinks, siteConfig } from "@/lib/site-config";
 
 function InstagramIcon({ className }: { className?: string }) {
@@ -88,35 +89,36 @@ function WhatsAppIcon({ className }: { className?: string }) {
  *  - main grid (mobile-first): brand block, nav column, contacts column, social column
  *  - bottom bar: copyright + working hours + back-to-top
  *
- * Locale-independent facts come from `siteConfig`, copy from `messages/*.json`
- * — no magic values in either direction.
+ * Address/phone/email/map link/social links come from `getContactInfo` —
+ * the same admin-managed data `ContactsLeadSection` reads — so the footer
+ * never drifts from what `/contacts` shows. Brand facts that aren't
+ * "contact info" (name, founded year, nav links) still come from
+ * `siteConfig`; copy from `messages/*.json`.
  */
-export function Footer() {
-  const t = useTranslations("footer");
-  const tNav = useTranslations("nav");
-  const tCommon = useTranslations("common");
+export async function Footer() {
+  const t = await getTranslations("footer");
+  const tNav = await getTranslations("nav");
+  const tCommon = await getTranslations("common");
+  const locale = await getLocale();
+  const contactInfo = await getContactInfo(locale);
 
   // Passed to ICU as a string on purpose: `{year}` typed as a number would be
   // formatted per locale and render "2 026" in Russian.
   const year = String(new Date().getFullYear());
 
-  const socials = [
-    {
-      href: siteConfig.social.instagram,
-      label: t("instagram"),
-      icon: InstagramIcon,
-    },
-    {
-      href: siteConfig.social.telegram,
-      label: t("telegram"),
-      icon: TelegramIcon,
-    },
-    {
-      href: siteConfig.whatsappHref,
-      label: t("whatsapp"),
-      icon: WhatsAppIcon,
-    },
-  ] as const;
+  const socials = contactInfo
+    ? (
+        [
+          contactInfo.social.instagram.enabled && contactInfo.social.instagram.url
+            ? { href: contactInfo.social.instagram.url, label: t("instagram"), icon: InstagramIcon }
+            : null,
+          contactInfo.social.telegram.enabled && contactInfo.social.telegram.url
+            ? { href: contactInfo.social.telegram.url, label: t("telegram"), icon: TelegramIcon }
+            : null,
+          { href: contactInfo.whatsappHref, label: t("whatsapp"), icon: WhatsAppIcon },
+        ] as const
+      ).filter((social) => social !== null)
+    : [];
 
   return (
     // `relative z-10` is layering, not positioning — nothing inside is placed
@@ -170,35 +172,39 @@ export function Footer() {
             {t("contacts")}
           </h2>
           <ul className="mt-5 space-y-4 text-brand-white/85">
-            <li className="flex items-start gap-3">
-              <MapPin className="mt-0.5 size-4 shrink-0 text-brand-red" aria-hidden />
-              <a
-                href={siteConfig.mapUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="rounded-control transition-colors hover:text-brand-white focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:ring-offset-brand-black focus-visible:outline-none"
-              >
-                {tCommon("address")}
-              </a>
-            </li>
-            <li className="flex items-center gap-3">
-              <Phone className="size-4 shrink-0 text-brand-red" aria-hidden />
-              <a
-                href={siteConfig.phoneHref}
-                className="rounded-control py-1 transition-colors hover:text-brand-white focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:ring-offset-brand-black focus-visible:outline-none"
-              >
-                {siteConfig.phone}
-              </a>
-            </li>
-            <li className="flex items-center gap-3">
-              <Mail className="size-4 shrink-0 text-brand-red" aria-hidden />
-              <a
-                href={`mailto:${siteConfig.email}`}
-                className="rounded-control py-1 break-all transition-colors hover:text-brand-white focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:ring-offset-brand-black focus-visible:outline-none"
-              >
-                {siteConfig.email}
-              </a>
-            </li>
+            {contactInfo ? (
+              <>
+                <li className="flex items-start gap-3">
+                  <MapPin className="mt-0.5 size-4 shrink-0 text-brand-red" aria-hidden />
+                  <a
+                    href={contactInfo.mapUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="rounded-control transition-colors hover:text-brand-white focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:ring-offset-brand-black focus-visible:outline-none"
+                  >
+                    {contactInfo.address}
+                  </a>
+                </li>
+                <li className="flex items-center gap-3">
+                  <Phone className="size-4 shrink-0 text-brand-red" aria-hidden />
+                  <a
+                    href={contactInfo.phoneHref}
+                    className="rounded-control py-1 transition-colors hover:text-brand-white focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:ring-offset-brand-black focus-visible:outline-none"
+                  >
+                    {contactInfo.phone}
+                  </a>
+                </li>
+                <li className="flex items-center gap-3">
+                  <Mail className="size-4 shrink-0 text-brand-red" aria-hidden />
+                  <a
+                    href={contactInfo.emailHref}
+                    className="rounded-control py-1 break-all transition-colors hover:text-brand-white focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:ring-offset-brand-black focus-visible:outline-none"
+                  >
+                    {contactInfo.email}
+                  </a>
+                </li>
+              </>
+            ) : null}
             <li className="flex items-center gap-3">
               <Clock className="size-4 shrink-0 text-brand-red" aria-hidden />
               <span>{tCommon("workingHours")}</span>

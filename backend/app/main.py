@@ -15,12 +15,16 @@ from app.routes import (
     about_content_router,
     about_timeline_router,
     about_certificates_router,
+    contact_info_router,
+    contact_interests_router,
 )
 from app.startup import (
     seed_initial_admin,
     seed_about_content,
     seed_about_timeline,
     seed_about_certificates,
+    seed_contact_info,
+    seed_contact_interests,
 )
 
 # Ensures `app.startup`'s seed log line is visible under `docker compose logs`
@@ -34,6 +38,8 @@ seed_initial_admin()
 seed_about_content()
 seed_about_timeline()
 seed_about_certificates()
+seed_contact_info()
+seed_contact_interests()
 
 app = FastAPI(
     title="FastAPI Auth Service",
@@ -65,6 +71,8 @@ app.include_router(showrooms_router)
 app.include_router(about_content_router)
 app.include_router(about_timeline_router)
 app.include_router(about_certificates_router)
+app.include_router(contact_info_router)
+app.include_router(contact_interests_router)
 
 @app.get("/")
 async def root():

@@ -7,6 +7,8 @@ from app.database import SessionLocal
 from app.models.about_certificate import AboutCertificate
 from app.models.about_content import AboutContent
 from app.models.about_timeline_item import AboutTimelineItem
+from app.models.contact_info import ContactInfo
+from app.models.contact_interest import ContactInterest
 from app.models.user import User
 from app.utils.security import hash_password
 
@@ -257,6 +259,93 @@ def seed_about_certificates(db: Session | None = None) -> None:
         db.commit()
         if owns_session:
             logger.info("Seeded %d about_certificates rows", len(_ABOUT_CERTIFICATES_SEED))
+    finally:
+        if owns_session:
+            db.close()
+
+
+# The values that used to be hardcoded in the frontend's `lib/site-config.ts`
+# (`ContactsLeadSection`'s contact list only — the rest of `siteConfig` is
+# still static, used by the header/footer/WhatsApp button, which stayed out
+# of scope for this feature). Address is duplicated across all four locale
+# columns exactly as `_STORY_PARAGRAPHS` above is — translation is a
+# follow-up task, not something invented here.
+_CONTACT_INFO_SEED = dict(
+    address="г. Душанбе, ул. Мирали Махмадали 25",
+    map_url="https://yandex.tj/maps/-/CTVRvHm1",
+    phone="+992 700 600 700",
+    email="rollerunopen2006@gmail.com",
+    whatsapp="992700600700",
+    social_instagram_url="https://instagram.com/roller.tj",
+    social_telegram_url="https://t.me/ROLLERcallcenter",
+)
+
+
+def seed_contact_info(db: Session | None = None) -> None:
+    """Same idempotency contract as `seed_about_content` — see its docstring."""
+    owns_session = db is None
+    db = db or SessionLocal()
+    try:
+        if db.query(ContactInfo).first():
+            if owns_session:
+                logger.info("Contact info seed skipped: row already exists")
+            return
+
+        values = {
+            f"address_{locale}": _CONTACT_INFO_SEED["address"] for locale in ("ru", "tj", "en", "tr")
+        }
+        contact = ContactInfo(
+            **values,
+            map_url=_CONTACT_INFO_SEED["map_url"],
+            phone=_CONTACT_INFO_SEED["phone"],
+            email=_CONTACT_INFO_SEED["email"],
+            whatsapp=_CONTACT_INFO_SEED["whatsapp"],
+            social_instagram_url=_CONTACT_INFO_SEED["social_instagram_url"],
+            social_instagram_enabled=True,
+            social_telegram_url=_CONTACT_INFO_SEED["social_telegram_url"],
+            social_telegram_enabled=True,
+        )
+        db.add(contact)
+        db.commit()
+        if owns_session:
+            logger.info("Seeded contact_info row")
+    finally:
+        if owns_session:
+            db.close()
+
+
+# The catalog's own category names, carried over as the starting checkbox
+# options in `ContactsLeadSection`'s "Что вас интересует?" list — that list
+# used to *be* `data/products.ts`'s categories (see that file's git history);
+# it is now its own admin-managed resource, seeded once from the same copy
+# so nothing visibly changes until an admin edits it.
+_CONTACT_INTERESTS_SEED = [
+    "Окна",
+    "Двери",
+    "Раздвижные системы",
+    "Фасадное остекление",
+    "Москитные сетки",
+    "Перегородки",
+]
+
+
+def seed_contact_interests(db: Session | None = None) -> None:
+    """Same idempotency contract as `seed_about_content` — see its docstring."""
+    owns_session = db is None
+    db = db or SessionLocal()
+    try:
+        if db.query(ContactInterest).first():
+            if owns_session:
+                logger.info("Contact interests seed skipped: rows already exist")
+            return
+
+        for position, label in enumerate(_CONTACT_INTERESTS_SEED):
+            values = {f"label_{locale}": label for locale in ("ru", "tj", "en", "tr")}
+            db.add(ContactInterest(**values, position=position))
+
+        db.commit()
+        if owns_session:
+            logger.info("Seeded %d contact_interests rows", len(_CONTACT_INTERESTS_SEED))
     finally:
         if owns_session:
             db.close()

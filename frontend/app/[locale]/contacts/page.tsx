@@ -24,7 +24,6 @@ export default async function ContactsPage({ params }: PageProps<"/[locale]/cont
       <Section className="pb-0 pt-12!">
         <PageHeader
           breadcrumbs={[{ label: t("breadcrumb") }]}
-          eyebrow={t("eyebrow")}
           title={t("title")}
           description={t("description")}
         />

@@ -1,11 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, type ReactNode } from "react";
 import { useLocale } from "next-intl";
 
-import { ContactsLeadSection } from "@/components/sections/contacts-lead-section";
 import type { Locale } from "@/i18n/routing";
-import { localized } from "@/lib/localized";
 import { ProductFinishesSection } from "./product-finishes-section";
 import { ProductGallerySection } from "./product-gallery-section";
 import { ProductHeroSection } from "./product-hero-section";
@@ -35,7 +33,19 @@ import type { ProductPageData } from "@/types/product-page";
  * address changes — the "adjust state on prop change" pattern, and the reason
  * the comparison is on `product`/`category` rather than object identity.
  */
-export function ProductPageView({ initialData }: { initialData: ProductPageData }) {
+export function ProductPageView({
+  initialData,
+  contactsSection,
+}: {
+  initialData: ProductPageData;
+  /**
+   * `ContactsLeadSection` is a Server Component (it fetches the
+   * admin-managed contact list) and cannot be imported into this client
+   * component — its parent, the page's Server Component, builds it and
+   * hands it down instead.
+   */
+  contactsSection: ReactNode;
+}) {
   const locale = useLocale() as Locale;
   const [data, setData] = useState<ProductPageData>(initialData);
 
@@ -48,7 +58,7 @@ export function ProductPageView({ initialData }: { initialData: ProductPageData 
     return <ProductNotFoundSection data={data.notFound} locale={locale} />;
   }
 
-  const { hero, finishes, specs, story, gallery, promo, contacts } = data.sections;
+  const { hero, finishes, specs, story, gallery, promo } = data.sections;
 
   return (
     <>
@@ -59,14 +69,10 @@ export function ProductPageView({ initialData }: { initialData: ProductPageData 
       <ProductGallerySection data={gallery} locale={locale} />
       <ProductPromoSection data={promo} locale={locale} />
 
-      {/* The site's one request block, unchanged, given this page's words and
-          told which system the visitor was reading. */}
-      <ContactsLeadSection
-        id={contacts.id}
-        title={localized(contacts.title, locale)}
-        description={localized(contacts.description, locale)}
-        context={localized(contacts.context, locale)}
-      />
+      {/* The site's one request block, given this page's words and told
+          which system the visitor was reading — built server-side by the
+          page and passed down, see the `contactsSection` prop comment. */}
+      {contactsSection}
     </>
   );
 }

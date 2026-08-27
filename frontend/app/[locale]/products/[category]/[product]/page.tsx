@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 
+import { ContactsLeadSection } from "@/components/sections/contacts-lead-section";
 import { ProductPageView } from "@/components/products/page/product-page-view";
 import {
   colorSwatches,
@@ -9,7 +10,8 @@ import {
   productParams,
   type ProductBase,
 } from "@/data/products";
-import { joinLocalized, type LocalizedText } from "@/lib/localized";
+import type { Locale } from "@/i18n/routing";
+import { joinLocalized, localized, type LocalizedText } from "@/lib/localized";
 import { localizedPairs, localizedText } from "@/lib/localized-messages";
 import type { ProductFinish, ProductPageData } from "@/types/product-page";
 
@@ -105,7 +107,19 @@ export default async function ProductPage({
   const { locale, category, product } = await params;
   setRequestLocale(locale);
 
-  return <ProductPageView initialData={buildPageData(category, product)} />;
+  const pageData = buildPageData(category, product);
+
+  const contactsSection =
+    pageData.status === "found" ? (
+      <ContactsLeadSection
+        id={pageData.sections.contacts.id}
+        title={localized(pageData.sections.contacts.title, locale as Locale)}
+        description={localized(pageData.sections.contacts.description, locale as Locale)}
+        context={localized(pageData.sections.contacts.context, locale as Locale)}
+      />
+    ) : null;
+
+  return <ProductPageView initialData={pageData} contactsSection={contactsSection} />;
 }
 
 function buildPageData(categorySlug: string, productSlug: string): ProductPageData {

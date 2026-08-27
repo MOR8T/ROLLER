@@ -8,6 +8,8 @@ from app.routes.showrooms import router as showrooms_router
 from app.routes.about_content import router as about_content_router
 from app.routes.about_timeline import router as about_timeline_router
 from app.routes.about_certificates import router as about_certificates_router
+from app.routes.contact_info import router as contact_info_router
+from app.routes.contact_interests import router as contact_interests_router
 
 __all__ = [
     "auth_router",
@@ -20,4 +22,6 @@ __all__ = [
     "about_content_router",
     "about_timeline_router",
     "about_certificates_router",
+    "contact_info_router",
+    "contact_interests_router",
 ]
