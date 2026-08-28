@@ -3,7 +3,6 @@ import { AboutStatsSection } from "@/components/sections/about-stats-section";
 import { ContactsLeadSection } from "@/components/sections/contacts-lead-section";
 import { HeroSection } from "@/components/sections/hero-section";
 import { NewsSection } from "@/components/sections/news-section";
-import { OffersTabsSection } from "@/components/sections/offers-tabs-section";
 import { PartnersSection } from "@/components/sections/partners-section";
 import { ProductsGridSection } from "@/components/sections/products-grid-section";
 import { ShowroomsSection } from "@/components/sections/showrooms-section";
@@ -20,7 +19,6 @@ import { getShowrooms } from "@/lib/showrooms";
  *   hero      — the promise and the four audiences.
  *   products  — the catalogue itself, eight photographs, no menu required.
  *   about     — who is behind it: two sentences and four numbers.
- *   offers    — three audiences, three sets of pages written for them.
  *   news      — dated, because a site with no dates on it looks abandoned.
  *   partners  — the suppliers' marks, an argument the visitor already trusts.
  *   showrooms — the map: which city, and whether it is the visitor's own.
@@ -85,7 +83,6 @@ export default async function Home({ params }: PageProps<"/[locale]">) {
       <HeroSection slides={heroSlides} />
       <ProductsGridSection />
       <AboutStatsSection stats={aboutContent?.stats ?? []} />
-      <OffersTabsSection />
       <NewsSection />
       <PartnersSection />
       <ShowroomsSection showrooms={showrooms} />
