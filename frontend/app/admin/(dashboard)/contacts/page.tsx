@@ -1,7 +1,7 @@
 import { ContactInfoManager } from "@/components/admin/contact-info/contact-info-manager";
 import { ContactInterestsManager } from "@/components/admin/contact-interests/contact-interests-manager";
-import { getAdminContactInfo } from "@/app/admin/(dashboard)/contact-info-actions";
-import { getAdminContactInterests } from "@/app/admin/(dashboard)/contact-interests-actions";
+import { getAdminContactInfo } from "@/components/admin-sections/contact-info-actions";
+import { getAdminContactInterests } from "@/components/admin-sections/contact-interests-actions";
 
 export default async function AdminContactsPage() {
   const [content, interests] = await Promise.all([

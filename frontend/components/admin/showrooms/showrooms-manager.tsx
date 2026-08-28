@@ -17,13 +17,13 @@ import { ImageLightbox } from "@/components/ui/image-lightbox";
 import { cn } from "@/lib/utils";
 import { locales } from "@/i18n/routing";
 import { localeLabels } from "@/i18n/locale-labels";
-import type { AdminShowroomDto } from "@/app/admin/(dashboard)/showrooms-actions";
+import type { AdminShowroomDto } from "@/components/admin-sections/showrooms-actions";
 import {
   createShowroomAction,
   deleteShowroomAction,
   reorderShowroomsAction,
   updateShowroomAction,
-} from "@/app/admin/(dashboard)/showrooms-actions";
+} from "@/components/admin-sections/showrooms-actions";
 
 interface ShowroomsManagerProps {
   initialShowrooms: AdminShowroomDto[];

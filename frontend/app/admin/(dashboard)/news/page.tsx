@@ -1,5 +1,5 @@
 import { NewsManager } from "@/components/admin/news/news-manager";
-import { getAdminNews } from "@/app/admin/(dashboard)/news-actions";
+import { getAdminNews } from "@/components/admin-sections/news-actions";
 
 export default async function AdminNewsPage() {
   const articles = await getAdminNews();

@@ -1,5 +1,5 @@
 import { ProductCategoriesManager } from "@/components/admin/product-categories/product-categories-manager";
-import { getAdminProductCategories } from "@/app/admin/(dashboard)/product-categories-actions";
+import { getAdminProductCategories } from "@/components/admin-sections/product-categories-actions";
 
 export default async function AdminProductCategoriesPage() {
   const categories = await getAdminProductCategories();

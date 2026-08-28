@@ -4,7 +4,7 @@ import { useEffect, useRef, useState, useTransition, type FormEvent } from "reac
 import { Button } from "@/components/ui/button";
 import { PasswordInput } from "@/components/ui/password-input";
 import { Modal } from "@/components/ui/modal";
-import { changePasswordAction } from "@/app/admin/(dashboard)/settings-actions";
+import { changePasswordAction } from "@/components/admin-sections/settings-actions";
 
 const SAVED_MESSAGE_MS = 4000;
 

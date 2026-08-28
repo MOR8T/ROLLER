@@ -17,13 +17,13 @@ import { ImageLightbox } from "@/components/ui/image-lightbox";
 import { cn } from "@/lib/utils";
 import { locales } from "@/i18n/routing";
 import { localeLabels } from "@/i18n/locale-labels";
-import type { AdminHeroSlideDto } from "@/app/admin/(dashboard)/hero-slides-actions";
+import type { AdminHeroSlideDto } from "@/components/admin-sections/hero-slides-actions";
 import {
   createHeroSlideAction,
   deleteHeroSlideAction,
   reorderHeroSlidesAction,
   updateHeroSlideAction,
-} from "@/app/admin/(dashboard)/hero-slides-actions";
+} from "@/components/admin-sections/hero-slides-actions";
 
 interface HeroSlidesManagerProps {
   initialSlides: AdminHeroSlideDto[];

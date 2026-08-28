@@ -20,7 +20,7 @@ import {
   reorderSectionsAction,
   updateSectionAction,
   type AdminProductSectionDto,
-} from "@/app/admin/(dashboard)/products-actions";
+} from "@/components/admin-sections/products-actions";
 
 /**
  * The second half of the client's flow: «после этого админ в самом продукте

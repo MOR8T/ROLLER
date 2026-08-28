@@ -11,7 +11,7 @@ import {
   toLocalizedValue,
   type LocalizedValue,
 } from "@/components/admin/localized-fields";
-import { uploadSectionImageAction } from "@/app/admin/(dashboard)/products-actions";
+import { uploadSectionImageAction } from "@/components/admin-sections/products-actions";
 
 /**
  * The editor for one product-page section, in all five of its shapes.

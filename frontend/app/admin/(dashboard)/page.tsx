@@ -1,5 +1,5 @@
 import { HeroSlidesManager } from "@/components/admin/hero-slides/hero-slides-manager";
-import { getAdminHeroSlides } from "./hero-slides-actions";
+import { getAdminHeroSlides } from "@/components/admin-sections/hero-slides-actions";
 
 export default async function AdminHomePage() {
   const heroSlides = await getAdminHeroSlides();

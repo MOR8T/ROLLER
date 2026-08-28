@@ -19,12 +19,12 @@ import { TiptapEditor } from "@/components/admin/news/tiptap-editor";
 import { cn } from "@/lib/utils";
 import { locales, type Locale } from "@/i18n/routing";
 import { localeLabels } from "@/i18n/locale-labels";
-import type { AdminNewsArticleDto } from "@/app/admin/(dashboard)/news-actions";
+import type { AdminNewsArticleDto } from "@/components/admin-sections/news-actions";
 import {
   createNewsAction,
   deleteNewsAction,
   updateNewsAction,
-} from "@/app/admin/(dashboard)/news-actions";
+} from "@/components/admin-sections/news-actions";
 
 interface NewsManagerProps {
   initialArticles: AdminNewsArticleDto[];

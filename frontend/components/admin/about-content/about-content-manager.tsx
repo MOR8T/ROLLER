@@ -8,8 +8,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
-import type { AdminAboutContentDto } from "@/app/admin/(dashboard)/about-content-actions";
-import { updateAboutContentAction } from "@/app/admin/(dashboard)/about-content-actions";
+import type { AdminAboutContentDto } from "@/components/admin-sections/about-content-actions";
+import { updateAboutContentAction } from "@/components/admin-sections/about-content-actions";
 
 interface AboutContentManagerProps {
   content: AdminAboutContentDto | null;

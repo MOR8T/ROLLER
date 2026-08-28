@@ -15,13 +15,13 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ImageLightbox } from "@/components/ui/image-lightbox";
 import { cn } from "@/lib/utils";
-import type { AdminPartnerDto } from "@/app/admin/(dashboard)/partners-actions";
+import type { AdminPartnerDto } from "@/components/admin-sections/partners-actions";
 import {
   createPartnerAction,
   deletePartnerAction,
   reorderPartnersAction,
   updatePartnerAction,
-} from "@/app/admin/(dashboard)/partners-actions";
+} from "@/components/admin-sections/partners-actions";
 
 interface PartnersManagerProps {
   initialPartners: AdminPartnerDto[];

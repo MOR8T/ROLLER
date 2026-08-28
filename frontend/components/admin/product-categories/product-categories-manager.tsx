@@ -17,13 +17,13 @@ import { ImageLightbox } from "@/components/ui/image-lightbox";
 import { cn } from "@/lib/utils";
 import { locales } from "@/i18n/routing";
 import { localeLabels } from "@/i18n/locale-labels";
-import type { AdminProductCategoryDto } from "@/app/admin/(dashboard)/product-categories-actions";
+import type { AdminProductCategoryDto } from "@/components/admin-sections/product-categories-actions";
 import {
   createProductCategoryAction,
   deleteProductCategoryAction,
   reorderProductCategoriesAction,
   updateProductCategoryAction,
-} from "@/app/admin/(dashboard)/product-categories-actions";
+} from "@/components/admin-sections/product-categories-actions";
 
 interface ProductCategoriesManagerProps {
   initialCategories: AdminProductCategoryDto[];

@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
 
 import { ProductSectionsManager } from "@/components/admin/products/product-sections-manager";
-import { getAdminProduct } from "@/app/admin/(dashboard)/products-actions";
+import { getAdminProduct } from "@/components/admin-sections/products-actions";
 import { BACKEND_API_URL } from "@/lib/admin-auth";
 
 /**

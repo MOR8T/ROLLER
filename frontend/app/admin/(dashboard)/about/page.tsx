@@ -2,10 +2,10 @@ import { AboutContentManager } from "@/components/admin/about-content/about-cont
 import { AboutTimelineManager } from "@/components/admin/about-timeline/about-timeline-manager";
 import { AboutCertificatesManager } from "@/components/admin/about-certificates/about-certificates-manager";
 import { PartnersManager } from "@/components/admin/partners/partners-manager";
-import { getAdminAboutContent } from "@/app/admin/(dashboard)/about-content-actions";
-import { getAdminAboutTimeline } from "@/app/admin/(dashboard)/about-timeline-actions";
-import { getAdminAboutCertificates } from "@/app/admin/(dashboard)/about-certificates-actions";
-import { getAdminPartners } from "@/app/admin/(dashboard)/partners-actions";
+import { getAdminAboutContent } from "@/components/admin-sections/about-content-actions";
+import { getAdminAboutTimeline } from "@/components/admin-sections/about-timeline-actions";
+import { getAdminAboutCertificates } from "@/components/admin-sections/about-certificates-actions";
+import { getAdminPartners } from "@/components/admin-sections/partners-actions";
 
 export default async function AdminAboutPage() {
   const [content, timeline, certificates, partners] = await Promise.all([

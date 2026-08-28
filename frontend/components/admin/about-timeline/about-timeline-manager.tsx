@@ -9,13 +9,13 @@ import { Textarea } from "@/components/ui/textarea";
 import { locales, type Locale } from "@/i18n/routing";
 import { localeLabels } from "@/i18n/locale-labels";
 import { cn } from "@/lib/utils";
-import type { AdminAboutTimelineItemDto } from "@/app/admin/(dashboard)/about-timeline-actions";
+import type { AdminAboutTimelineItemDto } from "@/components/admin-sections/about-timeline-actions";
 import {
   createTimelineItemAction,
   deleteTimelineItemAction,
   reorderTimelineItemsAction,
   updateTimelineItemAction,
-} from "@/app/admin/(dashboard)/about-timeline-actions";
+} from "@/components/admin-sections/about-timeline-actions";
 
 interface AboutTimelineManagerProps {
   initialItems: AdminAboutTimelineItemDto[];

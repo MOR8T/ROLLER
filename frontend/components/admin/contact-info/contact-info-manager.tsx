@@ -7,8 +7,8 @@ import { localeLabels } from "@/i18n/locale-labels";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
-import type { AdminContactInfoDto } from "@/app/admin/(dashboard)/contact-info-actions";
-import { updateContactInfoAction } from "@/app/admin/(dashboard)/contact-info-actions";
+import type { AdminContactInfoDto } from "@/components/admin-sections/contact-info-actions";
+import { updateContactInfoAction } from "@/components/admin-sections/contact-info-actions";
 
 interface ContactInfoManagerProps {
   content: AdminContactInfoDto | null;

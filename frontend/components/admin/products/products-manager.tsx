@@ -26,7 +26,7 @@ import {
   updateProductAction,
   type AdminCategoryOptionDto,
   type AdminProductDto,
-} from "@/app/admin/(dashboard)/products-actions";
+} from "@/components/admin-sections/products-actions";
 
 /** Kept in sync with the backend's own check in `routes/products.py`. */
 const MAX_IMAGE_SIZE_BYTES = 10 * 1024 * 1024;

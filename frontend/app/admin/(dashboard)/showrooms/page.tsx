@@ -1,5 +1,5 @@
 import { ShowroomsManager } from "@/components/admin/showrooms/showrooms-manager";
-import { getAdminShowrooms } from "@/app/admin/(dashboard)/showrooms-actions";
+import { getAdminShowrooms } from "@/components/admin-sections/showrooms-actions";
 
 export default async function AdminShowroomsPage() {
   const showrooms = await getAdminShowrooms();

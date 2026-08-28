@@ -17,13 +17,13 @@ import { ImageLightbox } from "@/components/ui/image-lightbox";
 import { locales, type Locale } from "@/i18n/routing";
 import { localeLabels } from "@/i18n/locale-labels";
 import { cn } from "@/lib/utils";
-import type { AdminAboutCertificateDto } from "@/app/admin/(dashboard)/about-certificates-actions";
+import type { AdminAboutCertificateDto } from "@/components/admin-sections/about-certificates-actions";
 import {
   createCertificateAction,
   deleteCertificateAction,
   reorderCertificatesAction,
   updateCertificateAction,
-} from "@/app/admin/(dashboard)/about-certificates-actions";
+} from "@/components/admin-sections/about-certificates-actions";
 
 interface AboutCertificatesManagerProps {
   initialCertificates: AdminAboutCertificateDto[];

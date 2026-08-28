@@ -8,13 +8,13 @@ import { Input } from "@/components/ui/input";
 import { locales, type Locale } from "@/i18n/routing";
 import { localeLabels } from "@/i18n/locale-labels";
 import { cn } from "@/lib/utils";
-import type { AdminContactInterestDto } from "@/app/admin/(dashboard)/contact-interests-actions";
+import type { AdminContactInterestDto } from "@/components/admin-sections/contact-interests-actions";
 import {
   createContactInterestAction,
   deleteContactInterestAction,
   reorderContactInterestsAction,
   updateContactInterestAction,
-} from "@/app/admin/(dashboard)/contact-interests-actions";
+} from "@/components/admin-sections/contact-interests-actions";
 
 interface ContactInterestsManagerProps {
   initialItems: AdminContactInterestDto[];
