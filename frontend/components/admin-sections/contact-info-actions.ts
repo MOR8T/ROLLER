@@ -23,10 +23,6 @@ interface RawContactInfo {
   phone: string;
   email: string;
   whatsapp: string;
-  social_instagram_url: string;
-  social_instagram_enabled: boolean;
-  social_telegram_url: string;
-  social_telegram_enabled: boolean;
 }
 
 const LOCALES: Locale[] = ["ru", "tj", "en", "tr"];
@@ -38,10 +34,6 @@ export interface AdminContactInfoDto {
   phone: string;
   email: string;
   whatsapp: string;
-  social: {
-    instagram: { url: string; enabled: boolean };
-    telegram: { url: string; enabled: boolean };
-  };
 }
 
 function toDto(raw: RawContactInfo): AdminContactInfoDto {
@@ -57,41 +49,25 @@ function toDto(raw: RawContactInfo): AdminContactInfoDto {
     phone: raw.phone,
     email: raw.email,
     whatsapp: raw.whatsapp,
-    social: {
-      instagram: { url: raw.social_instagram_url, enabled: raw.social_instagram_enabled },
-      telegram: { url: raw.social_telegram_url, enabled: raw.social_telegram_enabled },
-    },
   };
 }
 
 /**
  * Reads every `name="address_ru"`-style field plus the flat fields the form
  * submits and turns them into the JSON body `ContactInfoUpdate` expects.
- * Checkboxes (`social_*_enabled`) are absent from `FormData` when unchecked
- * — presence, not value, is what `formData.has` reads.
  */
-function toUpdatePayload(formData: FormData): Record<string, string | boolean> {
-  const payload: Record<string, string | boolean> = {};
+function toUpdatePayload(formData: FormData): Record<string, string> {
+  const payload: Record<string, string> = {};
 
   for (const locale of LOCALES) {
     const value = formData.get(`address_${locale}`);
     if (typeof value === "string") payload[`address_${locale}`] = value;
   }
 
-  for (const field of [
-    "map_url",
-    "phone",
-    "email",
-    "whatsapp",
-    "social_instagram_url",
-    "social_telegram_url",
-  ] as const) {
+  for (const field of ["map_url", "phone", "email", "whatsapp"] as const) {
     const value = formData.get(field);
     if (typeof value === "string") payload[field] = value;
   }
-
-  payload.social_instagram_enabled = formData.has("social_instagram_enabled");
-  payload.social_telegram_enabled = formData.has("social_telegram_enabled");
 
   return payload;
 }

@@ -17,6 +17,7 @@ from app.routes import (
     about_certificates_router,
     contact_info_router,
     contact_interests_router,
+    social_links_router,
 )
 from app.config import get_settings
 from app.startup import (
@@ -26,6 +27,7 @@ from app.startup import (
     seed_about_certificates,
     seed_contact_info,
     seed_contact_interests,
+    seed_social_links,
     seed_product_categories,
     seed_products,
 )
@@ -44,6 +46,7 @@ seed_about_timeline()
 seed_about_certificates()
 seed_contact_info()
 seed_contact_interests()
+seed_social_links()
 seed_product_categories()
 seed_products()
 
@@ -90,6 +93,7 @@ app.include_router(about_timeline_router)
 app.include_router(about_certificates_router)
 app.include_router(contact_info_router)
 app.include_router(contact_interests_router)
+app.include_router(social_links_router)
 
 @app.get("/")
 async def root():

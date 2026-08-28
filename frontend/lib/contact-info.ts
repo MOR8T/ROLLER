@@ -25,10 +25,6 @@ interface RawContactInfo {
   phone: string;
   email: string;
   whatsapp: string;
-  social_instagram_url: string;
-  social_instagram_enabled: boolean;
-  social_telegram_url: string;
-  social_telegram_enabled: boolean;
 }
 
 export interface ContactInfoDto {
@@ -40,10 +36,6 @@ export interface ContactInfoDto {
   emailHref: string;
   whatsapp: string;
   whatsappHref: string;
-  social: {
-    instagram: { url: string; enabled: boolean };
-    telegram: { url: string; enabled: boolean };
-  };
 }
 
 function toDto(raw: RawContactInfo, locale: Locale): ContactInfoDto {
@@ -56,10 +48,6 @@ function toDto(raw: RawContactInfo, locale: Locale): ContactInfoDto {
     emailHref: `mailto:${raw.email}`,
     whatsapp: raw.whatsapp,
     whatsappHref: `https://wa.me/${raw.whatsapp}`,
-    social: {
-      instagram: { url: raw.social_instagram_url, enabled: raw.social_instagram_enabled },
-      telegram: { url: raw.social_telegram_url, enabled: raw.social_telegram_enabled },
-    },
   };
 }
 

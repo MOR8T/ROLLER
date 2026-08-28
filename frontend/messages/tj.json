@@ -41,6 +41,9 @@
     "toTop": "Наверх",
     "instagram": "Instagram ROLLER",
     "telegram": "Telegram ROLLER",
+    "facebook": "Facebook ROLLER",
+    "youtube": "YouTube ROLLER",
+    "tiktok": "TikTok ROLLER",
     "whatsapp": "WhatsApp ROLLER"
   },
   "whatsappFab": {
@@ -104,8 +107,6 @@
       }
     },
     "about": {
-      "title": "Производим профильные системы в Душанбе с 2006 года",
-      "body": "Полный цикл: экструзия, сборка конструкций, замер, монтаж и сервис. С 2025 года — и алюминий.",
       "more": "О компании"
     },
     "offers": {

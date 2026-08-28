@@ -14,11 +14,6 @@ class ContactInfoOut(BaseModel):
     email: str
     whatsapp: str
 
-    social_instagram_url: str
-    social_instagram_enabled: bool
-    social_telegram_url: str
-    social_telegram_enabled: bool
-
     class Config:
         from_attributes = True
 
@@ -36,8 +31,3 @@ class ContactInfoUpdate(BaseModel):
     phone: str | None = None
     email: str | None = None
     whatsapp: str | None = None
-
-    social_instagram_url: str | None = None
-    social_instagram_enabled: bool | None = None
-    social_telegram_url: str | None = None
-    social_telegram_enabled: bool | None = None

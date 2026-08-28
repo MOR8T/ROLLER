@@ -34,6 +34,18 @@ class AboutContent(Base):
     hero_description_en = Column(String, nullable=False)
     hero_description_tr = Column(String, nullable=False)
 
+    # The homepage's "О компании" teaser (`AboutStatsSection`) — distinct
+    # from `hero_title`/`hero_description` above, which is `/about`'s own
+    # page banner. `stat_*` below backs the numbers both sections show.
+    home_title_ru = Column(String, nullable=False)
+    home_title_tj = Column(String, nullable=False)
+    home_title_en = Column(String, nullable=False)
+    home_title_tr = Column(String, nullable=False)
+    home_description_ru = Column(String, nullable=False)
+    home_description_tj = Column(String, nullable=False)
+    home_description_en = Column(String, nullable=False)
+    home_description_tr = Column(String, nullable=False)
+
     story_title_ru = Column(String, nullable=False)
     story_title_tj = Column(String, nullable=False)
     story_title_en = Column(String, nullable=False)

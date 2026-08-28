@@ -13,6 +13,15 @@ class AboutContentOut(BaseModel):
     hero_description_en: str
     hero_description_tr: str
 
+    home_title_ru: str
+    home_title_tj: str
+    home_title_en: str
+    home_title_tr: str
+    home_description_ru: str
+    home_description_tj: str
+    home_description_en: str
+    home_description_tr: str
+
     story_title_ru: str
     story_title_tj: str
     story_title_en: str
@@ -78,6 +87,15 @@ class AboutContentUpdate(BaseModel):
     hero_description_tj: str | None = None
     hero_description_en: str | None = None
     hero_description_tr: str | None = None
+
+    home_title_ru: str | None = None
+    home_title_tj: str | None = None
+    home_title_en: str | None = None
+    home_title_tr: str | None = None
+    home_description_ru: str | None = None
+    home_description_tj: str | None = None
+    home_description_en: str | None = None
+    home_description_tr: str | None = None
 
     story_title_ru: str | None = None
     story_title_tj: str | None = None
