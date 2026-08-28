@@ -16,6 +16,7 @@ from app.models.contact_interest import ContactInterest
 from app.models.hero_slide import HeroSlide
 from app.models.news_article import NewsArticle
 from app.models.partner import Partner
+from app.models.product import Product, ProductSection, product_category_links
 from app.models.product_category import ProductCategory
 from app.models.showroom import Showroom
 from app.models.user import User
@@ -29,7 +30,10 @@ __all__ = [
     "HeroSlide",
     "NewsArticle",
     "Partner",
+    "Product",
     "ProductCategory",
+    "ProductSection",
+    "product_category_links",
     "Showroom",
     "User",
 ]

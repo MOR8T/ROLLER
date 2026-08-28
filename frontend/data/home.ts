@@ -65,7 +65,15 @@ export const advantages = [
  * A visitor who recognises themselves in a tab lands on pages written for them
  * instead of on a material they have no way to choose between.
  *
- * Every `href` is a route that exists. Copy: `home.offers.tabs.<key>`.
+ * ⚠️ `href`s here are not all live routes. The three that pointed into the
+ * catalogue now point at `/#products`, the homepage's own category strip: the
+ * catalogue index was removed on 2026-08-28 and a product's address is a pair
+ * of database ids (`/products/<category_id>/<product_id>`), which a static
+ * fixture cannot spell. The `/solutions/<category>` landings and `/portfolio`
+ * in this list were already addresses without pages before that change —
+ * unrelated, and left as they are.
+ *
+ * Copy: `home.offers.tabs.<key>`.
  */
 export interface HomeOfferLink {
   key: string;
@@ -95,9 +103,9 @@ export const homeOffers: HomeOffer[] = [
   {
     key: "house",
     icon: Store,
-    cta: "/products",
+    cta: "/#products",
     links: [
-      { key: "stella", href: "/products/stella" },
+      { key: "stella", href: "/#products" },
       { key: "doors", href: "/solutions/doors" },
       { key: "sliding", href: "/solutions/sliding-systems" },
       { key: "showroom", href: "/showroom" },
@@ -110,7 +118,7 @@ export const homeOffers: HomeOffer[] = [
     links: [
       { key: "facade", href: "/solutions/facade-glazing" },
       { key: "partitions", href: "/solutions/partitions" },
-      { key: "systems", href: "/products" },
+      { key: "systems", href: "/#products" },
       { key: "portfolio", href: "/portfolio" },
     ],
   },

@@ -4,6 +4,7 @@ from app.routes.hero_slides import router as hero_slides_router
 from app.routes.partners import router as partners_router
 from app.routes.news import router as news_router
 from app.routes.product_categories import router as product_categories_router
+from app.routes.products import router as products_router
 from app.routes.showrooms import router as showrooms_router
 from app.routes.about_content import router as about_content_router
 from app.routes.about_timeline import router as about_timeline_router
@@ -18,6 +19,7 @@ __all__ = [
     "partners_router",
     "news_router",
     "product_categories_router",
+    "products_router",
     "showrooms_router",
     "about_content_router",
     "about_timeline_router",

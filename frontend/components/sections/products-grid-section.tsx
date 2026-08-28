@@ -6,6 +6,7 @@ import { HomeCarousel } from "@/components/sections/home-carousel";
 import { HomeHeading, HomeSection, homeCard } from "@/components/sections/home-kit";
 import { Reveal } from "@/components/ui/reveal";
 import { Link } from "@/i18n/navigation";
+import { productCategoryHref } from "@/lib/product-links";
 import { getProductCategories, type ProductCategoryDto } from "@/lib/product-categories";
 
 /**
@@ -18,11 +19,11 @@ import { getProductCategories, type ProductCategoryDto } from "@/lib/product-cat
  *
  * ⚠️ Categories moved from a static fixture (`data/home.ts`) to the admin
  * panel on 2026-08-27 (`lib/product-categories.ts` fetches them; managed
- * from `app/admin/(dashboard)/product-categories/page.tsx`). The backend's
- * `product_categories` table carries a name per locale and a photo but no
- * slug — it hasn't been wired into the catalogue taxonomy in
- * `data/products.ts` — so every card links to `/products` rather than a
- * per-category `/solutions/<slug>` page. `getProductCategories` returns
+ * from `app/admin/(dashboard)/product-categories/page.tsx`), and gained a
+ * destination of their own on 2026-08-28: each card opens
+ * `/products/<id>`, the category's product list. That page is also the only
+ * way into a product now — the catalogue index the cards used to share was
+ * removed with the same change. `getProductCategories` returns
  * `[]`, never fabricated content, when the backend has nothing yet —
  * `ProductsGridSkeleton` below renders instead, same shape as
  * `HeroSection`'s/`PartnersSection`'s own skeletons.
@@ -37,7 +38,7 @@ function ProductCard({
 }) {
   return (
     <Link
-      href="/products"
+      href={productCategoryHref(category.id)}
       className={`group relative flex aspect-4/5 flex-col justify-end overflow-hidden bg-neutral-100 p-6 focus-visible:ring-2 focus-visible:ring-brand-black focus-visible:ring-offset-2 focus-visible:outline-none sm:aspect-3/4 sm:p-7 ${homeCard}`}
     >
       <Image
@@ -88,7 +89,9 @@ export async function ProductsGridSection() {
   return (
     <HomeSection id="products">
       <Reveal>
-        <HomeHeading title={t("title")} action={{ label: t("all"), href: "/products" }} />
+        {/* No «Вся продукция» action: the page it opened is gone, and the
+            strip below is itself the full list of categories. */}
+        <HomeHeading title={t("title")} />
       </Reveal>
 
       <Reveal className="mt-12">

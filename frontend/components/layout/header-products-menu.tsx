@@ -4,10 +4,16 @@ import { useTranslations } from "next-intl";
 import { AnimatePresence, motion, useReducedMotion, type Variants } from "framer-motion";
 import { Container } from "@/components/ui/container";
 import { Link } from "@/i18n/navigation";
-import { categories, productHref, productsByCategory } from "@/data/products";
+import { productHref, type ProductsMenuCategory } from "@/lib/product-links";
 import { PRODUCTS_MENU_ID } from "./header-shared";
 
 interface HeaderProductsMenuProps {
+  /**
+   * Categories and their products, already localised. Fetched in
+   * `app/[locale]/layout.tsx` (a Server Component) and handed down: this is a
+   * client component and `lib/products.ts` is server-only.
+   */
+  categories: ProductsMenuCategory[];
   open: boolean;
   /** Keep the panel open while the pointer is inside it. */
   onOpen: () => void;
@@ -25,28 +31,26 @@ interface HeaderProductsMenuProps {
  * longer navigates and why the old «Весь каталог» link at the top of the panel
  * is gone.
  *
- * A category heading is plain text, not a link. `/solutions/[category]` still
- * exists and the site still reaches it from `/catalog` and from the product
- * pages, but a menu whose headings navigate is a menu that opens index pages,
- * and that is exactly what this rebuild removed.
+ * A category heading is plain text, not a link. It leads somewhere now —
+ * `/products/<id>` is a real page — but a menu whose headings navigate is a
+ * menu that opens index pages, and that is exactly what this rebuild removed;
+ * the visitor reaches the category page from the homepage strip instead.
  *
  * A system appears in every category that claims it — ROLLER under «Окна» and
  * again under «Двери» — because that is what the many-to-many link means. A
- * category with no products yet is skipped rather than shown as an empty
- * column: with the list admin-managed, an empty category is a normal state
- * between creating it and filling it, not a layout to design around.
+ * category with no products is already filtered out by `getProductsMenu`: an
+ * empty category is a normal state between creating it and filling it, not a
+ * layout to design around.
  */
 export function HeaderProductsMenu({
+  categories,
   open,
   onOpen,
   onScheduleClose,
   onClose,
 }: HeaderProductsMenuProps) {
   const prefersReducedMotion = useReducedMotion();
-  const t = useTranslations("categories");
-  const tBrands = useTranslations("brands");
-
-  const filled = categories.filter((category) => category.productSlugs.length > 0);
+  const t = useTranslations("nav");
 
   const panelVariants: Variants = prefersReducedMotion
     ? { hidden: { opacity: 0 }, visible: { opacity: 1 }, exit: { opacity: 0 } }
@@ -71,7 +75,7 @@ export function HeaderProductsMenu({
           key="products-mega"
           id={PRODUCTS_MENU_ID}
           role="region"
-          aria-label={t("eyebrow")}
+          aria-label={t("products")}
           variants={panelVariants}
           initial="hidden"
           animate="visible"
@@ -86,10 +90,10 @@ export function HeaderProductsMenu({
                 rows rather than one column per category. Name-only rows are
                 short enough for five across even at 1280px. */}
             <div className="grid gap-x-8 gap-y-8 xl:grid-cols-5 2xl:gap-x-10">
-              {filled.map((category) => (
-                <div key={category.slug}>
+              {categories.map((category) => (
+                <div key={category.id}>
                   <p className="text-xs font-semibold tracking-[0.16em] text-brand-black/55 uppercase">
-                    {t(`items.${category.slug}.title`)}
+                    {category.name}
                   </p>
 
                   {/* Name only, and the name carries weight: at 15px/600 in full
@@ -101,14 +105,14 @@ export function HeaderProductsMenu({
                       properly. The specs live on the product page; the menu is a
                       list of names. */}
                   <ul className="mt-3 grid gap-px">
-                    {productsByCategory(category.slug).map((product) => (
-                      <li key={product.slug}>
+                    {category.products.map((product) => (
+                      <li key={product.id}>
                         <Link
-                          href={productHref(product, category.slug)}
+                          href={productHref(category.id, product.id)}
                           onClick={onClose}
                           className="block rounded-control py-1.5 text-[0.9375rem] font-semibold text-brand-black transition-colors hover:text-brand-red focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:outline-none"
                         >
-                          {tBrands(`items.${product.slug}.name`)}
+                          {product.title}
                         </Link>
                       </li>
                     ))}

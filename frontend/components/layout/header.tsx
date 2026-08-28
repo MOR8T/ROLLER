@@ -6,6 +6,7 @@ import { Menu, Phone, X } from "lucide-react";
 import { Container } from "@/components/ui/container";
 import { BrandLogo } from "@/components/ui/brand-logo";
 import { Link } from "@/i18n/navigation";
+import type { ProductsMenuCategory } from "@/lib/product-links";
 import { siteConfig } from "@/lib/site-config";
 import { cn } from "@/lib/utils";
 import { LanguageSwitcher } from "./language-switcher";
@@ -37,7 +38,16 @@ const SCROLL_THRESHOLD = 24;
  * This component owns only the bar and the open/closed state; the mega-menu and
  * the mobile drawer live in their own files, each with its own behaviour.
  */
-export function Header() {
+export function Header({
+  productCategories,
+}: {
+  /**
+   * The «Продукция» panel's contents, read from the backend by
+   * `app/[locale]/layout.tsx` and passed straight through to the two menus.
+   * The header is a client component and cannot fetch it itself.
+   */
+  productCategories: ProductsMenuCategory[];
+}) {
   const [open, setOpen] = useState(false);
   const [productsOpen, setProductsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -163,13 +173,14 @@ export function Header() {
       </Container>
 
       <HeaderProductsMenu
+        categories={productCategories}
         open={productsOpen}
         onOpen={openProducts}
         onScheduleClose={scheduleCloseProducts}
         onClose={closeProducts}
       />
 
-      <HeaderMobileDrawer open={open} onClose={closeMobile} />
+      <HeaderMobileDrawer categories={productCategories} open={open} onClose={closeMobile} />
     </header>
   );
 }

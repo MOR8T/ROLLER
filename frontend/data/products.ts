@@ -3,6 +3,18 @@ import type { Category, Colorway, Product, Segment } from "@/types";
 /**
  * The catalog: six categories and six profile systems, on one axis.
  *
+ * ⚠️ **Read this first.** Since 2026-08-28 this file no longer backs the
+ * product section of the site. Products, their categories and their page
+ * sections live in the backend and are managed from `/admin/products`;
+ * `lib/products.ts` is the only read path, and the catalogue index this file
+ * describes (`/products`) was removed entirely.
+ *
+ * What still reads it: `data/calculator.ts` (the system picker and its
+ * material filter) and the «Что вас интересует» options in
+ * `components/forms/request-form.tsx`. Everything below is written as if it
+ * were the catalogue because it was — treat that framing as history, the same
+ * way the `project_plan` references are.
+ *
  * ⚠️ It had two axes until 2026-08-17 — **category** meaning the material
  * (`pvc` / `aluminium`, one per product, and the product's URL) and
  * **application** meaning what the system is for. The client removed the first

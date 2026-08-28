@@ -8,8 +8,9 @@ import { notFound } from "next/navigation";
  * lands on an unstyled English page with no header, no footer and no way back,
  * on all four locales.
  *
- * Real routes take precedence: once `app/[locale]/products/page.tsx` exists
- * (stage 04) Next matches the more specific segment and never reaches here.
+ * Real routes take precedence: where a page exists for a segment — say
+ * `app/[locale]/products/[category]/page.tsx` — Next matches the more specific
+ * route and never reaches here.
  */
 export default function CatchAllNotFound() {
   notFound();

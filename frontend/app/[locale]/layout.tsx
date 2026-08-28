@@ -5,6 +5,7 @@ import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import "../globals.css";
 import { Header } from "@/components/layout/header";
+import { getProductsMenu } from "@/lib/products";
 import { Footer } from "@/components/layout/footer";
 import { WhatsAppFab } from "@/components/layout/whatsapp-fab";
 import { routing } from "@/i18n/routing";
@@ -96,6 +97,13 @@ export default async function LocaleLayout({ children, params }: LayoutProps<"/[
 
   const t = await getTranslations({ locale, namespace: "common" });
 
+  // The header's «Продукция» panel. Read here, in the one Server Component
+  // every page passes through, because `Header` is a client component and
+  // `lib/products.ts` is server-only. The fetch is tagged and revalidated by
+  // the admin panel's mutations, so this costs one cached request per locale
+  // rather than one per navigation.
+  const productCategories = await getProductsMenu(locale);
+
   return (
     <html
       lang={locale}
@@ -109,7 +117,7 @@ export default async function LocaleLayout({ children, params }: LayoutProps<"/[
           >
             {t("skipToContent")}
           </a>
-          <Header />
+          <Header productCategories={productCategories} />
           <main id="top" className="flex-1">
             {children}
           </main>

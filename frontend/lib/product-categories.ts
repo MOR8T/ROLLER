@@ -7,11 +7,12 @@ import { BACKEND_API_URL } from "@/lib/admin-auth";
  * Server-only read path for `ProductsGridSection` — same shape as
  * `lib/partners.ts`/`lib/showrooms.ts`. Product categories are managed from
  * the admin panel (`app/admin/(dashboard)/product-categories/page.tsx`) and
- * stored in the backend as a name per locale plus a photo and a position —
- * no slug, no link into the catalogue taxonomy in `data/products.ts` (that
- * taxonomy hasn't been migrated to the backend; see
- * `product-categories-manager.tsx`'s own note). Cards built from this DTO
- * therefore have no per-category destination and link to `/products`.
+ * stored in the backend as a name per locale plus a photo and a position.
+ *
+ * There is no slug: a card links to `/products/<id>`, the category page, which
+ * is also where the product URLs get their first segment. `lib/products.ts` is
+ * the read path for that page and for the products themselves — this module
+ * stays the categories-only one the homepage strip uses.
  */
 export interface ProductCategoryDto {
   id: number;

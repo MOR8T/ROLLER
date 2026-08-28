@@ -10,6 +10,7 @@ from app.routes import (
     partners_router,
     news_router,
     product_categories_router,
+    products_router,
     showrooms_router,
     about_content_router,
     about_timeline_router,
@@ -25,6 +26,8 @@ from app.startup import (
     seed_about_certificates,
     seed_contact_info,
     seed_contact_interests,
+    seed_product_categories,
+    seed_products,
 )
 
 # The only logging configuration in the app. It used to be belt-and-braces —
@@ -41,6 +44,8 @@ seed_about_timeline()
 seed_about_certificates()
 seed_contact_info()
 seed_contact_interests()
+seed_product_categories()
+seed_products()
 
 app = FastAPI(
     title="FastAPI Auth Service",
@@ -78,6 +83,7 @@ app.include_router(hero_slides_router)
 app.include_router(partners_router)
 app.include_router(news_router)
 app.include_router(product_categories_router)
+app.include_router(products_router)
 app.include_router(showrooms_router)
 app.include_router(about_content_router)
 app.include_router(about_timeline_router)

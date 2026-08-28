@@ -3,19 +3,22 @@ import type { LocalizedPair, LocalizedText } from "@/lib/localized";
 /**
  * The view model of `/[locale]/products/[category]/[product]`.
  *
- * Not a domain type — `types/index.ts` keeps those, and they are the contract
- * the API will satisfy. This file describes the *page*: one object, assembled
- * once in `page.tsx`, held in state by `ProductPageView` and handed down section
- * by section. A section receives its slice and nothing else, so no section
- * reads `data/products.ts`, the message catalogue or the route params.
+ * Not a domain type — `types/index.ts` keeps those. This file describes the
+ * *page*: one object, assembled once in `lib/products.ts` from the API, held in
+ * state by `ProductPageView` and handed down section by section. A section
+ * receives its slice and nothing else, so no section knows about the backend,
+ * the message catalogue or the route params.
  *
- * Two rules keep the sections uniform:
+ * Three rules keep the sections uniform:
  *
  *  1. Every section extends `ProductSection` — the same `id`, `title`,
  *     `description`, `media` and `actions` in the same places, so the layouts
  *     differ and the plumbing does not.
  *  2. Every string is a `LocalizedText`. The section picks its locale with
  *     `localized(text, locale)`; nothing calls `useTranslations`.
+ *  3. The body of the page is an *ordered array*, not a fixed set of named
+ *     slots. Which blocks a product has, in which order, and how many of each,
+ *     is the admin's decision — see `ProductPageBlock` below.
  */
 
 export interface ProductMedia {
@@ -99,34 +102,50 @@ export interface ProductContactsSectionData extends ProductSection {
 
 export type ProductNotFoundSectionData = ProductSection;
 
-export interface ProductPageSections {
-  hero: ProductHeroSectionData;
-  finishes: ProductFinishesSectionData;
-  specs: ProductSpecsSectionData;
-  story: ProductStorySectionData;
-  gallery: ProductGallerySectionData;
-  promo: ProductPromoSectionData;
-  contacts: ProductContactsSectionData;
-}
+/**
+ * One block in the body of a product page, tagged with which of the five kinds
+ * it is.
+ *
+ * ⚠️ This was a fixed object — `{ hero, finishes, specs, story, gallery, promo,
+ * contacts }` — until the page moved to the backend. It is a discriminated
+ * union in an array now because the admin panel builds the page: they choose
+ * which blocks a product has, they order them, and nothing stops them from
+ * adding two galleries. A named slot per kind cannot express any of that.
+ *
+ * `hero` and `contacts` are deliberately *not* in here. The hero is the
+ * product's own photo, title and description — the fields the admin fills in
+ * before there are any sections at all — and the contacts block is the site's
+ * one lead form, which closes every product page. Neither is a block the admin
+ * adds, removes or moves, so neither is a `ProductPageBlock`.
+ */
+export type ProductPageBlock =
+  | { kind: "finishes"; section: ProductFinishesSectionData }
+  | { kind: "specs"; section: ProductSpecsSectionData }
+  | { kind: "story"; section: ProductStorySectionData }
+  | { kind: "gallery"; section: ProductGallerySectionData }
+  | { kind: "promo"; section: ProductPromoSectionData };
 
 /**
  * The whole page in one value.
  *
  * `not-found` is a state of this page rather than `notFound()`: the category
- * segment is not validated against the product, so `/products/anything/roller`
- * and `/products/windows/nothing` both land here, and the client asked for a
- * section that says so instead of the site's 404.
+ * segment is not validated against the product, so `/products/9/3` renders the
+ * product whatever category 9 turns out to be, and only an unknown *product*
+ * lands here — the client asked for a section that says so instead of the
+ * site's 404.
  */
 export type ProductPageData =
   | {
       status: "found";
-      category: string;
-      product: string;
-      sections: ProductPageSections;
+      categoryId: number;
+      productId: number;
+      hero: ProductHeroSectionData;
+      blocks: ProductPageBlock[];
+      contacts: ProductContactsSectionData;
     }
   | {
       status: "not-found";
-      category: string;
-      product: string;
+      categoryId: number;
+      productId: number;
       notFound: ProductNotFoundSectionData;
     };

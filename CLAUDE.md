@@ -8,13 +8,19 @@ ROLLER.TJ — corporate site and product catalog for a PVC/aluminium profile-sys
 manufacturer in Tajikistan. Two independent apps, no root-level tooling tying them
 together:
 
-- `frontend/` — Next.js 16 site. Fully built: homepage, catalog, product pages,
-  calculator, news, showroom, contacts, about, all in four locales.
-- `backend/` — FastAPI + PostgreSQL service. Freshly scaffolded (single commit) and
-  currently **auth-only** (register/login/me) — nothing else exists yet, and the
-  frontend does not call it. `lib/leads.ts` and `lib/news.ts` in the frontend are
-  written as stubs specifically so this API can be swapped in later without touching
-  callers; see those files' module comments for the intended contract.
+- `frontend/` — Next.js 16 site: homepage, product pages, calculator, news,
+  showroom, contacts, about, all in four locales, plus the admin panel at
+  `/admin` (outside the `[locale]` segment).
+- `backend/` — FastAPI + PostgreSQL service behind the admin panel. Auth plus
+  hero slides, partners, news, product categories, products and their page
+  sections, showrooms, the about page and contacts. `lib/leads.ts` is still the
+  one stub left; see its module comment for the intended contract.
+
+⚠️ There is no product *catalogue index*. `/products` was removed on 2026-08-28
+at the client's request; the entry points are the category strip on the homepage
+and the header's «Продукция» panel, and the addresses are
+`/products/<category_id>` and `/products/<category_id>/<product_id>` — database
+ids, not slugs.
 
 `notes/` (gitignored) holds raw source photography and per-brand material handed
 over by the client — reference only, not part of the app.
@@ -108,6 +114,22 @@ rather than ask `next-intl` per-request. `lib/localized-messages.ts` is
 (~1200 lines combined) to the browser. Everywhere else, use `useTranslations`
 normally.
 
+### Products
+Products live in the backend and are managed from `/admin/products`
+(`lib/products.ts` is the sole read path; nothing else may call `/api/products`).
+A product is a photo, a title and a description per locale — that is the card
+*and* the page's opening screen — plus an **ordered list of sections**, each one
+of five kinds (`finishes`, `specs`, `story`, `gallery`, `promo`) with a JSONB
+payload. The order the admin puts them in is the order the page renders, a kind
+may repeat, and `components/products/page/product-page-view.tsx` loops over the
+list rather than naming the blocks.
+
+⚠️ `data/products.ts` still exists but is **only** the calculator's source now
+(`data/calculator.ts`) and the option list in `components/forms/request-form.tsx`.
+The catalogue, the header menu and the product page no longer read it. Its module
+comments still describe it as the catalogue — historical, like the `project_plan`
+references above.
+
 ### Calculator
 `data/calculator-schemes.json` (parsed geometry) + `data/calculator.ts` (option
 lists: constructions, materials, glazing, lamination colors, size ranges) drive
@@ -143,7 +165,18 @@ or weights, the preload budget is tuned per current usage.
 Standard FastAPI layering: `routes/` → `schemas/` (Pydantic) → `models/` (SQLAlchemy)
 → `database.py` (session/engine), with `dependencies/auth.py` providing
 `get_current_user` via a bearer JWT (`utils/security.py`, `python-jose` + `passlib`
-bcrypt). `main.py` currently allows CORS from `*` — fine for local dev, must be
-scoped before any deployment. `Base.metadata.create_all` runs at import time in
-`main.py` (no migration tool like Alembic is set up); adding models means the
-tables appear automatically on next backend start, not via a migration.
+bcrypt). CORS is driven by `ALLOWED_ORIGINS` and is empty behind the production
+nginx, where everything is same-origin.
+
+The schema lives in Alembic (`migrations/`), applied by the container's
+entrypoint — adding a model means adding it to `app/models/__init__.py` (the
+registry autogenerate reads) *and* writing a revision. `app/startup.py` seeds a
+fresh database, including the six product categories and the six systems the
+site shipped with; every seed is skipped once its table has a row.
+`scripts/build-products-seed.py` is what generated `app/seeds/products.json`
+from the frontend's message catalogues.
+
+⚠️ Every route is an `async def` doing blocking SQLAlchemy work, and `get_db` is
+a sync generator, so sessions are checked out from Starlette's 40-thread
+threadpool. `database.py`'s pool is sized against that, not against expected
+traffic — see its comment before changing it.
