@@ -1,45 +1,40 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
-import { useRouter } from "next/navigation";
+import { useActionState, useState, useSyncExternalStore } from "react";
 import { BrandLogo } from "@/components/ui/brand-logo";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
+import { login, type LoginState } from "./login-actions";
+
+const initialState: LoginState = { error: null };
 
 export default function LoginPage() {
-  const router = useRouter();
+  const [state, formAction, isPending] = useActionState(login, initialState);
+
+  // React resets an uncontrolled form once its action resolves, so after a
+  // failed attempt the login field would come back empty and have to be
+  // retyped. Keeping it controlled preserves it; the password field stays
+  // uncontrolled precisely so that it *is* cleared.
   const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState<string | null>(null);
-  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    setError(null);
-    setIsSubmitting(true);
-
-    try {
-      const res = await fetch("/api/auth/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, password }),
-      });
-
-      if (!res.ok) {
-        const data = await res.json().catch(() => null);
-        setError(data?.error ?? "Не удалось войти");
-        return;
-      }
-
-      router.push("/admin");
-      router.refresh();
-    } catch {
-      setError("Сервер недоступен. Попробуйте ещё раз.");
-    } finally {
-      setIsSubmitting(false);
-    }
-  }
+  // Second line of defence behind the Server Action: until React has hydrated
+  // this page there is no `isPending`, no error rendering and no double-submit
+  // guard, so the submit button stays disabled — which also blocks implicit
+  // submission via Enter, since a form with a disabled default button does not
+  // submit. The admin panel is JS-only anyway (every manager under
+  // `components/admin/` is a client component), so this costs no working
+  // no-JS path.
+  //
+  // `useSyncExternalStore` rather than a `useState`/`useEffect` pair: the
+  // server snapshot is `false` and the client snapshot `true`, which is
+  // exactly the "has this hydrated yet" signal, without the cascading render
+  // an effect-set state would cause (and which `react-hooks` flags).
+  const isHydrated = useSyncExternalStore(
+    () => () => {},
+    () => true,
+    () => false,
+  );
 
   return (
     <main className="flex flex-1 items-center justify-center px-gutter py-16">
@@ -53,7 +48,7 @@ export default function LoginPage() {
             Вход в панель управления
           </h1>
 
-          <form onSubmit={handleSubmit} className="space-y-4" noValidate>
+          <form action={formAction} className="space-y-4" noValidate>
             <div>
               <label
                 htmlFor="username"
@@ -67,7 +62,7 @@ export default function LoginPage() {
                 autoComplete="username"
                 required
                 value={username}
-                onChange={(e) => setUsername(e.target.value)}
+                onChange={(event) => setUsername(event.target.value)}
               />
             </div>
 
@@ -84,19 +79,17 @@ export default function LoginPage() {
                 type="password"
                 autoComplete="current-password"
                 required
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
               />
             </div>
 
-            {error && (
+            {state.error && (
               <p role="alert" className="text-sm text-brand-red">
-                {error}
+                {state.error}
               </p>
             )}
 
-            <Button type="submit" size="lg" className="w-full" disabled={isSubmitting}>
-              {isSubmitting ? "Входим..." : "Войти"}
+            <Button type="submit" size="lg" className="w-full" disabled={!isHydrated || isPending}>
+              {isPending ? "Входим..." : "Войти"}
             </Button>
           </form>
         </Card>

@@ -4,7 +4,7 @@ import { ADMIN_SESSION_COOKIE, BACKEND_API_URL } from "@/lib/admin-session";
 /**
  * Server-only session helpers for the admin area (`app/admin`, `app/login`,
  * `app/api/auth/*`). The JWT itself lives only in an httpOnly cookie set by
- * `app/api/auth/login/route.ts` — it is never exposed to client-side JS, so
+ * `app/login/login-actions.ts` — it is never exposed to client-side JS, so
  * there is no localStorage/token-in-JS path anywhere in this app.
  *
  * The cookie name and refresh call live in `lib/admin-session.ts` instead of
