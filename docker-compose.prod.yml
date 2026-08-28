@@ -1,0 +1,91 @@
+# Production stack. Run it explicitly and on its own:
+#
+#     docker compose -f docker-compose.prod.yml up -d
+#
+# Never plain `docker compose up` here — that would also pull in
+# docker-compose.override.yml, which bind-mounts source, enables --reload and
+# publishes Postgres and the backend on the host.
+#
+# Images are built by GitHub Actions and pulled from the registry; nothing is
+# built on the server. `next build` peaks well above this box's 4 GB of RAM.
+#
+# Only nginx publishes ports. Note that Docker writes its own iptables rules
+# *ahead* of ufw, so a `ports:` entry here would be reachable from the internet
+# no matter what the firewall says — which is exactly why db, backend and
+# frontend have none and talk over the internal Compose network instead.
+
+services:
+  db:
+    image: postgres:17-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 5s
+
+  backend:
+    image: ${REGISTRY:-ghcr.io/mor8t}/roller-backend:${IMAGE_TAG:-latest}
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}
+      SECRET_KEY: ${SECRET_KEY}
+      ALGORITHM: ${ALGORITHM:-HS256}
+      ACCESS_TOKEN_EXPIRE_MINUTES: ${ACCESS_TOKEN_EXPIRE_MINUTES:-30}
+      REFRESH_TOKEN_EXPIRE_HOURS: ${REFRESH_TOKEN_EXPIRE_HOURS:-8}
+      INITIAL_ADMIN_USERNAME: ${INITIAL_ADMIN_USERNAME}
+      INITIAL_ADMIN_EMAIL: ${INITIAL_ADMIN_EMAIL}
+      INITIAL_ADMIN_PASSWORD: ${INITIAL_ADMIN_PASSWORD}
+      ALLOWED_ORIGINS: ${PUBLIC_ORIGIN}
+      SQL_ECHO: "false"
+    volumes:
+      - backend_uploads:/app/uploads
+    depends_on:
+      db:
+        condition: service_healthy
+
+  frontend:
+    image: ${REGISTRY:-ghcr.io/mor8t}/roller-frontend:${IMAGE_TAG:-latest}
+    restart: unless-stopped
+    environment:
+      # Server-to-server calls: Docker's internal DNS, unreachable from a browser.
+      BACKEND_API_URL: http://backend:8000
+      # What browser <img> src attributes are built from. Absolute on purpose:
+      # every component renders admin-uploaded photos with
+      # `unoptimized={src.startsWith("http")}`, so next/image's optimizer stays
+      # out of the way and no `remotePatterns` entry is needed. Read at runtime,
+      # so switching this to https://roller.tj later needs no rebuild.
+      BACKEND_PUBLIC_URL: ${PUBLIC_ORIGIN}
+    volumes:
+      # next/image writes optimized variants here. Without a volume the whole
+      # cache is lost on every deploy, and re-encoding AVIF for the product
+      # catalogue on 2 vCPUs is the slowest thing this box does.
+      - next_image_cache:/app/.next/cache/images
+    depends_on:
+      backend:
+        condition: service_healthy
+
+  nginx:
+    image: nginx:1.27-alpine
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d:ro
+      - ./nginx/certs:/etc/nginx/certs:ro
+    depends_on:
+      - frontend
+      - backend
+
+volumes:
+  postgres_data:
+  backend_uploads:
+  next_image_cache:

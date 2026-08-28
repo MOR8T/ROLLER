@@ -3,7 +3,6 @@ import logging
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
-from app.database import Base, engine
 from app.routes import (
     auth_router,
     users_router,
@@ -18,6 +17,7 @@ from app.routes import (
     contact_info_router,
     contact_interests_router,
 )
+from app.config import get_settings
 from app.startup import (
     seed_initial_admin,
     seed_about_content,
@@ -27,13 +27,14 @@ from app.startup import (
     seed_contact_interests,
 )
 
-# Ensures `app.startup`'s seed log line is visible under `docker compose logs`
-# regardless of whether `database.py`'s `echo=True` (which incidentally also
-# triggers a logging config) stays as-is.
+# The only logging configuration in the app. It used to be belt-and-braces —
+# `database.py`'s `echo=True` configured logging as a side effect — but that
+# is off by default now, so `app.startup`'s seed lines reach
+# `docker compose logs` only because of this call.
 logging.basicConfig(level=logging.INFO)
 
-# Создание таблиц
-Base.metadata.create_all(bind=engine)
+# Схема живёт в Alembic (`migrations/`), а не в `create_all` — таблицы уже
+# применены entrypoint'ом контейнера к моменту импорта этого модуля.
 seed_initial_admin()
 seed_about_content()
 seed_about_timeline()
@@ -47,10 +48,20 @@ app = FastAPI(
     version="1.0.0"
 )
 
-# CORS middleware
+# CORS. The old `allow_origins=["*"]` paired with `allow_credentials=True`
+# was never actually honoured — browsers reject that combination outright.
+# Behind the production nginx everything is same-origin, so this list is empty
+# there and the middleware becomes a no-op; ALLOWED_ORIGINS exists for a
+# frontend hosted somewhere else.
+_allowed_origins = [
+    origin.strip()
+    for origin in get_settings().allowed_origins.split(",")
+    if origin.strip()
+]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=_allowed_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

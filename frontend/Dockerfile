@@ -34,6 +34,11 @@ COPY --from=builder /app/public ./public
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
+# Pre-created so the named volume Compose mounts here inherits nextjs's
+# ownership. A volume mounted onto a path that doesn't exist in the image
+# is created root-owned, and the optimizer then silently fails to cache.
+RUN mkdir -p .next/cache/images && chown -R nextjs:nodejs .next
+
 USER nextjs
 
 EXPOSE 3031

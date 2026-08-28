@@ -6,7 +6,8 @@ settings = get_settings()
 
 engine = create_engine(
     settings.database_url,
-    echo=True  # Для отладки, отключить в продакшене
+    # Off by default; set SQL_ECHO=true in the environment to debug queries.
+    echo=settings.sql_echo,
 )
 
 SessionLocal = sessionmaker(
