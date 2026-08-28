@@ -5,6 +5,7 @@ import { ArrowDown, ArrowUp, Trash2 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useToast } from "@/components/ui/toast";
 import {
   EMPTY_LOCALIZED,
   LocalizedFields,
@@ -142,15 +143,14 @@ function ImageField({
   optionalHint?: string;
 }) {
   const [uploading, setUploading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const { showToast } = useToast();
 
   async function onFileChange(event: ChangeEvent<HTMLInputElement>) {
     const file = event.target.files?.[0];
     if (!file) return;
 
-    setError(null);
     if (file.size > MAX_IMAGE_SIZE_BYTES) {
-      setError("Размер файла не должен превышать 10 МБ");
+      showToast("Размер файла не должен превышать 10 МБ");
       event.target.value = "";
       return;
     }
@@ -167,7 +167,7 @@ function ImageField({
     event.target.value = "";
 
     if (!result.success) {
-      setError(result.error);
+      showToast(result.error);
       return;
     }
     onChange(result.data.path);
@@ -206,11 +206,6 @@ function ImageField({
           <p className="mt-1 text-xs text-neutral-500">
             {uploading ? "Загрузка..." : `${optionalHint} До 10 МБ.`}
           </p>
-          {error ? (
-            <p role="alert" className="mt-1 text-xs text-brand-red">
-              {error}
-            </p>
-          ) : null}
         </div>
       </div>
     </div>
@@ -712,17 +707,16 @@ function GalleryForm({
         )
       : [],
   );
-  const [error, setError] = useState<string | null>(null);
+  const { showToast } = useToast();
 
   return (
     <FormShell
       onSubmit={(event) => {
         event.preventDefault();
         if (images.length === 0) {
-          setError("Добавьте хотя бы одну фотографию");
+          showToast("Добавьте хотя бы одну фотографию");
           return;
         }
-        setError(null);
         onSubmit({ images });
       }}
       onCancel={onCancel}
@@ -773,12 +767,6 @@ function GalleryForm({
         uploadsBaseUrl={uploadsBaseUrl}
         optionalHint="Фотографии показываются слайдером, в этом порядке."
       />
-
-      {error ? (
-        <p role="alert" className="text-sm text-brand-red">
-          {error}
-        </p>
-      ) : null}
     </FormShell>
   );
 }

@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { locales, type Locale } from "@/i18n/routing";
 import { localeLabels } from "@/i18n/locale-labels";
+import { useToast } from "@/components/ui/toast";
 import { cn } from "@/lib/utils";
 import type { AdminContactInterestDto } from "@/components/admin-sections/contact-interests-actions";
 import {
@@ -29,7 +30,7 @@ export function ContactInterestsManager({ initialItems }: ContactInterestsManage
   const router = useRouter();
   const [items, setItems] = useOptimistic(initialItems);
   const [isPending, startTransition] = useTransition();
-  const [error, setError] = useState<string | null>(null);
+  const { showToast } = useToast();
   const [editingId, setEditingId] = useState<number | null>(null);
   const [showAddForm, setShowAddForm] = useState(false);
 
@@ -40,12 +41,11 @@ export function ContactInterestsManager({ initialItems }: ContactInterestsManage
     const reordered = items.slice();
     [reordered[index], reordered[target]] = [reordered[target], reordered[index]];
 
-    setError(null);
     startTransition(async () => {
       setItems(reordered);
       const result = await reorderContactInterestsAction(reordered.map((item) => item.id));
       if (!result.success) {
-        setError(result.error);
+        showToast(result.error);
         router.refresh();
       }
     });
@@ -54,12 +54,11 @@ export function ContactInterestsManager({ initialItems }: ContactInterestsManage
   function remove(id: number) {
     if (!window.confirm("Удалить этот пункт?")) return;
 
-    setError(null);
     startTransition(async () => {
       setItems(items.filter((item) => item.id !== id));
       const result = await deleteContactInterestAction(id);
       if (!result.success) {
-        setError(result.error);
+        showToast(result.error);
         router.refresh();
       }
     });
@@ -70,11 +69,10 @@ export function ContactInterestsManager({ initialItems }: ContactInterestsManage
     const form = event.currentTarget;
     const formData = new FormData(form);
 
-    setError(null);
     startTransition(async () => {
       const result = await createContactInterestAction(formData);
       if (!result.success) {
-        setError(result.error);
+        showToast(result.error);
         return;
       }
       form.reset();
@@ -86,11 +84,10 @@ export function ContactInterestsManager({ initialItems }: ContactInterestsManage
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
 
-    setError(null);
     startTransition(async () => {
       const result = await updateContactInterestAction(id, formData);
       if (!result.success) {
-        setError(result.error);
+        showToast(result.error);
         router.refresh();
         return;
       }
@@ -117,14 +114,11 @@ export function ContactInterestsManager({ initialItems }: ContactInterestsManage
         </Button>
       </div>
 
-      {error ? (
-        <p role="alert" className="mt-4 text-sm text-brand-red">
-          {error}
-        </p>
-      ) : null}
-
       {showAddForm ? (
-        <form onSubmit={submitCreate} className="mt-5 rounded-card border border-brand-black/10 p-5">
+        <form
+          onSubmit={submitCreate}
+          className="mt-5 rounded-card border border-brand-black/10 p-5"
+        >
           <InterestFields disabled={isPending} />
           <Button type="submit" disabled={isPending} className="mt-4">
             {isPending ? "Сохранение..." : "Добавить"}
@@ -207,13 +201,7 @@ export function ContactInterestsManager({ initialItems }: ContactInterestsManage
   );
 }
 
-function InterestFields({
-  disabled,
-  item,
-}: {
-  disabled: boolean;
-  item?: AdminContactInterestDto;
-}) {
+function InterestFields({ disabled, item }: { disabled: boolean; item?: AdminContactInterestDto }) {
   const [activeLocale, setActiveLocale] = useState<Locale>("ru");
 
   return (

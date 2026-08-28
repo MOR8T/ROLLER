@@ -14,6 +14,7 @@ import { ArrowDown, ArrowUp, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ImageLightbox } from "@/components/ui/image-lightbox";
+import { useToast } from "@/components/ui/toast";
 import { cn } from "@/lib/utils";
 import { locales } from "@/i18n/routing";
 import { localeLabels } from "@/i18n/locale-labels";
@@ -51,7 +52,7 @@ export function HeroSlidesManager({ initialSlides }: HeroSlidesManagerProps) {
   const router = useRouter();
   const [slides, setSlides] = useOptimistic(initialSlides);
   const [isPending, startTransition] = useTransition();
-  const [error, setError] = useState<string | null>(null);
+  const { showToast } = useToast();
   const [editingId, setEditingId] = useState<number | null>(null);
   const [showAddForm, setShowAddForm] = useState(false);
   const [lightbox, setLightbox] = useState<{ src: string; alt: string } | null>(null);
@@ -63,12 +64,11 @@ export function HeroSlidesManager({ initialSlides }: HeroSlidesManagerProps) {
     const reordered = slides.slice();
     [reordered[index], reordered[target]] = [reordered[target], reordered[index]];
 
-    setError(null);
     startTransition(async () => {
       setSlides(reordered);
       const result = await reorderHeroSlidesAction(reordered.map((slide) => slide.id));
       if (!result.success) {
-        setError(result.error);
+        showToast(result.error);
         // Someone else changed the list in the meantime (edited it in another
         // tab, or a slide was deleted elsewhere) — pull the real state back
         // in rather than leaving the optimistic reorder showing.
@@ -80,12 +80,11 @@ export function HeroSlidesManager({ initialSlides }: HeroSlidesManagerProps) {
   function remove(id: number) {
     if (!window.confirm("Удалить этот слайд?")) return;
 
-    setError(null);
     startTransition(async () => {
       setSlides(slides.filter((slide) => slide.id !== id));
       const result = await deleteHeroSlideAction(id);
       if (!result.success) {
-        setError(result.error);
+        showToast(result.error);
         router.refresh();
       }
     });
@@ -96,15 +95,14 @@ export function HeroSlidesManager({ initialSlides }: HeroSlidesManagerProps) {
     const form = event.currentTarget;
     const formData = new FormData(form);
 
-    setError(null);
     if (imageTooLarge(formData)) {
-      setError("Размер файла не должен превышать 10 МБ");
+      showToast("Размер файла не должен превышать 10 МБ");
       return;
     }
     startTransition(async () => {
       const result = await createHeroSlideAction(formData);
       if (!result.success) {
-        setError(result.error);
+        showToast(result.error);
         return;
       }
       form.reset();
@@ -116,15 +114,14 @@ export function HeroSlidesManager({ initialSlides }: HeroSlidesManagerProps) {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
 
-    setError(null);
     if (imageTooLarge(formData)) {
-      setError("Размер файла не должен превышать 10 МБ");
+      showToast("Размер файла не должен превышать 10 МБ");
       return;
     }
     startTransition(async () => {
       const result = await updateHeroSlideAction(id, formData);
       if (!result.success) {
-        setError(result.error);
+        showToast(result.error);
         // A 404 here means the slide was deleted elsewhere while this form
         // was open — leaving the edit form open on a slide that no longer
         // exists is exactly the confusing state to avoid, so pull fresh data.
@@ -154,12 +151,6 @@ export function HeroSlidesManager({ initialSlides }: HeroSlidesManagerProps) {
           {showAddForm ? "Отмена" : "Добавить слайд"}
         </Button>
       </div>
-
-      {error ? (
-        <p role="alert" className="mt-4 text-sm text-brand-red">
-          {error}
-        </p>
-      ) : null}
 
       {showAddForm ? (
         <form

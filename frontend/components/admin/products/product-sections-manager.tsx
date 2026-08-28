@@ -6,6 +6,7 @@ import { ArrowDown, ArrowUp, Trash2 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Select } from "@/components/ui/select";
+import { useToast } from "@/components/ui/toast";
 import {
   IconButton,
   SECTION_TYPES,
@@ -57,7 +58,7 @@ export function ProductSectionsManager({
   const router = useRouter();
   const [sections, setSections] = useOptimistic(initialSections);
   const [isPending, startTransition] = useTransition();
-  const [error, setError] = useState<string | null>(null);
+  const { showToast } = useToast();
   const [editingId, setEditingId] = useState<number | null>(null);
   const [addingType, setAddingType] = useState<SectionType | null>(null);
 
@@ -68,7 +69,6 @@ export function ProductSectionsManager({
     const reordered = sections.slice();
     [reordered[index], reordered[target]] = [reordered[target], reordered[index]];
 
-    setError(null);
     startTransition(async () => {
       setSections(reordered);
       const result = await reorderSectionsAction(
@@ -76,7 +76,7 @@ export function ProductSectionsManager({
         reordered.map((section) => section.id),
       );
       if (!result.success) {
-        setError(result.error);
+        showToast(result.error);
         // Someone else changed this product in another tab — pull the real
         // state back rather than leaving the optimistic order showing.
         router.refresh();
@@ -87,23 +87,21 @@ export function ProductSectionsManager({
   function remove(id: number) {
     if (!window.confirm("Удалить эту секцию?")) return;
 
-    setError(null);
     startTransition(async () => {
       setSections(sections.filter((section) => section.id !== id));
       const result = await deleteSectionAction(productId, id);
       if (!result.success) {
-        setError(result.error);
+        showToast(result.error);
         router.refresh();
       }
     });
   }
 
   function create(type: SectionType, content: unknown) {
-    setError(null);
     startTransition(async () => {
       const result = await createSectionAction(productId, { type, content });
       if (!result.success) {
-        setError(result.error);
+        showToast(result.error);
         return;
       }
       setAddingType(null);
@@ -111,11 +109,10 @@ export function ProductSectionsManager({
   }
 
   function update(sectionId: number, type: string, content: unknown) {
-    setError(null);
     startTransition(async () => {
       const result = await updateSectionAction(productId, sectionId, { type, content });
       if (!result.success) {
-        setError(result.error);
+        showToast(result.error);
         return;
       }
       setEditingId(null);
@@ -131,12 +128,6 @@ export function ProductSectionsManager({
           заголовок и описание из карточки показываются первым экраном и в этот список не входят.
         </p>
       </div>
-
-      {error ? (
-        <p role="alert" className="mt-4 text-sm text-brand-red">
-          {error}
-        </p>
-      ) : null}
 
       <ul className="mt-6 space-y-3">
         {sections.length === 0 ? (

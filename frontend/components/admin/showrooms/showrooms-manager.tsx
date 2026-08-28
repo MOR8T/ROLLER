@@ -14,6 +14,7 @@ import { ArrowDown, ArrowUp, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ImageLightbox } from "@/components/ui/image-lightbox";
+import { useToast } from "@/components/ui/toast";
 import { cn } from "@/lib/utils";
 import { locales } from "@/i18n/routing";
 import { localeLabels } from "@/i18n/locale-labels";
@@ -52,7 +53,7 @@ export function ShowroomsManager({ initialShowrooms }: ShowroomsManagerProps) {
   const router = useRouter();
   const [showrooms, setShowrooms] = useOptimistic(initialShowrooms);
   const [isPending, startTransition] = useTransition();
-  const [error, setError] = useState<string | null>(null);
+  const { showToast } = useToast();
   const [editingId, setEditingId] = useState<number | null>(null);
   const [showAddForm, setShowAddForm] = useState(false);
   const [lightbox, setLightbox] = useState<{ src: string; alt: string } | null>(null);
@@ -64,12 +65,11 @@ export function ShowroomsManager({ initialShowrooms }: ShowroomsManagerProps) {
     const reordered = showrooms.slice();
     [reordered[index], reordered[target]] = [reordered[target], reordered[index]];
 
-    setError(null);
     startTransition(async () => {
       setShowrooms(reordered);
       const result = await reorderShowroomsAction(reordered.map((showroom) => showroom.id));
       if (!result.success) {
-        setError(result.error);
+        showToast(result.error);
         // Someone else changed the list in the meantime (edited it in another
         // tab, or a showroom was deleted elsewhere) — pull the real state
         // back in rather than leaving the optimistic reorder showing.
@@ -81,12 +81,11 @@ export function ShowroomsManager({ initialShowrooms }: ShowroomsManagerProps) {
   function remove(id: number) {
     if (!window.confirm("Удалить этот шоурум?")) return;
 
-    setError(null);
     startTransition(async () => {
       setShowrooms(showrooms.filter((showroom) => showroom.id !== id));
       const result = await deleteShowroomAction(id);
       if (!result.success) {
-        setError(result.error);
+        showToast(result.error);
         router.refresh();
       }
     });
@@ -97,15 +96,14 @@ export function ShowroomsManager({ initialShowrooms }: ShowroomsManagerProps) {
     const form = event.currentTarget;
     const formData = new FormData(form);
 
-    setError(null);
     if (imageTooLarge(formData)) {
-      setError("Размер файла не должен превышать 10 МБ");
+      showToast("Размер файла не должен превышать 10 МБ");
       return;
     }
     startTransition(async () => {
       const result = await createShowroomAction(formData);
       if (!result.success) {
-        setError(result.error);
+        showToast(result.error);
         return;
       }
       form.reset();
@@ -117,15 +115,14 @@ export function ShowroomsManager({ initialShowrooms }: ShowroomsManagerProps) {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
 
-    setError(null);
     if (imageTooLarge(formData)) {
-      setError("Размер файла не должен превышать 10 МБ");
+      showToast("Размер файла не должен превышать 10 МБ");
       return;
     }
     startTransition(async () => {
       const result = await updateShowroomAction(id, formData);
       if (!result.success) {
-        setError(result.error);
+        showToast(result.error);
         // A 404 here means the showroom was deleted elsewhere while this
         // form was open — leaving the edit form open on a showroom that no
         // longer exists is exactly the confusing state to avoid, so pull
@@ -158,12 +155,6 @@ export function ShowroomsManager({ initialShowrooms }: ShowroomsManagerProps) {
         </Button>
       </div>
 
-      {error ? (
-        <p role="alert" className="mt-4 text-sm text-brand-red">
-          {error}
-        </p>
-      ) : null}
-
       {showAddForm ? (
         <form
           onSubmit={submitCreate}
@@ -185,10 +176,7 @@ export function ShowroomsManager({ initialShowrooms }: ShowroomsManagerProps) {
           showrooms.map((showroom, index) =>
             editingId === showroom.id ? (
               <li key={showroom.id} className="rounded-card border border-brand-black/10 p-5">
-                <form
-                  onSubmit={(event) => submitEdit(showroom.id, event)}
-                  className="grid gap-4"
-                >
+                <form onSubmit={(event) => submitEdit(showroom.id, event)} className="grid gap-4">
                   <ShowroomFields disabled={isPending} showroom={showroom} isEdit />
                   <div className="flex gap-2">
                     <Button type="submit" size="sm" disabled={isPending}>
@@ -214,9 +202,7 @@ export function ShowroomsManager({ initialShowrooms }: ShowroomsManagerProps) {
                 <button
                   type="button"
                   aria-label="Просмотреть фотографию"
-                  onClick={() =>
-                    setLightbox({ src: showroom.photoSrc, alt: showroom.cities.ru })
-                  }
+                  onClick={() => setLightbox({ src: showroom.photoSrc, alt: showroom.cities.ru })}
                   className="shrink-0 cursor-zoom-in rounded-control transition-opacity hover:opacity-80 focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:outline-none"
                 >
                   {/* eslint-disable-next-line @next/next/no-img-element */}

@@ -14,6 +14,7 @@ import { ArrowDown, ArrowUp, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ImageLightbox } from "@/components/ui/image-lightbox";
+import { useToast } from "@/components/ui/toast";
 import { cn } from "@/lib/utils";
 import { locales } from "@/i18n/routing";
 import { localeLabels } from "@/i18n/locale-labels";
@@ -54,7 +55,7 @@ export function ProductCategoriesManager({ initialCategories }: ProductCategorie
   const router = useRouter();
   const [categories, setCategories] = useOptimistic(initialCategories);
   const [isPending, startTransition] = useTransition();
-  const [error, setError] = useState<string | null>(null);
+  const { showToast } = useToast();
   const [editingId, setEditingId] = useState<number | null>(null);
   const [showAddForm, setShowAddForm] = useState(false);
   const [lightbox, setLightbox] = useState<{ src: string; alt: string } | null>(null);
@@ -66,12 +67,11 @@ export function ProductCategoriesManager({ initialCategories }: ProductCategorie
     const reordered = categories.slice();
     [reordered[index], reordered[target]] = [reordered[target], reordered[index]];
 
-    setError(null);
     startTransition(async () => {
       setCategories(reordered);
       const result = await reorderProductCategoriesAction(reordered.map((category) => category.id));
       if (!result.success) {
-        setError(result.error);
+        showToast(result.error);
         // Someone else changed the list in the meantime (edited it in another
         // tab, or a category was deleted elsewhere) — pull the real state
         // back in rather than leaving the optimistic reorder showing.
@@ -83,12 +83,11 @@ export function ProductCategoriesManager({ initialCategories }: ProductCategorie
   function remove(id: number) {
     if (!window.confirm("Удалить эту категорию?")) return;
 
-    setError(null);
     startTransition(async () => {
       setCategories(categories.filter((category) => category.id !== id));
       const result = await deleteProductCategoryAction(id);
       if (!result.success) {
-        setError(result.error);
+        showToast(result.error);
         router.refresh();
       }
     });
@@ -99,15 +98,14 @@ export function ProductCategoriesManager({ initialCategories }: ProductCategorie
     const form = event.currentTarget;
     const formData = new FormData(form);
 
-    setError(null);
     if (imageTooLarge(formData)) {
-      setError("Размер файла не должен превышать 10 МБ");
+      showToast("Размер файла не должен превышать 10 МБ");
       return;
     }
     startTransition(async () => {
       const result = await createProductCategoryAction(formData);
       if (!result.success) {
-        setError(result.error);
+        showToast(result.error);
         return;
       }
       form.reset();
@@ -119,15 +117,14 @@ export function ProductCategoriesManager({ initialCategories }: ProductCategorie
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
 
-    setError(null);
     if (imageTooLarge(formData)) {
-      setError("Размер файла не должен превышать 10 МБ");
+      showToast("Размер файла не должен превышать 10 МБ");
       return;
     }
     startTransition(async () => {
       const result = await updateProductCategoryAction(id, formData);
       if (!result.success) {
-        setError(result.error);
+        showToast(result.error);
         // A 404 here means the category was deleted elsewhere while this
         // form was open — leaving the edit form open on a category that no
         // longer exists is exactly the confusing state to avoid, so pull
@@ -145,8 +142,8 @@ export function ProductCategoriesManager({ initialCategories }: ProductCategorie
         <div>
           <h2 className="text-lg font-semibold text-brand-black">Категории продукции</h2>
           <p className="mt-1 text-sm text-neutral-500">
-            Фотография и название на четырёх языках для каждой категории — и порядок, в котором
-            они показываются.
+            Фотография и название на четырёх языках для каждой категории — и порядок, в котором они
+            показываются.
           </p>
         </div>
         <Button
@@ -158,12 +155,6 @@ export function ProductCategoriesManager({ initialCategories }: ProductCategorie
           {showAddForm ? "Отмена" : "Добавить категорию"}
         </Button>
       </div>
-
-      {error ? (
-        <p role="alert" className="mt-4 text-sm text-brand-red">
-          {error}
-        </p>
-      ) : null}
 
       {showAddForm ? (
         <form

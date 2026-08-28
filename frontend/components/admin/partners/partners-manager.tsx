@@ -14,6 +14,7 @@ import { ArrowDown, ArrowUp, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ImageLightbox } from "@/components/ui/image-lightbox";
+import { useToast } from "@/components/ui/toast";
 import { cn } from "@/lib/utils";
 import type { AdminPartnerDto } from "@/components/admin-sections/partners-actions";
 import {
@@ -50,7 +51,7 @@ export function PartnersManager({ initialPartners }: PartnersManagerProps) {
   const router = useRouter();
   const [partners, setPartners] = useOptimistic(initialPartners);
   const [isPending, startTransition] = useTransition();
-  const [error, setError] = useState<string | null>(null);
+  const { showToast } = useToast();
   const [editingId, setEditingId] = useState<number | null>(null);
   const [showAddForm, setShowAddForm] = useState(false);
   const [lightbox, setLightbox] = useState<{ src: string; alt: string } | null>(null);
@@ -62,12 +63,11 @@ export function PartnersManager({ initialPartners }: PartnersManagerProps) {
     const reordered = partners.slice();
     [reordered[index], reordered[target]] = [reordered[target], reordered[index]];
 
-    setError(null);
     startTransition(async () => {
       setPartners(reordered);
       const result = await reorderPartnersAction(reordered.map((partner) => partner.id));
       if (!result.success) {
-        setError(result.error);
+        showToast(result.error);
         // Someone else changed the list in the meantime (edited it in another
         // tab, or a partner was deleted elsewhere) — pull the real state back
         // in rather than leaving the optimistic reorder showing.
@@ -79,12 +79,11 @@ export function PartnersManager({ initialPartners }: PartnersManagerProps) {
   function remove(id: number) {
     if (!window.confirm("Удалить этого партнёра?")) return;
 
-    setError(null);
     startTransition(async () => {
       setPartners(partners.filter((partner) => partner.id !== id));
       const result = await deletePartnerAction(id);
       if (!result.success) {
-        setError(result.error);
+        showToast(result.error);
         router.refresh();
       }
     });
@@ -95,15 +94,14 @@ export function PartnersManager({ initialPartners }: PartnersManagerProps) {
     const form = event.currentTarget;
     const formData = new FormData(form);
 
-    setError(null);
     if (imageTooLarge(formData)) {
-      setError("Размер файла не должен превышать 10 МБ");
+      showToast("Размер файла не должен превышать 10 МБ");
       return;
     }
     startTransition(async () => {
       const result = await createPartnerAction(formData);
       if (!result.success) {
-        setError(result.error);
+        showToast(result.error);
         return;
       }
       form.reset();
@@ -115,15 +113,14 @@ export function PartnersManager({ initialPartners }: PartnersManagerProps) {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
 
-    setError(null);
     if (imageTooLarge(formData)) {
-      setError("Размер файла не должен превышать 10 МБ");
+      showToast("Размер файла не должен превышать 10 МБ");
       return;
     }
     startTransition(async () => {
       const result = await updatePartnerAction(id, formData);
       if (!result.success) {
-        setError(result.error);
+        showToast(result.error);
         // A 404 here means the partner was deleted elsewhere while this
         // form was open — leaving the edit form open on a partner that no
         // longer exists is exactly the confusing state to avoid, so pull
@@ -154,12 +151,6 @@ export function PartnersManager({ initialPartners }: PartnersManagerProps) {
           {showAddForm ? "Отмена" : "Добавить партнёра"}
         </Button>
       </div>
-
-      {error ? (
-        <p role="alert" className="mt-4 text-sm text-brand-red">
-          {error}
-        </p>
-      ) : null}
 
       {showAddForm ? (
         <form

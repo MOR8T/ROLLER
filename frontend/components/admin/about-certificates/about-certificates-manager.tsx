@@ -16,6 +16,7 @@ import { Input } from "@/components/ui/input";
 import { ImageLightbox } from "@/components/ui/image-lightbox";
 import { locales, type Locale } from "@/i18n/routing";
 import { localeLabels } from "@/i18n/locale-labels";
+import { useToast } from "@/components/ui/toast";
 import { cn } from "@/lib/utils";
 import type { AdminAboutCertificateDto } from "@/components/admin-sections/about-certificates-actions";
 import {
@@ -47,7 +48,7 @@ export function AboutCertificatesManager({ initialCertificates }: AboutCertifica
   const router = useRouter();
   const [certificates, setCertificates] = useOptimistic(initialCertificates);
   const [isPending, startTransition] = useTransition();
-  const [error, setError] = useState<string | null>(null);
+  const { showToast } = useToast();
   const [editingId, setEditingId] = useState<number | null>(null);
   const [showAddForm, setShowAddForm] = useState(false);
   const [lightbox, setLightbox] = useState<{ src: string; alt: string } | null>(null);
@@ -59,12 +60,11 @@ export function AboutCertificatesManager({ initialCertificates }: AboutCertifica
     const reordered = certificates.slice();
     [reordered[index], reordered[target]] = [reordered[target], reordered[index]];
 
-    setError(null);
     startTransition(async () => {
       setCertificates(reordered);
       const result = await reorderCertificatesAction(reordered.map((cert) => cert.id));
       if (!result.success) {
-        setError(result.error);
+        showToast(result.error);
         router.refresh();
       }
     });
@@ -73,12 +73,11 @@ export function AboutCertificatesManager({ initialCertificates }: AboutCertifica
   function remove(id: number) {
     if (!window.confirm("Удалить этот сертификат?")) return;
 
-    setError(null);
     startTransition(async () => {
       setCertificates(certificates.filter((cert) => cert.id !== id));
       const result = await deleteCertificateAction(id);
       if (!result.success) {
-        setError(result.error);
+        showToast(result.error);
         router.refresh();
       }
     });
@@ -89,15 +88,14 @@ export function AboutCertificatesManager({ initialCertificates }: AboutCertifica
     const form = event.currentTarget;
     const formData = new FormData(form);
 
-    setError(null);
     if (imageTooLarge(formData)) {
-      setError("Размер файла не должен превышать 10 МБ");
+      showToast("Размер файла не должен превышать 10 МБ");
       return;
     }
     startTransition(async () => {
       const result = await createCertificateAction(formData);
       if (!result.success) {
-        setError(result.error);
+        showToast(result.error);
         return;
       }
       form.reset();
@@ -109,15 +107,14 @@ export function AboutCertificatesManager({ initialCertificates }: AboutCertifica
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
 
-    setError(null);
     if (imageTooLarge(formData)) {
-      setError("Размер файла не должен превышать 10 МБ");
+      showToast("Размер файла не должен превышать 10 МБ");
       return;
     }
     startTransition(async () => {
       const result = await updateCertificateAction(id, formData);
       if (!result.success) {
-        setError(result.error);
+        showToast(result.error);
         router.refresh();
         return;
       }
@@ -144,12 +141,6 @@ export function AboutCertificatesManager({ initialCertificates }: AboutCertifica
           {showAddForm ? "Отмена" : "Добавить сертификат"}
         </Button>
       </div>
-
-      {error ? (
-        <p role="alert" className="mt-4 text-sm text-brand-red">
-          {error}
-        </p>
-      ) : null}
 
       {showAddForm ? (
         <form

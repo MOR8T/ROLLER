@@ -17,6 +17,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { ImageLightbox } from "@/components/ui/image-lightbox";
 import { IconButton } from "@/components/admin/products/section-form";
+import { useToast } from "@/components/ui/toast";
 import { locales } from "@/i18n/routing";
 import { localeLabels } from "@/i18n/locale-labels";
 import {
@@ -58,7 +59,7 @@ export function ProductsManager({
   const router = useRouter();
   const [products, setProducts] = useOptimistic(initialProducts);
   const [isPending, startTransition] = useTransition();
-  const [error, setError] = useState<string | null>(null);
+  const { showToast } = useToast();
   const [editingId, setEditingId] = useState<number | null>(null);
   const [showAddForm, setShowAddForm] = useState(false);
   const [lightbox, setLightbox] = useState<{ src: string; alt: string } | null>(null);
@@ -70,12 +71,11 @@ export function ProductsManager({
     const reordered = products.slice();
     [reordered[index], reordered[target]] = [reordered[target], reordered[index]];
 
-    setError(null);
     startTransition(async () => {
       setProducts(reordered);
       const result = await reorderProductsAction(reordered.map((product) => product.id));
       if (!result.success) {
-        setError(result.error);
+        showToast(result.error);
         router.refresh();
       }
     });
@@ -84,12 +84,11 @@ export function ProductsManager({
   function remove(id: number) {
     if (!window.confirm("Удалить продукт вместе со всеми его секциями?")) return;
 
-    setError(null);
     startTransition(async () => {
       setProducts(products.filter((product) => product.id !== id));
       const result = await deleteProductAction(id);
       if (!result.success) {
-        setError(result.error);
+        showToast(result.error);
         router.refresh();
       }
     });
@@ -100,16 +99,15 @@ export function ProductsManager({
     const form = event.currentTarget;
     const formData = new FormData(form);
 
-    setError(null);
     if (imageTooLarge(formData)) {
-      setError("Размер файла не должен превышать 10 МБ");
+      showToast("Размер файла не должен превышать 10 МБ");
       return;
     }
 
     startTransition(async () => {
       const result = await createProductAction(collapseCategories(formData));
       if (!result.success) {
-        setError(result.error);
+        showToast(result.error);
         return;
       }
       form.reset();
@@ -124,16 +122,15 @@ export function ProductsManager({
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
 
-    setError(null);
     if (imageTooLarge(formData)) {
-      setError("Размер файла не должен превышать 10 МБ");
+      showToast("Размер файла не должен превышать 10 МБ");
       return;
     }
 
     startTransition(async () => {
       const result = await updateProductAction(id, collapseCategories(formData));
       if (!result.success) {
-        setError(result.error);
+        showToast(result.error);
         // A 404 means the product was deleted elsewhere while this form was
         // open — pull fresh data rather than leaving the form on a ghost.
         router.refresh();
@@ -167,12 +164,6 @@ export function ProductsManager({
         <p className="mt-4 text-sm text-neutral-500">
           Категорий продукции пока нет — создайте их в разделе «Категория продукции», иначе продукт
           не на что будет открыть с сайта.
-        </p>
-      ) : null}
-
-      {error ? (
-        <p role="alert" className="mt-4 text-sm text-brand-red">
-          {error}
         </p>
       ) : null}
 

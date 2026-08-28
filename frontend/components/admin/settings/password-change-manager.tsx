@@ -1,29 +1,22 @@
 "use client";
 
-import { useEffect, useRef, useState, useTransition, type FormEvent } from "react";
+import { useRef, useState, useTransition, type FormEvent } from "react";
 import { Button } from "@/components/ui/button";
 import { PasswordInput } from "@/components/ui/password-input";
 import { Modal } from "@/components/ui/modal";
+import { useToast } from "@/components/ui/toast";
 import { changePasswordAction } from "@/components/admin-sections/settings-actions";
-
-const SAVED_MESSAGE_MS = 4000;
 
 /**
  * Section header + a button that opens the form in a modal, rather than an
  * always-open form on the page — one fewer thing to scroll past for a
  * change an admin makes rarely. The modal closes itself on a successful
- * save; a brief confirmation stays behind on the page since the message
- * would otherwise disappear along with the form.
+ * save; the confirmation goes out as a toast since it would otherwise
+ * disappear along with the form/modal.
  */
 export function PasswordChangeManager() {
   const [open, setOpen] = useState(false);
-  const [justSaved, setJustSaved] = useState(false);
-
-  useEffect(() => {
-    if (!justSaved) return;
-    const timeout = setTimeout(() => setJustSaved(false), SAVED_MESSAGE_MS);
-    return () => clearTimeout(timeout);
-  }, [justSaved]);
+  const { showToast } = useToast();
 
   return (
     <section className="border-t border-brand-black/10 pt-8">
@@ -37,14 +30,13 @@ export function PasswordChangeManager() {
       <Button type="button" className="mt-5" onClick={() => setOpen(true)}>
         Изменить пароль
       </Button>
-      {justSaved ? <p className="mt-3 text-sm text-emerald-600">Пароль изменён</p> : null}
 
       <Modal open={open} onClose={() => setOpen(false)} title="Смена пароля">
         <PasswordChangeForm
           className="mt-5"
           onSuccess={() => {
             setOpen(false);
-            setJustSaved(true);
+            showToast("Пароль изменён", "success");
           }}
         />
       </Modal>
@@ -66,17 +58,16 @@ function PasswordChangeForm({
 }) {
   const formRef = useRef<HTMLFormElement>(null);
   const [isPending, startTransition] = useTransition();
-  const [error, setError] = useState<string | null>(null);
+  const { showToast } = useToast();
 
   function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
 
-    setError(null);
     startTransition(async () => {
       const result = await changePasswordAction(formData);
       if (!result.success) {
-        setError(result.error);
+        showToast(result.error);
         return;
       }
       formRef.current?.reset();
@@ -86,12 +77,6 @@ function PasswordChangeForm({
 
   return (
     <div className={className}>
-      {error ? (
-        <p role="alert" className="mb-4 text-sm text-brand-red">
-          {error}
-        </p>
-      ) : null}
-
       <form ref={formRef} onSubmit={submit} className="space-y-4">
         <Field
           name="current_password"
@@ -136,7 +121,13 @@ function Field({
       <label htmlFor={name} className="mb-1.5 block text-sm font-medium text-brand-black">
         {label}
       </label>
-      <PasswordInput id={name} name={name} required autoComplete={autoComplete} disabled={disabled} />
+      <PasswordInput
+        id={name}
+        name={name}
+        required
+        autoComplete={autoComplete}
+        disabled={disabled}
+      />
     </div>
   );
 }

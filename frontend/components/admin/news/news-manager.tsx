@@ -16,6 +16,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { ImageLightbox } from "@/components/ui/image-lightbox";
 import { TiptapEditor } from "@/components/admin/news/tiptap-editor";
+import { useToast } from "@/components/ui/toast";
 import { cn } from "@/lib/utils";
 import { locales, type Locale } from "@/i18n/routing";
 import { localeLabels } from "@/i18n/locale-labels";
@@ -75,7 +76,7 @@ export function NewsManager({ initialArticles }: NewsManagerProps) {
   const router = useRouter();
   const [articles, setArticles] = useOptimistic(initialArticles);
   const [isPending, startTransition] = useTransition();
-  const [error, setError] = useState<string | null>(null);
+  const { showToast } = useToast();
   const [editingId, setEditingId] = useState<number | null>(null);
   const [showAddForm, setShowAddForm] = useState(false);
   const [lightbox, setLightbox] = useState<{ src: string; alt: string } | null>(null);
@@ -83,12 +84,11 @@ export function NewsManager({ initialArticles }: NewsManagerProps) {
   function remove(id: number) {
     if (!window.confirm("Удалить эту новость? Действие необратимо.")) return;
 
-    setError(null);
     startTransition(async () => {
       setArticles(articles.filter((article) => article.id !== id));
       const result = await deleteNewsAction(id);
       if (!result.success) {
-        setError(result.error);
+        showToast(result.error);
         // Someone else changed the list in the meantime — pull the real
         // state back in rather than leaving the optimistic delete showing.
         router.refresh();
@@ -101,20 +101,19 @@ export function NewsManager({ initialArticles }: NewsManagerProps) {
     const form = event.currentTarget;
     const formData = new FormData(form);
 
-    setError(null);
     if (imageTooLarge(formData)) {
-      setError("Размер файла не должен превышать 10 МБ");
+      showToast("Размер файла не должен превышать 10 МБ");
       return;
     }
     const missing = missingLocale(formData);
     if (missing) {
-      setError(`Заполните заголовок и текст на языке «${localeLabels[missing]}»`);
+      showToast(`Заполните заголовок и текст на языке «${localeLabels[missing]}»`);
       return;
     }
     startTransition(async () => {
       const result = await createNewsAction(formData);
       if (!result.success) {
-        setError(result.error);
+        showToast(result.error);
         return;
       }
       form.reset();
@@ -126,20 +125,19 @@ export function NewsManager({ initialArticles }: NewsManagerProps) {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
 
-    setError(null);
     if (imageTooLarge(formData)) {
-      setError("Размер файла не должен превышать 10 МБ");
+      showToast("Размер файла не должен превышать 10 МБ");
       return;
     }
     const missing = missingLocale(formData);
     if (missing) {
-      setError(`Заполните заголовок и текст на языке «${localeLabels[missing]}»`);
+      showToast(`Заполните заголовок и текст на языке «${localeLabels[missing]}»`);
       return;
     }
     startTransition(async () => {
       const result = await updateNewsAction(id, formData);
       if (!result.success) {
-        setError(result.error);
+        showToast(result.error);
         // A 404 here means the article was deleted elsewhere while this form
         // was open — leaving the edit form open on an article that no
         // longer exists is exactly the confusing state to avoid.
@@ -172,12 +170,6 @@ export function NewsManager({ initialArticles }: NewsManagerProps) {
           {showAddForm ? "Отмена" : "Добавить новость"}
         </Button>
       </div>
-
-      {error ? (
-        <p role="alert" className="mt-4 text-sm text-brand-red">
-          {error}
-        </p>
-      ) : null}
 
       {showAddForm ? (
         <form

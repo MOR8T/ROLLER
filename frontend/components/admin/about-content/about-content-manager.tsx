@@ -7,6 +7,7 @@ import { localeLabels } from "@/i18n/locale-labels";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { useToast } from "@/components/ui/toast";
 import { cn } from "@/lib/utils";
 import type { AdminAboutContentDto } from "@/components/admin-sections/about-content-actions";
 import { updateAboutContentAction } from "@/components/admin-sections/about-content-actions";
@@ -34,22 +35,19 @@ export function AboutContentManager({ content }: AboutContentManagerProps) {
   const router = useRouter();
   const [activeLocale, setActiveLocale] = useState<Locale>("ru");
   const [isPending, startTransition] = useTransition();
-  const [error, setError] = useState<string | null>(null);
-  const [saved, setSaved] = useState(false);
+  const { showToast } = useToast();
 
   function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
 
-    setError(null);
-    setSaved(false);
     startTransition(async () => {
       const result = await updateAboutContentAction(formData);
       if (!result.success) {
-        setError(result.error);
+        showToast(result.error);
         return;
       }
-      setSaved(true);
+      showToast("Сохранено", "success");
       router.refresh();
     });
   }
@@ -63,13 +61,6 @@ export function AboutContentManager({ content }: AboutContentManagerProps) {
           клиентам, и статистика на этой странице и на главной.
         </p>
       </div>
-
-      {error ? (
-        <p role="alert" className="mt-4 text-sm text-brand-red">
-          {error}
-        </p>
-      ) : null}
-      {saved && !error ? <p className="mt-4 text-sm text-emerald-600">Сохранено</p> : null}
 
       <form onSubmit={submit} className="mt-5 space-y-6">
         <fieldset className="rounded-card border border-brand-black/10 p-5">

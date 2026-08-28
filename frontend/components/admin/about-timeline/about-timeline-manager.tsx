@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { locales, type Locale } from "@/i18n/routing";
 import { localeLabels } from "@/i18n/locale-labels";
+import { useToast } from "@/components/ui/toast";
 import { cn } from "@/lib/utils";
 import type { AdminAboutTimelineItemDto } from "@/components/admin-sections/about-timeline-actions";
 import {
@@ -36,7 +37,7 @@ export function AboutTimelineManager({ initialItems }: AboutTimelineManagerProps
   const router = useRouter();
   const [items, setItems] = useOptimistic(initialItems);
   const [isPending, startTransition] = useTransition();
-  const [error, setError] = useState<string | null>(null);
+  const { showToast } = useToast();
   const [editingId, setEditingId] = useState<number | null>(null);
   const [showAddForm, setShowAddForm] = useState(false);
 
@@ -47,12 +48,11 @@ export function AboutTimelineManager({ initialItems }: AboutTimelineManagerProps
     const reordered = items.slice();
     [reordered[index], reordered[target]] = [reordered[target], reordered[index]];
 
-    setError(null);
     startTransition(async () => {
       setItems(reordered);
       const result = await reorderTimelineItemsAction(reordered.map((item) => item.id));
       if (!result.success) {
-        setError(result.error);
+        showToast(result.error);
         router.refresh();
       }
     });
@@ -61,12 +61,11 @@ export function AboutTimelineManager({ initialItems }: AboutTimelineManagerProps
   function remove(id: number) {
     if (!window.confirm("Удалить этот этап?")) return;
 
-    setError(null);
     startTransition(async () => {
       setItems(items.filter((item) => item.id !== id));
       const result = await deleteTimelineItemAction(id);
       if (!result.success) {
-        setError(result.error);
+        showToast(result.error);
         router.refresh();
       }
     });
@@ -77,11 +76,10 @@ export function AboutTimelineManager({ initialItems }: AboutTimelineManagerProps
     const form = event.currentTarget;
     const formData = new FormData(form);
 
-    setError(null);
     startTransition(async () => {
       const result = await createTimelineItemAction(formData);
       if (!result.success) {
-        setError(result.error);
+        showToast(result.error);
         return;
       }
       form.reset();
@@ -93,11 +91,10 @@ export function AboutTimelineManager({ initialItems }: AboutTimelineManagerProps
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
 
-    setError(null);
     startTransition(async () => {
       const result = await updateTimelineItemAction(id, formData);
       if (!result.success) {
-        setError(result.error);
+        showToast(result.error);
         router.refresh();
         return;
       }
@@ -123,12 +120,6 @@ export function AboutTimelineManager({ initialItems }: AboutTimelineManagerProps
           {showAddForm ? "Отмена" : "Добавить этап"}
         </Button>
       </div>
-
-      {error ? (
-        <p role="alert" className="mt-4 text-sm text-brand-red">
-          {error}
-        </p>
-      ) : null}
 
       {showAddForm ? (
         <form
