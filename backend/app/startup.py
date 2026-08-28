@@ -11,6 +11,7 @@ from app.models.about_content import AboutContent
 from app.models.about_timeline_item import AboutTimelineItem
 from app.models.contact_info import ContactInfo
 from app.models.contact_interest import ContactInterest
+from app.models.social_link import SocialLink
 from app.models.product import Product, ProductSection
 from app.models.product_category import ProductCategory
 from app.models.user import User
@@ -91,6 +92,11 @@ _ABOUT_CONTENT_SEED = dict(
         "конструкций, замер, монтаж и сервис. Слоган остаётся прежним — тепло и комфорт для "
         "каждого дома."
     ),
+    home_title="Производим профильные системы в Душанбе с 2006 года",
+    home_description=(
+        "Полный цикл: экструзия, сборка конструкций, замер, монтаж и сервис. С 2025 года — и "
+        "алюминий."
+    ),
     story_title="Первый производитель ПВХ в Таджикистане",
     story_paragraphs=_STORY_PARAGRAPHS,
     timeline_title="Как компания росла",
@@ -115,6 +121,8 @@ _ABOUT_CONTENT_SEED = dict(
 _ABOUT_CONTENT_LOCALE_FIELDS = [
     "hero_title",
     "hero_description",
+    "home_title",
+    "home_description",
     "story_title",
     "story_paragraphs",
     "timeline_title",
@@ -280,9 +288,15 @@ _CONTACT_INFO_SEED = dict(
     phone="+992 700 600 700",
     email="rollerunopen2006@gmail.com",
     whatsapp="992700600700",
-    social_instagram_url="https://instagram.com/roller.tj",
-    social_telegram_url="https://t.me/ROLLERcallcenter",
 )
+
+# The footer's starting social links — used to be the fixed
+# `ContactInfo.social_instagram_url`/`social_telegram_url` pair, now the
+# first two rows of the admin-managed `SocialLink` list.
+_SOCIAL_LINKS_SEED = [
+    {"network": "instagram", "url": "https://instagram.com/roller.tj"},
+    {"network": "telegram", "url": "https://t.me/ROLLERcallcenter"},
+]
 
 
 def seed_contact_info(db: Session | None = None) -> None:
@@ -304,15 +318,31 @@ def seed_contact_info(db: Session | None = None) -> None:
             phone=_CONTACT_INFO_SEED["phone"],
             email=_CONTACT_INFO_SEED["email"],
             whatsapp=_CONTACT_INFO_SEED["whatsapp"],
-            social_instagram_url=_CONTACT_INFO_SEED["social_instagram_url"],
-            social_instagram_enabled=True,
-            social_telegram_url=_CONTACT_INFO_SEED["social_telegram_url"],
-            social_telegram_enabled=True,
         )
         db.add(contact)
         db.commit()
         if owns_session:
             logger.info("Seeded contact_info row")
+    finally:
+        if owns_session:
+            db.close()
+
+
+def seed_social_links(db: Session | None = None) -> None:
+    """Same idempotency contract as `seed_about_content` — see its docstring."""
+    owns_session = db is None
+    db = db or SessionLocal()
+    try:
+        if db.query(SocialLink).first():
+            if owns_session:
+                logger.info("Social links seed skipped: rows already exist")
+            return
+
+        for position, entry in enumerate(_SOCIAL_LINKS_SEED):
+            db.add(SocialLink(network=entry["network"], url=entry["url"], position=position))
+        db.commit()
+        if owns_session:
+            logger.info("Seeded social_links rows")
     finally:
         if owns_session:
             db.close()

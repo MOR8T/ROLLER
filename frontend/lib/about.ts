@@ -36,6 +36,14 @@ interface RawAboutContent {
   hero_description_tj: string;
   hero_description_en: string;
   hero_description_tr: string;
+  home_title_ru: string;
+  home_title_tj: string;
+  home_title_en: string;
+  home_title_tr: string;
+  home_description_ru: string;
+  home_description_tj: string;
+  home_description_en: string;
+  home_description_tr: string;
   story_title_ru: string;
   story_title_tj: string;
   story_title_en: string;
@@ -87,6 +95,8 @@ export interface AboutStat {
 export interface AboutContentDto {
   heroTitle: string;
   heroDescription: string;
+  homeTitle: string;
+  homeDescription: string;
   storyTitle: string;
   storyParagraphs: string[];
   timelineTitle: string;
@@ -102,6 +112,8 @@ function toContentDto(raw: RawAboutContent, locale: Locale): AboutContentDto {
   return {
     heroTitle: raw[`hero_title_${locale}`],
     heroDescription: raw[`hero_description_${locale}`],
+    homeTitle: raw[`home_title_${locale}`],
+    homeDescription: raw[`home_description_${locale}`],
     storyTitle: raw[`story_title_${locale}`],
     storyParagraphs: raw[`story_paragraphs_${locale}`].split("\n\n").filter(Boolean),
     timelineTitle: raw[`timeline_title_${locale}`],

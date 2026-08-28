@@ -24,6 +24,14 @@ interface RawAboutContent {
   hero_description_tj: string;
   hero_description_en: string;
   hero_description_tr: string;
+  home_title_ru: string;
+  home_title_tj: string;
+  home_title_en: string;
+  home_title_tr: string;
+  home_description_ru: string;
+  home_description_tj: string;
+  home_description_en: string;
+  home_description_tr: string;
   story_title_ru: string;
   story_title_tj: string;
   story_title_en: string;
@@ -70,6 +78,8 @@ interface RawAboutContent {
 type LocalizedField =
   | "heroTitle"
   | "heroDescription"
+  | "homeTitle"
+  | "homeDescription"
   | "storyTitle"
   | "storyParagraphs"
   | "timelineTitle"
@@ -82,6 +92,8 @@ type LocalizedField =
 const FIELD_TO_COLUMN: Record<LocalizedField, string> = {
   heroTitle: "hero_title",
   heroDescription: "hero_description",
+  homeTitle: "home_title",
+  homeDescription: "home_description",
   storyTitle: "story_title",
   storyParagraphs: "story_paragraphs",
   timelineTitle: "timeline_title",
@@ -98,6 +110,8 @@ export interface AdminAboutContentDto {
   id: number;
   heroTitle: Record<Locale, string>;
   heroDescription: Record<Locale, string>;
+  homeTitle: Record<Locale, string>;
+  homeDescription: Record<Locale, string>;
   storyTitle: Record<Locale, string>;
   storyParagraphs: Record<Locale, string>;
   timelineTitle: Record<Locale, string>;
@@ -129,6 +143,8 @@ function toDto(raw: RawAboutContent): AdminAboutContentDto {
     id: raw.id,
     heroTitle: localized("heroTitle"),
     heroDescription: localized("heroDescription"),
+    homeTitle: localized("homeTitle"),
+    homeDescription: localized("homeDescription"),
     storyTitle: localized("storyTitle"),
     storyParagraphs: localized("storyParagraphs"),
     timelineTitle: localized("timelineTitle"),

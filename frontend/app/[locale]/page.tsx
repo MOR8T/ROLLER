@@ -82,7 +82,11 @@ export default async function Home({ params }: PageProps<"/[locale]">) {
 
       <HeroSection slides={heroSlides} />
       <ProductsGridSection />
-      <AboutStatsSection stats={aboutContent?.stats ?? []} />
+      <AboutStatsSection
+        title={aboutContent?.homeTitle ?? null}
+        body={aboutContent?.homeDescription ?? null}
+        stats={aboutContent?.stats ?? []}
+      />
       <NewsSection />
       <PartnersSection />
       <ShowroomsSection showrooms={showrooms} />

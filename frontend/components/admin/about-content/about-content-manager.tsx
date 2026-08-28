@@ -17,10 +17,11 @@ interface AboutContentManagerProps {
 }
 
 /**
- * `/about`'s hero title/description, history narrative, the two list
- * sections' own headings, and the "Дорогие клиенты" quote — everything on
- * the page that isn't a reorderable list (`AboutTimelineManager`,
- * `AboutCertificatesManager`) or shared brand marks (`PartnersManager`).
+ * `/about`'s hero title/description, the homepage's "О компании" teaser
+ * (`AboutStatsSection`), the history narrative, the two list sections' own
+ * headings, and the "Дорогие клиенты" quote — everything on either page that
+ * isn't a reorderable list (`AboutTimelineManager`, `AboutCertificatesManager`)
+ * or shared brand marks (`PartnersManager`).
  *
  * One form, no add/edit/delete: it edits the single `about_content` row in
  * place, same locale-tab pattern as `NewsManager`'s `ArticleFields` — all 4
@@ -128,6 +129,24 @@ export function AboutContentManager({ content }: AboutContentManagerProps) {
                   label="Описание"
                   rows={2}
                   defaultValue={content?.heroDescription[locale]}
+                  disabled={isPending}
+                />
+              </Fieldset>
+
+              <Fieldset legend="Блок «О компании» на главной странице">
+                <LocalizedInput
+                  field="homeTitle"
+                  locale={locale}
+                  label="Заголовок"
+                  defaultValue={content?.homeTitle[locale]}
+                  disabled={isPending}
+                />
+                <LocalizedTextarea
+                  field="homeDescription"
+                  locale={locale}
+                  label="Описание"
+                  rows={2}
+                  defaultValue={content?.homeDescription[locale]}
                   disabled={isPending}
                 />
               </Fieldset>
