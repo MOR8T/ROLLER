@@ -1,0 +1,101 @@
+# Builds the two production images and pushes them to GHCR.
+#
+# This exists because the production server (2 vCPU / 4 GB) cannot build them:
+# `next build` peaks above its available RAM. The server only ever pulls.
+#
+# Tags produced per run:
+#   sha-<short>            always — this is what you pin IMAGE_TAG to for a
+#                          reproducible deploy or a rollback
+#   <branch>               e.g. `development`, moves with the branch
+#   latest                 only on the default branch (main)
+
+name: Build images
+
+on:
+  push:
+    branches: [main, development]
+    # Docs-only edits shouldn't spend ~10 minutes of runner time.
+    paths-ignore:
+      - "**/*.md"
+      - "notes/**"
+  workflow_dispatch:
+
+# A second push to the same branch makes the in-flight build pointless.
+concurrency:
+  group: build-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: backend
+            context: ./backend
+          - name: frontend
+            context: ./frontend
+
+    steps:
+      - uses: actions/checkout@v4
+
+      # GHCR rejects uppercase in an image path and the owner here is `MOR8T`.
+      - name: Lowercase the owner
+        id: owner
+        run: echo "value=${GITHUB_REPOSITORY_OWNER,,}" >> "$GITHUB_OUTPUT"
+
+      - uses: docker/setup-buildx-action@v3
+
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          # The workflow's own token — no PAT needed to push. A PAT with
+          # read:packages is only needed on the server, to pull.
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Derive tags
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ghcr.io/${{ steps.owner.outputs.value }}/roller-${{ matrix.name }}
+          tags: |
+            type=sha,prefix=sha-,format=short
+            type=ref,event=branch
+            type=raw,value=latest,enable={{is_default_branch}}
+
+      - name: Build and push
+        uses: docker/build-push-action@v6
+        with:
+          context: ${{ matrix.context }}
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          # The server is x86_64; building arm64 too would double the time for
+          # an image nothing would ever pull.
+          platforms: linux/amd64
+          # Keeps the pushed artifact a plain image rather than a manifest list
+          # with an attestation alongside it.
+          provenance: false
+          # Without this every run reinstalls node_modules and re-runs
+          # `next build` from scratch.
+          cache-from: type=gha,scope=${{ matrix.name }}
+          cache-to: type=gha,mode=max,scope=${{ matrix.name }}
+          # Frontend only — the backend has no such ARG and Docker would warn
+          # about an unconsumed build-arg. The secret may be unset: the site
+          # falls back to an iframe map when the key is empty, which is the
+          # current intent (see lib/ymaps.ts).
+          build-args: ${{ matrix.name == 'frontend' && format('NEXT_PUBLIC_YANDEX_MAPS_API_KEY={0}', secrets.NEXT_PUBLIC_YANDEX_MAPS_API_KEY) || '' }}
+
+      - name: Summary
+        run: |
+          echo "### roller-${{ matrix.name }}" >> "$GITHUB_STEP_SUMMARY"
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
+          echo "${{ steps.meta.outputs.tags }}" >> "$GITHUB_STEP_SUMMARY"
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
