@@ -3,6 +3,7 @@
 import { cookies } from "next/headers";
 import { revalidatePath, revalidateTag } from "next/cache";
 import { ADMIN_SESSION_COOKIE, BACKEND_API_URL } from "@/lib/admin-auth";
+import { describeError } from "@/components/admin-sections/utils/describe-error";
 import type { Locale } from "@/i18n/routing";
 
 /**
@@ -117,7 +118,7 @@ async function adminRequest<T = undefined>(
 
   if (!res.ok) {
     const body = await res.json().catch(() => null);
-    return { success: false, error: body?.detail ?? "Не удалось выполнить запрос" };
+    return { success: false, error: describeError(body) };
   }
 
   return { success: true, data: (await res.json()) as T };

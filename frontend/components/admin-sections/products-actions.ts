@@ -3,6 +3,7 @@
 import { cookies } from "next/headers";
 import { revalidatePath, revalidateTag } from "next/cache";
 import { ADMIN_SESSION_COOKIE, BACKEND_API_URL } from "@/lib/admin-auth";
+import { describeError } from "@/components/admin-sections/utils/describe-error";
 import type { Locale } from "@/i18n/routing";
 
 /**
@@ -138,25 +139,6 @@ async function adminRequest<T = undefined>(
   if (res.status === 204) return { success: true, data: undefined as T };
 
   return { success: true, data: (await res.json()) as T };
-}
-
-/**
- * FastAPI's `detail` is a string for the errors this app raises itself and an
- * array of field errors for a failed Pydantic validation — a section payload
- * missing one of its four languages, say. Both have to reach the admin as one
- * readable line, because the section forms post JSON and cannot rely on the
- * browser's own required-field messages for the nested parts.
- */
-function describeError(body: unknown): string {
-  const detail = (body as { detail?: unknown } | null)?.detail;
-  if (typeof detail === "string") return detail;
-
-  if (Array.isArray(detail)) {
-    const first = detail[0] as { msg?: string } | undefined;
-    if (first?.msg) return first.msg.replace(/^Value error, /, "");
-  }
-
-  return "Не удалось выполнить запрос";
 }
 
 function revalidateProducts(productId?: number) {

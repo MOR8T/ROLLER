@@ -2,6 +2,7 @@
 
 import { cookies } from "next/headers";
 import { ADMIN_SESSION_COOKIE, BACKEND_API_URL } from "@/lib/admin-auth";
+import { describeError } from "@/components/admin-sections/utils/describe-error";
 
 type ActionResult = { success: true } | { success: false; error: string };
 
@@ -22,7 +23,7 @@ async function adminRequest(path: string, init: RequestInit = {}): Promise<Actio
 
   if (!res.ok) {
     const body = await res.json().catch(() => null);
-    return { success: false, error: body?.detail ?? "Не удалось выполнить запрос" };
+    return { success: false, error: describeError(body) };
   }
 
   return { success: true };
