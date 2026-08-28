@@ -4,6 +4,7 @@ import { useActionState, useState, useSyncExternalStore } from "react";
 import { BrandLogo } from "@/components/ui/brand-logo";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { PasswordInput } from "@/components/ui/password-input";
 import { Card } from "@/components/ui/card";
 import { login, type LoginState } from "./login-actions";
 
@@ -73,10 +74,9 @@ export default function LoginPage() {
               >
                 Пароль
               </label>
-              <Input
+              <PasswordInput
                 id="password"
                 name="password"
-                type="password"
                 autoComplete="current-password"
                 required
               />

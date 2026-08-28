@@ -29,3 +29,7 @@ class TokenData(BaseModel):
 
 class RefreshRequest(BaseModel):
     refresh_token: str
+
+class PasswordChange(BaseModel):
+    current_password: str
+    new_password: str
