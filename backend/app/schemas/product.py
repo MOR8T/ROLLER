@@ -19,7 +19,7 @@ from pydantic import BaseModel, Field, field_validator
 
 from app.schemas.product_category import ProductCategoryOut
 
-SECTION_TYPES = ("finishes", "specs", "story", "gallery", "promo")
+SECTION_TYPES = ("finishes", "specs", "story", "gallery")
 
 
 class LocalizedText(BaseModel):
@@ -83,16 +83,6 @@ class GalleryContent(BaseModel):
     images: list[str] = Field(min_length=1)
 
 
-class PromoContent(BaseModel):
-    title: LocalizedText
-    description: LocalizedText
-    image: str | None = None
-    button_label: LocalizedText
-    # Internal (`/calculator`) or external (`https://…`, `tel:`) — the frontend
-    # decides which link component to use from the value itself.
-    button_href: str = Field(min_length=1)
-
-
 # ── The section, as a discriminated union ──────────────────────────────────
 
 
@@ -116,18 +106,12 @@ class GallerySectionIn(BaseModel):
     content: GalleryContent
 
 
-class PromoSectionIn(BaseModel):
-    type: Literal["promo"]
-    content: PromoContent
-
-
 ProductSectionIn = Annotated[
     Union[
         FinishesSectionIn,
         SpecsSectionIn,
         StorySectionIn,
         GallerySectionIn,
-        PromoSectionIn,
     ],
     Field(discriminator="type"),
 ]

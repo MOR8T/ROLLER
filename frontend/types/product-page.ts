@@ -112,18 +112,19 @@ export type ProductNotFoundSectionData = ProductSection;
  * which blocks a product has, they order them, and nothing stops them from
  * adding two galleries. A named slot per kind cannot express any of that.
  *
- * `hero` and `contacts` are deliberately *not* in here. The hero is the
- * product's own photo, title and description — the fields the admin fills in
- * before there are any sections at all — and the contacts block is the site's
- * one lead form, which closes every product page. Neither is a block the admin
- * adds, removes or moves, so neither is a `ProductPageBlock`.
+ * `hero`, `promo` and `contacts` are deliberately *not* in here. The hero is
+ * the product's own photo, title and description — the fields the admin fills
+ * in before there are any sections at all; the promo block is the site's one
+ * calculator pitch, identical on every product and no longer admin content
+ * (see `ProductPageData.promo` below); the contacts block is the site's one
+ * lead form, which closes every product page. None of the three is a block
+ * the admin adds, removes or moves, so none is a `ProductPageBlock`.
  */
 export type ProductPageBlock =
   | { kind: "finishes"; section: ProductFinishesSectionData }
   | { kind: "specs"; section: ProductSpecsSectionData }
   | { kind: "story"; section: ProductStorySectionData }
-  | { kind: "gallery"; section: ProductGallerySectionData }
-  | { kind: "promo"; section: ProductPromoSectionData };
+  | { kind: "gallery"; section: ProductGallerySectionData };
 
 /**
  * The whole page in one value.
@@ -141,6 +142,7 @@ export type ProductPageData =
       productId: number;
       hero: ProductHeroSectionData;
       blocks: ProductPageBlock[];
+      promo: ProductPromoSectionData;
       contacts: ProductContactsSectionData;
     }
   | {

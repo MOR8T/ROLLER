@@ -32,9 +32,9 @@ import {
  * move — the public page renders `position` order and nothing else, so what
  * this list shows is what a visitor gets.
  *
- * A type may be used more than once. Two galleries, or a promo block above and
- * below the specs, are legitimate layouts and nothing here treats a kind as a
- * slot that can only be filled once.
+ * A type may be used more than once. Two galleries, or two spec tables, are
+ * legitimate layouts and nothing here treats a kind as a slot that can only be
+ * filled once.
  *
  * Reordering is optimistic (`useOptimistic`), same as every other manager in
  * the panel, since it is the one action whose whole point is instant feedback.
@@ -288,10 +288,6 @@ function describeSection(section: AdminProductSectionDto): string {
     case "gallery": {
       const count = Array.isArray(content.images) ? content.images.length : 0;
       return `${count} ${plural(count, "фотография", "фотографии", "фотографий")}`;
-    }
-    case "promo": {
-      const title = (content.title ?? {}) as Record<string, unknown>;
-      return String(title.ru ?? "");
     }
     default:
       return "";

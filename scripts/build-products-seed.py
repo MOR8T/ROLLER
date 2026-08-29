@@ -61,8 +61,6 @@ STORY_ADVANTAGES = {
 
 # Photography shared by every system, from the page as it stood.
 GALLERY_IMAGES = [f"/product-page/gallery/{index}.webp" for index in range(1, 7)]
-PROMO_IMAGE = "/product-page/calculator.webp"
-CALCULATOR_HREF = "/calculator"
 
 PRODUCTS = [
     {
@@ -235,14 +233,6 @@ def build_product(product: dict, cat: Catalogue) -> dict:
         ],
     }
 
-    promo = {
-        "title": cat.text("productPage.promo.title"),
-        "description": cat.text("productPage.promo.description"),
-        "image": PROMO_IMAGE,
-        "button_label": cat.text("productPage.promo.cta"),
-        "button_href": CALCULATOR_HREF,
-    }
-
     return {
         "slug": slug,
         "image_path": product["image"],
@@ -256,7 +246,6 @@ def build_product(product: dict, cat: Catalogue) -> dict:
             {"type": "specs", "content": specs},
             {"type": "story", "content": story},
             {"type": "gallery", "content": {"images": GALLERY_IMAGES}},
-            {"type": "promo", "content": promo},
         ],
     }
 

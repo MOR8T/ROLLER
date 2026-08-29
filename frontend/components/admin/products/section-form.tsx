@@ -15,15 +15,19 @@ import {
 import { uploadSectionImageAction } from "@/components/admin-sections/products-actions";
 
 /**
- * The editor for one product-page section, in all five of its shapes.
+ * The editor for one product-page section, in all four of its shapes.
  *
- * ── Why these five ─────────────────────────────────────────────────────────
+ * ── Why these four ─────────────────────────────────────────────────────────
  *
- * They are the blocks the product page can draw
+ * They are the admin-ordered blocks the product page can draw
  * (`components/products/page/*-section.tsx`), and the payload each form
  * produces is exactly what `backend/app/schemas/product.py` validates. Adding a
- * sixth kind means a payload model on the backend, a form here, and a branch in
+ * fifth kind means a payload model on the backend, a form here, and a branch in
  * `ProductPageView` — in that order, and none of the three is optional.
+ *
+ * There used to be a fifth, `promo`. Every product's payload was
+ * byte-identical, so it moved to a block the page renders unconditionally
+ * instead — see `ProductPageData.promo` in `types/product-page.ts`.
  *
  * ── Why the forms hold state instead of posting FormData ───────────────────
  *
@@ -59,11 +63,6 @@ export const SECTION_TYPES = [
     hint: "Заголовок, несколько абзацев текста и изображение. Тёмный блок.",
   },
   { value: "gallery", label: "Галерея", hint: "Фотографии во всю ширину, слайдером." },
-  {
-    value: "promo",
-    label: "Промо-блок",
-    hint: "Половина фотография, половина текст с кнопкой — например, ссылка на калькулятор.",
-  },
 ] as const;
 
 export type SectionType = (typeof SECTION_TYPES)[number]["value"];
@@ -98,8 +97,6 @@ export function SectionForm(props: SectionFormProps) {
       return <StoryForm {...props} />;
     case "gallery":
       return <GalleryForm {...props} />;
-    case "promo":
-      return <PromoForm {...props} />;
   }
 }
 
@@ -766,87 +763,6 @@ function GalleryForm({
         disabled={disabled}
         uploadsBaseUrl={uploadsBaseUrl}
         optionalHint="Фотографии показываются слайдером, в этом порядке."
-      />
-    </FormShell>
-  );
-}
-
-// ── Промо-блок ─────────────────────────────────────────────────────────────
-
-function PromoForm({
-  initialContent,
-  onSubmit,
-  onCancel,
-  disabled,
-  uploadsBaseUrl,
-  submitLabel,
-}: SectionFormProps) {
-  const [title, setTitle] = useState<LocalizedValue>(() => toLocalizedValue(initialContent.title));
-  const [description, setDescription] = useState<LocalizedValue>(() =>
-    toLocalizedValue(initialContent.description),
-  );
-  const [buttonLabel, setButtonLabel] = useState<LocalizedValue>(() =>
-    toLocalizedValue(initialContent.button_label),
-  );
-  const [buttonHref, setButtonHref] = useState<string>(
-    () => readString(initialContent, "button_href") ?? "/calculator",
-  );
-  const [image, setImage] = useState<string | null>(() => readString(initialContent, "image"));
-
-  return (
-    <FormShell
-      onSubmit={(event) => {
-        event.preventDefault();
-        onSubmit({
-          title,
-          description,
-          image,
-          button_label: buttonLabel,
-          button_href: buttonHref,
-        });
-      }}
-      onCancel={onCancel}
-      disabled={disabled}
-      submitLabel={submitLabel}
-    >
-      <LocalizedFields label="Заголовок" value={title} onChange={setTitle} disabled={disabled} />
-      <LocalizedFields
-        label="Текст"
-        value={description}
-        onChange={setDescription}
-        disabled={disabled}
-        multiline
-      />
-      <LocalizedFields
-        label="Надпись на кнопке"
-        value={buttonLabel}
-        onChange={setButtonLabel}
-        disabled={disabled}
-      />
-
-      <div>
-        <label htmlFor="promo-href" className="mb-1.5 block text-sm font-medium text-brand-black">
-          Ссылка кнопки
-        </label>
-        <Input
-          id="promo-href"
-          value={buttonHref}
-          required
-          disabled={disabled}
-          onChange={(event) => setButtonHref(event.target.value)}
-        />
-        <p className="mt-1 text-xs text-neutral-500">
-          Страница сайта — начиная со слэша, например «/calculator». Внешний адрес — целиком, с
-          «https://».
-        </p>
-      </div>
-
-      <ImageField
-        label="Фотография"
-        value={image}
-        onChange={setImage}
-        disabled={disabled}
-        uploadsBaseUrl={uploadsBaseUrl}
       />
     </FormShell>
   );

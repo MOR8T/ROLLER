@@ -42,6 +42,12 @@ import type {
 
 const CONTACTS_ANCHOR = "#contacts";
 
+// The one calculator pitch, identical on every product page — see
+// `ProductPageData.promo`'s doc comment in `types/product-page.ts` for why
+// this is no longer admin content.
+const PROMO_IMAGE = "/product-page/calculator.webp";
+const PROMO_HREF = "/calculator";
+
 interface RawProductCategory {
   id: number;
   name_ru: string;
@@ -388,27 +394,6 @@ function toBlock(
       };
     }
 
-    case "promo": {
-      const image = mediaOf(content.image, localizedText("productPage.promo.imageAlt"));
-
-      return {
-        kind: "promo",
-        section: {
-          id: anchor,
-          title: localizedOf(content.title),
-          description: localizedOf(content.description),
-          media: image ? [image] : undefined,
-          actions: [
-            {
-              label: localizedOf(content.button_label),
-              href: String(content.button_href ?? "/"),
-              tone: "primary",
-            },
-          ],
-        },
-      };
-    }
-
     default:
       return null;
   }
@@ -468,6 +453,15 @@ export async function getProductPage(
       .sort((a, b) => a.position - b.position)
       .map((section) => toBlock(section, name, `section-${section.id}`))
       .filter((block): block is ProductPageBlock => block !== null),
+    promo: {
+      id: "promo",
+      title: localizedText("productPage.promo.title"),
+      description: localizedText("productPage.promo.description"),
+      media: [{ src: resolveImageSrc(PROMO_IMAGE), alt: localizedText("productPage.promo.imageAlt") }],
+      actions: [
+        { label: localizedText("productPage.promo.cta"), href: PROMO_HREF, tone: "primary" },
+      ],
+    },
     contacts: {
       id: "contacts",
       title: localizedText("productPage.contacts.title"),

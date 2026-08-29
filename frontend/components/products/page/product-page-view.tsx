@@ -82,6 +82,10 @@ export function ProductPageView({
         <ProductBlock key={block.section.id} block={block} locale={locale} />
       ))}
 
+      {/* The site's one calculator pitch — identical on every product and no
+          longer admin content, see `ProductPageData.promo`'s doc comment. */}
+      <ProductPromoSection data={data.promo} locale={locale} />
+
       {/* The site's one request block, given this page's words and told
           which system the visitor was reading — built server-side by the
           page and passed down, see the `contactsSection` prop comment. */}
@@ -108,7 +112,5 @@ function ProductBlock({ block, locale }: { block: ProductPageBlock; locale: Loca
       return <ProductStorySection data={block.section} locale={locale} />;
     case "gallery":
       return <ProductGallerySection data={block.section} locale={locale} />;
-    case "promo":
-      return <ProductPromoSection data={block.section} locale={locale} />;
   }
 }

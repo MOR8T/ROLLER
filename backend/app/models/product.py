@@ -85,29 +85,37 @@ class Product(Base):
 
 class ProductSection(Base):
     """
-    One block on a product page, of one of five types.
+    One block on a product page, of one of four types.
 
     ── Why `content` is JSONB and not columns ─────────────────────────────────
 
-    The five types agree on nothing: `specs` is a list of name/value pairs,
+    The four types agree on nothing: `specs` is a list of name/value pairs,
     `finishes` a list of colour + label + render, `story` a variable number of
-    paragraphs, `gallery` a list of photographs, `promo` a heading with one
-    button. Columns for the union of that would be almost entirely NULL and
-    would need a migration every time a type gains a field. The shape of each
-    payload is enforced by the Pydantic models in `app/schemas/product.py`
-    (a discriminated union on `type`), so "no columns" does not mean "no
-    validation" — nothing reaches this column unvalidated.
+    paragraphs, `gallery` a list of photographs. Columns for the union of that
+    would be almost entirely NULL and would need a migration every time a type
+    gains a field. The shape of each payload is enforced by the Pydantic
+    models in `app/schemas/product.py` (a discriminated union on `type`), so
+    "no columns" does not mean "no validation" — nothing reaches this column
+    unvalidated.
 
     Localised text inside `content` is a `{ru, tj, en, tr}` object, matching
     `LocalizedText` in the frontend's `lib/localized.ts`: the product page
     assembles all four locales into one value and each section picks its own,
     so the API hands it exactly that shape.
 
+    ⚠️ There used to be a fifth type, `promo`. Every product's payload was
+    byte-identical (same text, same image, same «/calculator» link), so it was
+    never really per-product content — it moved to a block the product page
+    renders unconditionally, the same way it already renders the contacts
+    block (`frontend/lib/products.ts`'s `getProductPage`, the `promo` field),
+    and is no longer one of `SECTION_TYPES`. A migration deleted the leftover
+    `type = 'promo'` rows this table held from before the change.
+
     ── Why a type may repeat ─────────────────────────────────────────────────
 
-    Nothing here is unique per product. Two galleries, or a promo block above
-    *and* below the specs, are legitimate layouts, and `position` — not the
-    type — is what fixes the order on the page.
+    Nothing here is unique per product. Two galleries, or two spec tables, are
+    legitimate layouts, and `position` — not the type — is what fixes the
+    order on the page.
     """
 
     __tablename__ = "product_sections"
