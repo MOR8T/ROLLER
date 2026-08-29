@@ -1,10 +1,11 @@
 "use client";
 
-import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
 
-import { schemeUrl, variantGroups, type ConstructionKind, type Scheme } from "@/data/calculator";
+import { SchemeView } from "@/components/calculator/scheme-view";
+import { variantGroups, type ConstructionKind } from "@/data/calculator";
+import type { SchemeGeometry } from "@/lib/scheme-geometry";
 import { cn } from "@/lib/utils";
 
 /**
@@ -21,15 +22,23 @@ import { cn } from "@/lib/utils";
  */
 export function VariantPicker({
   construction,
+  schemes,
   value,
+  laminationTexture,
+  laminationColor,
+  hardwareColor,
   onChange,
 }: {
   construction: ConstructionKind;
+  schemes: SchemeGeometry[];
   value: string;
+  laminationTexture: string | null;
+  laminationColor: string;
+  hardwareColor: string;
   onChange: (variant: string) => void;
 }) {
   const t = useTranslations("calculator");
-  const groups = variantGroups(construction);
+  const groups = variantGroups(schemes, construction);
   const [open, setOpen] = useState<number | null>(null);
   const [picked, setPicked] = useState<Record<number, string>>({});
   const root = useRef<HTMLDivElement>(null);
@@ -53,10 +62,10 @@ export function VariantPicker({
   return (
     <div ref={root} className="flex flex-wrap gap-x-5 gap-y-7 sm:gap-x-10 sm:gap-y-8">
       {groups.map((group) => {
-        const active = group.variants.some((variant) => variant.id === value);
+        const active = group.variants.some((variant) => variant.key === value);
         const shown =
-          group.variants.find((variant) => variant.id === value) ??
-          group.variants.find((variant) => variant.id === picked[group.columns]) ??
+          group.variants.find((variant) => variant.key === value) ??
+          group.variants.find((variant) => variant.key === picked[group.columns]) ??
           group.variants[0];
         const label = t(`groups.${construction}.${group.columns}`);
 
@@ -77,7 +86,7 @@ export function VariantPicker({
               aria-expanded={open === group.columns}
               aria-label={`${label} — ${t("chooseVariant")}`}
               onClick={() => {
-                onChange(shown.id);
+                onChange(shown.key);
                 setOpen(open === group.columns ? null : group.columns);
               }}
               className={cn(
@@ -86,7 +95,12 @@ export function VariantPicker({
                 active ? "border-brand-red" : "border-brand-black/15 hover:border-brand-black/40",
               )}
             >
-              <SchemeImage scheme={shown} />
+              <SchemeThumb
+                scheme={shown}
+                texture={laminationTexture}
+                colour={laminationColor}
+                hardware={hardwareColor}
+              />
             </button>
 
             {open === group.columns ? (
@@ -97,24 +111,29 @@ export function VariantPicker({
                 <div className="grid grid-cols-3 gap-2 sm:grid-cols-4">
                   {group.variants.map((variant) => (
                     <button
-                      key={variant.id}
+                      key={variant.key}
                       type="button"
                       role="option"
-                      aria-selected={variant.id === value}
+                      aria-selected={variant.key === value}
                       onClick={() => {
-                        setPicked((current) => ({ ...current, [group.columns]: variant.id }));
-                        onChange(variant.id);
+                        setPicked((current) => ({ ...current, [group.columns]: variant.key }));
+                        onChange(variant.key);
                         setOpen(null);
                       }}
                       className={cn(
                         "flex h-[68px] w-[76px] items-center justify-center rounded-control border p-1.5 transition-colors sm:h-[76px] sm:w-[86px]",
                         "focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:outline-none",
-                        variant.id === value
+                        variant.key === value
                           ? "border-brand-red bg-brand-red/5"
                           : "border-brand-black/12 hover:border-brand-red/60",
                       )}
                     >
-                      <SchemeImage scheme={variant} />
+                      <SchemeThumb
+                        scheme={variant}
+                        texture={laminationTexture}
+                        colour={laminationColor}
+                        hardware={hardwareColor}
+                      />
                     </button>
                   ))}
                 </div>
@@ -127,15 +146,38 @@ export function VariantPicker({
   );
 }
 
-function SchemeImage({ scheme }: { scheme: Scheme }) {
+/**
+ * A variant's thumbnail.
+ *
+ * Rendered from the same geometry as the big preview rather than loaded as an
+ * image: a scheme is no longer a file, so there is no URL to point at, and
+ * drawing it here means the thumbnail already wears the visitor's chosen
+ * lamination instead of showing a generic line drawing.
+ *
+ * The nominal size is what the *shape* is drawn at — the visitor's own
+ * millimetres belong on the stage below, not on a 76px chip where a 3000x400
+ * run would be an unreadable sliver.
+ */
+function SchemeThumb({
+  scheme,
+  texture,
+  colour,
+  hardware,
+}: {
+  scheme: SchemeGeometry;
+  texture: string | null;
+  colour: string;
+  hardware: string;
+}) {
   return (
-    <Image
-      src={schemeUrl(scheme)}
-      alt=""
-      width={Math.round(scheme.vw)}
-      height={Math.round(scheme.vh)}
-      className="max-h-full w-auto max-w-full object-contain"
-      unoptimized
+    <SchemeView
+      scheme={scheme}
+      widthMm={scheme.kind === "door" ? 1000 : 1400}
+      heightMm={scheme.kind === "door" ? 2100 : 1400}
+      laminationTexture={texture}
+      laminationColor={colour}
+      hardwareColor={hardware}
+      className="max-h-full max-w-full"
     />
   );
 }

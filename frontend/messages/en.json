@@ -1008,6 +1008,7 @@
     "breadcrumb": "Calculator",
     "title": "Calculator",
     "noPrice": "We do not publish prices: the cost depends on the survey, the specification and the fitting. The calculator builds the construction; a manager sends the quote.",
+    "unavailable": "The calculator is temporarily unavailable. Call us and we will size the construction with you.",
     "construction": {
       "window": "Window",
       "door": "Door"
@@ -1051,14 +1052,6 @@
       "single-chamber": "Single chamber",
       "double-chamber": "Double chamber",
       "double-chamber-energy": "Double chamber, low-E"
-    },
-    "mechanisms": {
-      "standard": "Standard hardware"
-    },
-    "accessories": {
-      "windowsill": "Windowsill",
-      "mosquito-net": "Mosquito net",
-      "drip": "Drip sill"
     },
     "units": {
       "mm": "mm",

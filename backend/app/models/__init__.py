@@ -11,9 +11,12 @@ database. Add new models here.
 from app.models.about_certificate import AboutCertificate
 from app.models.about_content import AboutContent
 from app.models.about_timeline_item import AboutTimelineItem
+from app.models.calculator_scheme import CalculatorScheme
+from app.models.calculator_settings import CalculatorSettings
 from app.models.contact_info import ContactInfo
 from app.models.contact_interest import ContactInterest
 from app.models.hero_slide import HeroSlide
+from app.models.lead import Lead
 from app.models.news_article import NewsArticle
 from app.models.partner import Partner
 from app.models.product import Product, ProductSection, product_category_links
@@ -26,9 +29,12 @@ __all__ = [
     "AboutCertificate",
     "AboutContent",
     "AboutTimelineItem",
+    "CalculatorScheme",
+    "CalculatorSettings",
     "ContactInfo",
     "ContactInterest",
     "HeroSlide",
+    "Lead",
     "NewsArticle",
     "Partner",
     "Product",

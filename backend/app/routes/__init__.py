@@ -12,6 +12,9 @@ from app.routes.about_certificates import router as about_certificates_router
 from app.routes.contact_info import router as contact_info_router
 from app.routes.contact_interests import router as contact_interests_router
 from app.routes.social_links import router as social_links_router
+from app.routes.leads import router as leads_router
+from app.routes.calculator_settings import router as calculator_settings_router
+from app.routes.calculator_schemes import router as calculator_schemes_router
 
 __all__ = [
     "auth_router",
@@ -28,4 +31,7 @@ __all__ = [
     "contact_info_router",
     "contact_interests_router",
     "social_links_router",
+    "leads_router",
+    "calculator_settings_router",
+    "calculator_schemes_router",
 ]

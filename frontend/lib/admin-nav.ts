@@ -11,11 +11,13 @@ export interface AdminNavItem {
     | "store"
     | "phone"
     | "panel-bottom"
-    | "settings";
+    | "settings"
+    | "inbox";
 }
 
 export const adminNavItems: AdminNavItem[] = [
   { label: "Главная", href: "/admin", icon: "home" },
+  { label: "Заявки", href: "/admin/leads", icon: "inbox" },
   { label: "О компании", href: "/admin/about", icon: "building" },
   { label: "Категория продукции", href: "/admin/product-categories", icon: "layout-grid" },
   { label: "Продукция", href: "/admin/products", icon: "package" },

@@ -9,11 +9,14 @@ import { SizeStage } from "@/components/calculator/size-stage";
 import { VariantPicker } from "@/components/calculator/variant-picker";
 import {
   constructionKinds,
+  defaultSizeOf,
   findScheme,
-  sizeLimits,
+  findSeries,
+  type CalculatorOptions,
   type ConfiguredItem,
   type ConstructionKind,
 } from "@/data/calculator";
+import type { SchemeGeometry } from "@/lib/scheme-geometry";
 import { cn } from "@/lib/utils";
 
 /** One position of the request: a construction, its size and its details. */
@@ -21,22 +24,35 @@ export function ItemCard({
   item,
   index,
   removable,
+  schemes,
+  options,
   onChange,
   onRemove,
 }: {
   item: ConfiguredItem;
   index: number;
   removable: boolean;
+  schemes: SchemeGeometry[];
+  options: CalculatorOptions;
   onChange: (patch: Partial<ConfiguredItem>) => void;
   onRemove: () => void;
 }) {
   const t = useTranslations("calculator");
-  const tBrands = useTranslations("brands");
   const [open, setOpen] = useState(true);
 
-  const scheme = findScheme(item.variant);
-  const limits = sizeLimits[item.construction];
+  const scheme = findScheme(schemes, item.variant);
+  const limits = options.sizeLimits[item.construction];
   const contentId = `position-${item.id}`;
+
+  // The palette is admin-managed, so a colour key can disappear between the
+  // visitor picking it and this render. Falling back to the first entry keeps
+  // the drawing painted rather than blanking it.
+  const palette = options.laminations;
+  // The series name comes from the admin's list, not the brands catalogue:
+  // renaming a series there must show here rather than leaving a blank.
+  const series = findSeries(options, item.system);
+  const lamination = palette.find((c) => c.key === item.lamination) ?? palette[0];
+  const hardware = palette.find((c) => c.key === item.hardware) ?? palette[0];
 
   if (!scheme) return null;
 
@@ -66,7 +82,7 @@ export function ItemCard({
             {t(`construction.${item.construction}`)}
           </h2>
           <p className="truncate text-sm text-brand-black/55">
-            {t(`materials.${item.material}`)} {tBrands(`items.${item.system}.name`)}
+            {t(`materials.${item.material}`)} {series?.label ?? item.system}
           </p>
         </div>
 
@@ -114,15 +130,28 @@ export function ItemCard({
 
           <VariantPicker
             construction={item.construction}
+            schemes={schemes}
             value={item.variant}
-            onChange={(variant) => onChange({ variant })}
+            laminationTexture={lamination?.texture ?? null}
+            laminationColor={lamination?.hex ?? "#f2f2f0"}
+            hardwareColor={hardware?.hex ?? "#f2f2f0"}
+            // The size travels with the variant: each template opens at its
+            // own proportions, so trying a five-sash run after a single
+            // casement no longer means correcting both sliders first.
+            onChange={(variant) =>
+              onChange({
+                variant,
+                ...defaultSizeOf(findScheme(schemes, variant), item.construction, options),
+              })
+            }
           />
 
           <div className="mt-10">
             <SizeStage
               scheme={scheme}
-              lamination={item.lamination}
-              hardware={item.hardware}
+              laminationTexture={lamination?.texture ?? null}
+              laminationColor={lamination?.hex ?? "#f2f2f0"}
+              hardwareColor={hardware?.hex ?? "#f2f2f0"}
               widthMm={item.widthMm}
               heightMm={item.heightMm}
               limits={limits}
@@ -137,7 +166,7 @@ export function ItemCard({
           </div>
 
           <div className="mt-12">
-            <DetailsPanel item={item} onChange={onChange} />
+            <DetailsPanel item={item} options={options} onChange={onChange} />
           </div>
         </div>
       ) : null}

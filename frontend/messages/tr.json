@@ -1008,6 +1008,7 @@
     "breadcrumb": "Hesaplayıcı",
     "title": "Hesaplayıcı",
     "noPrice": "Sitede fiyat göstermiyoruz: maliyet keşfe, donanıma ve montaja bağlıdır. Hesaplayıcı konstrüksiyonu kurar, teklifi yönetici gönderir.",
+    "unavailable": "Hesaplayıcı geçici olarak kullanılamıyor. Bizi arayın, yapıyı birlikte belirleyelim.",
     "construction": {
       "window": "Pencere",
       "door": "Kapı"
@@ -1051,14 +1052,6 @@
       "single-chamber": "Tek odacıklı",
       "double-chamber": "Çift odacıklı",
       "double-chamber-energy": "Çift odacıklı, ısı yalıtımlı"
-    },
-    "mechanisms": {
-      "standard": "Standart aksesuar"
-    },
-    "accessories": {
-      "windowsill": "Denizlik",
-      "mosquito-net": "Sineklik",
-      "drip": "Dış damlalık"
     },
     "units": {
       "mm": "mm",

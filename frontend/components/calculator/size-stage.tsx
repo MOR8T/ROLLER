@@ -3,8 +3,9 @@
 import { useId } from "react";
 import { useTranslations } from "next-intl";
 
-import { ConstructionScheme } from "@/components/calculator/construction-scheme";
-import { clamp, type LaminationKey, type Range, type Scheme } from "@/data/calculator";
+import { SchemeView } from "@/components/calculator/scheme-view";
+import { clamp, type Range } from "@/data/calculator";
+import type { SchemeGeometry } from "@/lib/scheme-geometry";
 import { cn } from "@/lib/utils";
 
 /**
@@ -15,9 +16,12 @@ import { cn } from "@/lib/utils";
  * one is a real vertical `<input type="range">` rather than a rotated
  * horizontal one, so arrow keys, screen readers and touch all behave.
  *
- * The sliders do not resize the drawing — see `ConstructionScheme`. They set
- * the millimetres that travel with the request, and the drawing keeps the
- * proportions it was drawn in.
+ * The sliders *do* resize the drawing now. They used to not: the old renderer
+ * inlined the client's own SVG, and a drawing is a picture of a type of
+ * construction rather than an elevation of one, so stretching it to 3000x400
+ * drew stiles half a metre thick. `SchemeView` computes the geometry instead,
+ * keeping the profile a constant 60 mm at every size, so a wide transom light
+ * now reads as a wide transom light.
  *
  * The readouts are editable. `imzo.uz` prints them as text, but somebody who
  * already measured the opening knows it is 1730 and cannot drag to it — the
@@ -25,8 +29,9 @@ import { cn } from "@/lib/utils";
  */
 export function SizeStage({
   scheme,
-  lamination,
-  hardware,
+  laminationTexture,
+  laminationColor,
+  hardwareColor,
   widthMm,
   heightMm,
   limits,
@@ -34,9 +39,10 @@ export function SizeStage({
   onHeight,
   title,
 }: {
-  scheme: Scheme;
-  lamination: LaminationKey;
-  hardware: LaminationKey;
+  scheme: SchemeGeometry;
+  laminationTexture: string | null;
+  laminationColor: string;
+  hardwareColor: string;
   widthMm: number;
   heightMm: number;
   limits: { width: Range; height: Range };
@@ -47,17 +53,21 @@ export function SizeStage({
   const t = useTranslations("calculator");
 
   return (
-    <div className="mx-auto grid w-full max-w-[34rem] grid-cols-[minmax(0,1fr)_auto] gap-x-4 gap-y-3">
-      <div className="flex h-[17rem] items-center justify-center rounded-card border border-brand-black/8 bg-surface p-4 sm:h-[22rem]">
-        <ConstructionScheme
+    <div className="grid w-full grid-cols-[minmax(0,1fr)_auto] gap-x-4 gap-y-3">
+      <div className="flex h-[34rem] items-center justify-center rounded-card border border-brand-black/8 bg-surface p-4 sm:h-[44rem]">
+        <SchemeView
           scheme={scheme}
-          lamination={lamination}
-          hardware={hardware}
+          widthMm={widthMm}
+          heightMm={heightMm}
+          laminationTexture={laminationTexture}
+          laminationColor={laminationColor}
+          hardwareColor={hardwareColor}
+          dimensions
           title={title}
         />
       </div>
 
-      <div className="flex h-[17rem] flex-col items-center gap-3 sm:h-[22rem]">
+      <div className="flex h-[34rem] flex-col items-center gap-3 sm:h-[44rem]">
         <Readout
           value={heightMm}
           range={limits.height}

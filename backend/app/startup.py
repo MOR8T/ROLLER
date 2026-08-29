@@ -9,6 +9,8 @@ from app.database import SessionLocal
 from app.models.about_certificate import AboutCertificate
 from app.models.about_content import AboutContent
 from app.models.about_timeline_item import AboutTimelineItem
+from app.models.calculator_scheme import CalculatorScheme
+from app.models.calculator_settings import CalculatorSettings
 from app.models.contact_info import ContactInfo
 from app.models.contact_interest import ContactInterest
 from app.models.social_link import SocialLink
@@ -323,6 +325,205 @@ def seed_contact_info(db: Session | None = None) -> None:
         db.commit()
         if owns_session:
             logger.info("Seeded contact_info row")
+    finally:
+        if owns_session:
+            db.close()
+
+
+_CALCULATOR_SETTINGS_SEED = {
+    # The six profile systems the site shipped with. `glazing` follows the
+    # chamber count: a 3-chamber economy frame takes a single-chamber unit and
+    # a 75 mm premium frame does not sell with one; ALD-45 is cold aluminium
+    # and single glass is its normal fill. Names are brand names and read the
+    # same in all four locales.
+    "series": [
+        {
+            "key": "ecoline",
+            "label": {loc: "ЭКОЛАЙН" for loc in ("ru", "tj", "en", "tr")},
+            "material": "pvc",
+            "constructions": ["window", "door"],
+            "glazing": ["single-chamber"],
+        },
+        {
+            "key": "roller",
+            "label": {loc: "ROLLER" for loc in ("ru", "tj", "en", "tr")},
+            "material": "pvc",
+            "constructions": ["window", "door"],
+            "glazing": ["single-chamber", "double-chamber"],
+        },
+        {
+            "key": "unopen",
+            "label": {loc: "UNOPEN" for loc in ("ru", "tj", "en", "tr")},
+            "material": "pvc",
+            "constructions": ["window", "door"],
+            "glazing": ["single-chamber", "double-chamber", "double-chamber-energy"],
+        },
+        {
+            "key": "stella",
+            "label": {loc: "STELLA" for loc in ("ru", "tj", "en", "tr")},
+            "material": "pvc",
+            "constructions": ["window", "door"],
+            "glazing": ["double-chamber", "double-chamber-energy"],
+        },
+        {
+            "key": "ald-45",
+            "label": {loc: "АЛД-45" for loc in ("ru", "tj", "en", "tr")},
+            "material": "aluminium",
+            # Doors only — the catalogue's `windows` category never listed it.
+            "constructions": ["door"],
+            "glazing": ["single-glass", "single-chamber"],
+        },
+        {
+            "key": "thermo-60",
+            "label": {loc: "ТЕРМО 60" for loc in ("ru", "tj", "en", "tr")},
+            "material": "aluminium",
+            "constructions": ["window", "door"],
+            "glazing": ["single-chamber", "double-chamber", "double-chamber-energy"],
+        },
+    ],
+    "mechanisms": [
+        {
+            "key": "standard",
+            "label": {
+                "ru": "Стандартная фурнитура",
+                "tj": "Фурнитураи стандартӣ",
+                "en": "Standard hardware",
+                "tr": "Standart aksesuar",
+            },
+        },
+    ],
+    "accessories": [
+        {
+            "key": "windowsill",
+            "label": {"ru": "Подоконник", "tj": "Остона", "en": "Windowsill", "tr": "Denizlik"},
+            "constructions": ["window"],
+        },
+        {
+            "key": "mosquito-net",
+            "label": {
+                "ru": "Москитная сетка",
+                "tj": "Тӯри пашшагир",
+                "en": "Mosquito net",
+                "tr": "Sineklik",
+            },
+            "constructions": ["window", "door"],
+        },
+        {
+            "key": "drip",
+            "label": {"ru": "Отлив", "tj": "Обгузар", "en": "Drip sill", "tr": "Dış damlalık"},
+            "constructions": ["window"],
+        },
+    ],
+    # Labels here are the site's own current text — `colors.*` in
+    # `messages/{tj,en,tr}.json` — which still repeats the Russian string in
+    # those three locales rather than translating it. Carried over as-is
+    # rather than invented here.
+    "lamination_colors": [
+        {"key": "white", "label": {"ru": "Белый", "tj": "Белый", "en": "Белый", "tr": "Белый"}, "hex": "#f2f2f0", "texture": "/cal/textures/white.png"},
+        {
+            "key": "anthracite",
+            "label": {"ru": "Антрацит", "tj": "Антрацит", "en": "Антрацит", "tr": "Антрацит"},
+            "hex": "#313948",
+            "texture": "/cal/textures/anthracite.png",
+        },
+        {"key": "nut", "label": {"ru": "Орех", "tj": "Орех", "en": "Орех", "tr": "Орех"}, "hex": "#734520", "texture": "/cal/textures/nut.png"},
+        {
+            "key": "golden-oak",
+            "label": {"ru": "Золотой дуб", "tj": "Золотой дуб", "en": "Золотой дуб", "tr": "Золотой дуб"},
+            "hex": "#9f520e",
+            "texture": "/cal/textures/golden-oak.png",
+        },
+        {
+            "key": "dark-oak",
+            "label": {"ru": "Тёмный дуб", "tj": "Тёмный дуб", "en": "Тёмный дуб", "tr": "Тёмный дуб"},
+            "hex": "#574831",
+            "texture": "/cal/textures/dark-oak.png",
+        },
+    ],
+    # Millimetres, matching `sizeLimits` in `data/calculator.ts` exactly.
+    "size_limits": {
+        "window": {
+            "width": {"min": 400, "max": 3000, "step": 10, "default": 1400},
+            "height": {"min": 400, "max": 2500, "step": 10, "default": 1400},
+        },
+        "door": {
+            "width": {"min": 700, "max": 2400, "step": 10, "default": 900},
+            "height": {"min": 1800, "max": 2800, "step": 10, "default": 2100},
+        },
+    },
+}
+
+
+def seed_calculator_settings(db: Session | None = None) -> None:
+    """Same idempotency contract as `seed_about_content` — see its docstring.
+
+    Seeds the row with the same option lists `data/calculator.ts` still
+    hardcodes, so switching the admin panel on does not change what today's
+    visitors see."""
+    owns_session = db is None
+    db = db or SessionLocal()
+    try:
+        if db.query(CalculatorSettings).first():
+            if owns_session:
+                logger.info("Calculator settings seed skipped: row already exists")
+            return
+
+        settings = CalculatorSettings(**_CALCULATOR_SETTINGS_SEED)
+        db.add(settings)
+        db.commit()
+        if owns_session:
+            logger.info("Seeded calculator_settings row")
+    finally:
+        if owns_session:
+            db.close()
+
+
+_CALCULATOR_SCHEMES_SEED_FILE = Path(__file__).parent / "seeds" / "calculator-schemes.json"
+
+
+def seed_calculator_schemes(db: Session | None = None) -> None:
+    """
+    The 55 constructions the site shipped with, as declared geometry.
+
+    Same idempotency contract as `seed_about_content`. The file is generated
+    by `scripts/convert-calculator-schemes.py` from the parsed drawings in
+    `frontend/data/calculator-schemes.json` — see `CalculatorScheme`'s
+    docstring for why the drawings themselves are no longer the source.
+    """
+    owns_session = db is None
+    db = db or SessionLocal()
+    try:
+        if db.query(CalculatorScheme).first():
+            if owns_session:
+                logger.info("Calculator schemes seed skipped: rows already exist")
+            return
+
+        if not _CALCULATOR_SCHEMES_SEED_FILE.is_file():
+            logger.warning(
+                "Calculator schemes seed skipped: %s is missing", _CALCULATOR_SCHEMES_SEED_FILE
+            )
+            return
+
+        entries = json.loads(_CALCULATOR_SCHEMES_SEED_FILE.read_text(encoding="utf-8"))
+
+        for position, entry in enumerate(entries):
+            db.add(
+                CalculatorScheme(
+                    key=entry["key"],
+                    kind=entry["kind"],
+                    columns=entry["columns"],
+                    arch=entry["arch"],
+                    geometry=entry["geometry"],
+                    default_width_mm=entry["default_width_mm"],
+                    default_height_mm=entry["default_height_mm"],
+                    enabled=True,
+                    position=position,
+                )
+            )
+
+        db.commit()
+        if owns_session:
+            logger.info("Seeded %d calculator schemes", len(entries))
     finally:
         if owns_session:
             db.close()

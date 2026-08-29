@@ -7,6 +7,7 @@ import {
   Building2,
   Calculator,
   Home,
+  Inbox,
   LayoutGrid,
   Newspaper,
   PanelBottom,
@@ -32,6 +33,7 @@ const icons: Record<AdminNavItem["icon"], LucideIcon> = {
   phone: Phone,
   settings: Settings,
   "panel-bottom": PanelBottom,
+  inbox: Inbox,
 };
 
 function isActive(pathname: string, href: string) {

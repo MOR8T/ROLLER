@@ -1,0 +1,2269 @@
+[
+  {
+    "key": "win_1",
+    "kind": "window",
+    "columns": 1,
+    "arch": null,
+    "default_width_mm": 530,
+    "default_height_mm": 1400,
+    "source_aspect": 0.3788,
+    "geometry": {
+      "opening": "fixed",
+      "hinge": null
+    }
+  },
+  {
+    "key": "win_2",
+    "kind": "window",
+    "columns": 1,
+    "arch": null,
+    "default_width_mm": 530,
+    "default_height_mm": 1400,
+    "source_aspect": 0.3788,
+    "geometry": {
+      "opening": "casement",
+      "hinge": "right"
+    }
+  },
+  {
+    "key": "win_3",
+    "kind": "window",
+    "columns": 1,
+    "arch": null,
+    "default_width_mm": 530,
+    "default_height_mm": 1400,
+    "source_aspect": 0.3788,
+    "geometry": {
+      "opening": "tilt-turn",
+      "hinge": "right"
+    }
+  },
+  {
+    "key": "win_4",
+    "kind": "window",
+    "columns": 1,
+    "arch": null,
+    "default_width_mm": 530,
+    "default_height_mm": 1400,
+    "source_aspect": 0.3788,
+    "geometry": {
+      "split": "h",
+      "children": [
+        {
+          "weight": 50.72,
+          "node": {
+            "opening": "fixed",
+            "hinge": null
+          }
+        },
+        {
+          "weight": 137.75,
+          "node": {
+            "opening": "casement",
+            "hinge": "right"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "key": "win_5",
+    "kind": "window",
+    "columns": 2,
+    "arch": null,
+    "default_width_mm": 1050,
+    "default_height_mm": 1400,
+    "source_aspect": 0.75,
+    "geometry": {
+      "split": "v",
+      "children": [
+        {
+          "weight": 70.17,
+          "node": {
+            "opening": "fixed",
+            "hinge": null
+          }
+        },
+        {
+          "weight": 66.66,
+          "node": {
+            "opening": "casement",
+            "hinge": "right"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "key": "win_6",
+    "kind": "window",
+    "columns": 2,
+    "arch": null,
+    "default_width_mm": 1050,
+    "default_height_mm": 1400,
+    "source_aspect": 0.75,
+    "geometry": {
+      "split": "h",
+      "children": [
+        {
+          "weight": 49.23,
+          "node": {
+            "opening": "fixed",
+            "hinge": null
+          }
+        },
+        {
+          "weight": 139.06,
+          "node": {
+            "split": "v",
+            "children": [
+              {
+                "weight": 72.12,
+                "node": {
+                  "opening": "fixed",
+                  "hinge": null
+                }
+              },
+              {
+                "weight": 66.14,
+                "node": {
+                  "opening": "casement",
+                  "hinge": "right"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "key": "win_7",
+    "kind": "window",
+    "columns": 2,
+    "arch": null,
+    "default_width_mm": 1050,
+    "default_height_mm": 1400,
+    "source_aspect": 0.75,
+    "geometry": {
+      "split": "v",
+      "children": [
+        {
+          "weight": 70.17,
+          "node": {
+            "opening": "fixed",
+            "hinge": null
+          }
+        },
+        {
+          "weight": 66.66,
+          "node": {
+            "opening": "tilt-turn",
+            "hinge": "right"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "key": "win_8",
+    "kind": "window",
+    "columns": 2,
+    "arch": null,
+    "default_width_mm": 1050,
+    "default_height_mm": 1400,
+    "source_aspect": 0.75,
+    "geometry": {
+      "split": "v",
+      "children": [
+        {
+          "weight": 71.04,
+          "node": {
+            "opening": "fixed",
+            "hinge": null
+          }
+        },
+        {
+          "weight": 67.28,
+          "node": {
+            "split": "h",
+            "children": [
+              {
+                "weight": 50.41,
+                "node": {
+                  "opening": "casement",
+                  "hinge": "right"
+                }
+              },
+              {
+                "weight": 137.94,
+                "node": {
+                  "opening": "casement",
+                  "hinge": "right"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "key": "win_9",
+    "kind": "window",
+    "columns": 2,
+    "arch": null,
+    "default_width_mm": 1040,
+    "default_height_mm": 1400,
+    "source_aspect": 0.745,
+    "geometry": {
+      "split": "v",
+      "children": [
+        {
+          "weight": 72.41,
+          "node": {
+            "split": "h",
+            "children": [
+              {
+                "weight": 53.04,
+                "node": {
+                  "opening": "casement",
+                  "hinge": "left"
+                }
+              },
+              {
+                "weight": 136.54,
+                "node": {
+                  "opening": "fixed",
+                  "hinge": null
+                }
+              }
+            ]
+          }
+        },
+        {
+          "weight": 66.82,
+          "node": {
+            "opening": "casement",
+            "hinge": "right"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "key": "win_10",
+    "kind": "window",
+    "columns": 2,
+    "arch": null,
+    "default_width_mm": 1050,
+    "default_height_mm": 1400,
+    "source_aspect": 0.7513,
+    "geometry": {
+      "split": "v",
+      "children": [
+        {
+          "weight": 65.33,
+          "node": {
+            "split": "h",
+            "children": [
+              {
+                "weight": 46.62,
+                "node": {
+                  "opening": "fixed",
+                  "hinge": null
+                }
+              },
+              {
+                "weight": 131.71,
+                "node": {
+                  "opening": "fixed",
+                  "hinge": null
+                }
+              }
+            ]
+          }
+        },
+        {
+          "weight": 65.61,
+          "node": {
+            "split": "h",
+            "children": [
+              {
+                "weight": 47.81,
+                "node": {
+                  "opening": "fixed",
+                  "hinge": null
+                }
+              },
+              {
+                "weight": 130.52,
+                "node": {
+                  "opening": "casement",
+                  "hinge": "right"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "key": "win_11",
+    "kind": "window",
+    "columns": 2,
+    "arch": null,
+    "default_width_mm": 1050,
+    "default_height_mm": 1400,
+    "source_aspect": 0.7513,
+    "geometry": {
+      "split": "h",
+      "children": [
+        {
+          "weight": 47.4,
+          "node": {
+            "opening": "fixed",
+            "hinge": null
+          }
+        },
+        {
+          "weight": 130.79,
+          "node": {
+            "split": "v",
+            "children": [
+              {
+                "weight": 65.09,
+                "node": {
+                  "opening": "casement",
+                  "hinge": "left"
+                }
+              },
+              {
+                "weight": 65.71,
+                "node": {
+                  "opening": "casement",
+                  "hinge": "right"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "key": "win_12",
+    "kind": "window",
+    "columns": 2,
+    "arch": null,
+    "default_width_mm": 1920,
+    "default_height_mm": 1400,
+    "source_aspect": 1.3704,
+    "geometry": {
+      "split": "v",
+      "children": [
+        {
+          "weight": 168.07,
+          "node": {
+            "opening": "fixed",
+            "hinge": null
+          }
+        },
+        {
+          "weight": 75.53,
+          "node": {
+            "opening": "casement",
+            "hinge": "right"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "key": "win_13",
+    "kind": "window",
+    "columns": 2,
+    "arch": null,
+    "default_width_mm": 1050,
+    "default_height_mm": 1400,
+    "source_aspect": 0.75,
+    "geometry": {
+      "split": "h",
+      "children": [
+        {
+          "weight": 47.17,
+          "node": {
+            "opening": "fixed",
+            "hinge": null
+          }
+        },
+        {
+          "weight": 130.15,
+          "node": {
+            "split": "v",
+            "children": [
+              {
+                "weight": 64.76,
+                "node": {
+                  "opening": "casement",
+                  "hinge": "left"
+                }
+              },
+              {
+                "weight": 65.39,
+                "node": {
+                  "opening": "tilt-turn",
+                  "hinge": "right"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "key": "win_14",
+    "kind": "window",
+    "columns": 2,
+    "arch": null,
+    "default_width_mm": 1050,
+    "default_height_mm": 1400,
+    "source_aspect": 0.75,
+    "geometry": {
+      "split": "v",
+      "children": [
+        {
+          "weight": 66.86,
+          "node": {
+            "split": "h",
+            "children": [
+              {
+                "weight": 45.75,
+                "node": {
+                  "opening": "fixed",
+                  "hinge": null
+                }
+              },
+              {
+                "weight": 130.42,
+                "node": {
+                  "opening": "fixed",
+                  "hinge": null
+                }
+              }
+            ]
+          }
+        },
+        {
+          "weight": 62.15,
+          "node": {
+            "split": "h",
+            "children": [
+              {
+                "weight": 46.34,
+                "node": {
+                  "opening": "fixed",
+                  "hinge": null
+                }
+              },
+              {
+                "weight": 129.84,
+                "node": {
+                  "opening": "casement",
+                  "hinge": "right"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "key": "win_15",
+    "kind": "window",
+    "columns": 2,
+    "arch": null,
+    "default_width_mm": 1050,
+    "default_height_mm": 1400,
+    "source_aspect": 0.75,
+    "geometry": {
+      "split": "v",
+      "children": [
+        {
+          "weight": 66.35,
+          "node": {
+            "opening": "casement",
+            "hinge": "left"
+          }
+        },
+        {
+          "weight": 66.35,
+          "node": {
+            "opening": "casement",
+            "hinge": "right"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "key": "win_16",
+    "kind": "window",
+    "columns": 2,
+    "arch": null,
+    "default_width_mm": 1050,
+    "default_height_mm": 1400,
+    "source_aspect": 0.75,
+    "geometry": {
+      "split": "h",
+      "children": [
+        {
+          "weight": 46.39,
+          "node": {
+            "opening": "fixed",
+            "hinge": null
+          }
+        },
+        {
+          "weight": 131.06,
+          "node": {
+            "split": "v",
+            "children": [
+              {
+                "weight": 67.97,
+                "node": {
+                  "opening": "fixed",
+                  "hinge": null
+                }
+              },
+              {
+                "weight": 62.32,
+                "node": {
+                  "opening": "tilt-turn",
+                  "hinge": "right"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "key": "win_17",
+    "kind": "window",
+    "columns": 2,
+    "arch": null,
+    "default_width_mm": 1050,
+    "default_height_mm": 1400,
+    "source_aspect": 0.7513,
+    "geometry": {
+      "split": "v",
+      "children": [
+        {
+          "weight": 64.68,
+          "node": {
+            "split": "h",
+            "children": [
+              {
+                "weight": 44.15,
+                "node": {
+                  "opening": "tilt",
+                  "hinge": "bottom"
+                }
+              },
+              {
+                "weight": 132.88,
+                "node": {
+                  "opening": "fixed",
+                  "hinge": null
+                }
+              }
+            ]
+          }
+        },
+        {
+          "weight": 64.96,
+          "node": {
+            "split": "h",
+            "children": [
+              {
+                "weight": 48.38,
+                "node": {
+                  "opening": "fixed",
+                  "hinge": null
+                }
+              },
+              {
+                "weight": 128.65,
+                "node": {
+                  "opening": "casement",
+                  "hinge": "right"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "key": "win_18",
+    "kind": "window",
+    "columns": 3,
+    "arch": null,
+    "default_width_mm": 1410,
+    "default_height_mm": 1400,
+    "source_aspect": 1.0105,
+    "geometry": {
+      "split": "v",
+      "children": [
+        {
+          "weight": 54.82,
+          "node": {
+            "opening": "fixed",
+            "hinge": null
+          }
+        },
+        {
+          "weight": 64.34,
+          "node": {
+            "opening": "fixed",
+            "hinge": null
+          }
+        },
+        {
+          "weight": 55.31,
+          "node": {
+            "opening": "fixed",
+            "hinge": null
+          }
+        }
+      ]
+    }
+  },
+  {
+    "key": "win_19",
+    "kind": "window",
+    "columns": 3,
+    "arch": null,
+    "default_width_mm": 1190,
+    "default_height_mm": 1400,
+    "source_aspect": 0.8482,
+    "geometry": {
+      "split": "v",
+      "children": [
+        {
+          "weight": 48.67,
+          "node": {
+            "split": "h",
+            "children": [
+              {
+                "weight": 45.19,
+                "node": {
+                  "opening": "fixed",
+                  "hinge": null
+                }
+              },
+              {
+                "weight": 135.17,
+                "node": {
+                  "opening": "casement",
+                  "hinge": "left"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "weight": 53.95,
+          "node": {
+            "split": "h",
+            "children": [
+              {
+                "weight": 43.25,
+                "node": {
+                  "opening": "fixed",
+                  "hinge": null
+                }
+              },
+              {
+                "weight": 137.11,
+                "node": {
+                  "opening": "fixed",
+                  "hinge": null
+                }
+              }
+            ]
+          }
+        },
+        {
+          "weight": 48.27,
+          "node": {
+            "split": "h",
+            "children": [
+              {
+                "weight": 45.19,
+                "node": {
+                  "opening": "fixed",
+                  "hinge": null
+                }
+              },
+              {
+                "weight": 135.17,
+                "node": {
+                  "opening": "casement",
+                  "hinge": "right"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "key": "win_20",
+    "kind": "window",
+    "columns": 3,
+    "arch": null,
+    "default_width_mm": 1410,
+    "default_height_mm": 1400,
+    "source_aspect": 1.0105,
+    "geometry": {
+      "split": "v",
+      "children": [
+        {
+          "weight": 58.67,
+          "node": {
+            "opening": "casement",
+            "hinge": "left"
+          }
+        },
+        {
+          "weight": 64.91,
+          "node": {
+            "opening": "fixed",
+            "hinge": null
+          }
+        },
+        {
+          "weight": 58.59,
+          "node": {
+            "opening": "casement",
+            "hinge": "right"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "key": "win_21",
+    "kind": "window",
+    "columns": 3,
+    "arch": null,
+    "default_width_mm": 1410,
+    "default_height_mm": 1400,
+    "source_aspect": 1.0105,
+    "geometry": {
+      "split": "v",
+      "children": [
+        {
+          "weight": 58.31,
+          "node": {
+            "opening": "fixed",
+            "hinge": null
+          }
+        },
+        {
+          "weight": 59.34,
+          "node": {
+            "opening": "tilt-turn",
+            "hinge": "right"
+          }
+        },
+        {
+          "weight": 58.75,
+          "node": {
+            "opening": "fixed",
+            "hinge": null
+          }
+        }
+      ]
+    }
+  },
+  {
+    "key": "win_22",
+    "kind": "window",
+    "columns": 3,
+    "arch": null,
+    "default_width_mm": 1410,
+    "default_height_mm": 1400,
+    "source_aspect": 1.0105,
+    "geometry": {
+      "split": "v",
+      "children": [
+        {
+          "weight": 58.38,
+          "node": {
+            "opening": "casement",
+            "hinge": "left"
+          }
+        },
+        {
+          "weight": 64.59,
+          "node": {
+            "opening": "fixed",
+            "hinge": null
+          }
+        },
+        {
+          "weight": 58.29,
+          "node": {
+            "opening": "tilt-turn",
+            "hinge": "right"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "key": "win_23",
+    "kind": "window",
+    "columns": 3,
+    "arch": null,
+    "default_width_mm": 1410,
+    "default_height_mm": 1400,
+    "source_aspect": 1.0105,
+    "geometry": {
+      "split": "v",
+      "children": [
+        {
+          "weight": 58.31,
+          "node": {
+            "opening": "fixed",
+            "hinge": null
+          }
+        },
+        {
+          "weight": 59.34,
+          "node": {
+            "opening": "casement",
+            "hinge": "right"
+          }
+        },
+        {
+          "weight": 58.75,
+          "node": {
+            "opening": "fixed",
+            "hinge": null
+          }
+        }
+      ]
+    }
+  },
+  {
+    "key": "win_24",
+    "kind": "window",
+    "columns": 3,
+    "arch": null,
+    "default_width_mm": 1190,
+    "default_height_mm": 1400,
+    "source_aspect": 0.8474,
+    "geometry": {
+      "split": "h",
+      "children": [
+        {
+          "weight": 42.92,
+          "node": {
+            "opening": "fixed",
+            "hinge": null
+          }
+        },
+        {
+          "weight": 136.02,
+          "node": {
+            "split": "v",
+            "children": [
+              {
+                "weight": 46.08,
+                "node": {
+                  "opening": "casement",
+                  "hinge": "left"
+                }
+              },
+              {
+                "weight": 57.17,
+                "node": {
+                  "opening": "fixed",
+                  "hinge": null
+                }
+              },
+              {
+                "weight": 46.47,
+                "node": {
+                  "opening": "casement",
+                  "hinge": "right"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "key": "win_25",
+    "kind": "window",
+    "columns": 3,
+    "arch": null,
+    "default_width_mm": 1190,
+    "default_height_mm": 1400,
+    "source_aspect": 0.8466,
+    "geometry": {
+      "split": "h",
+      "children": [
+        {
+          "weight": 40.95,
+          "node": {
+            "opening": "fixed",
+            "hinge": null
+          }
+        },
+        {
+          "weight": 134.05,
+          "node": {
+            "split": "v",
+            "children": [
+              {
+                "weight": 47.65,
+                "node": {
+                  "opening": "fixed",
+                  "hinge": null
+                }
+              },
+              {
+                "weight": 48.14,
+                "node": {
+                  "opening": "casement",
+                  "hinge": "right"
+                }
+              },
+              {
+                "weight": 49.98,
+                "node": {
+                  "opening": "fixed",
+                  "hinge": null
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "key": "win_26",
+    "kind": "window",
+    "columns": 3,
+    "arch": null,
+    "default_width_mm": 1190,
+    "default_height_mm": 1400,
+    "source_aspect": 0.8466,
+    "geometry": {
+      "split": "h",
+      "children": [
+        {
+          "weight": 40.95,
+          "node": {
+            "split": "v",
+            "children": [
+              {
+                "weight": 72.48,
+                "node": {
+                  "opening": "fixed",
+                  "hinge": null
+                }
+              },
+              {
+                "weight": 73.29,
+                "node": {
+                  "opening": "fixed",
+                  "hinge": null
+                }
+              }
+            ]
+          }
+        },
+        {
+          "weight": 134.05,
+          "node": {
+            "split": "v",
+            "children": [
+              {
+                "weight": 47.65,
+                "node": {
+                  "opening": "fixed",
+                  "hinge": null
+                }
+              },
+              {
+                "weight": 48.14,
+                "node": {
+                  "opening": "casement",
+                  "hinge": "right"
+                }
+              },
+              {
+                "weight": 49.98,
+                "node": {
+                  "opening": "fixed",
+                  "hinge": null
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "key": "win_27",
+    "kind": "window",
+    "columns": 3,
+    "arch": null,
+    "default_width_mm": 1190,
+    "default_height_mm": 1400,
+    "source_aspect": 0.8466,
+    "geometry": {
+      "split": "v",
+      "children": [
+        {
+          "weight": 45.52,
+          "node": {
+            "split": "h",
+            "children": [
+              {
+                "weight": 40.95,
+                "node": {
+                  "opening": "fixed",
+                  "hinge": null
+                }
+              },
+              {
+                "weight": 134.05,
+                "node": {
+                  "opening": "fixed",
+                  "hinge": null
+                }
+              }
+            ]
+          }
+        },
+        {
+          "weight": 52.72,
+          "node": {
+            "split": "h",
+            "children": [
+              {
+                "weight": 43.28,
+                "node": {
+                  "opening": "fixed",
+                  "hinge": null
+                }
+              },
+              {
+                "weight": 131.73,
+                "node": {
+                  "opening": "casement",
+                  "hinge": "right"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "weight": 47.53,
+          "node": {
+            "split": "h",
+            "children": [
+              {
+                "weight": 40.95,
+                "node": {
+                  "opening": "fixed",
+                  "hinge": null
+                }
+              },
+              {
+                "weight": 134.05,
+                "node": {
+                  "opening": "fixed",
+                  "hinge": null
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "key": "win_28",
+    "kind": "window",
+    "columns": 3,
+    "arch": null,
+    "default_width_mm": 1190,
+    "default_height_mm": 1400,
+    "source_aspect": 0.8474,
+    "geometry": {
+      "split": "h",
+      "children": [
+        {
+          "weight": 43.0,
+          "node": {
+            "split": "v",
+            "children": [
+              {
+                "weight": 74.58,
+                "node": {
+                  "opening": "fixed",
+                  "hinge": null
+                }
+              },
+              {
+                "weight": 75.4,
+                "node": {
+                  "opening": "fixed",
+                  "hinge": null
+                }
+              }
+            ]
+          }
+        },
+        {
+          "weight": 136.26,
+          "node": {
+            "split": "v",
+            "children": [
+              {
+                "weight": 46.14,
+                "node": {
+                  "opening": "casement",
+                  "hinge": "left"
+                }
+              },
+              {
+                "weight": 57.28,
+                "node": {
+                  "opening": "fixed",
+                  "hinge": null
+                }
+              },
+              {
+                "weight": 46.56,
+                "node": {
+                  "opening": "casement",
+                  "hinge": "right"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "key": "win_29",
+    "kind": "window",
+    "columns": 3,
+    "arch": null,
+    "default_width_mm": 1190,
+    "default_height_mm": 1400,
+    "source_aspect": 0.8474,
+    "geometry": {
+      "split": "v",
+      "children": [
+        {
+          "weight": 48.38,
+          "node": {
+            "split": "h",
+            "children": [
+              {
+                "weight": 45.33,
+                "node": {
+                  "opening": "fixed",
+                  "hinge": null
+                }
+              },
+              {
+                "weight": 133.94,
+                "node": {
+                  "opening": "casement",
+                  "hinge": "left"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "weight": 53.22,
+          "node": {
+            "opening": "fixed",
+            "hinge": null
+          }
+        },
+        {
+          "weight": 48.38,
+          "node": {
+            "split": "h",
+            "children": [
+              {
+                "weight": 45.33,
+                "node": {
+                  "opening": "fixed",
+                  "hinge": null
+                }
+              },
+              {
+                "weight": 133.94,
+                "node": {
+                  "opening": "casement",
+                  "hinge": "right"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "key": "win_30",
+    "kind": "window",
+    "columns": 2,
+    "arch": null,
+    "default_width_mm": 1120,
+    "default_height_mm": 1400,
+    "source_aspect": 0.8,
+    "geometry": {
+      "split": "v",
+      "children": [
+        {
+          "weight": 71.58,
+          "node": {
+            "opening": "casement",
+            "hinge": "left"
+          }
+        },
+        {
+          "weight": 71.57,
+          "node": {
+            "opening": "tilt-turn",
+            "hinge": "right"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "key": "win_31",
+    "kind": "window",
+    "columns": 3,
+    "arch": null,
+    "default_width_mm": 1190,
+    "default_height_mm": 1400,
+    "source_aspect": 0.8466,
+    "geometry": {
+      "split": "v",
+      "children": [
+        {
+          "weight": 48.92,
+          "node": {
+            "split": "h",
+            "children": [
+              {
+                "weight": 42.22,
+                "node": {
+                  "opening": "fixed",
+                  "hinge": null
+                }
+              },
+              {
+                "weight": 135.49,
+                "node": {
+                  "opening": "fixed",
+                  "hinge": null
+                }
+              }
+            ]
+          }
+        },
+        {
+          "weight": 48.67,
+          "node": {
+            "split": "h",
+            "children": [
+              {
+                "weight": 42.16,
+                "node": {
+                  "opening": "casement",
+                  "hinge": "right"
+                }
+              },
+              {
+                "weight": 135.55,
+                "node": {
+                  "opening": "casement",
+                  "hinge": "right"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "weight": 50.82,
+          "node": {
+            "split": "h",
+            "children": [
+              {
+                "weight": 42.22,
+                "node": {
+                  "opening": "fixed",
+                  "hinge": null
+                }
+              },
+              {
+                "weight": 135.49,
+                "node": {
+                  "opening": "fixed",
+                  "hinge": null
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "key": "win_32",
+    "kind": "window",
+    "columns": 4,
+    "arch": null,
+    "default_width_mm": 1590,
+    "default_height_mm": 1400,
+    "source_aspect": 1.1392,
+    "geometry": {
+      "split": "h",
+      "children": [
+        {
+          "weight": 33.28,
+          "node": {
+            "opening": "fixed",
+            "hinge": null
+          }
+        },
+        {
+          "weight": 113.23,
+          "node": {
+            "split": "v",
+            "children": [
+              {
+                "weight": 39.49,
+                "node": {
+                  "opening": "fixed",
+                  "hinge": null
+                }
+              },
+              {
+                "weight": 43.36,
+                "node": {
+                  "opening": "casement",
+                  "hinge": "left"
+                }
+              },
+              {
+                "weight": 43.43,
+                "node": {
+                  "opening": "casement",
+                  "hinge": "right"
+                }
+              },
+              {
+                "weight": 41.57,
+                "node": {
+                  "opening": "fixed",
+                  "hinge": null
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "key": "win_33",
+    "kind": "window",
+    "columns": 5,
+    "arch": null,
+    "default_width_mm": 2360,
+    "default_height_mm": 1400,
+    "source_aspect": 1.6835,
+    "geometry": {
+      "split": "v",
+      "children": [
+        {
+          "weight": 45.18,
+          "node": {
+            "opening": "fixed",
+            "hinge": null
+          }
+        },
+        {
+          "weight": 53.22,
+          "node": {
+            "opening": "casement",
+            "hinge": "left"
+          }
+        },
+        {
+          "weight": 58.56,
+          "node": {
+            "opening": "fixed",
+            "hinge": null
+          }
+        },
+        {
+          "weight": 52.81,
+          "node": {
+            "opening": "casement",
+            "hinge": "right"
+          }
+        },
+        {
+          "weight": 45.33,
+          "node": {
+            "opening": "fixed",
+            "hinge": null
+          }
+        }
+      ]
+    }
+  },
+  {
+    "key": "win_34",
+    "kind": "window",
+    "columns": 4,
+    "arch": null,
+    "default_width_mm": 1590,
+    "default_height_mm": 1400,
+    "source_aspect": 1.1392,
+    "geometry": {
+      "split": "v",
+      "children": [
+        {
+          "weight": 40.46,
+          "node": {
+            "split": "h",
+            "children": [
+              {
+                "weight": 33.15,
+                "node": {
+                  "opening": "tilt",
+                  "hinge": "bottom"
+                }
+              },
+              {
+                "weight": 117.39,
+                "node": {
+                  "opening": "fixed",
+                  "hinge": null
+                }
+              }
+            ]
+          }
+        },
+        {
+          "weight": 40.42,
+          "node": {
+            "split": "h",
+            "children": [
+              {
+                "weight": 37.64,
+                "node": {
+                  "opening": "fixed",
+                  "hinge": null
+                }
+              },
+              {
+                "weight": 112.89,
+                "node": {
+                  "opening": "casement",
+                  "hinge": "left"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "weight": 8.09,
+          "node": {
+            "opening": "fixed",
+            "hinge": null
+          }
+        },
+        {
+          "weight": 41.44,
+          "node": {
+            "split": "h",
+            "children": [
+              {
+                "weight": 37.64,
+                "node": {
+                  "opening": "fixed",
+                  "hinge": null
+                }
+              },
+              {
+                "weight": 112.89,
+                "node": {
+                  "opening": "casement",
+                  "hinge": "right"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "weight": 41.46,
+          "node": {
+            "split": "h",
+            "children": [
+              {
+                "weight": 33.15,
+                "node": {
+                  "opening": "tilt",
+                  "hinge": "bottom"
+                }
+              },
+              {
+                "weight": 117.39,
+                "node": {
+                  "opening": "fixed",
+                  "hinge": null
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "key": "win_35",
+    "kind": "window",
+    "columns": 1,
+    "arch": null,
+    "default_width_mm": 1070,
+    "default_height_mm": 1400,
+    "source_aspect": 0.7658,
+    "geometry": {
+      "opening": "casement",
+      "hinge": "right"
+    }
+  },
+  {
+    "key": "win_36",
+    "kind": "window",
+    "columns": 4,
+    "arch": null,
+    "default_width_mm": 1590,
+    "default_height_mm": 1400,
+    "source_aspect": 1.1392,
+    "geometry": {
+      "split": "v",
+      "children": [
+        {
+          "weight": 82.92,
+          "node": {
+            "split": "h",
+            "children": [
+              {
+                "weight": 33.28,
+                "node": {
+                  "opening": "fixed",
+                  "hinge": null
+                }
+              },
+              {
+                "weight": 113.23,
+                "node": {
+                  "split": "v",
+                  "children": [
+                    {
+                      "weight": 39.49,
+                      "node": {
+                        "opening": "fixed",
+                        "hinge": null
+                      }
+                    },
+                    {
+                      "weight": 43.43,
+                      "node": {
+                        "opening": "casement",
+                        "hinge": "left"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "weight": 84.94,
+          "node": {
+            "split": "h",
+            "children": [
+              {
+                "weight": 33.28,
+                "node": {
+                  "opening": "fixed",
+                  "hinge": null
+                }
+              },
+              {
+                "weight": 113.23,
+                "node": {
+                  "split": "v",
+                  "children": [
+                    {
+                      "weight": 43.37,
+                      "node": {
+                        "opening": "casement",
+                        "hinge": "right"
+                      }
+                    },
+                    {
+                      "weight": 41.57,
+                      "node": {
+                        "opening": "fixed",
+                        "hinge": null
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "key": "win_37",
+    "kind": "window",
+    "columns": 3,
+    "arch": 0.1815,
+    "default_width_mm": 1180,
+    "default_height_mm": 1400,
+    "source_aspect": 0.8424,
+    "geometry": {
+      "split": "v",
+      "children": [
+        {
+          "weight": 42.34,
+          "node": {
+            "split": "h",
+            "children": [
+              {
+                "weight": 12.73,
+                "node": {
+                  "opening": "fixed",
+                  "hinge": null
+                }
+              },
+              {
+                "weight": 112.23,
+                "node": {
+                  "opening": "casement",
+                  "hinge": "left"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "weight": 46.3,
+          "node": {
+            "split": "h",
+            "children": [
+              {
+                "weight": 10.74,
+                "node": {
+                  "opening": "fixed",
+                  "hinge": null
+                }
+              },
+              {
+                "weight": 114.23,
+                "node": {
+                  "opening": "fixed",
+                  "hinge": null
+                }
+              }
+            ]
+          }
+        },
+        {
+          "weight": 41.97,
+          "node": {
+            "split": "h",
+            "children": [
+              {
+                "weight": 12.73,
+                "node": {
+                  "opening": "fixed",
+                  "hinge": null
+                }
+              },
+              {
+                "weight": 112.23,
+                "node": {
+                  "opening": "casement",
+                  "hinge": "right"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "key": "win_38",
+    "kind": "window",
+    "columns": 3,
+    "arch": 0.1815,
+    "default_width_mm": 1180,
+    "default_height_mm": 1400,
+    "source_aspect": 0.8424,
+    "geometry": {
+      "split": "h",
+      "children": [
+        {
+          "weight": 10.74,
+          "node": {
+            "opening": "fixed",
+            "hinge": null
+          }
+        },
+        {
+          "weight": 114.23,
+          "node": {
+            "split": "v",
+            "children": [
+              {
+                "weight": 41.85,
+                "node": {
+                  "opening": "casement",
+                  "hinge": "left"
+                }
+              },
+              {
+                "weight": 45.32,
+                "node": {
+                  "opening": "fixed",
+                  "hinge": null
+                }
+              },
+              {
+                "weight": 43.42,
+                "node": {
+                  "opening": "casement",
+                  "hinge": "right"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "key": "win_39",
+    "kind": "window",
+    "columns": 5,
+    "arch": null,
+    "default_width_mm": 1850,
+    "default_height_mm": 1400,
+    "source_aspect": 1.319,
+    "geometry": {
+      "split": "v",
+      "children": [
+        {
+          "weight": 51.52,
+          "node": {
+            "opening": "casement",
+            "hinge": "left"
+          }
+        },
+        {
+          "weight": 46.76,
+          "node": {
+            "opening": "fixed",
+            "hinge": null
+          }
+        },
+        {
+          "weight": 9.32,
+          "node": {
+            "opening": "fixed",
+            "hinge": null
+          }
+        },
+        {
+          "weight": 44.56,
+          "node": {
+            "opening": "fixed",
+            "hinge": null
+          }
+        },
+        {
+          "weight": 54.52,
+          "node": {
+            "opening": "casement",
+            "hinge": "right"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "key": "win_40",
+    "kind": "window",
+    "columns": 4,
+    "arch": null,
+    "default_width_mm": 1850,
+    "default_height_mm": 1400,
+    "source_aspect": 1.319,
+    "geometry": {
+      "split": "v",
+      "children": [
+        {
+          "weight": 46.48,
+          "node": {
+            "opening": "fixed",
+            "hinge": null
+          }
+        },
+        {
+          "weight": 56.63,
+          "node": {
+            "opening": "casement",
+            "hinge": "left"
+          }
+        },
+        {
+          "weight": 56.51,
+          "node": {
+            "opening": "casement",
+            "hinge": "right"
+          }
+        },
+        {
+          "weight": 43.72,
+          "node": {
+            "opening": "fixed",
+            "hinge": null
+          }
+        }
+      ]
+    }
+  },
+  {
+    "key": "win_41",
+    "kind": "window",
+    "columns": 4,
+    "arch": null,
+    "default_width_mm": 1850,
+    "default_height_mm": 1400,
+    "source_aspect": 1.319,
+    "geometry": {
+      "split": "v",
+      "children": [
+        {
+          "weight": 46.48,
+          "node": {
+            "opening": "fixed",
+            "hinge": null
+          }
+        },
+        {
+          "weight": 56.63,
+          "node": {
+            "opening": "casement",
+            "hinge": "left"
+          }
+        },
+        {
+          "weight": 56.5,
+          "node": {
+            "opening": "tilt-turn",
+            "hinge": "right"
+          }
+        },
+        {
+          "weight": 43.73,
+          "node": {
+            "opening": "fixed",
+            "hinge": null
+          }
+        }
+      ]
+    }
+  },
+  {
+    "key": "win_42",
+    "kind": "window",
+    "columns": 3,
+    "arch": 0.1815,
+    "default_width_mm": 1180,
+    "default_height_mm": 1400,
+    "source_aspect": 0.8424,
+    "geometry": {
+      "split": "v",
+      "children": [
+        {
+          "weight": 41.7,
+          "node": {
+            "opening": "fixed",
+            "hinge": null
+          }
+        },
+        {
+          "weight": 42.45,
+          "node": {
+            "opening": "casement",
+            "hinge": "right"
+          }
+        },
+        {
+          "weight": 41.08,
+          "node": {
+            "opening": "fixed",
+            "hinge": null
+          }
+        }
+      ]
+    }
+  },
+  {
+    "key": "win_43",
+    "kind": "window",
+    "columns": 2,
+    "arch": 0.3803,
+    "default_width_mm": 800,
+    "default_height_mm": 1400,
+    "source_aspect": 0.5706,
+    "geometry": {
+      "split": "v",
+      "children": [
+        {
+          "weight": 42.08,
+          "node": {
+            "opening": "casement",
+            "hinge": "left"
+          }
+        },
+        {
+          "weight": 42.08,
+          "node": {
+            "opening": "casement",
+            "hinge": "right"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "key": "win_44",
+    "kind": "window",
+    "columns": 2,
+    "arch": 0.3803,
+    "default_width_mm": 800,
+    "default_height_mm": 1400,
+    "source_aspect": 0.5706,
+    "geometry": {
+      "split": "v",
+      "children": [
+        {
+          "weight": 39.72,
+          "node": {
+            "opening": "fixed",
+            "hinge": null
+          }
+        },
+        {
+          "weight": 39.72,
+          "node": {
+            "opening": "fixed",
+            "hinge": null
+          }
+        }
+      ]
+    }
+  },
+  {
+    "key": "win_45",
+    "kind": "window",
+    "columns": 2,
+    "arch": 0.3803,
+    "default_width_mm": 800,
+    "default_height_mm": 1400,
+    "source_aspect": 0.5706,
+    "geometry": {
+      "split": "v",
+      "children": [
+        {
+          "weight": 41.89,
+          "node": {
+            "opening": "fixed",
+            "hinge": null
+          }
+        },
+        {
+          "weight": 40.14,
+          "node": {
+            "opening": "casement",
+            "hinge": "right"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "key": "win_46",
+    "kind": "window",
+    "columns": 2,
+    "arch": 0.3803,
+    "default_width_mm": 800,
+    "default_height_mm": 1400,
+    "source_aspect": 0.5706,
+    "geometry": {
+      "split": "v",
+      "children": [
+        {
+          "weight": 42.08,
+          "node": {
+            "opening": "casement",
+            "hinge": "left"
+          }
+        },
+        {
+          "weight": 42.08,
+          "node": {
+            "opening": "casement",
+            "hinge": "right"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "key": "win_47",
+    "kind": "window",
+    "columns": 2,
+    "arch": 0.1799,
+    "default_width_mm": 940,
+    "default_height_mm": 1400,
+    "source_aspect": 0.6687,
+    "geometry": {
+      "split": "v",
+      "children": [
+        {
+          "weight": 50.9,
+          "node": {
+            "opening": "casement",
+            "hinge": "left"
+          }
+        },
+        {
+          "weight": 51.48,
+          "node": {
+            "opening": "casement",
+            "hinge": "right"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "key": "door_1",
+    "kind": "door",
+    "columns": 2,
+    "arch": null,
+    "default_width_mm": 1290,
+    "default_height_mm": 2100,
+    "source_aspect": 0.6151,
+    "geometry": {
+      "split": "h",
+      "children": [
+        {
+          "weight": 58.3,
+          "node": {
+            "opening": "fixed",
+            "hinge": null
+          }
+        },
+        {
+          "weight": 231.29,
+          "node": {
+            "split": "v",
+            "children": [
+              {
+                "weight": 86.59,
+                "node": {
+                  "opening": "casement",
+                  "hinge": "left"
+                }
+              },
+              {
+                "weight": 86.56,
+                "node": {
+                  "opening": "casement",
+                  "hinge": "right"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "key": "door_2",
+    "kind": "door",
+    "columns": 2,
+    "arch": null,
+    "default_width_mm": 1290,
+    "default_height_mm": 2100,
+    "source_aspect": 0.6151,
+    "geometry": {
+      "split": "v",
+      "children": [
+        {
+          "weight": 86.63,
+          "node": {
+            "opening": "casement",
+            "hinge": "left"
+          }
+        },
+        {
+          "weight": 86.64,
+          "node": {
+            "opening": "casement",
+            "hinge": "right"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "key": "door_3",
+    "kind": "door",
+    "columns": 2,
+    "arch": null,
+    "default_width_mm": 1290,
+    "default_height_mm": 2100,
+    "source_aspect": 0.6151,
+    "geometry": {
+      "split": "v",
+      "children": [
+        {
+          "weight": 59.94,
+          "node": {
+            "opening": "casement",
+            "hinge": "left"
+          }
+        },
+        {
+          "weight": 112.57,
+          "node": {
+            "opening": "casement",
+            "hinge": "right"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "key": "door_4",
+    "kind": "door",
+    "columns": 1,
+    "arch": null,
+    "default_width_mm": 820,
+    "default_height_mm": 2100,
+    "source_aspect": 0.3907,
+    "geometry": {
+      "opening": "casement",
+      "hinge": "right"
+    }
+  },
+  {
+    "key": "door_5",
+    "kind": "door",
+    "columns": 1,
+    "arch": 0.2846,
+    "default_width_mm": 750,
+    "default_height_mm": 2100,
+    "source_aspect": 0.3576,
+    "geometry": {
+      "opening": "casement",
+      "hinge": "right"
+    }
+  },
+  {
+    "key": "door_6",
+    "kind": "door",
+    "columns": 1,
+    "arch": null,
+    "default_width_mm": 780,
+    "default_height_mm": 2100,
+    "source_aspect": 0.3717,
+    "geometry": {
+      "opening": "casement",
+      "hinge": "right"
+    }
+  },
+  {
+    "key": "door_7",
+    "kind": "door",
+    "columns": 1,
+    "arch": 0.3695,
+    "default_width_mm": 770,
+    "default_height_mm": 2100,
+    "source_aspect": 0.3658,
+    "geometry": {
+      "opening": "casement",
+      "hinge": "right"
+    }
+  },
+  {
+    "key": "door_8",
+    "kind": "door",
+    "columns": 1,
+    "arch": null,
+    "default_width_mm": 700,
+    "default_height_mm": 2100,
+    "source_aspect": 0.3333,
+    "geometry": {
+      "opening": "casement",
+      "hinge": "right"
+    }
+  }
+]
