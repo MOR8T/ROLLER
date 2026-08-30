@@ -15,7 +15,7 @@ visitor.
 
 from typing import Annotated, Literal, Union
 
-from pydantic import BaseModel, Field, field_validator
+from pydantic import BaseModel, Field, field_validator, model_validator
 
 from app.schemas.product_category import ProductCategoryOut
 
@@ -45,14 +45,31 @@ class LocalizedText(BaseModel):
 class FinishItem(BaseModel):
     """One lamination: the swatch fill, its name, and the render wearing it."""
 
+    # Which of the two ways to fill the swatch this entry uses — a flat CSS
+    # colour or a photograph of the physical texture. The admin picks one with
+    # a toggle in the section form; exactly one of `color`/`texture` is set,
+    # matching whichever `kind` says.
+    kind: Literal["color", "texture"] = "color"
     # A CSS colour as typed into the admin panel's colour picker — `#f2f2f0`.
     # Not a name: the frontend paints the swatch with this value directly.
-    color: str = Field(min_length=1)
+    # Required when `kind` is "color".
+    color: str | None = Field(default=None, min_length=1)
+    # An uploaded photograph of the physical texture, tiled onto the swatch
+    # instead of a flat fill. Required when `kind` is "texture".
+    texture: str | None = None
     label: LocalizedText
     # A colour with no photography still belongs in the row — the palette is a
     # fact about the system, not about the folder the client sent — so the
     # render is optional and the section falls back to its placeholder.
     image: str | None = None
+
+    @model_validator(mode="after")
+    def _check_swatch_source(self) -> "FinishItem":
+        if self.kind == "color" and not self.color:
+            raise ValueError("Укажите цвет")
+        if self.kind == "texture" and not self.texture:
+            raise ValueError("Загрузите фотографию текстуры")
+        return self
 
 
 class FinishesContent(BaseModel):

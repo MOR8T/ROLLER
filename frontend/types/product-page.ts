@@ -54,10 +54,18 @@ export interface ProductSection {
   actions?: ProductAction[];
 }
 
-/** One lamination: swatch fill, name, and the render wearing it. */
+/**
+ * One lamination: swatch fill, name, and the render wearing it.
+ *
+ * The swatch is filled one of two ways, picked in the admin panel: a flat CSS
+ * colour (`kind: "color"`, via `color`) or a photograph of the physical
+ * texture (`kind: "texture"`, via `texture`, tiled onto the swatch). Never
+ * both — the field matching `kind` is set, the other is null.
+ */
 export interface ProductFinish {
-  color: string;
-  swatch: string;
+  kind: "color" | "texture";
+  color: string | null;
+  texture: ProductMedia | null;
   label: LocalizedText;
   image: ProductMedia | null;
 }

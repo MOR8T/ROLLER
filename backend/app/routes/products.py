@@ -79,14 +79,15 @@ def _section_image_paths(content: dict) -> list[str]:
 
     Walks the JSON rather than switching on the section type: the five payload
     shapes keep their images in different places (`image`, `items[].image`,
-    `images[]`), and a sixth type would otherwise leak its files silently.
+    `images[]`, `items[].texture`), and a sixth type would otherwise leak its
+    files silently.
     """
     found: list[str] = []
 
     def walk(node) -> None:
         if isinstance(node, dict):
             for key, value in node.items():
-                if key in ("image", "images") and isinstance(value, str):
+                if key in ("image", "images", "texture") and isinstance(value, str):
                     found.append(value)
                 else:
                     walk(value)
