@@ -319,12 +319,15 @@ function toBlock(
       const finishes: ProductFinish[] = items.map((item) => {
         const entry = item as Record<string, unknown>;
         const label = localizedOf(entry.label);
+        const kind = entry.kind === "texture" ? "texture" : "color";
+        const alt = localizedText("product.imageAlt", { name, color: label });
 
         return {
-          color: String(entry.color ?? ""),
-          swatch: String(entry.color ?? "#e5e5e5"),
+          kind,
+          color: kind === "color" ? String(entry.color ?? "#e5e5e5") : null,
+          texture: kind === "texture" ? mediaOf(entry.texture, alt) : null,
           label,
-          image: mediaOf(entry.image, localizedText("product.imageAlt", { name, color: label })),
+          image: mediaOf(entry.image, alt),
         };
       });
 

@@ -6,6 +6,7 @@ import { ArrowDown, ArrowUp, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/toast";
+import { cn } from "@/lib/utils";
 import {
   EMPTY_LOCALIZED,
   LocalizedFields,
@@ -50,7 +51,7 @@ export const SECTION_TYPES = [
   {
     value: "finishes",
     label: "Цвета ламинации",
-    hint: "Палитра: образец цвета, название и фотография системы в этом цвете.",
+    hint: "Палитра: образец цвета или фотография текстуры, название и фотография системы в этом цвете.",
   },
   {
     value: "specs",
@@ -202,6 +203,39 @@ function ImageField({
   );
 }
 
+/** Which of the two ways a lamination swatch is filled: a colour or a texture photo. */
+function KindToggle({
+  value,
+  onChange,
+  disabled,
+}: {
+  value: "color" | "texture";
+  onChange: (kind: "color" | "texture") => void;
+  disabled: boolean;
+}) {
+  return (
+    <div className="inline-flex rounded-control border border-brand-black/15 p-0.5">
+      {(["color", "texture"] as const).map((option) => (
+        <button
+          key={option}
+          type="button"
+          aria-pressed={value === option}
+          disabled={disabled}
+          onClick={() => onChange(option)}
+          className={cn(
+            "rounded-[7px] px-3 py-1.5 text-sm font-medium transition-colors disabled:opacity-40",
+            value === option
+              ? "bg-brand-black text-brand-white"
+              : "text-brand-black/60 hover:text-brand-black",
+          )}
+        >
+          {option === "color" ? "Цвет" : "Текстура"}
+        </button>
+      ))}
+    </div>
+  );
+}
+
 /** The frame every section form shares: fields, then Save / Cancel. */
 function FormShell({
   onSubmit,
@@ -315,10 +349,20 @@ function moved<T>(items: T[], index: number, direction: -1 | 1): T[] {
 // ── Цвета ламинации ────────────────────────────────────────────────────────
 
 interface FinishRow {
+  kind: "color" | "texture";
   color: string;
+  texture: string | null;
   label: LocalizedValue;
   image: string | null;
 }
+
+const EMPTY_FINISH_ROW: FinishRow = {
+  kind: "color",
+  color: "#ffffff",
+  texture: null,
+  label: EMPTY_LOCALIZED,
+  image: null,
+};
 
 function FinishesForm({
   initialContent,
@@ -329,17 +373,20 @@ function FinishesForm({
 }: SectionFormProps) {
   const [items, setItems] = useState<FinishRow[]>(() => {
     const stored = readArray(initialContent, "items").map((item) => ({
+      kind: item.kind === "texture" ? ("texture" as const) : ("color" as const),
       color: typeof item.color === "string" ? item.color : "#ffffff",
+      texture: typeof item.texture === "string" ? item.texture : null,
       label: toLocalizedValue(item.label),
       image: typeof item.image === "string" ? item.image : null,
     }));
-    return stored.length > 0 ? stored : [{ color: "#ffffff", label: EMPTY_LOCALIZED, image: null }];
+    return stored.length > 0 ? stored : [EMPTY_FINISH_ROW];
   });
   // A palette of one is the case the note exists for («ТОЛЬКО БЕЛЫЙ»), so it
   // starts open when the stored section has one and closed otherwise.
   const [note, setNote] = useState<LocalizedValue | null>(() =>
     initialContent.note ? toLocalizedValue(initialContent.note) : null,
   );
+  const { showToast } = useToast();
 
   function patch(index: number, next: Partial<FinishRow>) {
     setItems((current) =>
@@ -351,7 +398,21 @@ function FinishesForm({
     <FormShell
       onSubmit={(event) => {
         event.preventDefault();
-        onSubmit({ items, note });
+        const missingTexture = items.findIndex((item) => item.kind === "texture" && !item.texture);
+        if (missingTexture !== -1) {
+          showToast(`Загрузите фотографию текстуры для цвета ${missingTexture + 1}`);
+          return;
+        }
+        onSubmit({
+          items: items.map((item) => ({
+            kind: item.kind,
+            color: item.kind === "color" ? item.color : null,
+            texture: item.kind === "texture" ? item.texture : null,
+            label: item.label,
+            image: item.image,
+          })),
+          note,
+        });
       }}
       onCancel={onCancel}
       disabled={disabled}
@@ -377,33 +438,54 @@ function FinishesForm({
             </div>
 
             <div className="mt-4 grid gap-4">
-              <div className="flex items-end gap-3">
-                <div>
-                  <label className="mb-1.5 block text-sm font-medium text-brand-black">
-                    Образец
-                  </label>
-                  <input
-                    type="color"
-                    value={item.color}
-                    disabled={disabled}
-                    onChange={(event) => patch(index, { color: event.target.value })}
-                    className="h-12 w-16 cursor-pointer rounded-control border border-brand-black/15 bg-surface p-1"
-                  />
-                </div>
-                <div className="min-w-0 flex-1">
-                  <label className="mb-1.5 block text-xs text-neutral-500">
-                    Код цвета — им закрашивается квадратик в палитре
-                  </label>
-                  <Input
-                    value={item.color}
-                    disabled={disabled}
-                    onChange={(event) => patch(index, { color: event.target.value })}
-                  />
-                </div>
+              <div>
+                <label className="mb-1.5 block text-sm font-medium text-brand-black">
+                  Чем закрашивается квадратик в палитре
+                </label>
+                <KindToggle
+                  value={item.kind}
+                  onChange={(kind) => patch(index, { kind })}
+                  disabled={disabled}
+                />
               </div>
 
+              {item.kind === "color" ? (
+                <div className="flex items-end gap-3">
+                  <div>
+                    <label className="mb-1.5 block text-sm font-medium text-brand-black">
+                      Образец
+                    </label>
+                    <input
+                      type="color"
+                      value={item.color}
+                      disabled={disabled}
+                      onChange={(event) => patch(index, { color: event.target.value })}
+                      className="h-12 w-16 cursor-pointer rounded-control border border-brand-black/15 bg-surface p-1"
+                    />
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <label className="mb-1.5 block text-xs text-neutral-500">
+                      Код цвета — им закрашивается квадратик в палитре
+                    </label>
+                    <Input
+                      value={item.color}
+                      disabled={disabled}
+                      onChange={(event) => patch(index, { color: event.target.value })}
+                    />
+                  </div>
+                </div>
+              ) : (
+                <ImageField
+                  label="Фотография текстуры"
+                  value={item.texture}
+                  onChange={(path) => patch(index, { texture: path })}
+                  disabled={disabled}
+                  optionalHint="Ею закрашивается квадратик в палитре — снимок текстуры крупным планом, без бликов и теней."
+                />
+              )}
+
               <LocalizedFields
-                label="Название цвета"
+                label="Название"
                 value={item.label}
                 onChange={(next) => patch(index, { label: next })}
                 disabled={disabled}
@@ -427,12 +509,7 @@ function FinishesForm({
           size="sm"
           variant="outline"
           disabled={disabled}
-          onClick={() =>
-            setItems((current) => [
-              ...current,
-              { color: "#ffffff", label: EMPTY_LOCALIZED, image: null },
-            ])
-          }
+          onClick={() => setItems((current) => [...current, { ...EMPTY_FINISH_ROW }])}
         >
           Добавить цвет
         </Button>
