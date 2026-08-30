@@ -744,7 +744,8 @@
   "productPage": {
     "hero": {
       "imageAlt": "Шоурум ROLLER в Душанбе",
-      "order": "Заказать"
+      "trailLabel": "Sayfa yolu",
+      "jumpsLabel": "Sayfa bölümleri"
     },
     "specs": {
       "cornerAlt": "Разрез профиля {name}",
@@ -780,6 +781,12 @@
       "title": "Продукт не найден",
       "description": "Такой системы нет — возможно, адрес устарел или в нём опечатка. Выберите категорию продукции на главной странице.",
       "home": "На главную"
+    },
+    "jumps": {
+      "finishes": "Kaplamalar",
+      "specs": "Teknik özellikler",
+      "story": "Sistem hakkında",
+      "gallery": "Galeri"
     }
   },
   "news": {

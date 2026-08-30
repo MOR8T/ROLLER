@@ -104,6 +104,45 @@ h6 {
 }
 
 /* ---------------------------------------------------------------------------
+   Product hero — the slow push on the photograph.
+
+   Twenty seconds from 1 to 1.06, ease-out, held at the end: the frame is never
+   seen moving, only found slightly closer than it was. A faster or larger push
+   turns a product photograph into a screensaver, which is the opposite of the
+   point — the picture is there to be read, not performed.
+
+   `transform-origin` sits low and left because that is the half the type is
+   over: pushing away from the copy keeps the words where they were placed
+   while the window on the right opens up.
+
+   ⚠️ Opt-in per element via `.hero-push`, and only ever on an element inside
+   `overflow: hidden` — the scale is what makes the image bleed past its frame.
+   Under `prefers-reduced-motion: reduce` the animation is dropped entirely
+   rather than shortened; a slow zoom is precisely the kind of motion that
+   setting exists to stop.
+   --------------------------------------------------------------------------- */
+
+@keyframes hero-push {
+  from {
+    scale: 1;
+  }
+  to {
+    scale: 1.06;
+  }
+}
+
+.hero-push {
+  transform-origin: 30% 70%;
+  animation: hero-push 20s ease-out both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-push {
+    animation: none;
+  }
+}
+
+/* ---------------------------------------------------------------------------
    Scroll reveal — DESIGN.md §8.
 
    Native CSS scroll-driven animation, zero JS: works in server components and

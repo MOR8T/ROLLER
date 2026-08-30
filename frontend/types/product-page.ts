@@ -62,12 +62,55 @@ export interface ProductFinish {
   image: ProductMedia | null;
 }
 
+/** «Окна» → the product — the trail above the name in the hero. */
+export interface ProductHeroTrail {
+  category: LocalizedText;
+  /** `/products/<category>` — the list the visitor came from. */
+  href: string;
+}
+
+/** One anchor in the hero's jump row: a block further down this same page. */
+export interface ProductHeroJump {
+  /** The block's DOM id, so the link is `#section-7`. */
+  id: string;
+  label: LocalizedText;
+}
+
 /**
- * The hero carries nothing but the name, the paragraph and the buttons — the
- * reference's opening screen has no badge and no numbers, and the depth,
- * chambers and colour count all appear in the spec table further down.
+ * The opening screen.
+ *
+ * It carries the reference's three things — name, paragraph, photograph — and
+ * two additions:
+ *
+ *   `trail`   the site has no catalogue index (`/products` was removed), so
+ *             somebody arriving from search has no way to tell which section
+ *             they are in or how to get back to it, and the ids in the address
+ *             (`/products/1/2`) tell them nothing either. A category and a link
+ *             fix that in one line.
+ *   `jumps`   anchors into the blocks below, in the space the «Заказать» button
+ *             used to occupy. The page is long and every block on it is one the
+ *             admin chose, so the row is built from the block list itself and
+ *             cannot fall out of step with what the page actually contains.
+ *
+ * Both are derived in `lib/products.ts` from what the admin already entered.
+ * Neither is a field in the admin panel, and a product with no categories or no
+ * blocks renders the hero without that piece.
  */
-export type ProductHeroSectionData = ProductSection;
+export interface ProductHeroSectionData extends ProductSection {
+  trail?: ProductHeroTrail;
+  /** One per block, in render order. Empty for a product with no blocks. */
+  jumps: ProductHeroJump[];
+  /**
+   * Accessible names for the two rows, which are otherwise bare lists of links
+   * with no heading over them. They live in the data like every other string on
+   * this page — the sections never call `useTranslations`; see the note at the
+   * top of this file.
+   */
+  labels: {
+    trail: LocalizedText;
+    jumps: LocalizedText;
+  };
+}
 
 export interface ProductFinishesSectionData extends ProductSection {
   finishes: ProductFinish[];

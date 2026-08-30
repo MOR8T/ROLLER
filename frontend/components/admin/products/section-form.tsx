@@ -83,7 +83,6 @@ interface SectionFormProps {
   onCancel: () => void;
   disabled: boolean;
   /** Prefix for `/uploads/…` paths, so previews resolve. See the page. */
-  uploadsBaseUrl: string;
   submitLabel: string;
 }
 
@@ -101,10 +100,6 @@ export function SectionForm(props: SectionFormProps) {
 }
 
 // ── Shared pieces ──────────────────────────────────────────────────────────
-
-function resolveSrc(path: string, uploadsBaseUrl: string): string {
-  return path.startsWith("/uploads/") ? `${uploadsBaseUrl}${path}` : path;
-}
 
 function readString(content: Record<string, unknown>, key: string): string | null {
   const value = content[key];
@@ -129,14 +124,12 @@ function ImageField({
   value,
   onChange,
   disabled,
-  uploadsBaseUrl,
   optionalHint = "Необязательно.",
 }: {
   label: string;
   value: string | null;
   onChange: (path: string | null) => void;
   disabled: boolean;
-  uploadsBaseUrl: string;
   optionalHint?: string;
 }) {
   const [uploading, setUploading] = useState(false);
@@ -178,7 +171,7 @@ function ImageField({
           <div className="shrink-0">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src={resolveSrc(value, uploadsBaseUrl)}
+              src={value}
               alt=""
               className="h-16 w-24 rounded-control border border-brand-black/10 object-cover"
             />
@@ -332,7 +325,6 @@ function FinishesForm({
   onSubmit,
   onCancel,
   disabled,
-  uploadsBaseUrl,
   submitLabel,
 }: SectionFormProps) {
   const [items, setItems] = useState<FinishRow[]>(() => {
@@ -422,7 +414,6 @@ function FinishesForm({
                 value={item.image}
                 onChange={(path) => patch(index, { image: path })}
                 disabled={disabled}
-                uploadsBaseUrl={uploadsBaseUrl}
                 optionalHint="Необязательно — без неё покажется надпись-заглушка."
               />
             </div>
@@ -501,7 +492,6 @@ function SpecsForm({
   onSubmit,
   onCancel,
   disabled,
-  uploadsBaseUrl,
   submitLabel,
 }: SectionFormProps) {
   const [title, setTitle] = useState<LocalizedValue>(() => toLocalizedValue(initialContent.title));
@@ -542,7 +532,6 @@ function SpecsForm({
         value={image}
         onChange={setImage}
         disabled={disabled}
-        uploadsBaseUrl={uploadsBaseUrl}
       />
 
       <div className="grid gap-4">
@@ -605,7 +594,6 @@ function StoryForm({
   onSubmit,
   onCancel,
   disabled,
-  uploadsBaseUrl,
   submitLabel,
 }: SectionFormProps) {
   const [title, setTitle] = useState<LocalizedValue>(() => toLocalizedValue(initialContent.title));
@@ -634,7 +622,6 @@ function StoryForm({
         value={image}
         onChange={setImage}
         disabled={disabled}
-        uploadsBaseUrl={uploadsBaseUrl}
       />
 
       <div className="grid gap-4">
@@ -694,7 +681,6 @@ function GalleryForm({
   onSubmit,
   onCancel,
   disabled,
-  uploadsBaseUrl,
   submitLabel,
 }: SectionFormProps) {
   const [images, setImages] = useState<string[]>(() =>
@@ -728,11 +714,7 @@ function GalleryForm({
               className="flex items-center gap-4 rounded-card border border-brand-black/10 p-3"
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={resolveSrc(image, uploadsBaseUrl)}
-                alt=""
-                className="h-16 w-24 shrink-0 rounded-control object-cover"
-              />
+              <img src={image} alt="" className="h-16 w-24 shrink-0 rounded-control object-cover" />
               <p className="min-w-0 flex-1 truncate text-sm text-neutral-500">Фото {index + 1}</p>
               <RowControls
                 index={index}
@@ -761,7 +743,6 @@ function GalleryForm({
           if (path) setImages((current) => [...current, path]);
         }}
         disabled={disabled}
-        uploadsBaseUrl={uploadsBaseUrl}
         optionalHint="Фотографии показываются слайдером, в этом порядке."
       />
     </FormShell>

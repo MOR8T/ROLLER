@@ -56,10 +56,6 @@ export function ProductCard({
           objectFit="contain"
           sizes={sizes ?? "(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"}
           containerClassName="rounded-none border-0 bg-transparent"
-          // Admin-uploaded photos are absolute URLs into the backend, which
-          // the server-side optimizer cannot reach from inside a container;
-          // seeded `/public` paths keep the optimizer.
-          unoptimized={product.image?.startsWith("http") ?? false}
           className="transition-transform duration-700 ease-out group-hover:scale-105"
         />
       </Link>

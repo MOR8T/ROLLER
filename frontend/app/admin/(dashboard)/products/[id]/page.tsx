@@ -4,7 +4,6 @@ import { ArrowLeft } from "lucide-react";
 
 import { ProductSectionsManager } from "@/components/admin/products/product-sections-manager";
 import { getAdminProduct } from "@/components/admin-sections/products-actions";
-import { BACKEND_API_URL } from "@/lib/admin-auth";
 
 /**
  * One product's page, as the admin builds it: the five kinds of section, in
@@ -32,14 +31,7 @@ export default async function AdminProductPage({ params }: PageProps<"/admin/pro
       <h1 className="mt-4 text-2xl font-semibold text-brand-black">{product.titles.ru}</h1>
       <p className="mt-1 max-w-2xl text-sm text-neutral-500">{product.descriptions.ru}</p>
 
-      <ProductSectionsManager
-        productId={product.id}
-        initialSections={product.sections}
-        // `/uploads/…` is served by the backend, and the browser reaches it at
-        // a different address than the server does inside Docker — same split
-        // as everywhere else images are shown (`lib/products.ts`).
-        uploadsBaseUrl={process.env.BACKEND_PUBLIC_URL ?? BACKEND_API_URL}
-      />
+      <ProductSectionsManager productId={product.id} initialSections={product.sections} />
     </div>
   );
 }

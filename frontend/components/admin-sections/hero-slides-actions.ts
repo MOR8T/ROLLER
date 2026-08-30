@@ -42,9 +42,7 @@ function toDto(raw: RawHeroSlide): AdminHeroSlideDto {
   return {
     id: raw.id,
     titles: { ru: raw.title_ru, tj: raw.title_tj, en: raw.title_en, tr: raw.title_tr },
-    imageSrc: raw.image_path.startsWith("/uploads/")
-      ? `${process.env.BACKEND_PUBLIC_URL ?? BACKEND_API_URL}${raw.image_path}`
-      : raw.image_path,
+    imageSrc: raw.image_path,
     productLink: raw.product_link,
   };
 }

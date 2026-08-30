@@ -63,9 +63,7 @@ function toDto(raw: RawShowroom): AdminShowroomDto {
     lat: raw.lat,
     lng: raw.lng,
     routeUrl: raw.route_url,
-    photoSrc: raw.photo_path.startsWith("/uploads/")
-      ? `${process.env.BACKEND_PUBLIC_URL ?? BACKEND_API_URL}${raw.photo_path}`
-      : raw.photo_path,
+    photoSrc: raw.photo_path,
   };
 }
 

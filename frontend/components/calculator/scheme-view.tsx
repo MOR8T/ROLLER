@@ -46,6 +46,21 @@ const INK = "#333436";
 const OPENING = "#D91C2B";
 const GLASS = "#f7fafc";
 
+/**
+ * How many times the lamination tile repeats across the construction's long
+ * side — and so, directly, how many texture pixels land in each millimetre of
+ * the drawing. Ten, up from one: see the tile comment in `SchemeView`.
+ */
+const TEXTURE_DETAIL = 10;
+
+/**
+ * The tile's own proportions, matching the shipped lamination photographs
+ * (~486 x 152), so the grain is drawn at its natural aspect rather than
+ * squashed — `preserveAspectRatio="none"` on the `<image>` means the tile's
+ * shape *is* the texture's shape.
+ */
+const TEXTURE_ASPECT = 152 / 486;
+
 interface SchemeViewProps {
   scheme: SchemeGeometry;
   widthMm: number;
@@ -99,10 +114,20 @@ export function SchemeView({
   const grainH = `grain-h-${uid}`;
   const grainV = `grain-v-${uid}`;
 
-  // One tile spans the construction's long side, so grain reads at the same
-  // scale on a narrow casement and on a five-sash run.
-  const tile = Math.max(widthMm, heightMm);
-  const tileHeight = tile * 0.36;
+  // The tile is derived from the construction's long side, so grain reads at
+  // the same scale on a narrow casement and on a five-sash run — divided by
+  // `TEXTURE_DETAIL`, which is the whole of the resolution story.
+  //
+  // It used to be one tile across the entire construction. A lamination
+  // photograph is ~486 px wide, so a 3000 mm run stretched those 486 px over
+  // the full width of the drawing and the grain came out as soft smears; a
+  // 60 mm stile showed a single blurred slice of one pixel column. Repeating
+  // the tile ten times over the same span puts ten times as many texture
+  // pixels into every millimetre of the drawing, which is both sharper and
+  // closer to the real material — laminated profile repeats its grain every
+  // couple of hundred millimetres, not once per window.
+  const tile = Math.max(widthMm, heightMm) / TEXTURE_DETAIL;
+  const tileHeight = tile * TEXTURE_ASPECT;
 
   const fill = (direction: "h" | "v") =>
     laminationTexture ? `url(#${direction === "h" ? grainH : grainV})` : laminationColor;
@@ -129,6 +154,7 @@ export function SchemeView({
                 width={tile}
                 height={tileHeight}
                 preserveAspectRatio="none"
+                imageRendering="optimizeQuality"
               />
             </pattern>
             <pattern
@@ -143,6 +169,7 @@ export function SchemeView({
                 width={tile}
                 height={tileHeight}
                 preserveAspectRatio="none"
+                imageRendering="optimizeQuality"
               />
             </pattern>
           </>

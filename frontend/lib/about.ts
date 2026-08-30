@@ -16,14 +16,22 @@ import { defaultLocale, routing, type Locale } from "@/i18n/routing";
  * back to the default locale rather than throwing on a bad segment.
  */
 
-const BACKEND_PUBLIC_URL = process.env.BACKEND_PUBLIC_URL ?? BACKEND_API_URL;
-
 function resolveLocale(locale: string): Locale {
   return hasLocale(routing.locales, locale) ? locale : defaultLocale;
 }
 
+/**
+ * Admin uploads and seeded files are both served from this app's own origin,
+ * so an API path needs nothing done to it — `/uploads/...` is answered by
+ * nginx in production and by `next.config.ts`'s rewrite everywhere else, and
+ * `next/image` optimises it like any local file. See that rewrite's comment
+ * for why the absolute-URL version had to go.
+ *
+ * Kept as a function rather than inlined: this is the seam a CDN prefix would
+ * be added at, and every DTO in this file already goes through it.
+ */
 function resolveImageSrc(path: string): string {
-  return path.startsWith("/uploads/") ? `${BACKEND_PUBLIC_URL}${path}` : path;
+  return path;
 }
 
 interface RawAboutContent {

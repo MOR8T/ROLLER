@@ -28,9 +28,7 @@ function toDto(raw: RawAboutCertificate): AdminAboutCertificateDto {
     id: raw.id,
     position: raw.position,
     title: { ru: raw.title_ru, tj: raw.title_tj, en: raw.title_en, tr: raw.title_tr },
-    imageSrc: raw.image_path.startsWith("/uploads/")
-      ? `${process.env.BACKEND_PUBLIC_URL ?? BACKEND_API_URL}${raw.image_path}`
-      : raw.image_path,
+    imageSrc: raw.image_path,
   };
 }
 

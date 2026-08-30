@@ -44,16 +44,9 @@ import {
 export function ProductSectionsManager({
   productId,
   initialSections,
-  uploadsBaseUrl,
 }: {
   productId: number;
   initialSections: AdminProductSectionDto[];
-  /**
-   * Where `/uploads/…` paths are served from — `BACKEND_PUBLIC_URL`, read on
-   * the server and passed down because it is not a `NEXT_PUBLIC_` variable and
-   * this component runs in the browser.
-   */
-  uploadsBaseUrl: string;
 }) {
   const router = useRouter();
   const [sections, setSections] = useOptimistic(initialSections);
@@ -146,7 +139,6 @@ export function ProductSectionsManager({
                     onSubmit={(content) => update(section.id, section.type, content)}
                     onCancel={() => setEditingId(null)}
                     disabled={isPending}
-                    uploadsBaseUrl={uploadsBaseUrl}
                     submitLabel="Сохранить"
                   />
                 ) : (
@@ -255,7 +247,6 @@ export function ProductSectionsManager({
               onSubmit={(content) => create(addingType, content)}
               onCancel={() => setAddingType(null)}
               disabled={isPending}
-              uploadsBaseUrl={uploadsBaseUrl}
               submitLabel="Добавить"
             />
           </>

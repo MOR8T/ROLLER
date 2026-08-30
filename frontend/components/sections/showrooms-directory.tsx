@@ -235,7 +235,6 @@ function ShowroomCard({
           alt={t("photoAlt", { city })}
           placeholderLabel={t("photoPlaceholder")}
           sizes="(max-width: 640px) 92vw, (max-width: 1024px) 46vw, 600px"
-          unoptimized={showroom.photo.startsWith("http")}
         />
 
         {/* The dissolve.
