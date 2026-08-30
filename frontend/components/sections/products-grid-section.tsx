@@ -57,10 +57,6 @@ function ProductCard({
         // Three covers the widest breakpoint's `slidesPerView`, so nothing
         // visible is ever blank, and the rest load as the strip reaches them.
         loading={eager ? "eager" : "lazy"}
-        // Admin-uploaded photos are absolute URLs into the backend; the
-        // optimizer runs server-side and can't reach that URL from inside a
-        // Docker container — see `HeroSection`'s own note.
-        unoptimized={category.image.startsWith("http")}
         className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
       />
       {/* The photographs are showroom interiors — bright, busy and white at the

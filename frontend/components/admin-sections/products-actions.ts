@@ -83,10 +83,9 @@ export interface AdminCategoryOptionDto {
   name: string;
 }
 
+/** Nothing to resolve — see the `/uploads` rewrite in `next.config.ts`. */
 function resolveImageSrc(path: string): string {
-  return path.startsWith("/uploads/")
-    ? `${process.env.BACKEND_PUBLIC_URL ?? BACKEND_API_URL}${path}`
-    : path;
+  return path;
 }
 
 function localeMap(raw: object, field: string): Record<Locale, string> {

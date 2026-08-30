@@ -79,10 +79,6 @@ export default async function ArticlePage({ params }: PageProps<"/[locale]/news/
               fill
               priority
               sizes="(max-width: 1280px) 100vw, 1280px"
-              // Admin-uploaded covers are absolute URLs into the backend;
-              // the optimizer runs server-side and can't reach that URL from
-              // inside a Docker container — see `HeroSection`'s own note.
-              unoptimized={article.cover.startsWith("http")}
               className="object-cover"
             />
           </div>

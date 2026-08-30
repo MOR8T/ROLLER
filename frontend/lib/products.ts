@@ -3,10 +3,12 @@ import { hasLocale } from "next-intl";
 import { defaultLocale, routing, type Locale } from "@/i18n/routing";
 import { BACKEND_API_URL } from "@/lib/admin-auth";
 import type { LocalizedText } from "@/lib/localized";
-import type { ProductsMenuCategory } from "@/lib/product-links";
+import { productCategoryHref, type ProductsMenuCategory } from "@/lib/product-links";
 import { localizedText } from "@/lib/localized-messages";
 import type {
   ProductFinish,
+  ProductHeroJump,
+  ProductHeroTrail,
   ProductPageBlock,
   ProductPageData,
   ProductMedia,
@@ -31,16 +33,14 @@ import type {
  *      these functions; components take the DTOs as props.
  *   2. **The API carries content, the message catalogue carries chrome.** Text
  *      the admin writes (a spec row, a paragraph, a button label) comes from
- *      the backend. Text that is the same on every product page — the hero's
- *      «Заказать», the gallery's arrow labels, the «Продукт не найден» block,
- *      every `alt` — stays in `messages/*.json` and is read here, once, while
- *      the page is being assembled.
+ *      the backend. Text that is the same on every product page — the
+ *      calculator pitch, the gallery's arrow labels, the «Продукт не найден»
+ *      block, every `alt` — stays in `messages/*.json` and is read here, once,
+ *      while the page is being assembled.
  *   3. **A failure is an empty result, never a fabricated one.** An unreachable
  *      backend yields `[]` or a `not-found` page, and the caller decides what
  *      to show.
  */
-
-const CONTACTS_ANCHOR = "#contacts";
 
 // The one calculator pitch, identical on every product page — see
 // `ProductPageData.promo`'s doc comment in `types/product-page.ts` for why
@@ -84,18 +84,18 @@ interface RawProductDetail extends RawProduct {
   sections: RawProductSection[];
 }
 
-/** Only `BACKEND_API_URL` needs the Docker-internal hostname; the browser
- * loads images through this one instead. Same value everywhere except a
- * Docker Compose deployment, where they diverge — see `.env.example`. */
-const BACKEND_PUBLIC_URL = process.env.BACKEND_PUBLIC_URL ?? BACKEND_API_URL;
-
 /**
- * An admin upload lives on the backend and needs its host prefixed; a seeded
- * path (`/products/roller/white/1.webp`) is a file in this app's own `public/`
- * and is already correct. Same rule as `lib/news.ts`'s cover resolver.
+ * Admin uploads and seeded files are both served from this app's own origin,
+ * so an API path needs nothing done to it — `/uploads/...` is answered by
+ * nginx in production and by `next.config.ts`'s rewrite everywhere else, and
+ * `next/image` optimises it like any local file. See that rewrite's comment
+ * for why the absolute-URL version had to go.
+ *
+ * Kept as a function rather than inlined: this is the seam a CDN prefix would
+ * be added at, and every DTO in this file already goes through it.
  */
 function resolveImageSrc(path: string): string {
-  return path.startsWith("/uploads/") ? `${BACKEND_PUBLIC_URL}${path}` : path;
+  return path;
 }
 
 function resolveLocale(locale: string): Locale {
@@ -400,6 +400,48 @@ function toBlock(
 }
 
 /**
+ * «Окна» and a link back to it — the one thing in the hero that the reference
+ * has no equivalent for.
+ *
+ * It reads data the admin already entered (the product's categories) and adds
+ * no field to the admin panel, which was the constraint: the hero got a way
+ * back to the section without the person maintaining the site having anything
+ * new to fill in. A product with no categories renders the hero without it.
+ *
+ * The category is taken from the *address*, not from the product: a system is
+ * listed under several categories and therefore has several URLs, and the trail
+ * has to name the list the visitor actually came from. A product whose
+ * categories no longer include that id (an old link, a category deleted since)
+ * falls back to its first one rather than showing nothing.
+ */
+function heroTrail(product: RawProductDetail, categoryId: number): ProductHeroTrail | undefined {
+  const category =
+    product.categories.find((entry) => entry.id === categoryId) ?? product.categories[0];
+  if (!category) return undefined;
+
+  return { category: textOf(category, "name"), href: productCategoryHref(category.id) };
+}
+
+/**
+ * One anchor per block, in the order the page renders them.
+ *
+ * The admin's own heading is the label when the block has one — the link then
+ * says the same words as the heading it lands on. `specs` and `story` carry a
+ * title; `finishes` and `gallery` have none by design, so those fall back to
+ * the catalogue's generic name for the kind.
+ *
+ * ⚠️ Built from `blocks`, i.e. *after* `toBlock` has dropped anything it did
+ * not recognise, so the row can never offer an anchor to a section the page
+ * decided not to draw.
+ */
+function heroJumps(blocks: ProductPageBlock[]): ProductHeroJump[] {
+  return blocks.map((block) => ({
+    id: block.section.id,
+    label: block.section.title ?? localizedText(`productPage.jumps.${block.kind}`),
+  }));
+}
+
+/**
  * `/[locale]/products/[category]/[product]` — the whole page in one value.
  *
  * The order of `blocks` is the order the admin put the sections in; this
@@ -431,6 +473,14 @@ export async function getProductPage(
   const name = textOf(product, "title");
   const hero = mediaOf(product.image_path, localizedText("productPage.hero.imageAlt"));
 
+  // The DOM id is the section's database id, not its kind: a product may
+  // carry two galleries, and `#gallery` twice on one page is not an anchor.
+  const blocks = product.sections
+    .slice()
+    .sort((a, b) => a.position - b.position)
+    .map((section) => toBlock(section, name, `section-${section.id}`))
+    .filter((block): block is ProductPageBlock => block !== null);
+
   return {
     status: "found",
     categoryId,
@@ -440,24 +490,25 @@ export async function getProductPage(
       title: name,
       description: textOf(product, "description"),
       media: hero ? [hero] : undefined,
-      // One white button, as on the reference. The calculator has its own
-      // block further down the page and does not need a second pill here.
-      actions: [
-        { label: localizedText("productPage.hero.order"), href: CONTACTS_ANCHOR, tone: "light" },
-      ],
+      // No `actions`. The reference puts a white «Заказать» pill under the
+      // paragraph; the client asked for this screen without it, so the button
+      // is gone from the data as well as from the layout. The request block at
+      // `#contacts` still closes the page.
+      trail: heroTrail(product, categoryId),
+      jumps: heroJumps(blocks),
+      labels: {
+        trail: localizedText("productPage.hero.trailLabel"),
+        jumps: localizedText("productPage.hero.jumpsLabel"),
+      },
     },
-    // The DOM id is the section's database id, not its kind: a product may
-    // carry two galleries, and `#gallery` twice on one page is not an anchor.
-    blocks: product.sections
-      .slice()
-      .sort((a, b) => a.position - b.position)
-      .map((section) => toBlock(section, name, `section-${section.id}`))
-      .filter((block): block is ProductPageBlock => block !== null),
+    blocks,
     promo: {
       id: "promo",
       title: localizedText("productPage.promo.title"),
       description: localizedText("productPage.promo.description"),
-      media: [{ src: resolveImageSrc(PROMO_IMAGE), alt: localizedText("productPage.promo.imageAlt") }],
+      media: [
+        { src: resolveImageSrc(PROMO_IMAGE), alt: localizedText("productPage.promo.imageAlt") },
+      ],
       actions: [
         { label: localizedText("productPage.promo.cta"), href: PROMO_HREF, tone: "primary" },
       ],

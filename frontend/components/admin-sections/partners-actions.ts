@@ -31,9 +31,7 @@ function toDto(raw: RawPartner): AdminPartnerDto {
   return {
     id: raw.id,
     name: raw.name,
-    logoSrc: raw.logo_path.startsWith("/uploads/")
-      ? `${process.env.BACKEND_PUBLIC_URL ?? BACKEND_API_URL}${raw.logo_path}`
-      : raw.logo_path,
+    logoSrc: raw.logo_path,
   };
 }
 

@@ -57,13 +57,18 @@ interface RawNewsArticle {
   body_tr: string;
 }
 
-/** Only `BACKEND_API_URL` needs the Docker-internal hostname; the browser
- * loads images through this one instead. Same value everywhere except a
- * Docker Compose deployment, where they diverge — see `.env.example`. */
-const BACKEND_PUBLIC_URL = process.env.BACKEND_PUBLIC_URL ?? BACKEND_API_URL;
-
+/**
+ * Admin uploads and seeded files are both served from this app's own origin,
+ * so an API path needs nothing done to it — `/uploads/...` is answered by
+ * nginx in production and by `next.config.ts`'s rewrite everywhere else, and
+ * `next/image` optimises it like any local file. See that rewrite's comment
+ * for why the absolute-URL version had to go.
+ *
+ * Kept as a function rather than inlined: this is the seam a CDN prefix would
+ * be added at, and every DTO in this file already goes through it.
+ */
 function resolveCoverSrc(coverPath: string): string {
-  return coverPath.startsWith("/uploads/") ? `${BACKEND_PUBLIC_URL}${coverPath}` : coverPath;
+  return coverPath;
 }
 
 function stripHtml(html: string): string {

@@ -15,9 +15,6 @@ import type { ConstructionKind, SchemeGeometry, SchemeNode } from "@/lib/scheme-
  * free-standing list comes from here.
  */
 
-/** Only `BACKEND_API_URL` needs the Docker-internal hostname — see `lib/products.ts`. */
-const BACKEND_PUBLIC_URL = process.env.BACKEND_PUBLIC_URL ?? BACKEND_API_URL;
-
 interface RawScheme {
   id: number;
   key: string;
@@ -103,13 +100,13 @@ interface RawCalculatorSettings {
 }
 
 /**
- * An admin upload lives on the backend and needs its host prefixed; a seeded
- * path (`/cal/textures/white.png`) is a file in this app's own `public/` and
- * is already correct. Same rule as `lib/products.ts`'s image resolver.
+ * A texture path needs nothing done to it — an admin upload (`/uploads/...`)
+ * and a seeded file (`/cal/textures/white.png`) are both answered from this
+ * app's own origin. Same rule as `lib/products.ts`'s image resolver; see
+ * `next.config.ts`'s `/uploads` rewrite for why.
  */
 function resolveTexture(path: string | null): string | null {
-  if (!path) return null;
-  return path.startsWith("/uploads/") ? `${BACKEND_PUBLIC_URL}${path}` : path;
+  return path ?? null;
 }
 
 function labelOf(label: RawLocalizedLabel, locale: string): string {

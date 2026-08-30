@@ -75,10 +75,6 @@ export function HeroSection({ slides }: HeroSectionProps) {
               key: String(slide.id),
               image: slide.imageSrc,
               alt: slide.title,
-              // Admin-uploaded photos are absolute URLs into the backend;
-              // `next/image`'s optimizer runs server-side and can't reach that
-              // URL from inside the container — see `ExpoSlide.unoptimized`.
-              unoptimized: slide.imageSrc.startsWith("http"),
               // Only the opening banner is LCP-eligible; the other three are
               // off-screen and must not compete for the connection.
               priority: index === 0,

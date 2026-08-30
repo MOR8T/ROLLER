@@ -53,9 +53,7 @@ function toDto(raw: RawNewsArticle): AdminNewsArticleDto {
   return {
     id: raw.id,
     slug: raw.slug,
-    coverSrc: raw.cover_path.startsWith("/uploads/")
-      ? `${process.env.BACKEND_PUBLIC_URL ?? BACKEND_API_URL}${raw.cover_path}`
-      : raw.cover_path,
+    coverSrc: raw.cover_path,
     publishedAt: raw.published_at,
     titles: { ru: raw.title_ru, tj: raw.title_tj, en: raw.title_en, tr: raw.title_tr },
     excerpts: {

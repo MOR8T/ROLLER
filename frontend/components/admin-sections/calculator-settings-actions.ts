@@ -58,10 +58,7 @@ export interface LaminationColor {
  * static files. Same pattern as `hero-slides-actions.ts`.
  */
 function textureSrcOf(texture: string | null): string | null {
-  if (!texture) return null;
-  return texture.startsWith("/uploads/")
-    ? `${process.env.BACKEND_PUBLIC_URL ?? BACKEND_API_URL}${texture}`
-    : texture;
+  return texture ?? null;
 }
 
 export interface Range {
@@ -188,9 +185,9 @@ export async function uploadLaminationTextureAction(
   });
   if (!result.success) return result;
 
-  // `src` is computed here rather than in the browser: only server code reads
-  // `BACKEND_PUBLIC_URL`, and the client has no way to know the upload lives
-  // on a different host in dev.
+  // `src` is echoed back from the server rather than guessed in the browser:
+  // the upload's final path is the backend's to decide, and the client only
+  // learns it from this response.
   return {
     success: true,
     data: { path: result.data.path, src: textureSrcOf(result.data.path) as string },

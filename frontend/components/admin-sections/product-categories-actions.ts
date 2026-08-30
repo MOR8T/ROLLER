@@ -39,9 +39,7 @@ function toDto(raw: RawProductCategory): AdminProductCategoryDto {
   return {
     id: raw.id,
     names: { ru: raw.name_ru, tj: raw.name_tj, en: raw.name_en, tr: raw.name_tr },
-    imageSrc: raw.image_path.startsWith("/uploads/")
-      ? `${process.env.BACKEND_PUBLIC_URL ?? BACKEND_API_URL}${raw.image_path}`
-      : raw.image_path,
+    imageSrc: raw.image_path,
   };
 }
 
