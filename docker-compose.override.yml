@@ -9,6 +9,13 @@ services:
   backend:
     volumes:
       - ./backend/app:/app/app
+      # Migrations too, not just `app/`. The entrypoint runs `alembic upgrade
+      # head` on every start, so a revision that exists in the database but
+      # not in the container is a crash loop ("Can't locate revision ..."),
+      # and without this mount a new revision only reaches the container by
+      # rebuilding the image — or by `docker cp`, which does not survive the
+      # container being recreated.
+      - ./backend/migrations:/app/migrations
     command:
       ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
     ports:
