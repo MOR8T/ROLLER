@@ -5,20 +5,8 @@ import { useLocale, useTranslations } from "next-intl";
 import { ChevronDown } from "lucide-react";
 import { usePathname, useRouter } from "@/i18n/navigation";
 import { locales, type Locale } from "@/i18n/routing";
+import { localeLabels } from "@/i18n/locale-labels";
 import { cn } from "@/lib/utils";
-
-/**
- * Language switcher.
- *
- * Every label is written in its own language — a Turkish visitor looking for
- * their language is looking for "Türkçe", not for its Russian name.
- */
-const localeLabels: Record<Locale, string> = {
-  ru: "Русский",
-  tg: "Тоҷикӣ",
-  en: "English",
-  tr: "Türkçe",
-};
 
 export function LanguageSwitcher() {
   const [isOpen, setIsOpen] = useState(false);

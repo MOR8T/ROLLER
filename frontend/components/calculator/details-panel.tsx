@@ -8,15 +8,12 @@ import {
   MAX_QUANTITY,
   accessoriesFor,
   glazingOf,
-  hardwareColors,
-  laminations,
   materials,
-  mechanisms,
   systemsFor,
-  textureUrl,
-  type AccessoryKey,
+  type AccessoryOption,
+  type CalculatorOptions,
   type ConfiguredItem,
-  type LaminationKey,
+  type LaminationOption,
   type MaterialKind,
 } from "@/data/calculator";
 import { cn } from "@/lib/utils";
@@ -33,19 +30,24 @@ import { cn } from "@/lib/utils";
  */
 export function DetailsPanel({
   item,
+  options,
   onChange,
 }: {
   item: ConfiguredItem;
+  /**
+   * Every list an admin maintains at `/admin/calculator`. The same palette
+   * paints the drawing in `SchemeView`, so a colour added there appears in
+   * both rather than only in one.
+   */
+  options: CalculatorOptions;
   onChange: (patch: Partial<ConfiguredItem>) => void;
 }) {
   const t = useTranslations("calculator");
-  const tBrands = useTranslations("brands");
-  const tColors = useTranslations("colors");
   const uid = useId();
 
-  const series = systemsFor(item.construction, item.material);
-  const glazing = glazingOf(item.system);
-  const extras = accessoriesFor(item.construction);
+  const series = systemsFor(options, item.construction, item.material);
+  const glazing = glazingOf(options, item.system);
+  const extras = accessoriesFor(options, item.construction);
 
   return (
     <div className="space-y-6">
@@ -82,9 +84,9 @@ export function DetailsPanel({
           value={item.system}
           onChange={(event) => onChange({ system: event.target.value })}
         >
-          {series.map((product) => (
-            <option key={product.slug} value={product.slug}>
-              {tBrands(`items.${product.slug}.name`)}
+          {series.map((entry) => (
+            <option key={entry.key} value={entry.key}>
+              {entry.label}
             </option>
           ))}
         </Select>
@@ -110,13 +112,11 @@ export function DetailsPanel({
         <Select
           id={`${uid}-mechanism`}
           value={item.mechanism}
-          onChange={(event) =>
-            onChange({ mechanism: event.target.value as ConfiguredItem["mechanism"] })
-          }
+          onChange={(event) => onChange({ mechanism: event.target.value })}
         >
-          {mechanisms.map((key) => (
-            <option key={key} value={key}>
-              {t(`mechanisms.${key}`)}
+          {options.mechanisms.map((mechanism) => (
+            <option key={mechanism.key} value={mechanism.key}>
+              {mechanism.label}
             </option>
           ))}
         </Select>
@@ -124,26 +124,25 @@ export function DetailsPanel({
 
       <Field label={t("labels.lamination")}>
         <Swatches
-          options={laminations}
+          options={options.laminations}
           value={item.lamination}
           onChange={(lamination) => onChange({ lamination })}
-          name={(key) => tColors(key)}
         />
       </Field>
 
       <Field label={t("labels.hardware")}>
         <Swatches
-          options={hardwareColors}
+          options={options.laminations}
           value={item.hardware}
           onChange={(hardware) => onChange({ hardware })}
-          name={(key) => tColors(key)}
         />
       </Field>
 
       {extras.length > 0 ? (
         <Field label={t("labels.accessories")}>
           <div className="space-y-2.5">
-            {extras.map((key: AccessoryKey) => {
+            {extras.map((accessory: AccessoryOption) => {
+              const key = accessory.key;
               const checked = item.accessories.includes(key);
               return (
                 <label
@@ -162,7 +161,7 @@ export function DetailsPanel({
                     }
                     className="size-[18px] shrink-0 accent-brand-red"
                   />
-                  {t(`accessories.${key}`)}
+                  {accessory.label}
                 </label>
               );
             })}
@@ -213,25 +212,23 @@ function Swatches({
   options,
   value,
   onChange,
-  name,
 }: {
-  options: readonly LaminationKey[];
-  value: LaminationKey;
-  onChange: (key: LaminationKey) => void;
-  name: (key: LaminationKey) => string;
+  options: LaminationOption[];
+  value: string;
+  onChange: (key: string) => void;
 }) {
   return (
     <div className="flex flex-wrap gap-2.5">
-      {options.map((key) => {
-        const active = key === value;
+      {options.map((colour) => {
+        const active = colour.key === value;
         return (
           <button
-            key={key}
+            key={colour.key}
             type="button"
             aria-pressed={active}
-            title={name(key)}
-            aria-label={name(key)}
-            onClick={() => onChange(key)}
+            title={colour.label}
+            aria-label={colour.label}
+            onClick={() => onChange(colour.key)}
             className={cn(
               "size-9 rounded-full border bg-cover bg-center transition-[box-shadow,border-color]",
               "focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:outline-none",
@@ -239,7 +236,12 @@ function Swatches({
                 ? "border-brand-black/25 ring-2 ring-brand-black ring-offset-2"
                 : "border-brand-black/20 hover:border-brand-black/45",
             )}
-            style={{ backgroundImage: `url(${textureUrl(key)})` }}
+            // The photograph when there is one, the flat colour when there is
+            // not — the same fallback the drawing itself uses.
+            style={{
+              backgroundColor: colour.hex,
+              backgroundImage: colour.texture ? `url(${colour.texture})` : undefined,
+            }}
           />
         );
       })}

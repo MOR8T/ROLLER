@@ -29,8 +29,8 @@ export function ProductFinishesSection({
   data: ProductFinishesSectionData;
   locale: Locale;
 }) {
-  const [selected, setSelected] = useState(data.finishes[0]?.color ?? "");
-  const active = data.finishes.find((finish) => finish.color === selected) ?? data.finishes[0];
+  const [selected, setSelected] = useState(0);
+  const active = data.finishes[selected] ?? data.finishes[0];
   const note = localized(data.note, locale);
 
   return (
@@ -41,9 +41,9 @@ export function ProductFinishesSection({
       <div className="grid gap-10 lg:grid-cols-[35fr_65fr] lg:items-center lg:gap-12">
         <div>
           <ul className="-mt-9 flex flex-wrap gap-x-5 gap-y-1">
-            {data.finishes.map((finish) => {
+            {data.finishes.map((finish, index) => {
               const label = localized(finish.label, locale);
-              const isActive = finish.color === active?.color;
+              const isActive = index === selected;
 
               return (
                 // `group` and `relative` carry the tooltip: it is a child of the
@@ -51,7 +51,7 @@ export function ProductFinishesSection({
                 // else. `pt-9` reserves the room it needs above the row —
                 // without it the first row's tooltip would be clipped by the
                 // section, and the swatches would jump when it appeared.
-                <li key={finish.color} className="group relative pt-9">
+                <li key={index} className="group relative pt-9">
                   <span
                     aria-hidden
                     className="pointer-events-none absolute top-0 left-1/2 -translate-x-1/2 rounded-[0.5rem] bg-black px-3 py-1.5 text-sm leading-none whitespace-nowrap text-white opacity-0 transition-opacity duration-150 group-focus-within:opacity-100 group-hover:opacity-100"
@@ -62,7 +62,7 @@ export function ProductFinishesSection({
                   <button
                     type="button"
                     aria-pressed={isActive}
-                    onClick={() => setSelected(finish.color)}
+                    onClick={() => setSelected(index)}
                     className={cn(
                       // The chosen lamination has to read from across the row,
                       // and a 1px border does not — least of all around the
@@ -71,12 +71,16 @@ export function ProductFinishesSection({
                       // 108×96 — the reference's 135×120 less a fifth, at the
                       // client's request; the 20px radius is scaled with them
                       // so the corner keeps its proportion.
-                      "block h-24 w-27 cursor-pointer rounded-[1rem] border transition-[box-shadow,border-color] focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2 focus-visible:outline-none",
+                      "block h-24 w-27 cursor-pointer rounded-[1rem] border bg-cover bg-center transition-[box-shadow,border-color] focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2 focus-visible:outline-none",
                       isActive
                         ? "border-black shadow-[0_0_0_2px_#fff,0_0_0_4px_#000]"
                         : "border-[#85766f] hover:border-black/60",
                     )}
-                    style={{ backgroundColor: finish.swatch }}
+                    style={
+                      finish.kind === "texture" && finish.texture
+                        ? { backgroundImage: `url(${finish.texture.src})` }
+                        : { backgroundColor: finish.color ?? "#e5e5e5" }
+                    }
                   >
                     <span className="sr-only">{label}</span>
                   </button>

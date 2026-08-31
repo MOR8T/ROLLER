@@ -20,9 +20,15 @@ import { articleHref, fetchLatestNews, type NewsArticle } from "@/lib/news";
  * The covers are the client's own photographs rather than the catalogue renders
  * they used to be — see the note on the feed in `data/news/ru.json`.
  *
- * Six slides, not the whole feed: the list is fifteen entries and paged since
- * 2026-08-17, and a carousel that never comes back round is a scroll trap. Six
+ * Six slides, not the whole feed: the list can run to many entries and is paged
+ * on `/news`, and a carousel that never comes back round is a scroll trap. Six
  * is two loops of three on desktop.
+ *
+ * ⚠️ News moved from a static fixture to the admin panel on 2026-08-24
+ * (`lib/news.ts` fetches it; managed from `app/admin/(dashboard)/news/page.tsx`).
+ * `fetchLatestNews` returns `[]`, never fabricated content, when the backend
+ * has nothing yet — `NewsSkeleton` below renders instead, same shape as
+ * `HeroSection`'s and `PartnersSection`'s own skeletons.
  */
 function NewsCard({ article }: { article: NewsArticle }) {
   const format = useFormatter();
@@ -75,19 +81,46 @@ export async function NewsSection() {
       </Reveal>
 
       <Reveal className="mt-12">
-        <HomeCarousel
-          label={t("title")}
-          perView={[1.15, 2, 3]}
-          gap={24}
-          // Slower than the logo strip: a headline has to be readable in one
-          // pass, and eight marks do not.
-          autoplayDelay={5000}
-          slides={articles.map((article) => ({
-            key: article.slug,
-            node: <NewsCard article={article} />,
-          }))}
-        />
+        {articles.length === 0 ? (
+          <NewsSkeleton />
+        ) : (
+          <HomeCarousel
+            label={t("title")}
+            perView={[1.15, 2, 3]}
+            gap={24}
+            // Slower than the logo strip: a headline has to be readable in one
+            // pass, and eight marks do not.
+            autoplayDelay={5000}
+            slides={articles.map((article) => ({
+              key: article.slug,
+              node: <NewsCard article={article} />,
+            }))}
+          />
+        )}
       </Reveal>
     </HomeSection>
+  );
+}
+
+/**
+ * Stands in for the carousel while there are no articles to show — same card
+ * frame (photo, date line, headline) repeated three times, so the swap to
+ * real content the moment the admin publishes a news item doesn't jolt the
+ * layout. Pulses as one unit rather than per-piece, same treatment as
+ * `HeroSection`'s and `PartnersSection`'s own skeletons.
+ */
+function NewsSkeleton() {
+  return (
+    <div className="animate-pulse" style={{ animationDuration: "3.2s" }}>
+      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        {Array.from({ length: 3 }).map((_, index) => (
+          <div key={index}>
+            <div className={`aspect-4/3 bg-brand-black/10 ${homeCard}`} />
+            <div className="mt-6 h-3 w-24 rounded-control bg-brand-black/10" />
+            <div className="mt-3 h-6 w-4/5 rounded-control bg-brand-black/10" />
+          </div>
+        ))}
+      </div>
+    </div>
   );
 }

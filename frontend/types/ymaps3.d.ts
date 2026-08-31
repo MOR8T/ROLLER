@@ -1,10 +1,6 @@
-/// <reference types="@yandex/ymaps3-types" />
-
-// `@yandex/ymaps3-types` ships no runtime — the JS API is a <script> from
-// Yandex's CDN, and the package exists only to describe the `ymaps3` global it
-// installs (`declare global { const ymaps3: ... }` in its own `index.d.ts`).
-//
-// The reference above is what pulls that declaration into the program. It is a
-// file of its own rather than an `import type` inside `lib/ymaps.ts` because an
-// import of a package whose `main` is empty is a runtime error waiting for
-// someone to drop the `type` keyword.
+// `@yandex/ymaps3-types`'s `declare global { const ymaps3: ... }` only takes
+// effect once the module itself is part of the compilation graph — it's a
+// scoped package, not an auto-included `@types/*` one. This import is the
+// only thing this file does; see the comment in `lib/ymaps.ts` for why the
+// global exists at all.
+import "@yandex/ymaps3-types";

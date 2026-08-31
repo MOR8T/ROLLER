@@ -31,7 +31,11 @@ export interface NavLink {
 export const navLinks: NavLink[] = [
   // { key: "main", href: "/" },
   { key: "about", href: "/about" },
-  { key: "products", href: "/products", menu: true },
+  // The header renders this as a `<button>` that opens the mega-menu, so the
+  // href is only ever followed from the footer, which cannot open a panel.
+  // It used to point at `/products`; that index page was removed with the
+  // catalogue rebuild, and the homepage's category strip is what it opened.
+  { key: "products", href: "/#products", menu: true },
   { key: "calculator", href: "/calculator" },
   { key: "news", href: "/news" },
   { key: "showroom", href: "/showroom" },

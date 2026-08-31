@@ -32,7 +32,7 @@ export const ymapsApiKey = process.env.NEXT_PUBLIC_YANDEX_MAPS_API_KEY ?? "";
 /**
  * Our locales onto the JS API's `language_REGION` codes.
  *
- * Tajik is not among the languages the JS API renders, so `tg` takes Russian —
+ * Tajik is not among the languages the JS API renders, so `tj` takes Russian —
  * which is what the map labels around Dushanbe and Khujand read as anyway. Only
  * the map's own furniture is affected (copyright line, control tooltips); every
  * word this section contributes comes from `messages/*.json` and is in the
@@ -40,7 +40,7 @@ export const ymapsApiKey = process.env.NEXT_PUBLIC_YANDEX_MAPS_API_KEY ?? "";
  */
 const langs: Record<string, string> = {
   ru: "ru_RU",
-  tg: "ru_RU",
+  tj: "ru_RU",
   en: "en_US",
   tr: "tr_TR",
 };

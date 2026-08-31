@@ -8,7 +8,7 @@ import { ChevronDown, MessageCircle, Phone, X } from "lucide-react";
 import { ButtonLink } from "@/components/ui/button";
 import { BrandLogo } from "@/components/ui/brand-logo";
 import { Link } from "@/i18n/navigation";
-import { categories, productHref, productsByCategory } from "@/data/products";
+import { productHref, type ProductsMenuCategory } from "@/lib/product-links";
 import { navLinks, siteConfig } from "@/lib/site-config";
 import { cn } from "@/lib/utils";
 import { LanguageSwitcher } from "./language-switcher";
@@ -24,6 +24,8 @@ function useIsClient() {
 }
 
 interface HeaderMobileDrawerProps {
+  /** The same tree the desktop mega-menu gets — see `HeaderProductsMenu`. */
+  categories: ProductsMenuCategory[];
   open: boolean;
   onClose: () => void;
 }
@@ -35,7 +37,7 @@ interface HeaderMobileDrawerProps {
  * Owns its own accessibility behaviour: body scroll lock, Escape to close, and
  * a focus trap so keyboard users can't tab out to the page behind the backdrop.
  */
-export function HeaderMobileDrawer({ open, onClose }: HeaderMobileDrawerProps) {
+export function HeaderMobileDrawer({ categories, open, onClose }: HeaderMobileDrawerProps) {
   const [catalogOpen, setCatalogOpen] = useState(false);
   const isClient = useIsClient();
   const prefersReducedMotion = useReducedMotion();
@@ -44,8 +46,6 @@ export function HeaderMobileDrawer({ open, onClose }: HeaderMobileDrawerProps) {
   const t = useTranslations("header");
   const tNav = useTranslations("nav");
   const tCommon = useTranslations("common");
-  const tCategories = useTranslations("categories");
-  const tBrands = useTranslations("brands");
 
   const close = () => {
     setCatalogOpen(false);
@@ -216,25 +216,23 @@ export function HeaderMobileDrawer({ open, onClose }: HeaderMobileDrawerProps) {
                                 because the item that used to open one is now a
                                 button. */}
                             <div className="mb-2 ml-2 flex flex-col gap-0.5 border-l border-brand-black/10 pl-3">
-                              {categories
-                                .filter((category) => category.productSlugs.length > 0)
-                                .map((category) => (
-                                  <div key={category.slug} className="pt-2 first:pt-0">
-                                    <p className="px-3 py-1 text-[11px] font-medium tracking-[0.18em] text-brand-black/45 uppercase">
-                                      {tCategories(`items.${category.slug}.title`)}
-                                    </p>
-                                    {productsByCategory(category.slug).map((product) => (
-                                      <Link
-                                        key={product.slug}
-                                        href={productHref(product, category.slug)}
-                                        onClick={close}
-                                        className="block rounded-control px-3 py-2.5 text-sm font-semibold text-brand-black/80 transition-colors hover:bg-brand-black/5 hover:text-brand-red focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:outline-none"
-                                      >
-                                        {tBrands(`items.${product.slug}.name`)}
-                                      </Link>
-                                    ))}
-                                  </div>
-                                ))}
+                              {categories.map((category) => (
+                                <div key={category.id} className="pt-2 first:pt-0">
+                                  <p className="px-3 py-1 text-[11px] font-medium tracking-[0.18em] text-brand-black/45 uppercase">
+                                    {category.name}
+                                  </p>
+                                  {category.products.map((product) => (
+                                    <Link
+                                      key={product.id}
+                                      href={productHref(category.id, product.id)}
+                                      onClick={close}
+                                      className="block rounded-control px-3 py-2.5 text-sm font-semibold text-brand-black/80 transition-colors hover:bg-brand-black/5 hover:text-brand-red focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:outline-none"
+                                    >
+                                      {product.title}
+                                    </Link>
+                                  ))}
+                                </div>
+                              ))}
                             </div>
                           </motion.div>
                         )}

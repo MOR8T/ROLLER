@@ -1,0 +1,40 @@
+# Dev overrides, auto-applied by plain `docker compose up`: bind-mounted
+# source with hot reload for both services, plus direct host access to
+# Postgres and the backend for debugging.
+services:
+  db:
+    ports:
+      - "5432:5432"
+
+  backend:
+    volumes:
+      - ./backend/app:/app/app
+      # Migrations too, not just `app/`. The entrypoint runs `alembic upgrade
+      # head` on every start, so a revision that exists in the database but
+      # not in the container is a crash loop ("Can't locate revision ..."),
+      # and without this mount a new revision only reaches the container by
+      # rebuilding the image — or by `docker cp`, which does not survive the
+      # container being recreated.
+      - ./backend/migrations:/app/migrations
+    command:
+      ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+    ports:
+      - "8000:8000"
+
+  frontend:
+    build:
+      target: deps
+    volumes:
+      - ./frontend:/app
+      - frontend_node_modules:/app/node_modules
+      - frontend_next_cache:/app/.next
+    command: ["npm", "run", "dev"]
+    environment:
+      NODE_ENV: development
+      # `next dev` has no separate build step, so unlike prod this is read at
+      # runtime — a plain runtime env var, not a build arg.
+      NEXT_PUBLIC_YANDEX_MAPS_API_KEY: ${NEXT_PUBLIC_YANDEX_MAPS_API_KEY}
+
+volumes:
+  frontend_node_modules:
+  frontend_next_cache:

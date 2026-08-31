@@ -13,8 +13,10 @@ import {
   createItem,
   findScheme,
   reconcile,
+  type CalculatorOptions,
   type ConfiguredItem,
 } from "@/data/calculator";
+import type { SchemeGeometry } from "@/lib/scheme-geometry";
 
 /**
  * The configurator (`project_plan/06-*.md`, decision 14), rebuilt on
@@ -34,23 +36,35 @@ import {
  * guarded field by field, because the invalid states all have one shape: a
  * choice that was legal under the previous selection surviving into the next.
  */
+/** A key's own label from the admin's list, or the key itself if it is gone. */
+function labelFor(list: { key: string; label: string }[], key: string): string {
+  return list.find((entry) => entry.key === key)?.label ?? key;
+}
+
 /** `win_8` -> `W-8`, `door_3` -> `D-3`. A filename is not a thing to show. */
 function variantCode(variant: string): string {
   const [kind, number] = variant.split("_");
   return `${kind === "door" ? "D" : "W"}-${number}`;
 }
 
-export function Calculator() {
+export function Calculator({
+  schemes,
+  options,
+}: {
+  /** Admin-managed, fetched by the page — see `lib/calculator-schemes.ts`. */
+  schemes: SchemeGeometry[];
+  options: CalculatorOptions;
+}) {
   const t = useTranslations("calculator");
-  const tBrands = useTranslations("brands");
-  const tColors = useTranslations("colors");
 
   // Ids are handed out from here rather than by `createItem` itself: a
   // module-level counter is shared with the server render and with StrictMode's
   // second pass, so a position came back with a different id every time and the
   // tree could not hydrate.
   const nextId = useRef(1);
-  const [items, setItems] = useState<ConfiguredItem[]>(() => [createItem("item-1", "window")]);
+  const [items, setItems] = useState<ConfiguredItem[]>(() => [
+    createItem("item-1", "window", schemes, options),
+  ]);
   const [requesting, setRequesting] = useState(false);
 
   // A new position opens as the same construction as the last one: somebody
@@ -60,32 +74,43 @@ export function Calculator() {
       nextId.current += 1;
       return [
         ...current,
-        createItem(`item-${nextId.current}`, current[current.length - 1]?.construction ?? "window"),
+        createItem(
+          `item-${nextId.current}`,
+          current[current.length - 1]?.construction ?? "window",
+          schemes,
+          options,
+        ),
       ];
     });
 
   const update = (id: string, patch: Partial<ConfiguredItem>) =>
     setItems((current) =>
-      current.map((item) => (item.id === id ? reconcile({ ...item, ...patch }) : item)),
+      current.map((item) =>
+        item.id === id ? reconcile({ ...item, ...patch }, schemes, options) : item,
+      ),
     );
 
   const describe = useCallback(
     (item: ConfiguredItem, index: number) => {
-      const scheme = findScheme(item.variant);
+      const scheme = findScheme(schemes, item.variant);
       const parts = [
         t(`construction.${item.construction}`),
-        `${t(`materials.${item.material}`)} ${tBrands(`items.${item.system}.name`)}`,
+        `${t(`materials.${item.material}`)} ${labelFor(options.series, item.system)}`,
         scheme ? t(`groups.${item.construction}.${scheme.columns}`) : null,
         `${item.widthMm}×${item.heightMm} ${t("units.mm")}`,
         t(`glazing.${item.glazing}`),
-        t(`mechanisms.${item.mechanism}`),
-        `${t("labels.lamination")}: ${tColors(item.lamination)}`,
-        `${t("labels.hardware")}: ${tColors(item.hardware)}`,
+        labelFor(options.mechanisms, item.mechanism),
+        // Colour names come from the admin-managed palette, already resolved
+        // to this locale — not from `messages.colors`, which no longer knows
+        // every key. A key with no matching row travels as itself rather than
+        // as a blank, so the sales desk still sees what was picked.
+        `${t("labels.lamination")}: ${labelFor(options.laminations, item.lamination)}`,
+        `${t("labels.hardware")}: ${labelFor(options.laminations, item.hardware)}`,
         `${item.quantity} ${t("units.pcs")}`,
       ].filter(Boolean);
 
       if (item.accessories.length > 0) {
-        parts.push(item.accessories.map((key) => t(`accessories.${key}`)).join(", "));
+        parts.push(item.accessories.map((key) => labelFor(options.accessories, key)).join(", "));
       }
       // The drawing is the one thing a text summary cannot carry, so the
       // variant travels as a code the sales desk can look the scheme up by.
@@ -93,7 +118,7 @@ export function Calculator() {
 
       return `${index + 1}. ${parts.join(" · ")}`;
     },
-    [t, tBrands, tColors],
+    [t, schemes, options],
   );
 
   // Read at submit time by `RequestForm`, not rendered into it: the summary
@@ -110,6 +135,8 @@ export function Calculator() {
               item={item}
               index={index}
               removable={items.length > 1}
+              schemes={schemes}
+              options={options}
               onChange={(patch) => update(item.id, patch)}
               onRemove={() =>
                 setItems((current) => current.filter((candidate) => candidate.id !== item.id))

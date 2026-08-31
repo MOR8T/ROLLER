@@ -111,7 +111,7 @@ export interface Colorway {
  */
 export interface Product {
   slug: string;
-  /** Brand name. Translated: `ТЕРМО 60` on RU/TG, `THERMO 60` on EN/TR. */
+  /** Brand name. Translated: `ТЕРМО 60` on RU/TJ, `THERMO 60` on EN/TR. */
   name: string;
   kind: ProductKind;
   /**
@@ -191,38 +191,6 @@ export interface Cta {
 }
 
 /**
- * One slide of the homepage first screen.
- *
- * ⚠️ DESIGN.md §7 described the hero in the singular and §2 ruled out the
- * IMZO-style promo carousel outright. The client overrode both on 2026-08-11:
- * a single static panel could only ever say one thing, and the two halves of
- * the offer — ПВХ and алюминий — never reached the first screen at all. The
- * override is narrow: still one promise, one action *per slide*, and the
- * carousel stays inside the page container rather than taking the full screen,
- * so §5's rule that the next section's top edge is visible without scrolling
- * survives.
- */
-export interface HeroSlide {
-  /** Looks up `hero.slides.<key>.*` in the message catalogue. */
-  key: string;
-  /**
-   * The "context" layer DESIGN.md §6 asks for — an interior, facade or
-   * finished object. Every other image slot on the site is nullable because
-   * this photography did not exist; the client delivered it on 2026-08-11 as
-   * `public/banners/*.jpg`, so here it is required. §11's ban on profile
-   * cutaways over the first screen is satisfied rather than overridden: these
-   * are finished objects, and the renders they replaced were exactly what §11
-   * meant.
-   *
-   * The banners carry the ROLLER mark and the brand's red/black corner
-   * graphics in the pixels, which is why slide copy sits along the bottom edge
-   * — see `hero-section.tsx`.
-   */
-  image: string;
-  cta: Cta["href"];
-}
-
-/**
  * ⚠️ `Application` was the catalog's second axis — a facet on `Product` and an
  * SEO landing of its own — while `Category` meant the material. Since
  * 2026-08-17 there is only one axis: those applications *are* the categories,
@@ -256,43 +224,12 @@ export type ProductCardBadgeVariant = "red" | "black" | "outline";
  * 12 is the one that survives.
  */
 
-export interface Partner {
-  name: string;
-  logo: string | null;
-}
-
 /**
- * A showroom pin on the homepage map (`ShowroomsSection`).
- *
- * ⚠️ `coordinates` is `[lng, lat]`, not `[lat, lng]`. Yandex JS API 3 broke
- * with 2.1 here — 2.1 took `[lat, lng]` and v3 takes GeoJSON order — and the
- * two are silently swappable for Tajikistan only in the sense that both are
- * plausible numbers: `[38.5, 68.7]` lands in the Arabian Sea instead of
- * Dushanbe, with no error. The `LngLat` name in the JS API types is the whole
- * warning it gives you.
- *
- * Nothing here is translated. The city name, street address and opening hours
- * live in `messages/*.json` under `home.showrooms.points.<id>` — an address in
- * Tajik is not the same string as an address in Russian, and the map has to
- * speak the locale the rest of the page is in.
+ * Showrooms moved to the backend on 2026-08-26, the same day as this note —
+ * see `ShowroomDto` in `lib/showrooms.ts`, which is what `ShowroomMap`,
+ * `ShowroomsSection` and `ShowroomsDirectory` actually render. Unlike
+ * `Article` above, there is no separate "domain contract" type left here:
+ * `ShowroomDto` already is the API response shape, city/address/hours
+ * included, so a second interface saying the same thing would only drift
+ * from it.
  */
-export interface Showroom {
-  /** Also the message key under `showrooms.points`. */
-  id: string;
-  /** `[lng, lat]` — see the note above. */
-  coordinates: [number, number];
-  phone: string;
-  phoneHref: string;
-  /** Deep link into Yandex Maps: the "проложить маршрут" affordance. */
-  routeUrl: string;
-  /**
-   * Photograph of the showroom, shown at the top of its card in the list view
-   * of `/showroom`.
-   *
-   * `null` until the client's own shoot lands — DESIGN.md §6 п.2 is the rule
-   * this follows, and `MediaFrame` renders the neutral hatched panel in the
-   * meantime. The slot keeps its size either way, so the page does not reflow
-   * on the day the photographs arrive.
-   */
-  photo: string | null;
-}

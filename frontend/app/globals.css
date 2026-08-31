@@ -104,6 +104,45 @@ h6 {
 }
 
 /* ---------------------------------------------------------------------------
+   Product hero — the slow push on the photograph.
+
+   Twenty seconds from 1 to 1.06, ease-out, held at the end: the frame is never
+   seen moving, only found slightly closer than it was. A faster or larger push
+   turns a product photograph into a screensaver, which is the opposite of the
+   point — the picture is there to be read, not performed.
+
+   `transform-origin` sits low and left because that is the half the type is
+   over: pushing away from the copy keeps the words where they were placed
+   while the window on the right opens up.
+
+   ⚠️ Opt-in per element via `.hero-push`, and only ever on an element inside
+   `overflow: hidden` — the scale is what makes the image bleed past its frame.
+   Under `prefers-reduced-motion: reduce` the animation is dropped entirely
+   rather than shortened; a slow zoom is precisely the kind of motion that
+   setting exists to stop.
+   --------------------------------------------------------------------------- */
+
+@keyframes hero-push {
+  from {
+    scale: 1;
+  }
+  to {
+    scale: 1.06;
+  }
+}
+
+.hero-push {
+  transform-origin: 30% 70%;
+  animation: hero-push 20s ease-out both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-push {
+    animation: none;
+  }
+}
+
+/* ---------------------------------------------------------------------------
    Scroll reveal — DESIGN.md §8.
 
    Native CSS scroll-driven animation, zero JS: works in server components and
@@ -241,6 +280,88 @@ h6 {
 .cal-range--vertical::-webkit-slider-thumb {
   margin-top: 0;
   margin-left: -6.5px;
+}
+
+/*
+ * Shared by the news article body (`app/[locale]/news/[article]/page.tsx`)
+ * and the admin panel's Tiptap editor (`components/admin/news/tiptap-editor.tsx`)
+ * — the two render the exact same HTML, so they share the one class rather
+ * than drift into separate styling for what is meant to look identical.
+ */
+.rich-text p {
+  margin-top: 1.1em;
+}
+
+.rich-text p:first-child {
+  margin-top: 0;
+}
+
+.rich-text h2,
+.rich-text h3 {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  color: var(--color-brand-black);
+  letter-spacing: -0.01em;
+  margin-top: 1.6em;
+  margin-bottom: 0.5em;
+}
+
+.rich-text h2 {
+  font-size: 1.375em;
+}
+
+.rich-text h3 {
+  font-size: 1.15em;
+}
+
+.rich-text ul,
+.rich-text ol {
+  margin-top: 1.1em;
+  padding-left: 1.25em;
+}
+
+.rich-text ul {
+  list-style: disc;
+}
+
+.rich-text ol {
+  list-style: decimal;
+}
+
+.rich-text li + li {
+  margin-top: 0.4em;
+}
+
+.rich-text a {
+  color: var(--color-brand-red);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.rich-text strong {
+  font-weight: 700;
+}
+
+.rich-text blockquote {
+  margin-top: 1.1em;
+  padding-left: 1em;
+  border-left: 2px solid var(--color-brand-red);
+  color: color-mix(in srgb, var(--color-brand-black) 65%, transparent);
+}
+
+.rich-text code {
+  background: color-mix(in srgb, var(--color-brand-black) 6%, transparent);
+  border-radius: 4px;
+  padding: 0.15em 0.4em;
+  font-size: 0.9em;
+}
+
+.rich-text .is-editor-empty:first-child::before {
+  content: attr(data-placeholder);
+  float: left;
+  height: 0;
+  color: color-mix(in srgb, var(--color-brand-black) 40%, transparent);
+  pointer-events: none;
 }
 
 .cal-range--vertical::-moz-range-track {

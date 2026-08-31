@@ -2,12 +2,13 @@ import { setRequestLocale } from "next-intl/server";
 import { AboutStatsSection } from "@/components/sections/about-stats-section";
 import { ContactsLeadSection } from "@/components/sections/contacts-lead-section";
 import { HeroSection } from "@/components/sections/hero-section";
-import { MeasureStripSection } from "@/components/sections/measure-strip-section";
 import { NewsSection } from "@/components/sections/news-section";
-import { OffersTabsSection } from "@/components/sections/offers-tabs-section";
 import { PartnersSection } from "@/components/sections/partners-section";
 import { ProductsGridSection } from "@/components/sections/products-grid-section";
 import { ShowroomsSection } from "@/components/sections/showrooms-section";
+import { getAboutContent } from "@/lib/about";
+import { getHeroSlides } from "@/lib/hero-slides";
+import { getShowrooms } from "@/lib/showrooms";
 
 /**
  * The homepage, recomposed on 2026-08-13 against imzo.uz at the client's
@@ -17,9 +18,7 @@ import { ShowroomsSection } from "@/components/sections/showrooms-section";
  *
  *   hero      — the promise and the four audiences.
  *   products  — the catalogue itself, eight photographs, no menu required.
- *   measure   — one field, halfway down, for the visitor who is already sold.
  *   about     — who is behind it: two sentences and four numbers.
- *   offers    — three audiences, three sets of pages written for them.
  *   news      — dated, because a site with no dates on it looks abandoned.
  *   partners  — the suppliers' marks, an argument the visitor already trusts.
  *   showrooms — the map: which city, and whether it is the visitor's own.
@@ -38,6 +37,9 @@ import { ShowroomsSection } from "@/components/sections/showrooms-section";
 export default async function Home({ params }: PageProps<"/[locale]">) {
   const { locale } = await params;
   setRequestLocale(locale);
+  const heroSlides = await getHeroSlides(locale);
+  const showrooms = await getShowrooms(locale);
+  const aboutContent = await getAboutContent(locale);
 
   return (
     // `isolate` is what makes the watermark work. It opens a stacking context,
@@ -78,15 +80,16 @@ export default async function Home({ params }: PageProps<"/[locale]">) {
       </div>
       */}
 
-      <HeroSection />
+      <HeroSection slides={heroSlides} />
       <ProductsGridSection />
-      {/* Вызвать замерщика бесплатно */}
-      {/* <MeasureStripSection />  */}
-      <AboutStatsSection />
-      <OffersTabsSection />
+      <AboutStatsSection
+        title={aboutContent?.homeTitle ?? null}
+        body={aboutContent?.homeDescription ?? null}
+        stats={aboutContent?.stats ?? []}
+      />
       <NewsSection />
       <PartnersSection />
-      <ShowroomsSection />
+      <ShowroomsSection showrooms={showrooms} />
       <ContactsLeadSection />
     </div>
   );

@@ -4,6 +4,7 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import { Calculator } from "@/components/calculator/calculator";
 import { Breadcrumbs } from "@/components/products/breadcrumbs";
 import { Container } from "@/components/ui/container";
+import { getCalculatorOptions, getCalculatorSchemes } from "@/lib/calculator-schemes";
 
 export async function generateMetadata({
   params,
@@ -33,6 +34,15 @@ export default async function CalculatorPage({ params }: PageProps<"/[locale]/ca
 
   const t = await getTranslations({ locale, namespace: "calculator" });
 
+  // Admin-managed, so they are fetched rather than imported — see
+  // `lib/calculator-schemes.ts`. Both come back empty when the backend is
+  // unreachable, which the configurator renders as its own empty state
+  // instead of inventing a window.
+  const [schemes, options] = await Promise.all([
+    getCalculatorSchemes(),
+    getCalculatorOptions(locale),
+  ]);
+
   return (
     <>
       <Container className="pt-10">
@@ -42,7 +52,13 @@ export default async function CalculatorPage({ params }: PageProps<"/[locale]/ca
         </h1>
       </Container>
 
-      <Calculator />
+      {schemes.length > 0 && options ? (
+        <Calculator schemes={schemes} options={options} />
+      ) : (
+        <Container className="py-16">
+          <p className="text-brand-black/55">{t("unavailable")}</p>
+        </Container>
+      )}
     </>
   );
 }

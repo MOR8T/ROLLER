@@ -1,58 +1,128 @@
 import { hasLocale } from "next-intl";
 
 import { defaultLocale, routing, type Locale } from "@/i18n/routing";
-import en from "@/data/news/en.json";
-import ru from "@/data/news/ru.json";
-import tg from "@/data/news/tg.json";
-import tr from "@/data/news/tr.json";
+import { BACKEND_API_URL } from "@/lib/admin-auth";
 
 /**
- * The news section's data access layer — and the seam where the backend lands.
+ * The news section's data access layer.
  *
- * Everything the site knows about news comes through the four functions below.
- * Today they resolve out of `data/news/<locale>.json`; when stage 12 ships,
- * each body becomes a `fetch` against the admin panel's API and **nothing else
- * on the site changes** — the JSON files are already shaped like the responses
- * (`{ items: [...] }`, one document per locale, `publishedAt` in ISO-8601).
+ * Everything the site knows about news comes through the four functions
+ * below. News is managed from the admin panel
+ * (`app/admin/(dashboard)/news/page.tsx`, `news-actions.ts`) and stored in
+ * the backend with a title, an optional excerpt and a Tiptap-authored body
+ * per locale (`title_ru`/`title_tj`/…, see `RawNewsArticle`); this module
+ * picks out the one `locale` a page needs, same split as `lib/hero-slides.ts`
+ * and `lib/partners.ts`.
  *
- * Two rules keep that promise honest:
+ * Two rules keep that split honest:
  *
- *   1. **Nothing imports `data/news/*.json` directly.** Components take
- *      `NewsArticle` objects as props; pages call these functions.
- *   2. **They are `async` even though the JSON is synchronous.** An await that
- *      is free today costs nothing; a caller written against a synchronous API
- *      has to be rewritten when the network appears.
- *
- * The article text lives here rather than in `messages/*.json` because the
- * admin panel — not a translator editing the message catalogue — is what will
- * own it. UI chrome around the articles («Читать», «Все новости», the page
- * title) stays in the catalogue.
+ *   1. **Nothing outside this file reads `/api/news` directly.** Components
+ *      take `NewsArticle` objects as props; pages call these functions.
+ *   2. **The full (all-locale) list is fetched once and cached under the
+ *      `"news"` tag** — the admin's mutations revalidate that tag, so a
+ *      change shows up on `/` and `/news` immediately rather than waiting
+ *      for its 60s revalidate.
  */
 
-/**
- * One article as the API will return it.
- *
- * Diverges from `Article` in `types/index.ts` on `body`: the contract there has
- * a single string for rendered rich text, and until an editor exists the mock
- * carries plain paragraphs, which is an array. Reconcile at stage 12, when
- * there is a real editor to say which one is true.
- */
+/** One article, picked out for a single locale. */
 export interface NewsArticle {
-  /** URL segment, Latin in every locale — the article's identity. */
+  /** URL segment, Latin in every locale — the article's identity. Auto-generated
+   * from the Russian title when the admin creates the article (`routes/news.py`). */
   slug: string;
   cover: string;
-  /** ISO-8601. Formatted per locale at render time, never here. */
+  /** ISO-8601 date. Formatted per locale at render time, never here. */
   publishedAt: string;
   title: string;
   excerpt: string;
-  body: string[];
+  /** Tiptap's HTML output for this locale. */
+  body: string;
 }
 
-interface NewsFeed {
-  items: NewsArticle[];
+interface RawNewsArticle {
+  id: number;
+  slug: string;
+  cover_path: string;
+  published_at: string;
+  title_ru: string;
+  title_tj: string;
+  title_en: string;
+  title_tr: string;
+  excerpt_ru: string | null;
+  excerpt_tj: string | null;
+  excerpt_en: string | null;
+  excerpt_tr: string | null;
+  body_ru: string;
+  body_tj: string;
+  body_en: string;
+  body_tr: string;
 }
 
-const feeds: Record<Locale, NewsFeed> = { ru, tg, en, tr };
+/**
+ * Admin uploads and seeded files are both served from this app's own origin,
+ * so an API path needs nothing done to it — `/uploads/...` is answered by
+ * nginx in production and by `next.config.ts`'s rewrite everywhere else, and
+ * `next/image` optimises it like any local file. See that rewrite's comment
+ * for why the absolute-URL version had to go.
+ *
+ * Kept as a function rather than inlined: this is the seam a CDN prefix would
+ * be added at, and every DTO in this file already goes through it.
+ */
+function resolveCoverSrc(coverPath: string): string {
+  return coverPath;
+}
+
+function stripHtml(html: string): string {
+  return html
+    .replace(/<[^>]*>/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+/** Long enough to read as a real subtitle, short enough not to duplicate the body. */
+const EXCERPT_FALLBACK_LENGTH = 160;
+
+/** The admin's excerpt field is optional — a blank one falls back to a
+ * trimmed plain-text lead of the body, generated here rather than stored,
+ * so editing the body keeps the fallback in sync automatically. */
+function excerptFallback(bodyHtml: string): string {
+  const text = stripHtml(bodyHtml);
+  return text.length > EXCERPT_FALLBACK_LENGTH
+    ? `${text.slice(0, EXCERPT_FALLBACK_LENGTH).trimEnd()}…`
+    : text;
+}
+
+function toArticle(raw: RawNewsArticle, locale: Locale): NewsArticle {
+  const title: Record<Locale, string> = {
+    ru: raw.title_ru,
+    tj: raw.title_tj,
+    en: raw.title_en,
+    tr: raw.title_tr,
+  };
+  const excerpt: Record<Locale, string | null> = {
+    ru: raw.excerpt_ru,
+    tj: raw.excerpt_tj,
+    en: raw.excerpt_en,
+    tr: raw.excerpt_tr,
+  };
+  const body: Record<Locale, string> = {
+    ru: raw.body_ru,
+    tj: raw.body_tj,
+    en: raw.body_en,
+    tr: raw.body_tr,
+  };
+
+  const localizedBody = body[locale] ?? body[defaultLocale];
+  const localizedExcerpt = excerpt[locale] ?? excerpt[defaultLocale];
+
+  return {
+    slug: raw.slug,
+    cover: resolveCoverSrc(raw.cover_path),
+    publishedAt: raw.published_at,
+    title: title[locale] ?? title[defaultLocale],
+    excerpt: localizedExcerpt?.trim() ? localizedExcerpt : excerptFallback(localizedBody),
+    body: localizedBody,
+  };
+}
 
 /**
  * Cards per page on `/news` — imzo.uz's own figure, and it lands on our grid:
@@ -69,8 +139,29 @@ export interface NewsPage {
 }
 
 /**
- * Newest first. The JSON is stored in that order and is not re-sorted here.
- *
+ * The full, all-locale feed, newest first. Returns `[]` — never throws, never
+ * a fabricated placeholder — if the backend is unreachable or has no
+ * articles yet; callers render a skeleton in that case.
+ */
+async function loadRaw(): Promise<RawNewsArticle[]> {
+  try {
+    const res = await fetch(`${BACKEND_API_URL}/api/news`, {
+      next: { revalidate: 60, tags: ["news"] },
+    });
+    if (!res.ok) return [];
+
+    const data: RawNewsArticle[] = await res.json();
+    return data
+      .slice()
+      .sort((a, b) =>
+        a.published_at < b.published_at ? 1 : a.published_at > b.published_at ? -1 : 0,
+      );
+  } catch {
+    return [];
+  }
+}
+
+/**
  * `locale` is the raw route segment, because that is what a page has —
  * `PageProps` types it as `string`, and only the layout narrows it. The same
  * `hasLocale` guard the layout uses narrows it here, and anything else falls
@@ -79,7 +170,8 @@ export interface NewsPage {
  */
 async function loadFeed(locale: string): Promise<NewsArticle[]> {
   const key: Locale = hasLocale(routing.locales, locale) ? locale : defaultLocale;
-  return feeds[key].items;
+  const raw = await loadRaw();
+  return raw.map((item) => toArticle(item, key));
 }
 
 /** Clamps anything a visitor can put in `?page=` down to a page that exists. */
@@ -129,13 +221,13 @@ export async function fetchLatestNews(
 }
 
 /**
- * Slugs for `generateStaticParams`. Synchronous and single-locale on purpose:
- * slugs are Latin and identical across locales (see `i18n/routing.ts`), so one
- * feed answers for all four. When the API arrives this becomes the one call
- * made at build time.
+ * Slugs for `generateStaticParams`. Fetches the backend once at build time;
+ * an unreachable backend just means nothing is pre-rendered — `ArticlePage`
+ * still serves any slug on demand since dynamic params are allowed.
  */
-export function newsParams() {
-  return ru.items.map((article) => ({ article: article.slug }));
+export async function newsParams(): Promise<{ article: string }[]> {
+  const raw = await loadRaw();
+  return raw.map((item) => ({ article: item.slug }));
 }
 
 export function articleHref(slug: string): string {

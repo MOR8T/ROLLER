@@ -10,9 +10,9 @@ import type { Lead } from "@/types";
  * a visitor who opens WhatsApp and never presses send simply disappears, and
  * the client never learns that they existed.
  *
- * During the frontend-only phase `submitLead` is a stub with the interface the
- * real call will have, so stage 13 replaces the body of one function and no
- * form is rewritten.
+ * Posts to `/api/leads` and `/api/leads/quick`, which the route handlers
+ * under `app/api/leads` proxy to the backend's `Lead` table — see those
+ * routes' comments for why the indirection exists.
  */
 
 export interface LeadReceipt {
@@ -28,25 +28,44 @@ export class LeadSubmitError extends Error {
 }
 
 /**
- * Stores the lead. Stage 13 swaps the body for
- * `fetch("/api/leads", { method: "POST", … })` — the signature, the thrown
- * error and the returned receipt are the contract the backend has to satisfy
- * (`project_plan/11-backend-api.md`).
+ * Stores the lead.
  *
- * The stub still rejects an empty payload rather than pretending to succeed:
- * a form that reports success on nothing is the failure mode this whole
- * ordering exists to prevent.
+ * Rejects an incomplete payload before the network round-trip rather than
+ * letting the backend's own validation catch it: a form that reports success
+ * on nothing is the failure mode this whole store-first ordering exists to
+ * prevent, and there is no case where an incomplete `Lead` reaching here is
+ * anything but a caller bug.
  */
 export async function submitLead(lead: Lead): Promise<LeadReceipt> {
   if (!lead.name || !lead.phone || !lead.city || !lead.productType) {
     throw new LeadSubmitError("Incomplete lead payload");
   }
 
-  // Stand-in for the network round-trip, so the form's loading state is real
-  // and not a branch that only runs in production.
-  await new Promise((resolve) => setTimeout(resolve, 400));
+  let response: Response;
+  try {
+    response = await fetch("/api/leads", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        scenario: lead.scenario,
+        name: lead.name,
+        phone: lead.phone,
+        city: lead.city,
+        product_type: lead.productType,
+        comment: lead.comment,
+        configuration: lead.configuration,
+      }),
+    });
+  } catch {
+    throw new LeadSubmitError("Network error");
+  }
 
-  return { id: `local-${Date.now()}` };
+  if (!response.ok) {
+    throw new LeadSubmitError("Backend rejected the lead");
+  }
+
+  const data = (await response.json()) as { id: number };
+  return { id: String(data.id) };
 }
 
 /**
@@ -90,9 +109,23 @@ export async function submitQuickLead(lead: QuickLead): Promise<LeadReceipt> {
     throw new LeadSubmitError("Implausible phone number");
   }
 
-  await new Promise((resolve) => setTimeout(resolve, 400));
+  let response: Response;
+  try {
+    response = await fetch("/api/leads/quick", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(lead),
+    });
+  } catch {
+    throw new LeadSubmitError("Network error");
+  }
 
-  return { id: `local-quick-${Date.now()}` };
+  if (!response.ok) {
+    throw new LeadSubmitError("Backend rejected the lead");
+  }
+
+  const data = (await response.json()) as { id: number };
+  return { id: String(data.id) };
 }
 
 /**

@@ -1,5 +1,4 @@
-import schemes from "@/data/calculator-schemes.json";
-import { products, productsByCategory, type ProductBase } from "@/data/products";
+import type { SchemeGeometry } from "@/lib/scheme-geometry";
 
 /**
  * The calculator's option lists and the geometry behind its preview
@@ -10,11 +9,19 @@ import { products, productsByCategory, type ProductBase } from "@/data/products"
  * sent as a request. Nothing here is a price — the brief forbids showing one
  * (§5.3) and none of these parameters could produce one.
  *
- * ⚠️ Still the frontend half of **open question №1**: nobody has decided
- * whether these lists live in Postgres as reference tables or stay here. So
- * everything is keys and numbers, every label lives in `messages/*.json` under
- * `calculator.*`, and the per-system record is the join table a migration
- * would create.
+ * ── Where the option lists live ───────────────────────────────────────────
+ *
+ * Open question №1 is settled: the lists an admin maintains — mechanisms,
+ * accessories, the lamination palette, the size limits — are rows in Postgres
+ * now, edited at `/admin/calculator` and fetched by the page. They arrive here
+ * as a `CalculatorOptions` bundle rather than being imported, which is why
+ * `createItem`, `reconcile` and `accessoriesFor` all take one.
+ *
+ * What is still code, and deliberately: `materials`, `GlazingKey`,
+ * `systemOptions` and `systemsFor`. Those are not free-standing lists — they
+ * describe what a given *profile system* can be built as, so their natural
+ * home is the product, not a settings table. Moving them means adding a
+ * calculator block to `Product`, which is its own change.
  */
 
 export type ConstructionKind = "window" | "door";
@@ -23,67 +30,67 @@ export type MaterialKind = "pvc" | "aluminium";
 export type GlazingKey =
   "single-glass" | "single-chamber" | "double-chamber" | "double-chamber-energy";
 
-export type AccessoryKey = "windowsill" | "mosquito-net" | "drip";
-
 /** Per pane, read off the red indicator lines in the source drawings. */
 export type OpeningType = "fixed" | "casement" | "tilt" | "tilt-turn";
 
 export const constructionKinds: ConstructionKind[] = ["window", "door"];
 export const materials: MaterialKind[] = ["pvc", "aluminium"];
 
-/**
- * The lamination palette.
- *
- * Five colours, because five is what the company laminates — the client's
- * `public/cal/texture.svg` is a sheet of exactly these swatches, and
- * `scripts/parse-calculator-schemes.py`'s sibling step cut them out into
- * `public/cal/textures/`. The keys are the catalogue's own colour keys, so the
- * labels come from `messages.colors` and no new strings are needed.
- *
- * The same five are offered for hardware: the client confirmed on 2026-08-23
- * that handles ship in the lamination colours rather than in a palette of
- * their own.
- */
-export const laminations = ["white", "anthracite", "nut", "golden-oak", "dark-oak"] as const;
-export type LaminationKey = (typeof laminations)[number];
-
-export const hardwareColors = laminations;
-
-export function textureUrl(color: LaminationKey): string {
-  return `/cal/textures/${color}.png`;
-}
+/* -------------------------------------------------------------------------- */
+/* Admin-managed option lists                                                  */
+/* -------------------------------------------------------------------------- */
 
 /**
- * ⚠️ Placeholder. «Механизм» is a field `imzo.uz` fills with a hardware brand
- * (Fornax); the client said on 2026-08-23 they would send the list of brands
- * ROLLER actually fits, and it has not arrived. Inventing brand names on a
- * manufacturer's own site is not a placeholder, it is a false claim — so the
- * select renders with one neutral entry until the list lands, and the only
- * edit needed then is this array plus `calculator.mechanisms.*` in the four
- * message catalogues.
+ * The lists an admin maintains at `/admin/calculator`, already resolved to the
+ * visitor's locale by `lib/calculator-schemes.ts`.
+ *
+ * Keys are plain strings, not unions: they are rows in a table, so a union
+ * would be a lie the moment somebody adds a mechanism. Whatever validity these
+ * values have is checked against this bundle at the point of use, not by the
+ * type system.
  */
-export const mechanisms = ["standard"] as const;
-export type MechanismKey = (typeof mechanisms)[number];
-
-interface SystemOptions {
+export interface SeriesOption {
+  key: string;
+  label: string;
+  material: MaterialKind;
+  /** Which constructions this series can be built as. */
+  constructions: ConstructionKind[];
+  /** The glazing units it sells with, in the admin's order. */
   glazing: GlazingKey[];
 }
 
-/**
- * What a given profile system can be glazed with.
- *
- * The ladder follows the chamber count: a 3-chamber economy frame takes a
- * single-chamber unit, a 75 mm premium frame does not sell with one. ALD-45 is
- * cold aluminium and single glass is its normal fill.
- */
-const systemOptions: Record<string, SystemOptions> = {
-  ecoline: { glazing: ["single-chamber"] },
-  roller: { glazing: ["single-chamber", "double-chamber"] },
-  unopen: { glazing: ["single-chamber", "double-chamber", "double-chamber-energy"] },
-  stella: { glazing: ["double-chamber", "double-chamber-energy"] },
-  "ald-45": { glazing: ["single-glass", "single-chamber"] },
-  "thermo-60": { glazing: ["single-chamber", "double-chamber", "double-chamber-energy"] },
-};
+export interface MechanismOption {
+  key: string;
+  label: string;
+}
+
+export interface AccessoryOption {
+  key: string;
+  label: string;
+  /** Which constructions offer it — a windowsill is not a door fitting. */
+  constructions: ConstructionKind[];
+}
+
+export interface LaminationOption {
+  key: string;
+  label: string;
+  hex: string;
+  /** Browser-reachable URL, or null when the colour has no photograph. */
+  texture: string | null;
+}
+
+export interface CalculatorOptions {
+  series: SeriesOption[];
+  mechanisms: MechanismOption[];
+  accessories: AccessoryOption[];
+  /**
+   * One palette for both lamination and hardware: the client confirmed on
+   * 2026-08-23 that handles ship in the lamination colours rather than in a
+   * palette of their own.
+   */
+  laminations: LaminationOption[];
+  sizeLimits: Record<ConstructionKind, { width: Range; height: Range }>;
+}
 
 export interface Range {
   min: number;
@@ -92,104 +99,40 @@ export interface Range {
   default: number;
 }
 
-/**
- * Size ranges in millimetres. Ordinary manufacturing limits, not a pricing
- * input — the surveyor needs them regardless, and they turn a request into
- * something the sales desk can act on.
- */
-export const sizeLimits: Record<ConstructionKind, { width: Range; height: Range }> = {
-  window: {
-    width: { min: 400, max: 3000, step: 10, default: 1400 },
-    height: { min: 400, max: 2500, step: 10, default: 1400 },
-  },
-  door: {
-    width: { min: 700, max: 2400, step: 10, default: 900 },
-    height: { min: 1800, max: 2800, step: 10, default: 2100 },
-  },
-};
-
 export const MAX_ITEMS = 8;
 export const MAX_QUANTITY = 99;
-
-export const accessories: { key: AccessoryKey; constructions: ConstructionKind[] }[] = [
-  { key: "windowsill", constructions: ["window"] },
-  { key: "mosquito-net", constructions: ["window", "door"] },
-  { key: "drip", constructions: ["window"] },
-];
 
 /* -------------------------------------------------------------------------- */
 /* Variants                                                                    */
 /* -------------------------------------------------------------------------- */
 
 /**
- * A drawn variant — one of the 55 schemes in `public/cal/`.
+ * The variants a construction offers, grouped the way `imzo.uz` groups them —
+ * by how many sashes wide they read, with everything else (a transom, an
+ * arched head, a fanlight divided more finely than the sashes under it)
+ * sitting as a variation inside its group.
  *
- * The drawing is the thumbnail; `panes` and `arch` are the same drawing read
- * as geometry, so the preview can be rendered with the lamination texture on
- * the profile and glass in the openings. Both come out of
- * `scripts/parse-calculator-schemes.py`; nothing here is written by hand.
+ * ⚠️ The schemes are a *parameter* now, not a module-level constant read from
+ * `data/calculator-schemes.json`. They live in the backend and an admin edits
+ * them (`/admin/calculator`), so the page fetches them and hands them down —
+ * `lib/calculator-schemes.ts` is the read path. The JSON file survives only as
+ * the converter's input; nothing renders from it.
  */
-export interface Pane {
-  /** `[x0, y0, x1, y1]` in the drawing's own coordinates. */
-  box: number[];
-  opening: OpeningType;
-  hinge: "left" | "right" | "bottom" | null;
-}
-
-export interface ArchHead extends Omit<Pane, "box"> {
-  /** The arc itself, lifted from the drawing. */
-  d: string;
-  /** Where the arc springs, and the rail it closes on. */
-  spring: number;
-  foot: number;
-  box: number[];
-}
-
-export interface SchemeRoles {
-  /** Paths that draw a handle or a hinge, by index into the file's path order. */
-  hardware: number[];
-  /** Paths that draw the variant number stamped on the drawing. */
-  label: number[];
-}
-
-export interface Scheme {
-  id: string;
-  kind: ConstructionKind;
-  vw: number;
-  vh: number;
-  outer: number[];
-  profile: number;
-  arch: ArchHead | null;
-  /** How many sashes wide the variant reads — the group it belongs to. */
-  columns: number;
-  roles: SchemeRoles;
-  panes: Pane[];
-}
-
-export const allSchemes = schemes as Scheme[];
-
-export function findScheme(id: string): Scheme | undefined {
-  return allSchemes.find((scheme) => scheme.id === id);
-}
-
-export function schemeUrl(scheme: Scheme): string {
-  return `/cal/${scheme.kind === "window" ? "windows" : "doors"}/${scheme.id}.svg`;
-}
-
 export interface VariantGroup {
   columns: number;
-  variants: Scheme[];
+  variants: SchemeGeometry[];
 }
 
-/**
- * The variants of a construction, grouped the way `imzo.uz` groups them —
- * by how many sashes wide they are, with everything else (a transom, an arched
- * head, a fanlight divided more finely than the sashes under it) sitting as a
- * variation inside its group.
- */
-export function variantGroups(construction: ConstructionKind): VariantGroup[] {
-  const groups = new Map<number, Scheme[]>();
-  for (const scheme of allSchemes) {
+export function findScheme(schemes: SchemeGeometry[], key: string): SchemeGeometry | undefined {
+  return schemes.find((scheme) => scheme.key === key);
+}
+
+export function variantGroups(
+  schemes: SchemeGeometry[],
+  construction: ConstructionKind,
+): VariantGroup[] {
+  const groups = new Map<number, SchemeGeometry[]>();
+  for (const scheme of schemes) {
     if (scheme.kind !== construction) continue;
     const bucket = groups.get(scheme.columns);
     if (bucket) bucket.push(scheme);
@@ -200,47 +143,77 @@ export function variantGroups(construction: ConstructionKind): VariantGroup[] {
     .map(([columns, variants]) => ({ columns, variants }));
 }
 
+/** The first variant of the smallest group, or "" when there are no schemes. */
+function firstVariant(schemes: SchemeGeometry[], construction: ConstructionKind): string {
+  return variantGroups(schemes, construction)[0]?.variants[0]?.key ?? "";
+}
+
+/**
+ * The size a variant opens at, clamped to what the workshop will make.
+ *
+ * Clamped here rather than trusted: the defaults are admin-editable and the
+ * limits are a separate list, so nothing stops the two from disagreeing.
+ */
+export function defaultSizeOf(
+  scheme: SchemeGeometry | undefined,
+  construction: ConstructionKind,
+  options: CalculatorOptions,
+): { widthMm: number; heightMm: number } {
+  const limits = options.sizeLimits[construction];
+  if (!scheme) {
+    return { widthMm: limits.width.default, heightMm: limits.height.default };
+  }
+  return {
+    widthMm: clamp(scheme.defaultWidthMm, limits.width),
+    heightMm: clamp(scheme.defaultHeightMm, limits.height),
+  };
+}
+
 /* -------------------------------------------------------------------------- */
 /* Systems                                                                     */
 /* -------------------------------------------------------------------------- */
 
-/** The category slug that makes a system available as this construction. */
-const categoryOf: Record<ConstructionKind, string> = { window: "windows", door: "doors" };
-
 /**
- * The systems on offer for a construction in a material.
+ * The series on offer for a construction in a material.
  *
- * ⚠️ The material step is back. It was removed on 2026-08-17 — «не должно быть
- * разделения на ПВХ и алюминиевую продукцию» — and that decision still governs
- * the catalogue, where `material` is a characteristic and not an axis. Here it
- * is a field again because the client asked on 2026-08-23 for this page to
- * carry `imzo.uz`'s own «Тип профиля → Серия профиля» pair. Scoped to the
- * calculator; the catalogue is untouched.
+ * Reads the admin's list, not `data/products.ts`. The two are deliberately
+ * separate: the catalogue publishes what marketing wants shown, while this is
+ * what the sales desk will actually quote, and the client has changed one
+ * without the other before. `material` stays an axis *here* only — the
+ * catalogue dropped it on 2026-08-17 and this is imzo's «Тип профиля → Серия
+ * профиля» pair, restored at the client's request on 2026-08-23.
  */
-export function systemsFor(construction: ConstructionKind, material: MaterialKind): ProductBase[] {
-  return productsByCategory(categoryOf[construction]).filter(
-    (product) => product.material === material,
+export function systemsFor(
+  options: CalculatorOptions,
+  construction: ConstructionKind,
+  material: MaterialKind,
+): SeriesOption[] {
+  return options.series.filter(
+    (series) => series.material === material && series.constructions.includes(construction),
   );
 }
 
-export function findSystem(slug: string): ProductBase | undefined {
-  return products.find((product) => product.slug === slug);
+export function findSeries(options: CalculatorOptions, key: string): SeriesOption | undefined {
+  return options.series.find((series) => series.key === key);
 }
 
-export function glazingOf(slug: string): GlazingKey[] {
-  const options = systemOptions[slug];
-  if (!options) {
-    // A system without an entry is a data bug, not a runtime state to paper
-    // over: the calculator would offer it with no glazing at all.
-    throw new Error(`No calculator options declared for system "${slug}"`);
-  }
-  return options.glazing;
+/**
+ * What a series can be glazed with.
+ *
+ * An empty list for an unknown key rather than a throw: the series list is
+ * admin-managed now, so a key that has been renamed under a visitor is an
+ * ordinary event and `reconcile` handles it by picking another series.
+ */
+export function glazingOf(options: CalculatorOptions, key: string): GlazingKey[] {
+  return findSeries(options, key)?.glazing ?? [];
 }
 
-export function accessoriesFor(construction: ConstructionKind): AccessoryKey[] {
-  return accessories
-    .filter((accessory) => accessory.constructions.includes(construction))
-    .map((accessory) => accessory.key);
+/** The extras offered for a construction, in the admin's order. */
+export function accessoriesFor(
+  options: CalculatorOptions,
+  construction: ConstructionKind,
+): AccessoryOption[] {
+  return options.accessories.filter((accessory) => accessory.constructions.includes(construction));
 }
 
 /* -------------------------------------------------------------------------- */
@@ -251,41 +224,64 @@ export interface ConfiguredItem {
   id: string;
   construction: ConstructionKind;
   material: MaterialKind;
-  /** Product slug from `data/products.ts`. */
+  /** Series key from the admin's list. */
   system: string;
-  /** Scheme id from `data/calculator-schemes.json`. */
+  /** Scheme key from the backend — `win_8`, `door_3`. */
   variant: string;
   widthMm: number;
   heightMm: number;
   glazing: GlazingKey;
-  mechanism: MechanismKey;
-  lamination: LaminationKey;
-  hardware: LaminationKey;
-  accessories: AccessoryKey[];
+  /** A mechanism key from the admin's list. Plain string, same as the colours. */
+  mechanism: string;
+  /**
+   * Lamination and hardware colour keys.
+   *
+   * Plain `string`, not `LaminationKey`: the palette is admin-managed now
+   * (`/admin/calculator`) and its keys are rows in a table, so a compile-time
+   * union would be a lie the moment somebody adds a colour. `ItemCard`
+   * resolves a key against the fetched palette and falls back to its first
+   * entry, which is what covers a colour being renamed or removed under a
+   * visitor mid-session.
+   */
+  lamination: string;
+  hardware: string;
+  accessories: string[];
   quantity: number;
 }
 
-export function createItem(id: string, construction: ConstructionKind = "window"): ConfiguredItem {
-  const limits = sizeLimits[construction];
-  const groups = variantGroups(construction);
+export function createItem(
+  id: string,
+  construction: ConstructionKind,
+  schemes: SchemeGeometry[],
+  options: CalculatorOptions,
+): ConfiguredItem {
+  const variant = firstVariant(schemes, construction);
+  const size = defaultSizeOf(findScheme(schemes, variant), construction, options);
 
-  return reconcile({
-    id,
-    construction,
-    material: "pvc",
-    system: "",
-    // Open on the simplest variant of the smallest group — a single sash reads
-    // at a glance, and every other variant is one click from it.
-    variant: groups[0].variants[0].id,
-    widthMm: limits.width.default,
-    heightMm: limits.height.default,
-    glazing: "single-chamber",
-    mechanism: mechanisms[0],
-    lamination: "white",
-    hardware: "white",
-    accessories: [],
-    quantity: 1,
-  });
+  return reconcile(
+    {
+      id,
+      construction,
+      material: "pvc",
+      system: "",
+      // Open on the simplest variant of the smallest group — a single sash reads
+      // at a glance, and every other variant is one click from it.
+      variant,
+      widthMm: size.widthMm,
+      heightMm: size.heightMm,
+      glazing: "single-chamber",
+      // The first entry of each admin list, not a hardcoded key: an admin who
+      // renames «standard» must not leave every new position pointing at a
+      // mechanism that no longer exists.
+      mechanism: options.mechanisms[0]?.key ?? "",
+      lamination: options.laminations[0]?.key ?? "",
+      hardware: options.laminations[0]?.key ?? "",
+      accessories: [],
+      quantity: 1,
+    },
+    schemes,
+    options,
+  );
 }
 
 /**
@@ -297,37 +293,65 @@ export function createItem(id: string, construction: ConstructionKind = "window"
  * to drop a PVC series and the glazing that came with it, and switching a
  * window to a door has to drop a three-sash variant that doors do not have.
  */
-export function reconcile(item: ConfiguredItem): ConfiguredItem {
-  const available = systemsFor(item.construction, item.material);
+export function reconcile(
+  item: ConfiguredItem,
+  schemes: SchemeGeometry[],
+  options: CalculatorOptions,
+): ConfiguredItem {
+  const available = systemsFor(options, item.construction, item.material);
   const material = available.length > 0 ? item.material : otherMaterial(item.material);
-  const systems = available.length > 0 ? available : systemsFor(item.construction, material);
-  const system = systems.some((product) => product.slug === item.system)
+  const systems =
+    available.length > 0 ? available : systemsFor(options, item.construction, material);
+  // `systems` can still be empty — an admin may have left a construction with
+  // no series at all — so this falls back to the key already held rather than
+  // indexing into nothing.
+  const system = systems.some((series) => series.key === item.system)
     ? item.system
-    : (systems.find((product) => product.popular) ?? systems[0]).slug;
+    : (systems[0]?.key ?? item.system);
 
-  const glazing = glazingOf(system);
-  const limits = sizeLimits[item.construction];
-  const allowed = accessoriesFor(item.construction);
-  const scheme = findScheme(item.variant);
-  const variant =
-    scheme && scheme.kind === item.construction
-      ? scheme.id
-      : variantGroups(item.construction)[0].variants[0].id;
+  const glazing = glazingOf(options, system);
+  const limits = options.sizeLimits[item.construction];
+  const allowed = accessoriesFor(options, item.construction).map((a) => a.key);
+  // A variant that does not exist, or belongs to the other construction,
+  // falls back to the first on offer — which is also what happens when an
+  // admin disables the scheme a visitor had selected.
+  const scheme = findScheme(schemes, item.variant);
+  const keptVariant = Boolean(scheme && scheme.kind === item.construction);
+  const variant = keptVariant ? scheme!.key : firstVariant(schemes, item.construction);
+
+  // When *this function* substitutes the variant — a window switched to a
+  // door, or a scheme the admin has since disabled — the size that came with
+  // the old one is meaningless, so the new variant's own default replaces it.
+  // A variant the visitor picked deliberately arrives with its size already in
+  // the patch, so `keptVariant` is true and whatever they set is left alone.
+  const size = keptVariant
+    ? { widthMm: item.widthMm, heightMm: item.heightMm }
+    : defaultSizeOf(findScheme(schemes, variant), item.construction, options);
 
   return {
     ...item,
     material,
     system,
     variant,
-    glazing: glazing.includes(item.glazing) ? item.glazing : glazing[0],
-    mechanism: mechanisms.includes(item.mechanism) ? item.mechanism : mechanisms[0],
-    lamination: laminations.includes(item.lamination) ? item.lamination : laminations[0],
-    hardware: hardwareColors.includes(item.hardware) ? item.hardware : hardwareColors[0],
-    widthMm: clamp(item.widthMm, limits.width),
-    heightMm: clamp(item.heightMm, limits.height),
+    glazing: glazing.includes(item.glazing) ? item.glazing : (glazing[0] ?? item.glazing),
+    // Clamped against the admin's list, so a mechanism that has been renamed
+    // or removed cannot survive into a submitted request.
+    mechanism: options.mechanisms.some((m) => m.key === item.mechanism)
+      ? item.mechanism
+      : (options.mechanisms[0]?.key ?? ""),
+    lamination: colourOrFirst(options, item.lamination),
+    hardware: colourOrFirst(options, item.hardware),
+    widthMm: clamp(size.widthMm, limits.width),
+    heightMm: clamp(size.heightMm, limits.height),
     accessories: item.accessories.filter((key) => allowed.includes(key)),
     quantity: Math.min(Math.max(Math.round(item.quantity) || 1, 1), MAX_QUANTITY),
   };
+}
+
+function colourOrFirst(options: CalculatorOptions, key: string): string {
+  return options.laminations.some((colour) => colour.key === key)
+    ? key
+    : (options.laminations[0]?.key ?? "");
 }
 
 function otherMaterial(material: MaterialKind): MaterialKind {

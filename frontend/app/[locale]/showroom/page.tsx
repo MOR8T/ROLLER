@@ -5,6 +5,7 @@ import { PageHeader } from "@/components/layout/page-header";
 import { ContactsLeadSection } from "@/components/sections/contacts-lead-section";
 import { ShowroomsDirectory } from "@/components/sections/showrooms-directory";
 import { Section } from "@/components/ui/section";
+import { getShowrooms } from "@/lib/showrooms";
 
 export async function generateMetadata({
   params,
@@ -45,10 +46,11 @@ export default async function ShowroomPage({ params }: PageProps<"/[locale]/show
   setRequestLocale(locale);
 
   const t = await getTranslations({ locale, namespace: "showroom" });
+  const showrooms = await getShowrooms(locale);
 
   return (
     <>
-      <Section className="pb-0">
+      <Section className="pb-0 pt-12!">
         <PageHeader
           breadcrumbs={[{ label: t("breadcrumb") }]}
           title={t("title")}
@@ -56,7 +58,7 @@ export default async function ShowroomPage({ params }: PageProps<"/[locale]/show
         />
       </Section>
 
-      <ShowroomsDirectory />
+      <ShowroomsDirectory showrooms={showrooms} />
 
       <ContactsLeadSection />
     </>
