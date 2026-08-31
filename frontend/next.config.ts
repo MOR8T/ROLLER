@@ -6,10 +6,19 @@ const withNextIntl = createNextIntlPlugin("./i18n/request.ts");
 /**
  * Where the FastAPI service answers, from *inside* this container — Docker's
  * internal DNS under Compose (`http://backend:8000`), the same host in a plain
- * local run. Read at server start, not at build time, so one image works in
- * every environment. `lib/admin-auth.ts` exports the same value for API calls;
- * it is repeated here because `next.config.ts` is loaded before the app's own
+ * local run. `lib/admin-auth.ts` exports the same value for API calls; it is
+ * repeated here because `next.config.ts` is loaded before the app's own
  * module graph and cannot import from it.
+ *
+ * ⚠️ That's true for the app's own server-side code, which reads
+ * `process.env.BACKEND_API_URL` per request. It is NOT true for the
+ * `rewrites()` below: `next build` calls it once and bakes the result into
+ * `.next/routes-manifest.json`, and the standalone server serves rewrites
+ * from that manifest at runtime rather than calling `rewrites()` again — so
+ * for that one use, this is effectively build-time-only. The Dockerfile sets
+ * a `BACKEND_API_URL` build ARG (default `http://backend:8000`) for exactly
+ * this reason; without it the fallback below gets baked into every image
+ * regardless of where it actually runs.
  */
 const BACKEND_API_URL = process.env.BACKEND_API_URL ?? "http://localhost:8000";
 
