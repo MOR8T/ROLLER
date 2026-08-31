@@ -7,7 +7,7 @@ interface BrandLogoProps {
 }
 
 export function BrandLogo({ isDark = false, className }: BrandLogoProps) {
-  const logoSrc = isDark ? "/logos/roller_black.svg" : "/logos/roller_white.svg";
+  const logoSrc = isDark ? "/logos/logo_dark.svg" : "/logos/logo_light.svg";
   const logoAlt = isDark ? "ROLLER (dark)" : "ROLLER (light)";
 
   return (

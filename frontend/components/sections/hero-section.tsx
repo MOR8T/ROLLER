@@ -39,7 +39,7 @@ import type { HeroSlideDto } from "@/lib/hero-slides";
  */
 
 /** Long enough to read a four-word headline and reach for the button. */
-const AUTOPLAY_MS = 3500;
+const AUTOPLAY_MS = 4000;
 
 interface HeroSectionProps {
   slides: HeroSlideDto[];
