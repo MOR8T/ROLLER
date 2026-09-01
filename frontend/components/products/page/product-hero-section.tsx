@@ -59,10 +59,12 @@ export function ProductHeroSection({
 }) {
   const image = data.media?.[0];
 
+  // `bg-white`: the ground behind the photograph, seen only while it loads —
+  // white, not black, so the band does not flash dark under the header.
   return (
     <section
       id={data.id}
-      className="relative isolate flex h-[100svh] max-h-[43.75rem] w-full overflow-hidden bg-black"
+      className="relative isolate flex h-[100svh] max-h-[43.75rem] w-full overflow-hidden bg-white"
     >
       {image ? (
         <Image
