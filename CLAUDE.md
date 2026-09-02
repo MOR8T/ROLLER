@@ -150,6 +150,25 @@ first, send to WhatsApp second** — is intentional and must be preserved when t
 is wired to a real endpoint: submitting to WhatsApp first risks losing a lead if
 the visitor never presses send in the WhatsApp UI.
 
+### Maintenance mode
+`/admin/settings` → «Сайт в разработке» flips a boolean on the backend's
+`site_settings` singleton. When it is on, `app/[locale]/layout.tsx` returns
+`MaintenanceScreen` instead of the header/page/footer on all four locales, and
+`generateMetadata` swaps in a `noindex` placeholder title. `/admin`, `/login`
+and `/api` sit outside `[locale]` and are deliberately untouched — the admin
+has to stay able to log in and switch it back off.
+
+`lib/site-settings.ts` **fails open**: an unreachable or slow backend returns
+`maintenanceMode: false`, so a backend hiccup can never take the storefront
+down on its own. The switch is instant because the action revalidates the
+`site-settings` tag; the fetch's 60s `revalidate` is only a backstop.
+
+`MaintenanceScreen` is a rebuild of the placeholder the client ran on roller.tj
+in 2026-09 (Tilda + GSAP), down to its palette and timings — the styles are in
+`app/globals.css` under "Maintenance screen", the stroke stagger is in the
+component because it sorts by `getTotalLength()`. Treat it as a copy of that
+page, not as a design to iterate on.
+
 ### Design tokens
 Brand colors, radii, container width, spacing scale, and hero height are Tailwind
 v4 `@theme` custom properties in `app/globals.css`. Fonts are Chakra Petch

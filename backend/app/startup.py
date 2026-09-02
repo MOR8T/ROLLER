@@ -13,6 +13,7 @@ from app.models.calculator_scheme import CalculatorScheme
 from app.models.calculator_settings import CalculatorSettings
 from app.models.contact_info import ContactInfo
 from app.models.contact_interest import ContactInterest
+from app.models.site_settings import SiteSettings
 from app.models.social_link import SocialLink
 from app.models.product import Product, ProductSection
 from app.models.product_category import ProductCategory
@@ -706,6 +707,31 @@ def seed_products(db: Session | None = None) -> None:
         db.commit()
         if owns_session:
             logger.info("Seeded %d products", len(entries))
+    finally:
+        if owns_session:
+            db.close()
+
+
+def seed_site_settings(db: Session | None = None) -> None:
+    """
+    Creates the singleton `site_settings` row with every switch off.
+
+    Same idempotency contract as `seed_about_content` — it is skipped once the
+    table has a row, so re-running it can never turn the public site back on
+    (or off) behind an admin who has already set the switch.
+    """
+    owns_session = db is None
+    db = db or SessionLocal()
+    try:
+        if db.query(SiteSettings).first():
+            if owns_session:
+                logger.info("Site settings seed skipped: row already exists")
+            return
+
+        db.add(SiteSettings(maintenance_mode=False))
+        db.commit()
+        if owns_session:
+            logger.info("Seeded site_settings row")
     finally:
         if owns_session:
             db.close()

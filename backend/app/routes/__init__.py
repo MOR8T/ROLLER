@@ -15,6 +15,7 @@ from app.routes.social_links import router as social_links_router
 from app.routes.leads import router as leads_router
 from app.routes.calculator_settings import router as calculator_settings_router
 from app.routes.calculator_schemes import router as calculator_schemes_router
+from app.routes.site_settings import router as site_settings_router
 
 __all__ = [
     "auth_router",
@@ -34,4 +35,5 @@ __all__ = [
     "leads_router",
     "calculator_settings_router",
     "calculator_schemes_router",
+    "site_settings_router",
 ]
