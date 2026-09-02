@@ -4,6 +4,10 @@
     "titleTemplate": "%s | ROLLER",
     "description": "ROLLER — первый производитель материалов из ПВХ в Таджикистане. Окна и двери ПВХ, алюминиевые и фасадные системы. Тепло и комфорт для каждого дома."
   },
+  "maintenance": {
+    "caption": "Site under construction",
+    "title": "Site under construction"
+  },
   "common": {
     "skipToContent": "Перейти к основному содержимому",
     "slogan": "Тепло и комфорт для каждого дома",

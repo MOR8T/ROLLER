@@ -8,6 +8,8 @@ import { Header } from "@/components/layout/header";
 import { getProductsMenu } from "@/lib/products";
 import { Footer } from "@/components/layout/footer";
 import { WhatsAppFab } from "@/components/layout/whatsapp-fab";
+import { MaintenanceScreen } from "@/components/layout/maintenance-screen";
+import { getSiteSettings } from "@/lib/site-settings";
 import { routing } from "@/i18n/routing";
 
 /**
@@ -79,6 +81,16 @@ export async function generateMetadata({
   const { locale } = await params;
   if (!hasLocale(routing.locales, locale)) return {};
 
+  // While «Сайт в разработке» is on there is no site to describe, and nothing
+  // worth indexing: the tab reads as the placeholder and crawlers are told to
+  // stay away, so a search engine that happens to recrawl during the closure
+  // does not replace the real listings with it.
+  const { maintenanceMode } = await getSiteSettings();
+  if (maintenanceMode) {
+    const tMaintenance = await getTranslations({ locale, namespace: "maintenance" });
+    return { title: tMaintenance("title"), robots: { index: false, follow: false } };
+  }
+
   const t = await getTranslations({ locale, namespace: "meta" });
 
   return {
@@ -96,6 +108,35 @@ export default async function LocaleLayout({ children, params }: LayoutProps<"/[
   setRequestLocale(locale);
 
   const t = await getTranslations({ locale, namespace: "common" });
+
+  // «Настройки сайта» → «Сайт в разработке». Gated here rather than in
+  // `proxy.ts` because the flag lives in the backend: the proxy runs on every
+  // request, including static assets, and would have to reach the API from the
+  // Edge runtime each time. This layout is the one Server Component every
+  // public page passes through, and the read behind it is cached and tagged,
+  // so the check costs one request per revalidation window instead.
+  //
+  // `/admin`, `/login` and `/api` sit outside `[locale]` and are untouched —
+  // an admin has to stay able to log in and switch this back off.
+  const { maintenanceMode } = await getSiteSettings();
+
+  // The chrome (header, footer, WhatsApp button) and `children` are all
+  // dropped: the placeholder replaces the site, it does not overlay it, so
+  // there is nothing left to navigate to or scroll past.
+  if (maintenanceMode) {
+    return (
+      <html
+        lang={locale}
+        className={`${montserrat.variable} ${chakraPetch.variable} h-full antialiased`}
+      >
+        <body className="min-h-full">
+          <NextIntlClientProvider>
+            <MaintenanceScreen />
+          </NextIntlClientProvider>
+        </body>
+      </html>
+    );
+  }
 
   // The header's «Продукция» panel. Read here, in the one Server Component
   // every page passes through, because `Header` is a client component and

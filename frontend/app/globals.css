@@ -390,3 +390,203 @@ h6 {
   width: 2px;
   height: 100%;
 }
+
+/* ---------------------------------------------------------------------------
+   Maintenance screen — `components/layout/maintenance-screen.tsx`.
+
+   The takeover shown instead of the whole public site while «Настройки сайта»
+   → «Сайт в разработке» is on. Rebuilt from the placeholder the client put on
+   roller.tj in 2026-09, down to its palette and timings, so switching the flag
+   swaps between the site and exactly the page visitors already saw there.
+
+   ⚠️ This block owns its own dark palette rather than using the `@theme`
+   tokens above, and that is on purpose: the screen is not part of the site's
+   design system, it is the thing that replaces it. The brand tokens are still
+   available — the ROLLER logo is the real asset — but the ground, the grid and
+   the outline are this page's own.
+
+   The stroke timeline is *not* here: it runs in JS because it staggers by path
+   length (see the component). What is here is everything that has a fixed
+   delay — the handle fills, the logo plate — whose constants are the CSS twins
+   of `STROKE_DRAW_MS`/`STROKE_STAGGER_MS` in that file. Change one, look at
+   the other.
+   --------------------------------------------------------------------------- */
+
+.maintenance-stage {
+  --maintenance-bg: #0b0c10;
+  --maintenance-fg: #e8e8ea;
+  --maintenance-muted: rgb(232 232 234 / 0.65);
+  --maintenance-stroke: #b5b5b5;
+
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 100%;
+  min-height: 100dvh;
+  overflow: hidden;
+  background:
+    radial-gradient(1200px 800px at 50% 35%, rgb(255 255 255 / 0.08), transparent 60%),
+    linear-gradient(180deg, #07080b, var(--maintenance-bg));
+  color: var(--maintenance-fg);
+}
+
+.maintenance-grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(to right, rgb(255 255 255 / 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgb(255 255 255 / 0.04) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: radial-gradient(closest-side, rgb(0 0 0 / 0.65), transparent 80%);
+  opacity: 0.55;
+  pointer-events: none;
+}
+
+.maintenance-vignette {
+  position: absolute;
+  inset: -20%;
+  background: radial-gradient(800px 520px at 50% 40%, rgb(255 255 255 / 0.1), transparent 62%);
+  opacity: 0.65;
+  pointer-events: none;
+}
+
+.maintenance-window {
+  display: grid;
+  place-items: center;
+  width: min(520px, 84vw);
+  max-height: 78dvh;
+  filter: drop-shadow(0 16px 40px rgb(0 0 0 / 0.35));
+}
+
+.maintenance-window svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-height: 78dvh;
+}
+
+.maintenance-stroke {
+  fill: none;
+  stroke: var(--maintenance-stroke);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* ---------------------------------------------------------------------------
+   The timeline.
+
+   Every rule below is gated on `[data-animate="true"]`, which the component
+   sets once it has measured each path and written `--maintenance-length` /
+   `--maintenance-delay` onto it. Two things follow from that, both wanted:
+
+     - one attribute starts the outline, the handles and the logo plate from
+       the same moment, instead of the stylesheet starting two of them at parse
+       time and JS starting the third after hydration;
+     - with no JS, or under reduced motion, none of it applies — and since each
+       element's *resting* state here is its finished one (drawn outline,
+       opaque handles, visible plate) and the animations supply the starting
+       state via `animation-fill-mode: both`, the fallback is the completed
+       picture rather than a blank screen.
+
+   ⚠️ Do not express the outline as a `transition` on `stroke-dashoffset`. The
+   dash offset has to be set at the same time as the animation, and a
+   transition would run on *that* write too — the window animates itself out
+   over 5.8s and then back in, which reads as no animation at all. An
+   animation has explicit `from`/`to` and no such dependency on the previous
+   computed value.
+   --------------------------------------------------------------------------- */
+
+.maintenance-stage[data-animate="true"] .maintenance-stroke {
+  stroke-dasharray: var(--maintenance-length);
+  animation: maintenance-draw 5.8s cubic-bezier(0.25, 0.46, 0.45, 0.94)
+    var(--maintenance-delay, 0ms) both;
+}
+
+@keyframes maintenance-draw {
+  from {
+    stroke-dashoffset: var(--maintenance-length);
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* The two window handles. They arrive while the outline is still drawing —
+   `animation-delay` is set per shape in the component, from 4.9s. */
+.maintenance-fill {
+  fill: var(--maintenance-stroke);
+}
+
+.maintenance-stage[data-animate="true"] .maintenance-fill {
+  animation: maintenance-fill-in 0.6s ease-out both;
+}
+
+@keyframes maintenance-fill-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Centred over the window, not in flow with it, so the outline stays exactly
+   where it was drawn when the plate appears on top of it. */
+.maintenance-plate {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+}
+
+.maintenance-logo {
+  display: grid;
+  place-items: center;
+  gap: 10px;
+  padding: 18px 22px;
+  border: 1px solid rgb(255 255 255 / 0.12);
+  border-radius: 18px;
+  background: rgb(10 10 12 / 0.35);
+  box-shadow: 0 16px 60px rgb(0 0 0 / 0.35);
+  backdrop-filter: blur(8px);
+}
+
+.maintenance-stage[data-animate="true"] .maintenance-logo {
+  animation: maintenance-logo-in 1s ease-out 6.4s both;
+}
+
+@keyframes maintenance-logo-in {
+  from {
+    opacity: 0;
+    translate: 0 10px;
+    scale: 0.98;
+  }
+  to {
+    opacity: 1;
+    translate: 0 0;
+    scale: 1;
+  }
+}
+
+.maintenance-caption {
+  margin: 0;
+  color: var(--maintenance-muted);
+  font-size: 13px;
+  letter-spacing: 0.06em;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+/* The component already declines to set `data-animate` under this setting;
+   this is the belt to that braces, and covers the case of it being switched on
+   while the screen is open. */
+@media (prefers-reduced-motion: reduce) {
+  .maintenance-stage[data-animate="true"] .maintenance-stroke,
+  .maintenance-stage[data-animate="true"] .maintenance-fill,
+  .maintenance-stage[data-animate="true"] .maintenance-logo {
+    animation: none;
+    stroke-dasharray: none;
+  }
+}
