@@ -87,11 +87,30 @@ services:
     volumes:
       - ./nginx/conf.d:/etc/nginx/conf.d:ro
       - ./nginx/certs:/etc/nginx/certs:ro
+      - letsencrypt:/etc/letsencrypt:ro
+      - certbot_webroot:/var/www/certbot
     depends_on:
       - frontend
       - backend
+
+  # Not started by `up -d` — it is a one-off tool, run on demand:
+  #
+  #   ./scripts/issue-letsencrypt.sh roller.tj you@example.com   # first issue
+  #   docker compose -f docker-compose.prod.yml run --rm certbot renew   # cron
+  #
+  # Uses the webroot challenge rather than standalone so nginx never has to be
+  # stopped to renew. Cloudflare passes /.well-known/acme-challenge/ through to
+  # the origin, so this works with the proxy on or off.
+  certbot:
+    image: certbot/certbot:latest
+    profiles: ["tools"]
+    volumes:
+      - letsencrypt:/etc/letsencrypt
+      - certbot_webroot:/var/www/certbot
 
 volumes:
   postgres_data:
   backend_uploads:
   next_image_cache:
+  letsencrypt:
+  certbot_webroot:
