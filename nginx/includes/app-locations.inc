@@ -13,6 +13,11 @@ add_header X-Content-Type-Options    "nosniff"       always;
 add_header X-Frame-Options           "SAMEORIGIN"    always;
 add_header Referrer-Policy           "strict-origin-when-cross-origin" always;
 
+# Restores the visitor's address from CF-Connecting-IP when the request
+# genuinely arrives from Cloudflare. Harmless when Cloudflare is not in
+# front: without a trusted source address the header is ignored.
+include /etc/nginx/includes/cloudflare-realip.inc;
+
 # Docker's embedded DNS. Resolving through a variable rather than an `upstream`
 # block matters here: an upstream is resolved once at startup, so after
 # `docker compose up -d` gives a container a new IP, nginx would keep proxying
