@@ -1,0 +1,46 @@
+# Rendered into /etc/nginx/conf.d/roller.conf at container start by the nginx
+# image's own envsubst step. Only ${NGINX_SITE_*} placeholders are substituted
+# (NGINX_ENVSUBST_FILTER in docker-compose.prod.yml pins that) — nginx's own
+# $host, $request_uri and friends pass through untouched.
+#
+# Moving to the real domain is therefore three values in .env plus a restart,
+# not an edit to this file:
+#
+#   NGINX_SITE_SERVER_NAME=roller.tj www.roller.tj
+#   NGINX_SITE_SSL_CERT=/etc/letsencrypt/live/roller.tj/fullchain.pem
+#   NGINX_SITE_SSL_KEY=/etc/letsencrypt/live/roller.tj/privkey.pem
+
+map $http_upgrade $connection_upgrade {
+    default upgrade;
+    ''      close;
+}
+
+server {
+    listen 80 default_server;
+    server_name ${NGINX_SITE_SERVER_NAME};
+
+    # Must stay above the redirect: Let's Encrypt's HTTP-01 challenge is fetched
+    # over plain HTTP and a 301 to https would fail it.
+    location /.well-known/acme-challenge/ {
+        root /var/www/certbot;
+    }
+
+    location / {
+        return 301 https://$host$request_uri;
+    }
+}
+
+server {
+    listen 443 ssl default_server;
+    http2 on;
+    server_name ${NGINX_SITE_SERVER_NAME};
+
+    ssl_certificate     ${NGINX_SITE_SSL_CERT};
+    ssl_certificate_key ${NGINX_SITE_SSL_KEY};
+    ssl_protocols       TLSv1.2 TLSv1.3;
+    ssl_ciphers         HIGH:!aNULL:!MD5;
+    ssl_session_cache   shared:SSL:10m;
+    ssl_session_timeout 10m;
+
+    include /etc/nginx/includes/app-locations.inc;
+}

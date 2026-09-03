@@ -84,8 +84,19 @@ services:
     ports:
       - "80:80"
       - "443:443"
+    environment:
+      # Restricts the image's envsubst step to our own placeholders. Without
+      # this filter it would also expand nginx's $host, $request_uri and the
+      # rest into empty strings, silently producing a broken config.
+      NGINX_ENVSUBST_FILTER: "^NGINX_SITE_"
+      NGINX_SITE_SERVER_NAME: ${NGINX_SITE_SERVER_NAME:-_}
+      NGINX_SITE_SSL_CERT: ${NGINX_SITE_SSL_CERT:-/etc/nginx/certs/selfsigned.crt}
+      NGINX_SITE_SSL_KEY: ${NGINX_SITE_SSL_KEY:-/etc/nginx/certs/selfsigned.key}
     volumes:
-      - ./nginx/conf.d:/etc/nginx/conf.d:ro
+      # conf.d is deliberately NOT mounted: it is where the image writes the
+      # rendered template, so it has to stay writable.
+      - ./nginx/templates:/etc/nginx/templates:ro
+      - ./nginx/includes:/etc/nginx/includes:ro
       - ./nginx/certs:/etc/nginx/certs:ro
       - letsencrypt:/etc/letsencrypt:ro
       - certbot_webroot:/var/www/certbot
