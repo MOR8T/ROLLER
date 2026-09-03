@@ -3,17 +3,24 @@
 # This exists because the production server (2 vCPU / 4 GB) cannot build them:
 # `next build` peaks above its available RAM. The server only ever pulls.
 #
+# Only `main` builds. Everything else — `dev`, `development`, feature
+# branches — is ordinary work with no side effects: no images, no runner
+# minutes, nothing that can reach the server. Releasing means merging to main.
+#
+# Use the Actions tab's "Run workflow" button to build another branch by hand
+# when you need to; that produces sha-* and branch tags but never `latest`.
+#
 # Tags produced per run:
 #   sha-<short>            always — this is what you pin IMAGE_TAG to for a
 #                          reproducible deploy or a rollback
-#   <branch>               e.g. `development`, moves with the branch
-#   latest                 only on the default branch (main)
+#   main                   moves with the branch
+#   latest                 what the server runs
 
 name: Build images
 
 on:
   push:
-    branches: [main, development]
+    branches: [main]
     # Docs-only edits shouldn't spend ~10 minutes of runner time.
     paths-ignore:
       - "**/*.md"
