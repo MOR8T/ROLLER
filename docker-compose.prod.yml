@@ -9,6 +9,12 @@
 # Images are built by GitHub Actions and pulled from the registry; nothing is
 # built on the server. `next build` peaks well above this box's 4 GB of RAM.
 #
+# Both IMAGE_TAG and PUBLIC_ORIGIN are required rather than defaulted. A
+# default of `latest` silently starts a stale image whose bundled Alembic
+# revisions can be older than the ones already stamped in the database, and
+# the backend then crash-loops on "Can't locate revision". Failing loudly on
+# a missing variable is the cheaper outcome.
+#
 # Only nginx publishes ports. Note that Docker writes its own iptables rules
 # *ahead* of ufw, so a `ports:` entry here would be reachable from the internet
 # no matter what the firewall says — which is exactly why db, backend and
@@ -32,7 +38,7 @@ services:
       start_period: 5s
 
   backend:
-    image: ${REGISTRY:-ghcr.io/mor8t}/roller-backend:${IMAGE_TAG:-latest}
+    image: ${REGISTRY:-ghcr.io/mor8t}/roller-backend:${IMAGE_TAG:?set IMAGE_TAG in .env (e.g. development, or a sha-* tag)}
     restart: unless-stopped
     environment:
       DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}
@@ -43,7 +49,7 @@ services:
       INITIAL_ADMIN_USERNAME: ${INITIAL_ADMIN_USERNAME}
       INITIAL_ADMIN_EMAIL: ${INITIAL_ADMIN_EMAIL}
       INITIAL_ADMIN_PASSWORD: ${INITIAL_ADMIN_PASSWORD}
-      ALLOWED_ORIGINS: ${PUBLIC_ORIGIN}
+      ALLOWED_ORIGINS: ${PUBLIC_ORIGIN:?set PUBLIC_ORIGIN in .env (scheme + host, no trailing slash)}
       SQL_ECHO: "false"
     volumes:
       - backend_uploads:/app/uploads
@@ -52,7 +58,7 @@ services:
         condition: service_healthy
 
   frontend:
-    image: ${REGISTRY:-ghcr.io/mor8t}/roller-frontend:${IMAGE_TAG:-latest}
+    image: ${REGISTRY:-ghcr.io/mor8t}/roller-frontend:${IMAGE_TAG:?set IMAGE_TAG in .env (e.g. development, or a sha-* tag)}
     restart: unless-stopped
     environment:
       # Server-to-server calls: Docker's internal DNS, unreachable from a browser.
@@ -62,7 +68,7 @@ services:
       # `unoptimized={src.startsWith("http")}`, so next/image's optimizer stays
       # out of the way and no `remotePatterns` entry is needed. Read at runtime,
       # so switching this to https://roller.tj later needs no rebuild.
-      BACKEND_PUBLIC_URL: ${PUBLIC_ORIGIN}
+      BACKEND_PUBLIC_URL: ${PUBLIC_ORIGIN:?set PUBLIC_ORIGIN in .env (scheme + host, no trailing slash)}
     volumes:
       # next/image writes optimized variants here. Without a volume the whole
       # cache is lost on every deploy, and re-encoding AVIF for the product
