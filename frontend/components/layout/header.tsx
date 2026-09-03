@@ -20,6 +20,14 @@ const PRODUCTS_CLOSE_DELAY_MS = 140;
 // transparent "over hero" state to the solid state, in px.
 const SCROLL_THRESHOLD = 24;
 
+// Below this offset the bar never auto-hides: near the top of the page the
+// header is part of the first screen, and hiding it there reads as a glitch.
+const HIDE_AFTER = 120;
+
+// Scroll movements smaller than this are ignored, so momentum jitter and
+// rubber-banding on iOS can't flip the bar back and forth.
+const SCROLL_DELTA = 6;
+
 /**
  * Header
  *
@@ -32,8 +40,12 @@ const SCROLL_THRESHOLD = 24;
  * The bar is always light. It used to go transparent with white text while the
  * page sat at the top, which only worked over a dark full-screen hero; now that
  * white dominates the site (DESIGN.md §3) and the hero is light, that state
- * would render white text on a near-white background. The only thing scroll
- * changes now is elevation: a shadow appears once the page moves under the bar.
+ * would render white text on a near-white background. What scroll changes now
+ * is elevation — a shadow appears once the page moves under the bar — and
+ * visibility: past `HIDE_AFTER` the bar slides out of the way while the visitor
+ * reads downwards and slides back on the first upward scroll, so a long product
+ * page keeps its full viewport without the visitor having to return to the top
+ * to navigate.
  *
  * This component owns only the bar and the open/closed state; the mega-menu and
  * the mobile drawer live in their own files, each with its own behaviour.
@@ -51,12 +63,14 @@ export function Header({
   const [open, setOpen] = useState(false);
   const [productsOpen, setProductsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [hidden, setHidden] = useState(false);
 
   const t = useTranslations("header");
   const tCommon = useTranslations("common");
 
   const productsCloseTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const headerRef = useRef<HTMLElement>(null);
+  const lastScrollY = useRef(0);
 
   const openProducts = useCallback(() => {
     if (productsCloseTimer.current) {
@@ -106,23 +120,77 @@ export function Header({
     return () => document.removeEventListener("pointerdown", onPointerDown);
   }, [productsOpen]);
 
+  // One listener drives both scroll-derived states: the elevation shadow and
+  // the hide-on-scroll-down / reveal-on-scroll-up behaviour. Reads are batched
+  // into a rAF so a fast scroll costs one layout read per frame, not one per
+  // event.
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > SCROLL_THRESHOLD);
-    onScroll();
+    lastScrollY.current = Math.max(window.scrollY, 0);
+    let frame = 0;
+
+    const update = () => {
+      frame = 0;
+      const y = Math.max(window.scrollY, 0);
+      setScrolled(y > SCROLL_THRESHOLD);
+
+      const delta = y - lastScrollY.current;
+      // Keep the previous reference point until the page actually moves, so a
+      // slow drift still accumulates into a real direction.
+      if (Math.abs(delta) < SCROLL_DELTA) return;
+
+      setHidden(y > HIDE_AFTER && delta > 0);
+      lastScrollY.current = y;
+    };
+
+    const onScroll = () => {
+      if (frame) return;
+      frame = window.requestAnimationFrame(update);
+    };
+
+    update();
     window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      if (frame) window.cancelAnimationFrame(frame);
+    };
   }, []);
 
   // An open menu keeps the elevation on regardless of scroll position, so the
   // bar stays visually detached from the panel it opened.
   const elevated = scrolled || open || productsOpen;
 
+  // An open mega-menu or drawer pins the bar in place: sliding away the element
+  // the visitor just opened (and, on desktop, the panel hanging off it) would
+  // take the menu with it.
+  const concealed = hidden && !open && !productsOpen;
+
   return (
     <header
       ref={headerRef}
+      // Tabbing into a hidden bar has to bring it back, or the focus ring lands
+      // off-screen.
+      onFocusCapture={() => setHidden(false)}
       className={cn(
-        "sticky top-0 z-50 border-b border-brand-black/10 bg-surface/95 text-brand-black backdrop-blur transition-shadow duration-300",
+        "sticky top-0 z-50 border-b border-brand-black/10 bg-surface/95 text-brand-black backdrop-blur",
+        // `translate`, not `transform`: Tailwind v4 compiles `-translate-y-*`
+        // to the standalone `translate` property, and a transition on
+        // `transform` does not cover it — the bar would jump instead of slide.
+        // `transform-gpu` (a bare `translateZ(0)`) still earns its place: it
+        // promotes the blurred bar to its own compositor layer so the slide
+        // doesn't re-rasterise the backdrop blur every frame.
+        "transition-[translate,box-shadow] will-change-[translate] transform-gpu motion-reduce:transition-none",
+        // Two different curves, because the two directions are not the same
+        // gesture. Leaving is a long ease-in — the bar drifts off slowly at
+        // first, so it never snaps out from under the pointer. Coming back is
+        // an ease-out quint: fast off the mark, settling gently, which is what
+        // makes the reveal feel instant without looking abrupt.
+        concealed
+          ? "duration-[320ms] ease-[cubic-bezier(0.32,0,0.28,1)]"
+          : "duration-[320ms] ease-[cubic-bezier(0.22,1,0.36,1)]",
         elevated && "shadow-[0_8px_30px_-12px_rgba(29,29,27,0.18)]",
+        // 110%, not 100%: the elevation shadow hangs ~18px below the bar and
+        // would stay as a grey smudge along the top edge at exactly one height.
+        concealed && "-translate-y-[110%]",
       )}
     >
       {/* `gap-4` at `xl`, not `gap-6`: seven nav items plus the logo and the

@@ -17,6 +17,19 @@ ARG NEXT_PUBLIC_YANDEX_MAPS_API_KEY
 ENV NEXT_PUBLIC_YANDEX_MAPS_API_KEY=$NEXT_PUBLIC_YANDEX_MAPS_API_KEY
 ENV NEXT_TELEMETRY_DISABLED=1
 
+# `next.config.ts`'s `rewrites()` also reads BACKEND_API_URL, and `next build`
+# evaluates it once and bakes the result into .next/routes-manifest.json —
+# the standalone server reads that manifest at runtime, it does not call
+# `rewrites()` again. Without this, the fallback in next.config.ts
+# ("http://localhost:8000") gets baked in instead, and the frontend
+# container's image optimizer can't reach the backend container at all.
+# `http://backend:8000` is the one true value: every place this image is
+# actually built and run puts the two containers on the same Compose network
+# under that service name (docker-compose.prod.yml sets it identically as a
+# runtime var too, which only matters for code that reads it per-request).
+ARG BACKEND_API_URL=http://backend:8000
+ENV BACKEND_API_URL=$BACKEND_API_URL
+
 RUN npm run build
 
 # ---- runner: minimal production image (default build target) ----

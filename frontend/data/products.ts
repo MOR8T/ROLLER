@@ -218,7 +218,7 @@ export const products: ProductBase[] = [
     images: ["/products/roller/roller-main.png"],
     gallery: galleryOf("roller", PVC_PALETTE, 5),
     sections: sectionsOf("roller", 3),
-    logo: "/logos/logo-dark.png",
+    logo: "/logos/logo_dark.svg",
     popular: true,
   },
   {

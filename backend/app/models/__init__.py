@@ -22,6 +22,7 @@ from app.models.partner import Partner
 from app.models.product import Product, ProductSection, product_category_links
 from app.models.product_category import ProductCategory
 from app.models.showroom import Showroom
+from app.models.site_settings import SiteSettings
 from app.models.social_link import SocialLink
 from app.models.user import User
 
@@ -42,6 +43,7 @@ __all__ = [
     "ProductSection",
     "product_category_links",
     "Showroom",
+    "SiteSettings",
     "SocialLink",
     "User",
 ]

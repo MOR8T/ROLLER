@@ -21,6 +21,7 @@ from app.routes import (
     leads_router,
     calculator_settings_router,
     calculator_schemes_router,
+    site_settings_router,
 )
 from app.config import get_settings
 from app.startup import (
@@ -35,6 +36,7 @@ from app.startup import (
     seed_products,
     seed_calculator_settings,
     seed_calculator_schemes,
+    seed_site_settings,
 )
 
 # The only logging configuration in the app. It used to be belt-and-braces —
@@ -56,6 +58,7 @@ seed_product_categories()
 seed_products()
 seed_calculator_settings()
 seed_calculator_schemes()
+seed_site_settings()
 
 app = FastAPI(
     title="FastAPI Auth Service",
@@ -104,6 +107,7 @@ app.include_router(social_links_router)
 app.include_router(leads_router)
 app.include_router(calculator_settings_router)
 app.include_router(calculator_schemes_router)
+app.include_router(site_settings_router)
 
 @app.get("/")
 async def root():
