@@ -30,11 +30,32 @@ interface ViewState {
 
 const RESET_VIEW: ViewState = { scale: MIN_SCALE, offset: { x: 0, y: 0 } };
 
+/**
+ * Chrome labels, so the same viewer can serve the localised storefront and the
+ * Russian-only admin panel. The defaults are the admin's copy: `/admin` sits
+ * outside `[locale]` and has no `next-intl` provider, so it cannot pass any.
+ * Public callers pass the `lightbox` namespace in (see `CertificatesGallery`).
+ */
+export interface ImageLightboxLabels {
+  close: string;
+  view: string;
+  zoomOut: string;
+  zoomIn: string;
+}
+
+const DEFAULT_LABELS: ImageLightboxLabels = {
+  close: "Закрыть",
+  view: "Просмотр фотографии",
+  zoomOut: "Уменьшить",
+  zoomIn: "Увеличить",
+};
+
 export interface ImageLightboxProps {
   /** The open photo, or `null` to keep the viewer closed. */
   src: string | null;
   alt?: string;
   onClose: () => void;
+  labels?: ImageLightboxLabels;
 }
 
 /**
@@ -47,7 +68,12 @@ export interface ImageLightboxProps {
  * cursor), pinch on touch, or the +/- buttons — up to 4×. Pan by dragging
  * once zoomed past 1×.
  */
-export function ImageLightbox({ src, alt = "", onClose }: ImageLightboxProps) {
+export function ImageLightbox({
+  src,
+  alt = "",
+  onClose,
+  labels = DEFAULT_LABELS,
+}: ImageLightboxProps) {
   const prefersReducedMotion = useReducedMotion();
   const open = src !== null;
 
@@ -81,7 +107,7 @@ export function ImageLightbox({ src, alt = "", onClose }: ImageLightboxProps) {
         >
           <button
             type="button"
-            aria-label="Закрыть"
+            aria-label={labels.close}
             onClick={onClose}
             className="absolute top-4 right-4 z-10 grid size-11 place-items-center rounded-full bg-brand-white/10 text-brand-white transition-colors hover:bg-brand-white/20 focus-visible:ring-2 focus-visible:ring-brand-white focus-visible:outline-none"
           >
@@ -90,7 +116,13 @@ export function ImageLightbox({ src, alt = "", onClose }: ImageLightboxProps) {
 
           {/* Keyed by `src`: a fresh photo remounts this instead of reusing
               stale zoom/pan state via an effect. */}
-          <ZoomablePhoto key={src} src={src} alt={alt} reducedMotion={!!prefersReducedMotion} />
+          <ZoomablePhoto
+            key={src}
+            src={src}
+            alt={alt}
+            labels={labels}
+            reducedMotion={!!prefersReducedMotion}
+          />
         </motion.div>
       ) : null}
     </AnimatePresence>
@@ -100,10 +132,12 @@ export function ImageLightbox({ src, alt = "", onClose }: ImageLightboxProps) {
 function ZoomablePhoto({
   src,
   alt,
+  labels,
   reducedMotion,
 }: {
   src: string | null;
   alt: string;
+  labels: ImageLightboxLabels;
   reducedMotion: boolean;
 }) {
   const [view, setView] = useState<ViewState>(RESET_VIEW);
@@ -234,7 +268,7 @@ function ZoomablePhoto({
         ref={containerRef}
         role="dialog"
         aria-modal="true"
-        aria-label={alt || "Просмотр фотографии"}
+        aria-label={alt || labels.view}
         className={cn(
           "relative h-full w-full touch-none overflow-hidden p-6 sm:p-12",
           view.scale > MIN_SCALE
@@ -279,7 +313,7 @@ function ZoomablePhoto({
       <div className="absolute bottom-5 left-1/2 z-10 flex -translate-x-1/2 items-center gap-1 rounded-full bg-brand-black/50 p-1 backdrop-blur-sm">
         <button
           type="button"
-          aria-label="Уменьшить"
+          aria-label={labels.zoomOut}
           disabled={view.scale <= MIN_SCALE}
           onClick={() => zoomAtCenter(view.scale - BUTTON_ZOOM_STEP)}
           className="grid size-9 place-items-center rounded-full text-brand-white transition-colors hover:bg-brand-white/15 focus-visible:ring-2 focus-visible:ring-brand-white focus-visible:outline-none disabled:pointer-events-none disabled:opacity-40"
@@ -291,7 +325,7 @@ function ZoomablePhoto({
         </span>
         <button
           type="button"
-          aria-label="Увеличить"
+          aria-label={labels.zoomIn}
           disabled={view.scale >= MAX_SCALE}
           onClick={() => zoomAtCenter(view.scale + BUTTON_ZOOM_STEP)}
           className="grid size-9 place-items-center rounded-full text-brand-white transition-colors hover:bg-brand-white/15 focus-visible:ring-2 focus-visible:ring-brand-white focus-visible:outline-none disabled:pointer-events-none disabled:opacity-40"
