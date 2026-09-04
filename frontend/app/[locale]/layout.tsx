@@ -12,6 +12,11 @@ import { MaintenanceScreen } from "@/components/layout/maintenance-screen";
 import { getSiteSettings } from "@/lib/site-settings";
 import { hasMaintenancePreviewAccess } from "@/lib/maintenance-access";
 import { routing } from "@/i18n/routing";
+import { seoConfig } from "@/lib/seo-config";
+import { siteUrl } from "@/lib/seo";
+import { buildOrganizationJsonLd, buildWebSiteJsonLd } from "@/lib/json-ld";
+import { JsonLd } from "@/components/seo/json-ld";
+import { Analytics } from "@/components/seo/analytics";
 
 /**
  * Fonts.
@@ -89,24 +94,65 @@ export async function generateMetadata({
   const { maintenanceMode } = await getSiteSettings();
 
   // …unless this visitor holds a valid preview code, in which case they are
-  // looking at the real site and its metadata should describe it.
+  // looking at the real site and its metadata should describe it. `robots`
+  // below still says `noindex` for them, and rightly: a crawler cannot hold
+  // the cookie, so the only reader of the real title here is the person who
+  // typed the code.
   const previewing = maintenanceMode && (await hasMaintenancePreviewAccess());
+
+  // `metadataBase` is what every relative canonical and `og:image` on the site
+  // resolves against. It is set here, in the one layout every public page
+  // passes through, rather than in each page: Next merges metadata down the
+  // tree, and a page that forgot it would silently resolve its canonical
+  // against `http://localhost:3000` — the exact failure the note in
+  // `app/[locale]/news/page.tsx` refused to risk before this value had a home.
+  const metadataBase = new URL(siteUrl);
+
+  // The two search-console tokens. Rendered on every page rather than only on
+  // the homepage because Google and Yandex both re-verify against whatever URL
+  // they happen to crawl, and a token that disappears mid-site is read as
+  // verification withdrawn.
+  const verification = {
+    ...(seoConfig.verification.google ? { google: seoConfig.verification.google } : {}),
+    ...(seoConfig.verification.yandex ? { yandex: seoConfig.verification.yandex } : {}),
+  };
 
   if (maintenanceMode && !previewing) {
     const tMaintenance = await getTranslations({ locale, namespace: "maintenance" });
-    return { title: tMaintenance("title"), robots: { index: false, follow: false } };
+    return {
+      metadataBase,
+      title: tMaintenance("title"),
+      robots: { index: false, follow: false },
+      verification,
+    };
   }
 
   const t = await getTranslations({ locale, namespace: "meta" });
 
   return {
+    metadataBase,
     title: { default: t("title"), template: t("titleTemplate") },
     description: t("description"),
-    // A previewing visitor gets the real title, never an invitation to index a
-    // site that is still closed. Belt and braces — a crawler cannot hold the
-    // cookie in the first place.
-    ...(previewing ? { robots: { index: false, follow: false } } : {}),
+    verification,
+    // The site-wide switch. A page that sets its own `robots` (all of them do,
+    // through `buildPageMetadata`) overrides this; it is the floor for
+    // anything that does not — `not-found`, and any route added later that
+    // forgets its own metadata.
+    ...(seoConfig.allowIndexing && !previewing ? {} : { robots: { index: false, follow: false } }),
   };
+}
+
+/**
+ * `<html lang>`.
+ *
+ * ⚠️ Not the URL segment. `tj` is the ISO 3166 country code for Tajikistan;
+ * the ISO 639 language code for Tajik is `tg`, and `lang="tj"` is simply
+ * invalid — screen readers fall back to the browser default and Google reads
+ * no language at all. Same substitution, same reason, as
+ * `HREFLANG_BY_LOCALE` in `lib/seo.ts`; the URL keeps saying `tj`.
+ */
+function htmlLang(locale: string): string {
+  return locale === "tj" ? "tg" : locale;
 }
 
 export default async function LocaleLayout({ children, params }: LayoutProps<"/[locale]">) {
@@ -147,7 +193,7 @@ export default async function LocaleLayout({ children, params }: LayoutProps<"/[
   if (maintenanceMode && !previewing) {
     return (
       <html
-        lang={locale}
+        lang={htmlLang(locale)}
         className={`${montserrat.variable} ${chakraPetch.variable} h-full antialiased`}
       >
         <body className="min-h-full">
@@ -166,12 +212,28 @@ export default async function LocaleLayout({ children, params }: LayoutProps<"/[
   // rather than one per navigation.
   const productCategories = await getProductsMenu(locale);
 
+  // Structured data and the analytics counters, both driven by
+  // `lib/seo-config.ts` like the metadata above. They live in the layout
+  // because they describe the site rather than any one page: emitting the
+  // organisation graph once, with a stable `@id`, is what lets the product and
+  // article graphs on the pages below point at it instead of restating the
+  // publisher on every URL.
+  const [organization, website] = await Promise.all([
+    buildOrganizationJsonLd(locale),
+    buildWebSiteJsonLd(locale),
+  ]);
+
   return (
     <html
-      lang={locale}
+      lang={htmlLang(locale)}
       className={`${montserrat.variable} ${chakraPetch.variable} h-full antialiased`}
     >
       <body className="flex min-h-full flex-col overflow-x-hidden bg-background text-foreground">
+        <JsonLd data={[organization, website]} />
+        <Analytics
+          yandexMetrikaId={seoConfig.analytics.yandexMetrika}
+          googleAnalyticsId={seoConfig.analytics.googleAnalytics}
+        />
         <NextIntlClientProvider>
           <a
             href="#top"

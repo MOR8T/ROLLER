@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 
+import { buildPageMetadata } from "@/lib/page-metadata";
+import { SEO_PAGE_PATHS } from "@/lib/seo";
+
 import { PageHeader } from "@/components/layout/page-header";
 import { ContactsLeadSection } from "@/components/sections/contacts-lead-section";
 import { ShowroomsDirectory } from "@/components/sections/showrooms-directory";
@@ -13,7 +16,16 @@ export async function generateMetadata({
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "showroom" });
 
-  return { title: t("metaTitle"), description: t("metaDescription") };
+  // The copy is this page's own, from `messages/*.json`; `buildPageMetadata`
+  // adds everything structural around it — canonical, hreflang, Open Graph,
+  // robots — from `lib/seo-config.ts`.
+  return buildPageMetadata({
+    locale,
+    path: SEO_PAGE_PATHS.showroom,
+    pageKey: "showroom",
+    title: t("metaTitle"),
+    description: t("metaDescription"),
+  });
 }
 
 /**
@@ -50,7 +62,7 @@ export default async function ShowroomPage({ params }: PageProps<"/[locale]/show
 
   return (
     <>
-      <Section className="pb-0 pt-12!">
+      <Section className="pt-12! pb-0">
         <PageHeader
           breadcrumbs={[{ label: t("breadcrumb") }]}
           title={t("title")}

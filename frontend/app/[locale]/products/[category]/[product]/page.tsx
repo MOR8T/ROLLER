@@ -5,7 +5,10 @@ import { ContactsLeadSection } from "@/components/sections/contacts-lead-section
 import { ProductPageView } from "@/components/products/page/product-page-view";
 import type { Locale } from "@/i18n/routing";
 import { localized } from "@/lib/localized";
-import { getProductMeta, getProductPage, productParams } from "@/lib/products";
+import { getProductMeta, getProductPage, productHref, productParams } from "@/lib/products";
+import { buildPageMetadata } from "@/lib/page-metadata";
+import { buildProductJsonLd } from "@/lib/json-ld";
+import { JsonLd } from "@/components/seo/json-ld";
 
 /**
  * `/[locale]/products/[category]/[product]` — the product page.
@@ -40,15 +43,25 @@ export async function generateStaticParams() {
 export async function generateMetadata({
   params,
 }: PageProps<"/[locale]/products/[category]/[product]">): Promise<Metadata> {
-  const { locale, product } = await params;
+  const { locale, category, product } = await params;
   const meta = await getProductMeta(locale, Number(product));
 
   if (!meta) {
+    // A product id that does not exist renders the «не найден» section rather
+    // than a 404 (see the note above), so it is a real 200 response and needs
+    // to be kept out of the index explicitly — otherwise every stale link from
+    // the slug era becomes an indexed empty page.
     const t = await getTranslations({ locale, namespace: "productPage" });
-    return { title: t("notFound.title") };
+    return { title: t("notFound.title"), robots: { index: false, follow: false } };
   }
 
-  return { title: meta.title, description: meta.description };
+  return buildPageMetadata({
+    locale,
+    path: productHref(Number(category), Number(product)),
+    title: meta.title,
+    description: meta.description,
+    image: meta.image ?? undefined,
+  });
 }
 
 export default async function ProductPage({
@@ -61,6 +74,27 @@ export default async function ProductPage({
   // the slug era becomes the «не найден» section rather than an error page.
   const pageData = await getProductPage(Number(category), Number(product));
 
+  // `Product` markup, and only when the product actually resolved — the
+  // «не найден» state is a page about nothing and has no product to describe.
+  //
+  // ⚠️ No `BreadcrumbList` here, unlike the category and article pages. This
+  // page renders no visible trail (`ProductPageView` has none), and breadcrumb
+  // markup that a visitor cannot see on the page is the mismatch the note in
+  // `lib/json-ld.ts` warns about. Giving the product page a visible trail would
+  // be the fix; inventing one in the markup alone is not.
+  const meta = await getProductMeta(locale, Number(product));
+  const productJsonLd =
+    pageData.status === "found" && meta
+      ? await buildProductJsonLd({
+          locale,
+          path: productHref(Number(category), Number(product)),
+          name: meta.title,
+          description: meta.description,
+          image: meta.image ?? undefined,
+          category: meta.categories.find((item) => item.id === Number(category))?.name,
+        })
+      : null;
+
   const contactsSection =
     pageData.status === "found" ? (
       <ContactsLeadSection
@@ -71,5 +105,10 @@ export default async function ProductPage({
       />
     ) : null;
 
-  return <ProductPageView initialData={pageData} contactsSection={contactsSection} />;
+  return (
+    <>
+      <JsonLd data={productJsonLd} />
+      <ProductPageView initialData={pageData} contactsSection={contactsSection} />
+    </>
+  );
 }

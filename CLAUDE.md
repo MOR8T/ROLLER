@@ -192,6 +192,41 @@ visitor. Three things are load-bearing:
 It gates *rendering the public site* and nothing else. `/admin`, `/login` and
 `/api` never consult it.
 
+### SEO
+Configured entirely in code, in one file: `lib/seo-config.ts` (canonical origin,
+indexing switch, share card, verification tokens, Metrika/GA4 counters, the
+`Organization`/`LocalBusiness` facts, per-page `noindex` and keywords). There is
+no admin section and no database table behind it — an earlier build had both and
+they were dropped: the values change a few times a year, and a form that has to
+be kept in sync with the code reading it is a second thing to get wrong.
+`SEO.md` in the repo root is the companion doc (in Russian, like `DEPLOYMENT.md`)
+— what is set, what is still waiting on the client, and where each value goes.
+
+Page copy is **not** in that config. `<title>`/`description` stay in
+`messages/*.json` under `metaTitle`/`metaDescription`, per the data-layer rule
+above; products, categories and articles take theirs from their own records.
+
+**Every public page's `generateMetadata` goes through `buildPageMetadata`**
+(`lib/page-metadata.ts`) — it owns canonical, hreflang, Open Graph, Twitter and
+the robots directives so those are decided once rather than eleven times. Pages
+pass their own copy in. It is synchronous; there is nothing to await.
+`app/sitemap.ts` and `app/robots.ts` read the same config (plus `getSiteSettings`
+for maintenance mode); JSON-LD is built in `lib/json-ld.ts` and rendered by
+`components/seo/json-ld.tsx`.
+
+⚠️ **`tj` is a country code, not a language.** The URL segment stays `tj`
+(frozen by `i18n/routing.ts`), but `hreflang`, `<html lang>`, `og:locale` and
+`inLanguage` all say `tg`/`tg-TJ`/`tg_TJ` — an invalid tag makes Google drop
+the whole alternates cluster, not just the one entry. `HREFLANG_BY_LOCALE` and
+`OG_LOCALE` are where that substitution lives.
+
+⚠️ **No prices in structured data.** The `Product` graph carries no `offers`,
+`priceRange` or `aggregateRating` — the site publishes no prices and the
+calculator is explicitly not a price calculator, so fabricating them is both
+untrue and a structured-data penalty. The product page also emits no
+`BreadcrumbList`, because it renders no visible trail; giving it one is the fix,
+inventing the markup alone is not.
+
 ### Design tokens
 Brand colors, radii, container width, spacing scale, and hero height are Tailwind
 v4 `@theme` custom properties in `app/globals.css`. Fonts are Chakra Petch
