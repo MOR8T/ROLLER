@@ -1,9 +1,10 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { useIsomorphicLayoutEffect } from "@/lib/use-isomorphic-layout-effect";
+import { MaintenanceAccessDialog } from "@/components/layout/maintenance-access-dialog";
 
 /**
  * The "САЙТ В РАЗРАБОТКЕ" takeover, shown instead of the whole public site
@@ -21,6 +22,12 @@ import { useIsomorphicLayoutEffect } from "@/lib/use-isomorphic-layout-effect";
  *   - the caption is translated (`messages/*.json` → `maintenance`) instead of
  *     being Russian on every locale, since this renders under `[locale]`.
  *
+ * The one thing the original did not have: the logo plate is a button when
+ * an admin has set a preview code in «Настройки сайта». It opens
+ * `MaintenanceAccessDialog`, and a correct code lets that visitor through to
+ * the real site — see `lib/maintenance-access.ts` for what "through" means
+ * and, just as importantly, what it does not.
+ *
  * Everything visual lives in `app/globals.css` under "Maintenance screen";
  * see that block for the palette and the timing constants' CSS twins.
  */
@@ -37,10 +44,16 @@ import { useIsomorphicLayoutEffect } from "@/lib/use-isomorphic-layout-effect";
  */
 const STROKE_STAGGER_MS = 80;
 
-export function MaintenanceScreen() {
+/**
+ * @param previewEnabled  A preview code is configured, so the plate unlocks
+ *   something. False — the shipped state — leaves it as the plain sign it has
+ *   always been, rather than a prompt no code can satisfy.
+ */
+export function MaintenanceScreen({ previewEnabled = false }: { previewEnabled?: boolean }) {
   const t = useTranslations("maintenance");
   const stageRef = useRef<HTMLDivElement>(null);
   const svgRef = useRef<SVGSVGElement>(null);
+  const [dialogOpen, setDialogOpen] = useState(false);
 
   // Layout effect, not `useEffect`: this runs before the browser paints, so
   // the outline never shows up finished for a frame and then restart.
@@ -189,12 +202,44 @@ export function MaintenanceScreen() {
         </svg>
       </div>
 
+      {/* The plate itself stays `pointer-events: none` — it spans the whole
+          stage, so making it clickable would make the background clickable.
+          Only the sign inside it takes the click, which is the thing a visitor
+          sees and aims at anyway. */}
       <div className="maintenance-plate">
-        <div className="maintenance-logo">
-          <Image src="/maintenance/roller-logo.svg" alt="ROLLER" width={222} height={48} priority />
-          <p className="maintenance-caption">{t("caption")}</p>
-        </div>
+        {previewEnabled ? (
+          <button
+            type="button"
+            className="maintenance-logo maintenance-logo--interactive"
+            onClick={() => setDialogOpen(true)}
+            aria-haspopup="dialog"
+            aria-expanded={dialogOpen}
+            title={t("accessTitle")}
+          >
+            <Image
+              src="/maintenance/roller-logo.svg"
+              alt="ROLLER"
+              width={222}
+              height={48}
+              priority
+            />
+            <span className="maintenance-caption">{t("caption")}</span>
+          </button>
+        ) : (
+          <div className="maintenance-logo">
+            <Image
+              src="/maintenance/roller-logo.svg"
+              alt="ROLLER"
+              width={222}
+              height={48}
+              priority
+            />
+            <p className="maintenance-caption">{t("caption")}</p>
+          </div>
+        )}
       </div>
+
+      {dialogOpen ? <MaintenanceAccessDialog onClose={() => setDialogOpen(false)} /> : null}
     </div>
   );
 }

@@ -167,7 +167,30 @@ down on its own. The switch is instant because the action revalidates the
 in 2026-09 (Tilda + GSAP), down to its palette and timings — the styles are in
 `app/globals.css` under "Maintenance screen", the stroke stagger is in the
 component because it sorts by `getTotalLength()`. Treat it as a copy of that
-page, not as a design to iterate on.
+page, not as a design to iterate on. Its one addition is the preview door
+below.
+
+**Preview code.** `/admin/settings` → «Код доступа к сайту» writes
+`site_settings.preview_code`. When one is set, the placeholder's logo plate
+becomes a button that opens a code prompt (`maintenance-access-dialog.tsx`,
+styled in the same `globals.css` block — *not* `components/ui/modal.tsx`,
+which is the light site-design-system dialog). A correct code goes into an
+httpOnly cookie and `app/[locale]/layout.tsx` renders the real site for that
+visitor. Three things are load-bearing:
+
+- the code is **never** in the public `/api/site-settings` payload — that
+  response carries only `preview_access_enabled`; the code is compared by
+  `POST /api/site-settings/preview-access` and read back only by the
+  authenticated `/api/site-settings/admin`;
+- `lib/maintenance-access.ts` fails **closed**, the mirror of
+  `lib/site-settings.ts`'s fail-open, and re-checks the cookie against the
+  backend every render — which is what makes changing the code revoke every
+  session at once;
+- the `cookies()` read is guarded by `maintenanceMode`, so the public pages
+  stay statically rendered while the switch is off.
+
+It gates *rendering the public site* and nothing else. `/admin`, `/login` and
+`/api` never consult it.
 
 ### Design tokens
 Brand colors, radii, container width, spacing scale, and hero height are Tailwind

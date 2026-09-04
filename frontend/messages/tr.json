@@ -6,7 +6,14 @@
   },
   "maintenance": {
     "caption": "Site yapım aşamasında",
-    "title": "Site yapım aşamasında"
+    "title": "Site yapım aşamasında",
+    "accessTitle": "Ön izleme erişimi",
+    "accessDescription": "Site yayına girmeden önce görüntülemek için erişim kodunu girin.",
+    "accessLabel": "Erişim kodu",
+    "accessSubmit": "Siteyi aç",
+    "accessPending": "Kontrol ediliyor…",
+    "accessError": "Kod hatalı",
+    "accessClose": "Kapat"
   },
   "common": {
     "skipToContent": "Ana içeriğe geç",

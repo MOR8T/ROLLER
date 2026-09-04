@@ -6,7 +6,14 @@
   },
   "maintenance": {
     "caption": "Сайт в разработке",
-    "title": "Сайт на стадии разработки"
+    "title": "Сайт на стадии разработки",
+    "accessTitle": "Доступ к сайту",
+    "accessDescription": "Введите код доступа, чтобы посмотреть сайт до его запуска.",
+    "accessLabel": "Код доступа",
+    "accessSubmit": "Открыть сайт",
+    "accessPending": "Проверяем…",
+    "accessError": "Неверный код",
+    "accessClose": "Закрыть"
   },
   "common": {
     "skipToContent": "Перейти к основному содержимому",

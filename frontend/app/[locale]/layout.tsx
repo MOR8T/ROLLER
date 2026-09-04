@@ -10,6 +10,7 @@ import { Footer } from "@/components/layout/footer";
 import { WhatsAppFab } from "@/components/layout/whatsapp-fab";
 import { MaintenanceScreen } from "@/components/layout/maintenance-screen";
 import { getSiteSettings } from "@/lib/site-settings";
+import { hasMaintenancePreviewAccess } from "@/lib/maintenance-access";
 import { routing } from "@/i18n/routing";
 
 /**
@@ -86,7 +87,12 @@ export async function generateMetadata({
   // stay away, so a search engine that happens to recrawl during the closure
   // does not replace the real listings with it.
   const { maintenanceMode } = await getSiteSettings();
-  if (maintenanceMode) {
+
+  // …unless this visitor holds a valid preview code, in which case they are
+  // looking at the real site and its metadata should describe it.
+  const previewing = maintenanceMode && (await hasMaintenancePreviewAccess());
+
+  if (maintenanceMode && !previewing) {
     const tMaintenance = await getTranslations({ locale, namespace: "maintenance" });
     return { title: tMaintenance("title"), robots: { index: false, follow: false } };
   }
@@ -96,6 +102,10 @@ export async function generateMetadata({
   return {
     title: { default: t("title"), template: t("titleTemplate") },
     description: t("description"),
+    // A previewing visitor gets the real title, never an invitation to index a
+    // site that is still closed. Belt and braces — a crawler cannot hold the
+    // cookie in the first place.
+    ...(previewing ? { robots: { index: false, follow: false } } : {}),
   };
 }
 
@@ -118,12 +128,23 @@ export default async function LocaleLayout({ children, params }: LayoutProps<"/[
   //
   // `/admin`, `/login` and `/api` sit outside `[locale]` and are untouched —
   // an admin has to stay able to log in and switch this back off.
-  const { maintenanceMode } = await getSiteSettings();
+  const { maintenanceMode, previewAccessEnabled } = await getSiteSettings();
+
+  // The one way past it: a visitor who typed the admin's preview code into
+  // the placeholder is carrying an httpOnly cookie, re-checked against the
+  // backend here on every render (`lib/maintenance-access.ts`).
+  //
+  // ⚠️ Guarded by `maintenanceMode` rather than called unconditionally,
+  // because it reads `cookies()` — which would opt every public page out of
+  // the static rendering `setRequestLocale` just bought back. While the
+  // switch is on the site is dynamic anyway; while it is off, nothing here
+  // touches a cookie and the pages stay static.
+  const previewing = maintenanceMode && (await hasMaintenancePreviewAccess());
 
   // The chrome (header, footer, WhatsApp button) and `children` are all
   // dropped: the placeholder replaces the site, it does not overlay it, so
   // there is nothing left to navigate to or scroll past.
-  if (maintenanceMode) {
+  if (maintenanceMode && !previewing) {
     return (
       <html
         lang={locale}
@@ -131,7 +152,7 @@ export default async function LocaleLayout({ children, params }: LayoutProps<"/[
       >
         <body className="min-h-full">
           <NextIntlClientProvider>
-            <MaintenanceScreen />
+            <MaintenanceScreen previewEnabled={previewAccessEnabled} />
           </NextIntlClientProvider>
         </body>
       </html>

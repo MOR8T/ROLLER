@@ -57,18 +57,32 @@ export async function changePasswordAction(formData: FormData): Promise<ActionRe
 
 /**
  * «Сайт в разработке» — the switch that replaces the whole public site with
- * `MaintenanceScreen`. Read and written as the one-field singleton it is; see
- * `lib/site-settings.ts` for the read path the site itself uses.
+ * `MaintenanceScreen`, plus the code that lets a chosen visitor back through
+ * it. See `lib/site-settings.ts` for the read path the site itself uses, and
+ * `lib/maintenance-access.ts` for what the code does once it is accepted.
  */
 export interface AdminSiteSettingsDto {
   maintenanceMode: boolean;
+  /** `null` → no code set, and the placeholder has nothing to unlock. */
+  previewCode: string | null;
 }
 
+/**
+ * Reads `/admin`, not the public `/api/site-settings`: the code is the one
+ * field the public response deliberately withholds, and this page has to show
+ * the admin the code they are handing out.
+ */
 export async function getAdminSiteSettings(): Promise<AdminSiteSettingsDto | null> {
-  const result = await adminRequest<{ maintenance_mode: boolean }>("/api/site-settings", {
-    cache: "no-store",
-  });
-  return result.success ? { maintenanceMode: result.data.maintenance_mode === true } : null;
+  const result = await adminRequest<{ maintenance_mode: boolean; preview_code: string | null }>(
+    "/api/site-settings/admin",
+    { cache: "no-store" },
+  );
+  return result.success
+    ? {
+        maintenanceMode: result.data.maintenance_mode === true,
+        previewCode: result.data.preview_code || null,
+      }
+    : null;
 }
 
 export async function updateMaintenanceModeAction(enabled: boolean): Promise<ActionResult> {
@@ -84,6 +98,39 @@ export async function updateMaintenanceModeAction(enabled: boolean): Promise<Act
     // this is what makes the switch take effect at once rather than at the end
     // of that fetch's 60s window. "max" is the stale-while-revalidate profile
     // the rest of this project uses — see `contact-info-actions.ts`.
+    revalidateTag("site-settings", "max");
+  }
+
+  return result;
+}
+
+/**
+ * Saves or clears the preview code.
+ *
+ * No `revalidateTag("site-settings")` for the *code* itself — the site never
+ * caches it; `lib/maintenance-access.ts` re-checks the cookie against the
+ * backend on every render, so a changed code takes effect on the next
+ * request without anything being invalidated. The tag is still revalidated
+ * because the public payload carries `preview_access_enabled`, which decides
+ * whether the placeholder's plate is a button at all.
+ */
+export async function updatePreviewCodeAction(code: string): Promise<ActionResult> {
+  const trimmed = code.trim();
+  if (trimmed && trimmed.length < 4) {
+    return { success: false, error: "Код должен быть не короче 4 символов" };
+  }
+  if (trimmed.length > 64) {
+    return { success: false, error: "Код должен быть не длиннее 64 символов" };
+  }
+
+  const result = await adminRequest("/api/site-settings/preview-code", {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ preview_code: trimmed || null }),
+  });
+
+  if (result.success) {
+    revalidatePath("/admin/settings");
     revalidateTag("site-settings", "max");
   }
 
