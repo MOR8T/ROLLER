@@ -17,8 +17,13 @@ COMPOSE="docker compose -f docker-compose.prod.yml"
 echo "==> git pull"
 git pull --ff-only
 
-echo "==> pulling images"
-$COMPOSE pull
+# Only our own images, and only from GHCR. `compose pull` with no arguments
+# also re-checks postgres and nginx on Docker Hub, whose anonymous pull limit
+# is low enough to return 429 on an ordinary day — which aborts the pull and
+# leaves the stack running the previous release while .env claims otherwise.
+# Both are pinned tags anyway; bump them deliberately, not on every deploy.
+echo "==> pulling application images"
+$COMPOSE pull backend frontend
 
 echo "==> starting"
 $COMPOSE up -d
