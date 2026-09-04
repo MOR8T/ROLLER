@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 
+import { buildPageMetadata } from "@/lib/page-metadata";
+import { SEO_PAGE_PATHS } from "@/lib/seo";
+
 import { Calculator } from "@/components/calculator/calculator";
 import { Breadcrumbs } from "@/components/products/breadcrumbs";
 import { Container } from "@/components/ui/container";
@@ -12,7 +15,16 @@ export async function generateMetadata({
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "calculator" });
 
-  return { title: t("metaTitle"), description: t("metaDescription") };
+  // The copy is this page's own, from `messages/*.json`; `buildPageMetadata`
+  // adds everything structural around it — canonical, hreflang, Open Graph,
+  // robots — from `lib/seo-config.ts`.
+  return buildPageMetadata({
+    locale,
+    path: SEO_PAGE_PATHS.calculator,
+    pageKey: "calculator",
+    title: t("metaTitle"),
+    description: t("metaDescription"),
+  });
 }
 
 /**

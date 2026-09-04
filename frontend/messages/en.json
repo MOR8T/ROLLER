@@ -6,7 +6,14 @@
   },
   "maintenance": {
     "caption": "Site under construction",
-    "title": "Site under construction"
+    "title": "Site under construction",
+    "accessTitle": "Preview access",
+    "accessDescription": "Enter the access code to view the site before it goes live.",
+    "accessLabel": "Access code",
+    "accessSubmit": "Open the site",
+    "accessPending": "Checking…",
+    "accessError": "Wrong code",
+    "accessClose": "Close"
   },
   "common": {
     "skipToContent": "Skip to main content",

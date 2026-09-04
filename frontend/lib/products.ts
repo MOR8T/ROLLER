@@ -525,11 +525,23 @@ export async function getProductPage(
   };
 }
 
-/** The product's title in one locale, for `generateMetadata`. */
+/**
+ * The product's title in one locale, for `generateMetadata`.
+ *
+ * `image` and `categories` were added when the product page grew an `og:image`
+ * and a `Product` graph: both are already on the row this function loads, and
+ * fetching the same product a second time from the page's own metadata just to
+ * read its photo would double the request count on every product URL.
+ */
 export async function getProductMeta(
   locale: string,
   productId: number,
-): Promise<{ title: string; description: string } | null> {
+): Promise<{
+  title: string;
+  description: string;
+  image: string | null;
+  categories: { id: number; name: string }[];
+} | null> {
   const key = resolveLocale(locale);
   const product = await loadProduct(productId);
   if (!product) return null;
@@ -537,6 +549,11 @@ export async function getProductMeta(
   return {
     title: textOf(product, "title")[key],
     description: textOf(product, "description")[key],
+    image: product.image_path ? resolveImageSrc(product.image_path) : null,
+    categories: product.categories.map((category) => ({
+      id: category.id,
+      name: textOf(category, "name")[key],
+    })),
   };
 }
 

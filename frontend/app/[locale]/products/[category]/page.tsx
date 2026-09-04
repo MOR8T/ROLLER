@@ -8,7 +8,10 @@ import { ContactsLeadSection } from "@/components/sections/contacts-lead-section
 import { Container } from "@/components/ui/container";
 import { RevealGroup, RevealItem } from "@/components/ui/reveal";
 import { Section } from "@/components/ui/section";
-import { getProductCategoryPage, productCategoryParams } from "@/lib/products";
+import { getProductCategoryPage, productCategoryHref, productCategoryParams } from "@/lib/products";
+import { buildPageMetadata } from "@/lib/page-metadata";
+import { buildBreadcrumbJsonLd } from "@/lib/json-ld";
+import { JsonLd } from "@/components/seo/json-ld";
 import { notFound } from "next/navigation";
 
 /**
@@ -54,10 +57,15 @@ export async function generateMetadata({
 
   const t = await getTranslations({ locale, namespace: "productsCategory" });
 
-  return {
+  // No `pageKey`: there are six categories today and the admin adds more, so
+  // their metadata follows the category record rather than a fixed row.
+  return buildPageMetadata({
+    locale,
+    path: productCategoryHref(page.id),
     title: t("metaTitle", { name: page.name }),
     description: t("metaDescription", { name: page.name }),
-  };
+    image: page.image,
+  });
 }
 
 export default async function ProductCategoryPage({
@@ -92,8 +100,14 @@ export default async function ProductCategoryPage({
       ? "(max-width: 640px) 92vw, 46vw"
       : "(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw";
 
+  // Mirrors the trail `CategoryHeroSection` draws — «Главная → <категория>»,
+  // with the home crumb prepended inside the builder just as `Breadcrumbs`
+  // prepends it to the visible one.
+  const breadcrumbJsonLd = await buildBreadcrumbJsonLd(locale, [{ name: page.name }]);
+
   return (
     <>
+      <JsonLd data={breadcrumbJsonLd} />
       <CategoryHeroSection name={page.name} image={page.image} />
 
       <Section tone="muted">

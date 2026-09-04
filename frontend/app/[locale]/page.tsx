@@ -1,4 +1,8 @@
-import { setRequestLocale } from "next-intl/server";
+import type { Metadata } from "next";
+import { getTranslations, setRequestLocale } from "next-intl/server";
+
+import { buildPageMetadata } from "@/lib/page-metadata";
+import { SEO_PAGE_PATHS } from "@/lib/seo";
 import { AboutStatsSection } from "@/components/sections/about-stats-section";
 import { ContactsLeadSection } from "@/components/sections/contacts-lead-section";
 import { HeroSection } from "@/components/sections/hero-section";
@@ -34,6 +38,29 @@ import { getShowrooms } from "@/lib/showrooms";
  * "О компании"; the suppliers' strip became `PartnersSection`. The objects now
  * live at `/products`, which the offers tabs link to.
  */
+/**
+ * The homepage had no `generateMetadata` of its own — it inherited the layout's
+ * `meta.title`/`meta.description` and that was the whole of its `<head>`. It
+ * needs one now for the parts the layout cannot supply: the canonical, the
+ * four-language alternates cluster, and the admin's overrides for the one page
+ * that gets more search traffic than the other five combined.
+ */
+export async function generateMetadata({ params }: PageProps<"/[locale]">): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "meta" });
+
+  return buildPageMetadata({
+    locale,
+    path: SEO_PAGE_PATHS.home,
+    pageKey: "home",
+    title: t("title"),
+    description: t("description"),
+    // `meta.title` is already «ROLLER — Профильные системы…»; the layout's
+    // `%s | ROLLER` template on top of it would say the brand twice.
+    absoluteTitle: true,
+  });
+}
+
 export default async function Home({ params }: PageProps<"/[locale]">) {
   const { locale } = await params;
   setRequestLocale(locale);

@@ -579,6 +579,195 @@ h6 {
   text-transform: uppercase;
 }
 
+/* ---------------------------------------------------------------------------
+   The preview door — `components/layout/maintenance-access-dialog.tsx`.
+
+   When «Настройки сайта» has a preview code, the sign becomes a button and
+   this is what opens behind it. It borrows the stage's four custom properties
+   (they are declared on `.maintenance-stage`, which is this dialog's ancestor)
+   rather than the site's `@theme` tokens, for the reason at the top of this
+   block: the site's own `Modal` would open a white card over a screen that has
+   no white in it.
+   --------------------------------------------------------------------------- */
+
+/* Only the sign takes the pointer; `.maintenance-plate` above it stays inert
+   so the rest of the stage is not one big click target. */
+.maintenance-logo--interactive {
+  cursor: pointer;
+  pointer-events: auto;
+  font: inherit;
+  color: inherit;
+  transition:
+    border-color 0.2s ease,
+    background-color 0.2s ease,
+    scale 0.2s ease;
+}
+
+.maintenance-logo--interactive:hover {
+  border-color: rgb(255 255 255 / 0.28);
+  background: rgb(10 10 12 / 0.55);
+  scale: 1.02;
+}
+
+.maintenance-logo--interactive:focus-visible {
+  outline: 2px solid var(--maintenance-fg);
+  outline-offset: 4px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .maintenance-logo--interactive {
+    transition: none;
+  }
+
+  .maintenance-logo--interactive:hover {
+    scale: 1;
+  }
+}
+
+.maintenance-dialog-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: grid;
+  place-items: center;
+  padding: 16px;
+  background: rgb(4 5 7 / 0.72);
+  backdrop-filter: blur(6px);
+}
+
+.maintenance-dialog {
+  position: relative;
+  width: min(380px, 100%);
+  padding: 28px 24px 24px;
+  border: 1px solid rgb(255 255 255 / 0.12);
+  border-radius: 18px;
+  background: linear-gradient(180deg, rgb(18 19 24 / 0.96), rgb(11 12 16 / 0.96));
+  box-shadow: 0 24px 80px rgb(0 0 0 / 0.55);
+  color: var(--maintenance-fg);
+}
+
+.maintenance-dialog-close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
+  color: var(--maintenance-muted);
+  cursor: pointer;
+  transition:
+    color 0.2s ease,
+    background-color 0.2s ease;
+}
+
+.maintenance-dialog-close:hover {
+  background: rgb(255 255 255 / 0.08);
+  color: var(--maintenance-fg);
+}
+
+.maintenance-dialog-close:focus-visible,
+.maintenance-dialog-submit:focus-visible {
+  outline: 2px solid var(--maintenance-fg);
+  outline-offset: 2px;
+}
+
+/* The field is focused the moment the dialog opens, so the same hard 2px ring
+   the buttons get would be the loudest thing on the screen before the visitor
+   has done anything. A lifted border plus a soft halo reads as "the caret is
+   here" without shouting it. */
+.maintenance-dialog-input:focus-visible {
+  border-color: rgb(255 255 255 / 0.45);
+  outline: none;
+  box-shadow: 0 0 0 3px rgb(255 255 255 / 0.08);
+}
+
+.maintenance-dialog-title {
+  margin: 0;
+  font-size: 17px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.maintenance-dialog-text {
+  margin: 8px 0 0;
+  color: var(--maintenance-muted);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.maintenance-dialog-form {
+  display: grid;
+  gap: 8px;
+  margin-top: 20px;
+}
+
+.maintenance-dialog-label {
+  color: var(--maintenance-muted);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.maintenance-dialog-input {
+  width: 100%;
+  padding: 11px 14px;
+  border: 1px solid rgb(255 255 255 / 0.16);
+  border-radius: 12px;
+  background: rgb(0 0 0 / 0.35);
+  color: var(--maintenance-fg);
+  font-size: 15px;
+  /* The codes are Latin and often numeric — a proportional face makes O/0 and
+     l/1 a guessing game when someone is reading one off a phone screen. */
+  font-family: var(--font-chakra-petch), ui-monospace, monospace;
+  letter-spacing: 0.14em;
+  transition: border-color 0.2s ease;
+}
+
+.maintenance-dialog-input::placeholder {
+  color: rgb(232 232 234 / 0.35);
+  letter-spacing: 0.14em;
+}
+
+.maintenance-dialog-input:hover {
+  border-color: rgb(255 255 255 / 0.26);
+}
+
+.maintenance-dialog-input[aria-invalid="true"] {
+  border-color: color-mix(in oklab, var(--color-brand-red) 70%, transparent);
+}
+
+.maintenance-dialog-error {
+  margin: 0;
+  color: color-mix(in oklab, var(--color-brand-red) 82%, white);
+  font-size: 12.5px;
+}
+
+.maintenance-dialog-submit {
+  margin-top: 4px;
+  padding: 11px 16px;
+  border-radius: 12px;
+  background: var(--maintenance-fg);
+  color: #0b0c10;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  transition:
+    opacity 0.2s ease,
+    background-color 0.2s ease;
+}
+
+.maintenance-dialog-submit:hover:not(:disabled) {
+  background: #ffffff;
+}
+
+.maintenance-dialog-submit:disabled {
+  cursor: progress;
+  opacity: 0.6;
+}
+
 /* The component already declines to set `data-animate` under this setting;
    this is the belt to that braces, and covers the case of it being switched on
    while the screen is open. */

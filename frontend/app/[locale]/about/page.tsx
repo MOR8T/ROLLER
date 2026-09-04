@@ -1,5 +1,8 @@
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
+
+import { buildPageMetadata } from "@/lib/page-metadata";
+import { SEO_PAGE_PATHS } from "@/lib/seo";
 import { Quote } from "lucide-react";
 
 import { Breadcrumbs } from "@/components/products/breadcrumbs";
@@ -19,7 +22,16 @@ export async function generateMetadata({
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "about" });
 
-  return { title: t("metaTitle"), description: t("metaDescription") };
+  // The copy is this page's own, from `messages/*.json`; `buildPageMetadata`
+  // adds everything structural around it — canonical, hreflang, Open Graph,
+  // robots — from `lib/seo-config.ts`.
+  return buildPageMetadata({
+    locale,
+    path: SEO_PAGE_PATHS.about,
+    pageKey: "about",
+    title: t("metaTitle"),
+    description: t("metaDescription"),
+  });
 }
 
 /**

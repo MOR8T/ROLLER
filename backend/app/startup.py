@@ -714,7 +714,8 @@ def seed_products(db: Session | None = None) -> None:
 
 def seed_site_settings(db: Session | None = None) -> None:
     """
-    Creates the singleton `site_settings` row with every switch off.
+    Creates the singleton `site_settings` row with every switch off and no
+    preview code — a fresh install is an open site nobody has a key to.
 
     Same idempotency contract as `seed_about_content` — it is skipped once the
     table has a row, so re-running it can never turn the public site back on

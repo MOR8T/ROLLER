@@ -10,7 +10,10 @@ import { SectionHeading } from "@/components/sections/section-heading";
 import { Container } from "@/components/ui/container";
 import { Reveal, RevealGroup, RevealItem } from "@/components/ui/reveal";
 import { Section } from "@/components/ui/section";
-import { fetchArticle, fetchLatestNews, newsParams } from "@/lib/news";
+import { articleHref, fetchArticle, fetchLatestNews, newsParams } from "@/lib/news";
+import { buildPageMetadata } from "@/lib/page-metadata";
+import { buildArticleJsonLd, buildBreadcrumbJsonLd } from "@/lib/json-ld";
+import { JsonLd } from "@/components/seo/json-ld";
 
 export async function generateStaticParams() {
   return newsParams();
@@ -23,7 +26,18 @@ export async function generateMetadata({
   const article = await fetchArticle(locale, slug);
   if (!article) return {};
 
-  return { title: article.title, description: article.excerpt };
+  // No `pageKey`: an article's title and description are its own content, and
+  // it has no row in `SEO_PAGE_PATHS` — the key only exists for the six static
+  // pages, which are the ones with a fixed address to canonicalise.
+  return buildPageMetadata({
+    locale,
+    path: articleHref(slug),
+    title: article.title,
+    description: article.excerpt,
+    image: article.cover,
+    type: "article",
+    publishedTime: article.publishedAt,
+  });
 }
 
 /**
@@ -51,8 +65,28 @@ export default async function ArticlePage({ params }: PageProps<"/[locale]/news/
     year: "numeric",
   });
 
+  // The graphs mirror what the page shows: the breadcrumb trail rendered two
+  // lines below, and the article itself. `buildArticleJsonLd` points `author`
+  // and `publisher` at the organisation node the root layout already emitted
+  // rather than restating the company on every article.
+  const [articleJsonLd, breadcrumbJsonLd] = await Promise.all([
+    buildArticleJsonLd({
+      locale,
+      path: articleHref(article.slug),
+      headline: article.title,
+      description: article.excerpt,
+      image: article.cover,
+      publishedAt: article.publishedAt,
+    }),
+    buildBreadcrumbJsonLd(locale, [
+      { name: tPage("breadcrumb"), path: "/news" },
+      { name: article.title },
+    ]),
+  ]);
+
   return (
     <>
+      <JsonLd data={[articleJsonLd, breadcrumbJsonLd]} />
       <Section className="pt-12!">
         <Container>
           <Breadcrumbs

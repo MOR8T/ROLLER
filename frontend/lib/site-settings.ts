@@ -5,18 +5,27 @@ import { BACKEND_API_URL } from "@/lib/admin-auth";
  * «Настройки сайта» — same shape as `lib/contact-info.ts`: a tagged `fetch`
  * against the backend, mapped to a DTO, with no throw on failure.
  *
- * Today there is exactly one switch, `maintenanceMode`, and
- * `app/[locale]/layout.tsx` is its only consumer.
+ * `app/[locale]/layout.tsx` is the only consumer of both fields.
  */
 
 interface RawSiteSettings {
   maintenance_mode: boolean;
+  preview_access_enabled: boolean;
 }
 
 export interface SiteSettingsDto {
   /** True → the public site is replaced by `MaintenanceScreen`. */
   maintenanceMode: boolean;
+  /**
+   * True → an admin has set a preview code, so `MaintenanceScreen`'s plate is
+   * a button that opens the code prompt. The code itself is never sent here;
+   * see `lib/maintenance-access.ts` for how one is checked.
+   */
+  previewAccessEnabled: boolean;
 }
+
+/** The fail-open answer — see the note below: an open site, with nothing to unlock. */
+const OPEN_SITE: SiteSettingsDto = { maintenanceMode: false, previewAccessEnabled: false };
 
 /**
  * ⚠️ Fails **open**: an unreachable, slow or unseeded backend returns
@@ -43,11 +52,14 @@ export async function getSiteSettings(): Promise<SiteSettingsDto> {
       next: { revalidate: 60, tags: ["site-settings"] },
       signal: AbortSignal.timeout(5000),
     });
-    if (!res.ok) return { maintenanceMode: false };
+    if (!res.ok) return OPEN_SITE;
 
     const raw = (await res.json()) as RawSiteSettings;
-    return { maintenanceMode: raw.maintenance_mode === true };
+    return {
+      maintenanceMode: raw.maintenance_mode === true,
+      previewAccessEnabled: raw.preview_access_enabled === true,
+    };
   } catch {
-    return { maintenanceMode: false };
+    return OPEN_SITE;
   }
 }

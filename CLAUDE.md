@@ -167,7 +167,66 @@ down on its own. The switch is instant because the action revalidates the
 in 2026-09 (Tilda + GSAP), down to its palette and timings — the styles are in
 `app/globals.css` under "Maintenance screen", the stroke stagger is in the
 component because it sorts by `getTotalLength()`. Treat it as a copy of that
-page, not as a design to iterate on.
+page, not as a design to iterate on. Its one addition is the preview door
+below.
+
+**Preview code.** `/admin/settings` → «Код доступа к сайту» writes
+`site_settings.preview_code`. When one is set, the placeholder's logo plate
+becomes a button that opens a code prompt (`maintenance-access-dialog.tsx`,
+styled in the same `globals.css` block — *not* `components/ui/modal.tsx`,
+which is the light site-design-system dialog). A correct code goes into an
+httpOnly **session** cookie — no `maxAge`, so it dies with the browser and the
+next visit is prompted again — and `app/[locale]/layout.tsx` renders the real
+site for that visitor. Three things are load-bearing:
+
+- the code is **never** in the public `/api/site-settings` payload — that
+  response carries only `preview_access_enabled`; the code is compared by
+  `POST /api/site-settings/preview-access` and read back only by the
+  authenticated `/api/site-settings/admin`;
+- `lib/maintenance-access.ts` fails **closed**, the mirror of
+  `lib/site-settings.ts`'s fail-open, and re-checks the cookie against the
+  backend every render — which is what makes changing the code revoke every
+  session at once;
+- the `cookies()` read is guarded by `maintenanceMode`, so the public pages
+  stay statically rendered while the switch is off.
+
+It gates *rendering the public site* and nothing else. `/admin`, `/login` and
+`/api` never consult it.
+
+### SEO
+Configured entirely in code, in one file: `lib/seo-config.ts` (canonical origin,
+indexing switch, share card, verification tokens, Metrika/GA4 counters, the
+`Organization`/`LocalBusiness` facts, per-page `noindex` and keywords). There is
+no admin section and no database table behind it — an earlier build had both and
+they were dropped: the values change a few times a year, and a form that has to
+be kept in sync with the code reading it is a second thing to get wrong.
+`SEO.md` in the repo root is the companion doc (in Russian, like `DEPLOYMENT.md`)
+— what is set, what is still waiting on the client, and where each value goes.
+
+Page copy is **not** in that config. `<title>`/`description` stay in
+`messages/*.json` under `metaTitle`/`metaDescription`, per the data-layer rule
+above; products, categories and articles take theirs from their own records.
+
+**Every public page's `generateMetadata` goes through `buildPageMetadata`**
+(`lib/page-metadata.ts`) — it owns canonical, hreflang, Open Graph, Twitter and
+the robots directives so those are decided once rather than eleven times. Pages
+pass their own copy in. It is synchronous; there is nothing to await.
+`app/sitemap.ts` and `app/robots.ts` read the same config (plus `getSiteSettings`
+for maintenance mode); JSON-LD is built in `lib/json-ld.ts` and rendered by
+`components/seo/json-ld.tsx`.
+
+⚠️ **`tj` is a country code, not a language.** The URL segment stays `tj`
+(frozen by `i18n/routing.ts`), but `hreflang`, `<html lang>`, `og:locale` and
+`inLanguage` all say `tg`/`tg-TJ`/`tg_TJ` — an invalid tag makes Google drop
+the whole alternates cluster, not just the one entry. `HREFLANG_BY_LOCALE` and
+`OG_LOCALE` are where that substitution lives.
+
+⚠️ **No prices in structured data.** The `Product` graph carries no `offers`,
+`priceRange` or `aggregateRating` — the site publishes no prices and the
+calculator is explicitly not a price calculator, so fabricating them is both
+untrue and a structured-data penalty. The product page also emits no
+`BreadcrumbList`, because it renders no visible trail; giving it one is the fix,
+inventing the markup alone is not.
 
 ### Design tokens
 Brand colors, radii, container width, spacing scale, and hero height are Tailwind

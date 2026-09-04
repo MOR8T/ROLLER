@@ -9,6 +9,8 @@ import { Container } from "@/components/ui/container";
 import { RevealGroup, RevealItem } from "@/components/ui/reveal";
 import { Section } from "@/components/ui/section";
 import { fetchNewsPage } from "@/lib/news";
+import { buildPageMetadata } from "@/lib/page-metadata";
+import { SEO_PAGE_PATHS } from "@/lib/seo";
 
 export async function generateMetadata({
   params,
@@ -19,18 +21,28 @@ export async function generateMetadata({
   const t = await getTranslations({ locale, namespace: "newsPage" });
   const { page: current } = await fetchNewsPage(locale, page);
 
-  return {
+  return buildPageMetadata({
+    locale,
+    path: SEO_PAGE_PATHS.news,
+    pageKey: "news",
     title:
       current > 1
         ? `${t("metaTitle")} — ${t("pagination.page", { page: current })}`
         : t("metaTitle"),
     description: t("metaDescription"),
-    // ⚠️ No `alternates.canonical` pointing page 2+ back at `/news`, though the
-    // pages do want one: `metadataBase` is not configured anywhere on the site,
-    // and Next resolves a relative canonical against it — in production that
-    // silently becomes a localhost URL, which is worse than no canonical at
-    // all. Add both together, or neither.
-  };
+    // Page 2+ is `noindex, follow`: the crawler still walks through to every
+    // article, but the slice itself does not compete with `/news` for a result.
+    //
+    // ⚠️ Note what this does *not* do — it does not point page 2's canonical at
+    // `/news`. `buildPageMetadata` canonicalises every page here to `/news`
+    // already, because `path` carries no `?page=`, and that is the correct
+    // shape: a `?page=2` canonical would be self-referential and a `/news`
+    // canonical *plus* `noindex` would tell Google to drop `/news` too, since a
+    // `noindex` on a page that claims another as canonical propagates. The
+    // pairing that works is exactly this one — canonical at the list,
+    // `noindex, follow` on the slice.
+    noindex: current > 1,
+  });
 }
 
 /**
