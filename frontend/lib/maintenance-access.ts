@@ -25,14 +25,29 @@ import { BACKEND_API_URL } from "@/lib/admin-session";
  *     door code.
  */
 
-export const MAINTENANCE_PREVIEW_COOKIE = "roller_preview";
-
 /**
- * A week. Long enough that the client is not retyping it every morning
- * through a closure, short enough that a laptop left in a cafe is not a
- * standing invitation.
+ * The cookie is written with **no `maxAge` and no `expires`**, which makes it
+ * a session cookie: the browser drops it when it closes, and the next visit
+ * lands back on the placeholder with the prompt.
+ *
+ * Deliberate, and the shortest lifetime a cookie can have. The alternative — a
+ * dated cookie — would leave a laptop that someone borrows, or a phone handed
+ * across a desk, holding a standing key to a site the client has not launched.
+ * Retyping a short code is the cheaper side of that trade.
+ *
+ * ⚠️ Two things it does not do, both browser behaviour rather than something
+ * this code can tighten:
+ *   - closing one *tab* is not closing the browser — access survives until the
+ *     last window goes. A cookie cannot be scoped to a tab; only `sessionStorage`
+ *     can, and it is unreachable from the server that has to make this decision;
+ *   - "continue where you left off" (Chrome) and session restore (Firefox) put
+ *     session cookies back, so a browser configured that way keeps access
+ *     across a restart.
+ * Neither is a hole in the gate: the code is still re-checked against the
+ * backend on every render, so clearing or changing it in «Настройки сайта»
+ * ends every session at once, whatever the browser is holding.
  */
-export const MAINTENANCE_PREVIEW_MAX_AGE_SECONDS = 60 * 60 * 24 * 7;
+export const MAINTENANCE_PREVIEW_COOKIE = "roller_preview";
 
 /**
  * Asks the backend whether `code` is the configured preview code.

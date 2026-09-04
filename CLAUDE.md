@@ -175,8 +175,9 @@ below.
 becomes a button that opens a code prompt (`maintenance-access-dialog.tsx`,
 styled in the same `globals.css` block — *not* `components/ui/modal.tsx`,
 which is the light site-design-system dialog). A correct code goes into an
-httpOnly cookie and `app/[locale]/layout.tsx` renders the real site for that
-visitor. Three things are load-bearing:
+httpOnly **session** cookie — no `maxAge`, so it dies with the browser and the
+next visit is prompted again — and `app/[locale]/layout.tsx` renders the real
+site for that visitor. Three things are load-bearing:
 
 - the code is **never** in the public `/api/site-settings` payload — that
   response carries only `preview_access_enabled`; the code is compared by

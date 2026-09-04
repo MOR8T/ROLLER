@@ -1,11 +1,7 @@
 "use server";
 
 import { cookies } from "next/headers";
-import {
-  MAINTENANCE_PREVIEW_COOKIE,
-  MAINTENANCE_PREVIEW_MAX_AGE_SECONDS,
-  verifyPreviewCode,
-} from "@/lib/maintenance-access";
+import { MAINTENANCE_PREVIEW_COOKIE, verifyPreviewCode } from "@/lib/maintenance-access";
 
 /**
  * The code prompt on `MaintenanceScreen`, submitted as a Server Action for
@@ -40,12 +36,14 @@ export async function unlockMaintenancePreview(
     return { status: "invalid" };
   }
 
+  // No `maxAge`, no `expires` — a session cookie, gone when the browser
+  // closes. See the note on `MAINTENANCE_PREVIEW_COOKIE` for why, and for the
+  // two cases where a browser hands it back anyway.
   (await cookies()).set(MAINTENANCE_PREVIEW_COOKIE, code.trim(), {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     sameSite: "lax",
     path: "/",
-    maxAge: MAINTENANCE_PREVIEW_MAX_AGE_SECONDS,
   });
 
   // No `redirect` — the visitor should land back where they were, which they
