@@ -631,7 +631,8 @@
           }
         ]
       }
-    }
+    },
+    "photoPending": "Фото готовится"
   },
   "productsCategory": {
     "metaTitle": "{name} — продукция ROLLER",
@@ -1090,5 +1091,11 @@
       "close": "Закрыть"
     },
     "variantCode": "Схема {code}"
+  },
+  "lightbox": {
+    "close": "Закрыть",
+    "view": "Просмотр фотографии",
+    "zoomOut": "Уменьшить",
+    "zoomIn": "Увеличить"
   }
 }

@@ -1,48 +1,48 @@
 {
   "meta": {
-    "title": "ROLLER — Профильные системы ПВХ и алюминий в Таджикистане",
+    "title": "ROLLER — PVC and aluminium profile systems in Tajikistan",
     "titleTemplate": "%s | ROLLER",
-    "description": "ROLLER — первый производитель материалов из ПВХ в Таджикистане. Окна и двери ПВХ, алюминиевые и фасадные системы. Тепло и комфорт для каждого дома."
+    "description": "ROLLER is the first manufacturer of PVC materials in Tajikistan. PVC windows and doors, aluminium and façade systems. Warmth and comfort for every home."
   },
   "maintenance": {
     "caption": "Site under construction",
     "title": "Site under construction"
   },
   "common": {
-    "skipToContent": "Перейти к основному содержимому",
-    "slogan": "Тепло и комфорт для каждого дома",
-    "address": "г. Душанбе, ул. Мирали Махмадали 25",
-    "workingHours": "Пн–Сб: 08:00–18:00",
-    "writeWhatsapp": "Написать в WhatsApp",
-    "call": "Позвонить"
+    "skipToContent": "Skip to main content",
+    "slogan": "Warmth and comfort for every home",
+    "address": "Dushanbe, 25 Mirali Mahmadali St.",
+    "workingHours": "Mon–Sat: 08:00–18:00",
+    "writeWhatsapp": "Message on WhatsApp",
+    "call": "Call"
   },
   "nav": {
-    "about": "О компании",
-    "products": "Продукция",
-    "calculator": "Калькулятор",
-    "news": "Новости",
-    "showroom": "Шоурумы",
-    "contacts": "Контакты"
+    "about": "About us",
+    "products": "Products",
+    "calculator": "Calculator",
+    "news": "News",
+    "showroom": "Showrooms",
+    "contacts": "Contacts"
   },
   "breadcrumbs": {
-    "aria": "Навигационная цепочка",
-    "home": "Главная"
+    "aria": "Breadcrumb",
+    "home": "Home"
   },
   "header": {
-    "mainNav": "Основная навигация",
-    "openMenu": "Меню",
-    "closeMenu": "Закрыть меню",
-    "mobileMenu": "Мобильное меню",
-    "languageSwitcher": "Выбор языка"
+    "mainNav": "Main navigation",
+    "openMenu": "Menu",
+    "closeMenu": "Close menu",
+    "mobileMenu": "Mobile menu",
+    "languageSwitcher": "Language"
   },
   "footer": {
-    "nav": "Подвал",
-    "sections": "Разделы",
-    "contacts": "Контакты",
-    "social": "Мы в соцсетях",
-    "onMarketSince": "На рынке с {year} года",
-    "rights": "© {year} {name}. Все права защищены.",
-    "toTop": "Наверх",
+    "nav": "Footer",
+    "sections": "Sections",
+    "contacts": "Contacts",
+    "social": "Follow us",
+    "onMarketSince": "On the market since {year}",
+    "rights": "© {year} {name}. All rights reserved.",
+    "toTop": "Back to top",
     "instagram": "Instagram ROLLER",
     "telegram": "Telegram ROLLER",
     "facebook": "Facebook ROLLER",
@@ -51,7 +51,7 @@
     "whatsapp": "WhatsApp ROLLER"
   },
   "whatsappFab": {
-    "label": "Написать нам в WhatsApp"
+    "label": "Message us on WhatsApp"
   },
   "materials": {
     "pvc": "ПВХ",
@@ -78,22 +78,22 @@
     "brown": "Коричневый"
   },
   "hero": {
-    "aria": "Главный экран",
-    "slideOf": "Слайд {index} из {total}",
-    "goTo": "Перейти к слайду {index}",
-    "previous": "Предыдущий слайд",
-    "next": "Следующий слайд"
+    "aria": "Main screen",
+    "slideOf": "Slide {index} of {total}",
+    "goTo": "Go to slide {index}",
+    "previous": "Previous slide",
+    "next": "Next slide"
   },
   "home": {
     "products": {
-      "title": "Продукция"
+      "title": "Products"
     },
     "carousel": {
-      "region": "карусель",
-      "slide": "слайд",
-      "goTo": "Перейти к слайду {index}",
-      "previous": "Предыдущий слайд",
-      "next": "Следующий слайд"
+      "region": "carousel",
+      "slide": "slide",
+      "goTo": "Go to slide {index}",
+      "previous": "Previous slide",
+      "next": "Next slide"
     },
     "measure": {
       "title": "Вызвать замерщика бесплатно",
@@ -111,7 +111,7 @@
       }
     },
     "about": {
-      "more": "О компании"
+      "more": "About us"
     },
     "offers": {
       "title": "Предложения",
@@ -149,37 +149,37 @@
       }
     },
     "news": {
-      "title": "Новости",
-      "all": "Все новости"
+      "title": "News",
+      "all": "All news"
     },
     "partners": {
-      "title": "Партнёры"
+      "title": "Partners"
     },
     "contacts": {
-      "title": "Свяжитесь с нами",
+      "title": "Get in touch",
       "form": {
-        "name": "Имя",
-        "namePlaceholder": "Имя",
-        "phone": "Телефон",
-        "phonePlaceholder": "Телефон",
-        "message": "Сообщение",
-        "messagePlaceholder": "Сообщение",
-        "submit": "Отправить",
-        "submitting": "Отправляем…",
-        "success": "Заявка принята — перезвоним.",
-        "again": "Отправить ещё",
+        "name": "Name",
+        "namePlaceholder": "Name",
+        "phone": "Phone",
+        "phonePlaceholder": "Phone",
+        "message": "Message",
+        "messagePlaceholder": "Message",
+        "submit": "Send",
+        "submitting": "Sending…",
+        "success": "Request received — we will call you back.",
+        "again": "Send another",
         "errors": {
-          "name": "Укажите имя",
-          "phone": "Проверьте номер",
-          "submit": "Не удалось отправить"
+          "name": "Enter your name",
+          "phone": "Check the number",
+          "submit": "Could not send"
         },
         "whatsapp": {
-          "intro": "Заявка с сайта ROLLER.",
-          "interests": "Интересует",
-          "context": "Страница",
-          "message": "Сообщение"
+          "intro": "Request from the ROLLER website.",
+          "interests": "Interested in",
+          "context": "Page",
+          "message": "Message"
         },
-        "interests": "Что вас интересует?"
+        "interests": "What are you interested in?"
       }
     }
   },
@@ -221,23 +221,23 @@
     }
   },
   "production": {
-    "eyebrow": "Производство и масштаб",
-    "title": "Собственный цех, а не <accent>перепродажа</accent>",
-    "description": "Профиль варим сами: от экструзии до готовой конструкции, замера и монтажа. Это позволяет держать сроки на объёмах застройщика и отвечать за результат целиком.",
-    "fullCycle": "Полный цикл",
-    "suppliers": "Сырьё и оборудование",
+    "eyebrow": "Production and scale",
+    "title": "Our own plant, not <accent>resale</accent>",
+    "description": "We extrude the profile ourselves: from extrusion to the finished unit, the survey and the installation. That is how we hold to schedule on developer volumes and answer for the result as a whole.",
+    "fullCycle": "Full cycle",
+    "suppliers": "Raw materials and equipment",
     "stats": {
-      "years": "лет на рынке",
-      "projects": "реализованных объектов",
-      "clients": "клиентов",
-      "employees": "сотрудников",
-      "tonnage": "тонн в год"
+      "years": "years on the market",
+      "projects": "completed projects",
+      "clients": "clients",
+      "employees": "employees",
+      "tonnage": "tonnes per year"
     },
     "steps": {
-      "measure": "Замер",
-      "manufacture": "Производство",
-      "installation": "Монтаж",
-      "service": "Сервис"
+      "measure": "Survey",
+      "manufacture": "Manufacturing",
+      "installation": "Installation",
+      "service": "Service"
     }
   },
   "partners": {
@@ -408,67 +408,67 @@
     }
   },
   "categories": {
-    "eyebrow": "Категории",
-    "title": "Выберите категорию",
-    "description": "Окна, двери, раздвижные системы и фасады. Какой профиль под это подойдёт — подберём мы.",
-    "cta": "Подобрать решение",
-    "imagePlaceholder": "Контекстное фото: {title}",
+    "eyebrow": "Categories",
+    "title": "Choose a category",
+    "description": "Windows, doors, sliding systems and façades. We will pick the profile that fits.",
+    "cta": "Find a solution",
+    "imagePlaceholder": "Context photo: {title}",
     "items": {
       "windows": {
-        "title": "Окна",
-        "description": "Оконные системы из ПВХ и алюминия для квартир, частных домов и коммерческих объектов.",
-        "heading": "Пластиковые и алюминиевые окна в Душанбе",
-        "intro": "Окна делаем на собственном заводе в Душанбе: от трёхкамерной эконом-серии до премиального профиля 75 мм. Замер, изготовление, доставка и монтаж — своими бригадами, без посредников.",
-        "metaTitle": "Пластиковые окна в Душанбе — ПВХ и алюминий от производителя",
-        "metaDescription": "Пластиковые и алюминиевые окна в Душанбе от производителя ROLLER: шесть профильных систем, замер, изготовление и монтаж. Цена по расчёту."
+        "title": "Windows",
+        "description": "PVC and aluminium window systems for flats, private houses and commercial buildings.",
+        "heading": "Plastic and aluminium windows in Dushanbe",
+        "intro": "We make windows at our own plant in Dushanbe: from the three-chamber economy series to the premium 75 mm profile. Survey, manufacturing, delivery and installation — by our own crews, with no middlemen.",
+        "metaTitle": "Plastic windows in Dushanbe — PVC and aluminium direct from the manufacturer",
+        "metaDescription": "Plastic and aluminium windows in Dushanbe from the manufacturer ROLLER: six profile systems, survey, manufacturing and installation. Price on calculation."
       },
       "doors": {
-        "title": "Двери",
-        "description": "Входные группы, балконные и межкомнатные двери из ПВХ и тёплого алюминия.",
-        "heading": "Двери из ПВХ и алюминия в Душанбе",
-        "intro": "Изготавливаем дверные группы под проём: входные двери из тёплого алюминия для отапливаемых зданий, лёгкие алюминиевые двери для магазинов и балконные двери из ПВХ.",
-        "metaTitle": "Алюминиевые двери в Душанбе — двери на заказ из ПВХ и алюминия",
-        "metaDescription": "Алюминиевые и ПВХ двери на заказ в Душанбе: входные группы, балконные и межкомнатные двери от производителя ROLLER. Замер и монтаж."
+        "title": "Doors",
+        "description": "Entrance groups, balcony and interior doors in PVC and thermally broken aluminium.",
+        "heading": "PVC and aluminium doors in Dushanbe",
+        "intro": "We make door units to fit the opening: entrance doors in thermally broken aluminium for heated buildings, light aluminium doors for shops, and PVC balcony doors.",
+        "metaTitle": "Aluminium doors in Dushanbe — made-to-order PVC and aluminium doors",
+        "metaDescription": "Made-to-order aluminium and PVC doors in Dushanbe: entrance groups, balcony and interior doors from the manufacturer ROLLER. Survey and installation."
       },
       "sliding-systems": {
-        "title": "Раздвижные системы",
-        "description": "Раздвижные окна и двери для балконов, террас и панорамных проёмов.",
-        "heading": "Раздвижные окна и двери в Душанбе",
-        "intro": "Раздвижные конструкции экономят место там, где створке некуда открываться: на балконе, на террасе, в узком проходе. Делаем на холодном и тёплом алюминиевом профиле.",
-        "metaTitle": "Раздвижные окна и двери в Душанбе",
-        "metaDescription": "Раздвижные алюминиевые системы для балконов, террас и панорамных проёмов в Душанбе. Производство ROLLER, замер и монтаж."
+        "title": "Sliding systems",
+        "description": "Sliding windows and doors for balconies, terraces and panoramic openings.",
+        "heading": "Sliding windows and doors in Dushanbe",
+        "intro": "Sliding units save space where a casement has nowhere to swing: on a balcony, on a terrace, in a narrow passage. We build them on cold and thermally broken aluminium profile.",
+        "metaTitle": "Sliding windows and doors in Dushanbe",
+        "metaDescription": "Sliding aluminium systems for balconies, terraces and panoramic openings in Dushanbe. Made by ROLLER, survey and installation."
       },
       "facade-glazing": {
-        "title": "Фасадное остекление",
-        "description": "Фасадные системы для жилых комплексов, бизнес-центров и торговых объектов.",
-        "heading": "Фасадное остекление в Душанбе",
-        "intro": "Работаем с застройщиками по объёмам и срокам: остекление жилых комплексов, витражи бизнес-центров, входные группы торговых зданий. Собственное производство держит график на больших партиях.",
-        "metaTitle": "Фасадное остекление в Душанбе — алюминиевые фасадные системы",
-        "metaDescription": "Фасадное остекление жилых комплексов и бизнес-центров в Душанбе: тёплые и холодные алюминиевые системы от производителя ROLLER."
+        "title": "Façade glazing",
+        "description": "Façade systems for residential complexes, business centres and retail buildings.",
+        "heading": "Façade glazing in Dushanbe",
+        "intro": "We work with developers on volume and schedule: glazing for residential complexes, curtain walls for business centres, entrance groups for retail buildings. Our own production keeps large batches on time.",
+        "metaTitle": "Façade glazing in Dushanbe — aluminium façade systems",
+        "metaDescription": "Façade glazing for residential complexes and business centres in Dushanbe: thermally broken and cold aluminium systems from the manufacturer ROLLER."
       },
       "mosquito-nets": {
-        "title": "Москитные сетки",
-        "description": "Сетки на окна и двери — изготавливаем по размеру проёма.",
-        "heading": "Москитные сетки в Душанбе",
-        "intro": "Сетки делаем под конкретный проём — рамочные на окна и распашные на двери. Отдельного каталога у них нет: размер снимается на замере вместе с окном.",
-        "metaTitle": "Москитные сетки в Душанбе — на окна и двери",
-        "metaDescription": "Москитные сетки на окна и двери в Душанбе по размеру проёма. Производство ROLLER, замер и установка."
+        "title": "Insect screens",
+        "description": "Screens for windows and doors — made to the size of the opening.",
+        "heading": "Insect screens in Dushanbe",
+        "intro": "Screens are made for a specific opening — framed for windows, hinged for doors. They have no catalogue of their own: the size is taken at the survey along with the window.",
+        "metaTitle": "Insect screens in Dushanbe — for windows and doors",
+        "metaDescription": "Insect screens for windows and doors in Dushanbe, made to the size of the opening. Made by ROLLER, survey and fitting."
       },
       "partitions": {
-        "title": "Перегородки",
-        "description": "Офисные и торговые перегородки из холодного алюминия с тонким профилем.",
-        "heading": "Алюминиевые перегородки в Душанбе",
-        "intro": "Перегородки делят офис, магазин или шоурум, не съедая свет. Тонкий холодный профиль 45 мм — там, где обогрев не нужен, а нужна геометрия и прочность.",
-        "metaTitle": "Алюминиевые перегородки в Душанбе — офисные и торговые",
-        "metaDescription": "Офисные и торговые перегородки из алюминиевого профиля в Душанбе. Производство ROLLER, замер, изготовление и монтаж."
+        "title": "Partitions",
+        "description": "Office and retail partitions in cold aluminium with a slim profile.",
+        "heading": "Aluminium partitions in Dushanbe",
+        "intro": "Partitions divide an office, a shop or a showroom without eating the light. A slim 45 mm cold profile — where heating is not needed but geometry and strength are.",
+        "metaTitle": "Aluminium partitions in Dushanbe — for offices and retail",
+        "metaDescription": "Office and retail partitions in aluminium profile in Dushanbe. Made by ROLLER: survey, manufacturing and installation."
       }
     }
   },
   "products": {
-    "more": "Подробнее",
-    "choose": "Подобрать",
-    "imageAlt": "Система {name}",
-    "imagePlaceholder": "Рендер системы {name}",
+    "more": "Learn more",
+    "choose": "Select",
+    "imageAlt": "{name} system",
+    "imagePlaceholder": "Render of the {name} system",
     "cardAria": "{name} — {segment}",
     "items": {
       "ecoline": {
@@ -631,24 +631,25 @@
           }
         ]
       }
-    }
+    },
+    "photoPending": "Photo coming soon"
   },
   "productsCategory": {
-    "metaTitle": "{name} — продукция ROLLER",
-    "metaDescription": "Системы категории «{name}»: характеристики, цвета и расчёт под объект.",
-    "description": "Системы этой категории. Откройте карточку, чтобы посмотреть характеристики, цвета ламинации и фотографии.",
-    "empty": "В этой категории пока нет продукции.",
-    "emptyHint": "Рассчитайте конструкцию в калькуляторе или напишите нам — подберём систему под ваш объект и пришлём предложение.",
-    "emptyCalculator": "Открыть калькулятор",
-    "emptyContact": "Написать нам",
-    "emptyTitle": "Раздел ещё наполняется"
+    "metaTitle": "{name} — ROLLER products",
+    "metaDescription": "Systems in the “{name}” category: specifications, colours and a calculation for your project.",
+    "description": "Systems in this category. Open a card to see the specifications, lamination colours and photos.",
+    "empty": "There are no products in this category yet.",
+    "emptyHint": "Configure your unit in the calculator or write to us — we will pick a system for your project and send you an offer.",
+    "emptyCalculator": "Open the calculator",
+    "emptyContact": "Write to us",
+    "emptyTitle": "This section is still being filled"
   },
   "product": {
     "eyebrow": "Профильная система",
     "metaTitle": "{name} — профильная система {depth} мм",
     "metaDescription": "{name}: профиль из {material}, глубина {depth} мм. Собственное производство в Душанбе, гарантия и монтаж. Цена по расчёту.",
     "imageAlt": "{name}, {color}",
-    "imagePlaceholder": "Рендеры системы {name} готовятся",
+    "imagePlaceholder": "Renders of the {name} system are on the way",
     "facts": {
       "depth": "Глубина профиля",
       "chambers": "Камеры",
@@ -751,44 +752,44 @@
   },
   "productPage": {
     "hero": {
-      "imageAlt": "Шоурум ROLLER в Душанбе",
+      "imageAlt": "ROLLER showroom in Dushanbe",
       "trailLabel": "Breadcrumb",
       "jumpsLabel": "Page sections"
     },
     "specs": {
-      "cornerAlt": "Разрез профиля {name}",
-      "material": "Тип профиля"
+      "cornerAlt": "Cross-section of the {name} profile",
+      "material": "Profile type"
     },
     "story": {
-      "eyebrow": "О системе",
-      "title": "{name} в деле"
+      "eyebrow": "About the system",
+      "title": "{name} in use"
     },
     "gallery": {
-      "eyebrow": "Шоурум",
-      "title": "Система вживую",
-      "description": "Шоурум в Душанбе: конструкции, ламинация и фурнитура, которые можно посмотреть и потрогать до заказа.",
-      "imageAlt": "Шоурум ROLLER, фото {index}",
-      "aria": "Фотографии шоурума",
-      "previous": "Предыдущее фото",
-      "next": "Следующее фото"
+      "eyebrow": "Showroom",
+      "title": "See the system in person",
+      "description": "Our showroom in Dushanbe: units, lamination and hardware you can look at and touch before ordering.",
+      "imageAlt": "ROLLER showroom, photo {index}",
+      "aria": "Showroom photos",
+      "previous": "Previous photo",
+      "next": "Next photo"
     },
     "promo": {
-      "eyebrow": "Расчёт",
-      "title": "Узнать стоимость",
-      "description": "Соберите конструкцию в калькуляторе: система, размеры, створки и цвет. Точную цену менеджер посчитает после замера.",
-      "cta": "Перейти в калькулятор",
-      "imageAlt": "Производство ROLLER в Душанбе"
+      "eyebrow": "Calculation",
+      "title": "Find out the cost",
+      "description": "Configure your unit in the calculator: system, dimensions, sashes and colour. A manager works out the exact price after the survey.",
+      "cta": "Go to the calculator",
+      "imageAlt": "ROLLER production in Dushanbe"
     },
     "contacts": {
-      "title": "Связаться с нами",
-      "description": "Остались вопросы по системе {name}? Оставьте заявку — перезвоним, посчитаем и запишем на замер.",
-      "context": "Система {name}"
+      "title": "Get in touch",
+      "description": "Still have questions about the {name} system? Leave a request — we will call back, calculate and book a survey.",
+      "context": "System {name}"
     },
     "notFound": {
-      "eyebrow": "Продукция",
-      "title": "Продукт не найден",
-      "description": "Такой системы нет — возможно, адрес устарел или в нём опечатка. Выберите категорию продукции на главной странице.",
-      "home": "На главную"
+      "eyebrow": "Products",
+      "title": "Product not found",
+      "description": "There is no such system — the address may be out of date or contain a typo. Choose a product category on the home page.",
+      "home": "Go to home page"
     },
     "jumps": {
       "finishes": "Finishes",
@@ -798,11 +799,11 @@
     }
   },
   "news": {
-    "eyebrow": "Новости и статьи",
-    "title": "Короткие заметки о производстве, проектах и сервисе",
-    "allNews": "Все новости",
-    "readArticle": "Читать статью",
-    "moreMaterials": "Ещё материалы"
+    "eyebrow": "News and articles",
+    "title": "Short notes on production, projects and service",
+    "allNews": "All news",
+    "readArticle": "Read the article",
+    "moreMaterials": "More materials"
   },
   "advantages": {
     "own-production": {
@@ -835,119 +836,119 @@
     }
   },
   "notFound": {
-    "title": "Страница не найдена",
-    "description": "Такой страницы нет или она переехала. Вернитесь на главную или посмотрите нашу продукцию.",
-    "home": "На главную"
+    "title": "Page not found",
+    "description": "This page does not exist or has moved. Go back to the home page or take a look at our products.",
+    "home": "Go to home page"
   },
   "requestForm": {
-    "formAria": "Форма заявки",
-    "scenarioLabel": "Что вас интересует",
+    "formAria": "Request form",
+    "scenarioLabel": "What are you interested in",
     "scenarios": {
       "calculate": {
-        "label": "Рассчитать",
-        "hint": "Подберём систему, приедем на замер и посчитаем под ваш проём."
+        "label": "Get a calculation",
+        "hint": "We will pick a system, come out for a survey and calculate for your opening."
       },
       "quote": {
-        "label": "Получить КП",
-        "hint": "Пришлём коммерческое предложение по объекту: объёмы, сроки, комплектация."
+        "label": "Request a quote",
+        "hint": "We will send a commercial offer for the project: volumes, deadlines, specification."
       },
       "dealer": {
-        "label": "Стать дилером",
-        "hint": "Расскажем об условиях опта и дилерства, пришлём прайс на профиль."
+        "label": "Become a dealer",
+        "hint": "We will explain the wholesale and dealer terms and send the profile price list."
       }
     },
     "fields": {
-      "name": "Имя",
-      "phone": "Телефон",
-      "city": "Город",
-      "productType": "Тип продукции",
-      "comment": "Комментарий",
-      "configuration": "Конфигурация"
+      "name": "Name",
+      "phone": "Phone",
+      "city": "City",
+      "productType": "Product type",
+      "comment": "Comment",
+      "configuration": "Configuration"
     },
     "placeholders": {
-      "name": "Ваше имя",
+      "name": "Your name",
       "phone": "+992",
-      "comment": "Опишите объект, сроки или вопрос — необязательно"
+      "comment": "Describe the project, the timeline or your question — optional"
     },
-    "optional": "(необязательно)",
-    "selectPlaceholder": "Выберите вариант",
+    "optional": "(optional)",
+    "selectPlaceholder": "Choose an option",
     "cities": {
-      "dushanbe": "Душанбе",
-      "khujand": "Худжанд",
-      "bokhtar": "Бохтар",
-      "kulob": "Куляб",
-      "other": "Другой город"
+      "dushanbe": "Dushanbe",
+      "khujand": "Khujand",
+      "bokhtar": "Bokhtar",
+      "kulob": "Kulob",
+      "other": "Another city"
     },
     "productTypes": {
-      "consultation": "Замер / консультация"
+      "consultation": "Survey / consultation"
     },
     "errors": {
-      "name": "Укажите имя",
-      "phoneRequired": "Укажите телефон",
-      "phoneInvalid": "Проверьте номер телефона",
-      "city": "Выберите город",
-      "productType": "Выберите тип продукции",
-      "submit": "Не удалось отправить заявку. Попробуйте ещё раз или позвоните нам."
+      "name": "Enter your name",
+      "phoneRequired": "Enter your phone number",
+      "phoneInvalid": "Check the phone number",
+      "city": "Choose a city",
+      "productType": "Choose a product type",
+      "submit": "The request could not be sent. Try again or give us a call."
     },
-    "submit": "Отправить заявку",
-    "submitting": "Отправляем…",
-    "note": "Заявка сначала сохраняется у нас, затем открывается WhatsApp с готовым текстом. Цены на сайте не показываем — считаем под объект.",
+    "submit": "Send the request",
+    "submitting": "Sending…",
+    "note": "The request is saved on our side first, then WhatsApp opens with the message ready. We do not show prices on the site — every project is calculated individually.",
     "success": {
-      "title": "Заявка принята",
-      "description": "Мы сохранили заявку и открыли WhatsApp с готовым сообщением. Если окно не открылось, нажмите кнопку ниже.",
-      "openWhatsapp": "Открыть WhatsApp",
-      "again": "Отправить ещё одну"
+      "title": "Request received",
+      "description": "We have saved your request and opened WhatsApp with the message ready. If the window did not open, use the button below.",
+      "openWhatsapp": "Open WhatsApp",
+      "again": "Send another one"
     },
     "whatsapp": {
-      "intro": "Здравствуйте! Заявка с сайта ROLLER.",
-      "scenario": "Тип заявки"
+      "intro": "Hello! A request from the ROLLER website.",
+      "scenario": "Request type"
     }
   },
   "about": {
-    "metaTitle": "О компании",
-    "metaDescription": "ROLLER — производитель профильных систем ПВХ и алюминия в Таджикистане с 2006 года: собственный цех, 400 сотрудников, более 10 000 тонн алюминия в год.",
-    "breadcrumb": "О компании",
-    "eyebrow": "О компании",
+    "metaTitle": "About us",
+    "metaDescription": "ROLLER has manufactured PVC and aluminium profile systems in Tajikistan since 2006: our own plant, 400 employees, over 10,000 tonnes of aluminium a year.",
+    "breadcrumb": "About us",
+    "eyebrow": "About us",
     "capabilities": {
-      "eyebrow": "Что у нас есть",
-      "title": "Полный цикл, а не перепродажа",
-      "description": "Профиль варим сами, конструкции собираем сами, ставим своими бригадами — поэтому за результат отвечаем целиком.",
+      "eyebrow": "What we have",
+      "title": "Full cycle, not resale",
+      "description": "We extrude the profile ourselves, assemble the units ourselves and install with our own crews — which is why the result is entirely our responsibility.",
       "items": {
         "production": {
-          "title": "Собственное производство",
-          "description": "Экструзия профиля и сборка конструкций на своей площадке, с контролем на каждом этапе."
+          "title": "Our own production",
+          "description": "Profile extrusion and unit assembly on our own site, with checks at every stage."
         },
         "installation": {
-          "title": "Монтажные бригады",
-          "description": "Свои бригады работают по технологическим картам, без подряда со стороны."
+          "title": "Installation crews",
+          "description": "Our own crews work to method statements, with no outside subcontracting."
         },
         "showroom": {
-          "title": "Шоурум",
-          "description": "Системы можно посмотреть вживую по адресу производства в Душанбе."
+          "title": "Showroom",
+          "description": "You can see the systems in person at the production address in Dushanbe."
         },
         "warranty": {
-          "title": "Гарантия и сервис",
-          "description": "Фиксируем обязательства и сопровождаем объект после сдачи — регулировка и обслуживание."
+          "title": "Warranty and service",
+          "description": "We put our obligations in writing and support the project after handover — adjustment and maintenance."
         }
       }
     },
     "partners": {
-      "eyebrow": "Сырьё и оборудование",
-      "title": "С кем работаем",
-      "description": "Оборудование и сырьё — от профильных поставщиков отрасли."
+      "eyebrow": "Raw materials and equipment",
+      "title": "Who we work with",
+      "description": "Equipment and raw materials from established suppliers to the industry."
     },
     "warranty": {
-      "eyebrow": "Гарантия",
-      "title": "Условия гарантии",
-      "intro": "Гарантия распространяется на профильные системы собственного производства при соблюдении условий монтажа и эксплуатации.",
+      "eyebrow": "Warranty",
+      "title": "Warranty terms",
+      "intro": "The warranty covers profile systems of our own manufacture, provided the installation and operating conditions are observed.",
       "terms": [
-        "Гарантия на белый ПВХ-профиль — 5 лет с даты передачи объекта.",
-        "Гарантия на ламинированный профиль и алюминиевые системы — по условиям, зафиксированным в договоре на объект.",
-        "Гарантия на фурнитуру и комплектующие действует в объёме гарантии производителя фурнитуры.",
-        "Гарантия сохраняется при монтаже силами компании или аттестованной бригады и при соблюдении правил эксплуатации.",
-        "Гарантия не распространяется на механические повреждения, самостоятельные переделки конструкции и последствия нарушений условий эксплуатации."
+        "The warranty on white PVC profile is 5 years from the date the project is handed over.",
+        "The warranty on laminated profile and aluminium systems follows the terms recorded in the contract for the project.",
+        "The warranty on hardware and components applies to the extent of the hardware manufacturer's warranty.",
+        "The warranty holds when installation is carried out by the company or a certified crew and the operating rules are followed.",
+        "The warranty does not cover mechanical damage, unauthorised alterations to the unit, or the consequences of misuse."
       ],
-      "note": "Точные сроки и объём обязательств по конкретному объекту фиксируются в договоре — уточняйте при расчёте."
+      "note": "The exact terms and scope of our obligations for a specific project are recorded in the contract — please check them when the calculation is made."
     }
   },
   "portfolio": {
@@ -963,59 +964,59 @@
     }
   },
   "newsPage": {
-    "metaTitle": "Новости",
-    "metaDescription": "Новости ROLLER: производство профильных систем, сданные объекты, шоурумы, выставки и сервис в Таджикистане.",
-    "breadcrumb": "Новости",
-    "title": "Новости",
-    "description": "Следите за новостями ROLLER: производство и новые системы, сданные объекты, шоурумы, выставки и сервис. Здесь всё, что происходит в компании.",
+    "metaTitle": "News",
+    "metaDescription": "ROLLER news: profile system manufacturing, completed projects, showrooms, exhibitions and service in Tajikistan.",
+    "breadcrumb": "News",
+    "title": "News",
+    "description": "Follow ROLLER news: production and new systems, completed projects, showrooms, exhibitions and service. Everything happening at the company is here.",
     "pagination": {
-      "label": "Страницы новостей",
-      "page": "Страница {page}"
+      "label": "News pages",
+      "page": "Page {page}"
     }
   },
   "contactsPage": {
-    "metaTitle": "Контакты",
-    "metaDescription": "Адрес, телефон, WhatsApp, Telegram и график работы ROLLER в Душанбе. Замер и расчёт по заявке.",
-    "breadcrumb": "Контакты",
-    "eyebrow": "Контакты",
-    "title": "Как с нами связаться",
-    "description": "Звоните, пишите в WhatsApp или приезжайте на производство — там же шоурум. Заявку с сайта разбирает менеджер и возвращается с расчётом.",
+    "metaTitle": "Contacts",
+    "metaDescription": "Address, phone, WhatsApp, Telegram and opening hours of ROLLER in Dushanbe. Survey and calculation on request.",
+    "breadcrumb": "Contacts",
+    "eyebrow": "Contacts",
+    "title": "How to reach us",
+    "description": "Call, write on WhatsApp or come to the production site — the showroom is there too. A manager reviews every request from the site and comes back with a calculation.",
     "social": {
       "instagram": {
         "title": "Instagram",
-        "description": "Объекты, продукция и производство в ленте."
+        "description": "Projects, products and production in the feed."
       },
       "telegram": {
         "title": "Telegram",
-        "description": "Канал компании и связь с колл-центром."
+        "description": "The company channel and a line to the call centre."
       }
     }
   },
   "showroom": {
-    "metaTitle": "Шоурумы",
-    "metaDescription": "Шоурумы ROLLER в Душанбе и Худжанде: адреса, часы работы и телефоны на карте.",
-    "breadcrumb": "Шоурумы",
-    "title": "Шоурумы",
-    "description": "Свяжитесь с нами для получения консультации и оформления заказа. Мы всегда рады ответить на ваши вопросы.",
-    "mapTitle": "Карта шоурумов ROLLER"
+    "metaTitle": "Showrooms",
+    "metaDescription": "ROLLER showrooms in Dushanbe and Khujand: addresses, opening hours and phone numbers on the map.",
+    "breadcrumb": "Showrooms",
+    "title": "Showrooms",
+    "description": "Get in touch for a consultation or to place an order. We are always glad to answer your questions.",
+    "mapTitle": "Map of ROLLER showrooms"
   },
   "showrooms": {
-    "title": "Шоурумы",
-    "action": "Подробнее",
-    "route": "Проложить маршрут",
+    "title": "Showrooms",
+    "action": "Details",
+    "route": "Get directions",
     "views": {
-      "map": "Карта",
-      "list": "Списком"
+      "map": "Map",
+      "list": "List"
     },
     "labels": {
-      "address": "Адрес",
-      "hours": "График работы",
-      "phone": "Телефон"
+      "address": "Address",
+      "hours": "Opening hours",
+      "phone": "Phone"
     },
-    "select": "Выбрать шоурум в городе {city}",
-    "selectedBadge": "Выбран",
-    "photoAlt": "Шоурум ROLLER в городе {city}",
-    "photoPlaceholder": "Фотография шоурума появится позже"
+    "select": "Choose the showroom in {city}",
+    "selectedBadge": "Selected",
+    "photoAlt": "ROLLER showroom in {city}",
+    "photoPlaceholder": "A photo of the showroom will appear later"
   },
   "calculator": {
     "metaTitle": "Window and door calculator",
@@ -1090,5 +1091,11 @@
       "close": "Close"
     },
     "variantCode": "Scheme {code}"
+  },
+  "lightbox": {
+    "close": "Close",
+    "view": "Photo viewer",
+    "zoomOut": "Zoom out",
+    "zoomIn": "Zoom in"
   }
 }

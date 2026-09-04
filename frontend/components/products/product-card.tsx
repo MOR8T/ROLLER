@@ -76,7 +76,7 @@ export function ProductCard({
           // Not the title: it is repeated as the heading directly below, and
           // «ЭКОЛАЙН / ЭКОЛАЙН» reads as a rendering bug rather than as a
           // missing photograph.
-          placeholderLabel="Фото готовится"
+          placeholderLabel={t("photoPending")}
           width={480}
           height={320}
           objectFit="cover"

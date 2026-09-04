@@ -42,5 +42,13 @@ server {
     ssl_session_cache   shared:SSL:10m;
     ssl_session_timeout 10m;
 
+    # Also here, not only on :80. Cloudflare's "Always Use HTTPS" turns the
+    # HTTP-01 challenge into a redirect, and the request then arrives on :443 —
+    # where, without this, it would fall through to the frontend and 404, and
+    # issuance would fail for no visible reason.
+    location /.well-known/acme-challenge/ {
+        root /var/www/certbot;
+    }
+
     include /etc/nginx/includes/app-locations.inc;
 }

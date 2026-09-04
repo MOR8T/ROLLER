@@ -1,0 +1,11 @@
+# Overwrites the stock default.conf the nginx image ships in conf.d.
+#
+# conf.d cannot be a read-only mount any more — it is where the image writes
+# the rendered roller.conf — so the stock file is no longer shadowed by our
+# own. It declares `server_name localhost` on :80, and an exact name match
+# beats our `default_server`, so requests with that Host reached nginx's
+# welcome page instead of the site.
+#
+# Rendering an (almost) empty file over it is the least surprising fix: it uses
+# the same envsubst step as the real config rather than adding a mount or an
+# entrypoint hook.

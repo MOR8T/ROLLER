@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 
 import { HomeCarousel } from "@/components/sections/home-carousel";
 import { ImageLightbox } from "@/components/ui/image-lightbox";
@@ -22,6 +23,7 @@ export function CertificatesGallery({
   certificates: AboutCertificateDto[];
   label: string;
 }) {
+  const t = useTranslations("lightbox");
   const [openSrc, setOpenSrc] = useState<string | null>(null);
   const openCert = certificates.find((cert) => cert.imageSrc === openSrc);
 
@@ -52,7 +54,17 @@ export function CertificatesGallery({
         }))}
       />
 
-      <ImageLightbox src={openSrc} alt={openCert?.title ?? ""} onClose={() => setOpenSrc(null)} />
+      <ImageLightbox
+        src={openSrc}
+        alt={openCert?.title ?? ""}
+        onClose={() => setOpenSrc(null)}
+        labels={{
+          close: t("close"),
+          view: t("view"),
+          zoomOut: t("zoomOut"),
+          zoomIn: t("zoomIn"),
+        }}
+      />
     </>
   );
 }
