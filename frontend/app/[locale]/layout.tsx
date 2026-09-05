@@ -16,7 +16,7 @@ import { seoConfig } from "@/lib/seo-config";
 import { siteUrl } from "@/lib/seo";
 import { buildOrganizationJsonLd, buildWebSiteJsonLd } from "@/lib/json-ld";
 import { JsonLd } from "@/components/seo/json-ld";
-import { Analytics } from "@/components/seo/analytics";
+import { Analytics, AnalyticsNoScript } from "@/components/seo/analytics";
 
 /**
  * Fonts.
@@ -246,9 +246,16 @@ export default async function LocaleLayout({ children, params }: LayoutProps<"/[
       className={`${montserrat.variable} ${chakraPetch.variable} h-full antialiased`}
     >
       <body className="flex min-h-full flex-col overflow-x-hidden bg-background text-foreground">
+        {/* First child of <body>, where Google Tag Manager's fallback frame
+            has to live — see `AnalyticsNoScript`. */}
+        <AnalyticsNoScript
+          yandexMetrikaId={seoConfig.analytics.yandexMetrika}
+          googleTagManagerId={seoConfig.analytics.googleTagManager}
+        />
         <JsonLd data={[organization, website]} />
         <Analytics
           yandexMetrikaId={seoConfig.analytics.yandexMetrika}
+          googleTagManagerId={seoConfig.analytics.googleTagManager}
           googleAnalyticsId={seoConfig.analytics.googleAnalytics}
         />
         <NextIntlClientProvider>
