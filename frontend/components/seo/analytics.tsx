@@ -33,11 +33,37 @@ export function Analytics({
   yandexMetrikaId,
   googleTagManagerId,
   googleAnalyticsId,
+  maintenance = false,
 }: {
   yandexMetrikaId: string;
   googleTagManagerId: string;
   googleAnalyticsId: string;
+  /**
+   * The visitor is looking at the «Сайт в разработке» placeholder rather than
+   * the site.
+   *
+   * Those visits are counted — somebody arriving at a closed site is exactly
+   * the number worth knowing while it is closed — but they are *labelled*,
+   * because they are not comparable to a visit to the real site. The
+   * placeholder lives at the same four URLs the homepage does, so without a
+   * label a closed week and an open week are indistinguishable afterwards, and
+   * every report that spans the launch is quietly wrong.
+   *
+   * Reading the label: in GTM it is the `site_mode` Data Layer Variable (and
+   * the value `"maintenance"` is worth excluding in the GA4 tag's trigger); in
+   * Metrika it is a visit parameter under «Отчёты» → «Параметры визитов».
+   * Neither needs a code change — but neither happens on its own either, so
+   * until somebody configures it the placeholder views land in the same
+   * reports as the rest, just carrying the label.
+   */
+  maintenance?: boolean;
 }) {
+  // Pushed *inside* the GTM snippet rather than from a `<Script>` of its own:
+  // two `afterInteractive` scripts have no guaranteed order between them, and a
+  // label that lands after `gtm.js` has already fired is a label GTM's own
+  // trigger never sees.
+  const dataLayerLabel = maintenance ? `w[l].push({'site_mode':'maintenance'});` : "";
+
   return (
     <>
       {yandexMetrikaId ? (
@@ -53,7 +79,7 @@ export function Analytics({
                 clickmap: true,
                 trackLinks: true,
                 accurateTrackBounce: true,
-                webvisor: true
+                webvisor: true${maintenance ? `,\n                params: { site_mode: "maintenance" }` : ""}
               });
             `}
         </Script>
@@ -62,7 +88,7 @@ export function Analytics({
       {googleTagManagerId ? (
         <Script id="google-tag-manager" strategy="afterInteractive">
           {`
-              (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+              (function(w,d,s,l,i){w[l]=w[l]||[];${dataLayerLabel}w[l].push({'gtm.start':
               new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
               j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
               'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);

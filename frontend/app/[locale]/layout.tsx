@@ -207,6 +207,17 @@ export default async function LocaleLayout({ children, params }: LayoutProps<"/[
   // The chrome (header, footer, WhatsApp button) and `children` are all
   // dropped: the placeholder replaces the site, it does not overlay it, so
   // there is nothing left to navigate to or scroll past.
+  //
+  // The counters are the one thing that survives. Somebody arriving at a closed
+  // site is precisely the number worth having while it is closed — how much
+  // traffic the domain already gets, and where from — and dropping it would
+  // mean the whole closed period is simply missing from the reports afterwards.
+  // `maintenance` labels those visits so they can be told apart from visits to
+  // the real site later; see `Analytics`.
+  //
+  // No JSON-LD here, unlike the branch below: the placeholder is `noindex` and
+  // describes no business. Structured data on a page a crawler is told to
+  // ignore is markup with no reader.
   if (maintenanceMode && !previewing) {
     return (
       <html
@@ -214,6 +225,16 @@ export default async function LocaleLayout({ children, params }: LayoutProps<"/[
         className={`${montserrat.variable} ${chakraPetch.variable} h-full antialiased`}
       >
         <body className="min-h-full">
+          <AnalyticsNoScript
+            yandexMetrikaId={seoConfig.analytics.yandexMetrika}
+            googleTagManagerId={seoConfig.analytics.googleTagManager}
+          />
+          <Analytics
+            yandexMetrikaId={seoConfig.analytics.yandexMetrika}
+            googleTagManagerId={seoConfig.analytics.googleTagManager}
+            googleAnalyticsId={seoConfig.analytics.googleAnalytics}
+            maintenance
+          />
           <NextIntlClientProvider>
             <MaintenanceScreen previewEnabled={previewAccessEnabled} />
           </NextIntlClientProvider>
