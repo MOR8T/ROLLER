@@ -58,8 +58,8 @@ export const MAINTENANCE_PREVIEW_COOKIE = "roller_preview";
  * closed site, so its failure mode must be "leave it closed". A backend that
  * cannot answer has not said yes.
  */
-export async function verifyPreviewCode(code: string): Promise<boolean> {
-  const trimmed = code.trim();
+export async function verifyPreviewCode(code: string | undefined): Promise<boolean> {
+  const trimmed = code?.trim();
   if (!trimmed) return false;
 
   try {
@@ -80,15 +80,35 @@ export async function verifyPreviewCode(code: string): Promise<boolean> {
 }
 
 /**
- * Whether *this* request carries a still-valid preview cookie.
+ * The preview code this request is carrying, if any. Reading it is separate
+ * from checking it (`verifyPreviewCode` above) on purpose.
  *
- * Call it only when the maintenance switch is on. `cookies()` opts the caller
- * out of static rendering, and there is no reason to pay that on an open site
- * — the layout guards it with exactly that condition, and so should anything
- * else that grows a use for this.
+ * ⚠️ **Call this unconditionally, before the maintenance switch is known.**
+ * The two used to be one function that the layout called only when the switch
+ * was on, so that an open site stayed statically rendered. That arrangement
+ * broke the site the first time the switch was actually used in production
+ * (2026-09-05):
+ *
+ *   - the image is built by CI, where the switch is off and the backend does
+ *     not exist, so every public page compiled as a *static* route;
+ *   - turning the switch on made those routes reach `cookies()` at runtime,
+ *     which is a Request-time API a static route may not use. Every background
+ *     regeneration then failed with `DYNAMIC_SERVER_USAGE`, Next threw the
+ *     result away and kept serving the HTML baked at build time — the empty,
+ *     backendless version of the site, with no placeholder and `index, follow`
+ *     in its metadata. Routes with no baked copy (`/products/[category]` and
+ *     the product page under it) answered 500 instead.
+ *
+ * A `cookies()` call that is *always* on the path is what fixes it: Next sees
+ * it while building, marks everything under `app/[locale]` dynamic, and the
+ * pages are rendered per request from then on — so the switch takes effect at
+ * once, and so does every edit an admin makes, without another deploy. The
+ * cost is bounded: the data behind those renders still comes from the tagged,
+ * 60-second `fetch` cache in `lib/*.ts`, not from the backend each time.
+ *
+ * The verification POST stays conditional — `verifyPreviewCode` is only worth
+ * calling on a closed site, and only for a visitor who actually holds a code.
  */
-export async function hasMaintenancePreviewAccess(): Promise<boolean> {
-  const code = (await cookies()).get(MAINTENANCE_PREVIEW_COOKIE)?.value;
-  if (!code) return false;
-  return verifyPreviewCode(code);
+export async function readMaintenancePreviewCookie(): Promise<string | undefined> {
+  return (await cookies()).get(MAINTENANCE_PREVIEW_COOKIE)?.value;
 }
