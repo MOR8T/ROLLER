@@ -187,11 +187,29 @@ site for that visitor. Three things are load-bearing:
   `lib/site-settings.ts`'s fail-open, and re-checks the cookie against the
   backend every render — which is what makes changing the code revoke every
   session at once;
-- the `cookies()` read is guarded by `maintenanceMode`, so the public pages
-  stay statically rendered while the switch is off.
+- the `cookies()` read (`readMaintenancePreviewCookie`) is **unconditional**,
+  which is what makes every route under `app/[locale]` dynamic (ƒ in
+  `next build`). Do not put it back behind `maintenanceMode` to win back
+  static rendering — that is the shape that broke the site on 2026-09-05:
+  CI builds the image with the switch off and no backend reachable, so the
+  pages compiled static; turning the switch on then made each regeneration
+  hit `cookies()`, fail with `DYNAMIC_SERVER_USAGE` and fall back to the
+  empty HTML baked at build time (and 500 on `/products/*`, which had no
+  baked copy). The *verification* POST is still guarded — only the cookie
+  read is not. `lib/page-metadata.ts` answers the same switch for the same
+  reason: page metadata merges over the layout's, so without it a closed
+  site kept publishing real titles and `index, follow`.
 
 It gates *rendering the public site* and nothing else. `/admin`, `/login` and
 `/api` never consult it.
+
+⚠️ Dynamic rendering is now the public site's normal state, and the data
+behind it comes from the tagged 60-second `fetch` cache in `lib/*.ts`, not
+from the backend on every request. That is also what makes an admin's edits
+show up without a redeploy — mutations revalidate their tag and the next
+request renders with the new data. Nothing under `[locale]` is prerendered
+into the image any more, so a deploy no longer ships a snapshot of the site
+that has to catch up with the database.
 
 ### SEO
 Configured entirely in code, in one file: `lib/seo-config.ts` (canonical origin,
@@ -210,7 +228,10 @@ above; products, categories and articles take theirs from their own records.
 **Every public page's `generateMetadata` goes through `buildPageMetadata`**
 (`lib/page-metadata.ts`) — it owns canonical, hreflang, Open Graph, Twitter and
 the robots directives so those are decided once rather than eleven times. Pages
-pass their own copy in. It is synchronous; there is nothing to await.
+pass their own copy in. It is `async` — it awaits `getSiteSettings()` so a
+closed site publishes no page metadata at all (see the maintenance section);
+every call site already returns its result straight out of an
+`async generateMetadata`, so nothing else had to change.
 `app/sitemap.ts` and `app/robots.ts` read the same config (plus `getSiteSettings`
 for maintenance mode); JSON-LD is built in `lib/json-ld.ts` and rendered by
 `components/seo/json-ld.tsx`.

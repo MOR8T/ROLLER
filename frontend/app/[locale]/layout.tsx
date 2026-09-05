@@ -10,7 +10,7 @@ import { Footer } from "@/components/layout/footer";
 import { WhatsAppFab } from "@/components/layout/whatsapp-fab";
 import { MaintenanceScreen } from "@/components/layout/maintenance-screen";
 import { getSiteSettings } from "@/lib/site-settings";
-import { hasMaintenancePreviewAccess } from "@/lib/maintenance-access";
+import { readMaintenancePreviewCookie, verifyPreviewCode } from "@/lib/maintenance-access";
 import { routing } from "@/i18n/routing";
 import { seoConfig } from "@/lib/seo-config";
 import { siteUrl } from "@/lib/seo";
@@ -87,6 +87,13 @@ export async function generateMetadata({
   const { locale } = await params;
   if (!hasLocale(routing.locales, locale)) return {};
 
+  // Read before anything branches on it — see the note on
+  // `readMaintenancePreviewCookie`. Both this function and the layout below
+  // are on every page's path, and both must reach `cookies()` whatever the
+  // switch says, or the pages compile static and freeze the first time it is
+  // turned on.
+  const previewCode = await readMaintenancePreviewCookie();
+
   // While «Сайт в разработке» is on there is no site to describe, and nothing
   // worth indexing: the tab reads as the placeholder and crawlers are told to
   // stay away, so a search engine that happens to recrawl during the closure
@@ -98,7 +105,7 @@ export async function generateMetadata({
   // below still says `noindex` for them, and rightly: a crawler cannot hold
   // the cookie, so the only reader of the real title here is the person who
   // typed the code.
-  const previewing = maintenanceMode && (await hasMaintenancePreviewAccess());
+  const previewing = maintenanceMode && (await verifyPreviewCode(previewCode));
 
   // `metadataBase` is what every relative canonical and `og:image` on the site
   // resolves against. It is set here, in the one layout every public page
@@ -159,11 +166,23 @@ export default async function LocaleLayout({ children, params }: LayoutProps<"/[
   const { locale } = await params;
   if (!hasLocale(routing.locales, locale)) notFound();
 
-  // Opts every Server Component under this layout back into static rendering,
-  // which `await params` would otherwise forfeit.
+  // Hands the locale to every `getTranslations()` below this layout that does
+  // not name one itself. (It used to also buy back static rendering after
+  // `await params`; the cookie read below gives that up on purpose — see the
+  // note there.)
   setRequestLocale(locale);
 
   const t = await getTranslations({ locale, namespace: "common" });
+
+  // ⚠️ Unconditional, and load-bearing: this is the Request-time API that
+  // makes every page under `app/[locale]` render per request instead of being
+  // prerendered at build time. `readMaintenancePreviewCookie` carries the full
+  // story; the short version is that a prerendered page cannot start reading a
+  // cookie later, so a build made with the switch off could never show the
+  // placeholder once an admin turned it on — it kept serving the HTML CI baked
+  // without a backend. Dynamic rendering is also what makes an admin's edits
+  // appear on the site without another deploy.
+  const previewCode = await readMaintenancePreviewCookie();
 
   // «Настройки сайта» → «Сайт в разработке». Gated here rather than in
   // `proxy.ts` because the flag lives in the backend: the proxy runs on every
@@ -180,12 +199,10 @@ export default async function LocaleLayout({ children, params }: LayoutProps<"/[
   // the placeholder is carrying an httpOnly cookie, re-checked against the
   // backend here on every render (`lib/maintenance-access.ts`).
   //
-  // ⚠️ Guarded by `maintenanceMode` rather than called unconditionally,
-  // because it reads `cookies()` — which would opt every public page out of
-  // the static rendering `setRequestLocale` just bought back. While the
-  // switch is on the site is dynamic anyway; while it is off, nothing here
-  // touches a cookie and the pages stay static.
-  const previewing = maintenanceMode && (await hasMaintenancePreviewAccess());
+  // The *check* stays guarded by `maintenanceMode` — it is a request to the
+  // backend, and there is nothing to unlock on an open site. Only the cookie
+  // read above is unconditional.
+  const previewing = maintenanceMode && (await verifyPreviewCode(previewCode));
 
   // The chrome (header, footer, WhatsApp button) and `children` are all
   // dropped: the placeholder replaces the site, it does not overlay it, so

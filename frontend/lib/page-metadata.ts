@@ -3,6 +3,8 @@ import type { Metadata } from "next";
 import { siteConfig } from "@/lib/site-config";
 import { seoConfig, type SeoPageKey } from "@/lib/seo-config";
 import { absoluteUrl, buildAlternates, localizedPath, siteUrl } from "@/lib/seo";
+import { getSiteSettings } from "@/lib/site-settings";
+import { readMaintenancePreviewCookie, verifyPreviewCode } from "@/lib/maintenance-access";
 import { locales, type Locale } from "@/i18n/routing";
 
 /**
@@ -14,9 +16,14 @@ import { locales, type Locale } from "@/i18n/routing";
  * eleven times. A page still owns its *copy* — it passes the title and
  * description it reads from `messages/*.json`, like every other string.
  *
- * Synchronous: the settings are a plain module, not a fetch. Calling it from an
- * `async generateMetadata` is fine — the returned object is simply wrapped in a
- * promise.
+ * ⚠️ Async since 2026-09-05, because it is also where «Сайт в разработке» has
+ * to be answered. `seoConfig` is still a plain module — the await is for the
+ * maintenance switch, which lives in the backend (behind the same cached,
+ * tagged fetch the layout uses, so it costs nothing extra per request).
+ *
+ * Every call site already sits in an `async generateMetadata` and does
+ * `return buildPageMetadata({...})`, so returning a promise needs no change
+ * there.
  */
 
 /**
@@ -67,7 +74,7 @@ export interface PageMetadataInput {
   absoluteTitle?: boolean;
 }
 
-export function buildPageMetadata({
+export async function buildPageMetadata({
   locale,
   path,
   pageKey,
@@ -78,7 +85,23 @@ export function buildPageMetadata({
   publishedTime,
   noindex = false,
   absoluteTitle = false,
-}: PageMetadataInput): Metadata {
+}: PageMetadataInput): Promise<Metadata> {
+  // A closed site describes nothing. Next merges a page's metadata *over* the
+  // root layout's, field by field, so without this every page would overwrite
+  // the placeholder's `noindex` title with its own copy, its canonical and its
+  // hreflang cluster — which is exactly what production did while the switch
+  // was on: the body said «Сайт в разработке» and the `<head>` said «Новости»,
+  // `index, follow`. Returning only `robots` here leaves the layout's
+  // placeholder title standing and takes the rest of the head away with it.
+  //
+  // A visitor holding a valid preview code is looking at the real site, so
+  // their `<head>` describes it — still `noindex`, because a crawler cannot
+  // hold that cookie and no one else should be reading these tags.
+  const { maintenanceMode } = await getSiteSettings();
+  if (maintenanceMode && !(await verifyPreviewCode(await readMaintenancePreviewCookie()))) {
+    return { robots: { index: false, follow: false } };
+  }
+
   const activeLocale = (locales as readonly string[]).includes(locale)
     ? (locale as Locale)
     : ("ru" as Locale);
