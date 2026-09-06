@@ -127,6 +127,13 @@ export function HomeCarousel({
         // a useful unit the moment the page size changes with the breakpoint.
         slidesPerGroup={1}
         spaceBetween={gap}
+        // Swiper decides "swipe or page scroll" on the first move of a gesture
+        // and holds that decision for the whole of it. At the default 45° a
+        // diagonal flick — which is most of them, on a card this tall (`aspect-4/5`
+        // at 78vw on a phone) — is read as a scroll and the strip sits still
+        // until the finger lifts. 60° keeps a deliberate vertical scroll working
+        // and stops eating the sloppy horizontal ones.
+        touchAngle={60}
         // `grabCursor` is repeated in every breakpoint on purpose. Swiper compares
         // the incoming breakpoint's value against the current one, and an absent
         // key reads as "off" — so crossing 640px would strip the grab cursor and
@@ -167,7 +174,29 @@ export function HomeCarousel({
             // `h-auto`, because `swiper/css` sets `.swiper-slide { height: 100% }`
             // unlayered and a card that has to size itself would collapse.
             style={{ height: "auto" }}
-            className={slideClassName}
+            // `select-none` and the killed `dragstart` are one fix, the same one
+            // `expo-slider.tsx` and `product-gallery-section.tsx` already carry:
+            // a slide here is a `<Link>` around a photograph, and both an anchor
+            // and an `<img>` are draggable by default. Swiper only guards that
+            // with `preventDefault()` on `pointerdown`, which Firefox and Safari
+            // ignore for drag purposes — so the browser walked off with a ghost
+            // of the picture instead of moving the strip.
+            //
+            // ⚠️ And the ghost did not just cost that one gesture. Starting a
+            // native drag fires `pointercancel`, and Swiper's `onTouchEnd`
+            // returns on it before clearing `pointerId`/`isTouched`/`isMoved`
+            // unless the browser is Safari or a WebView — after which its
+            // `onTouchStart` bails on `isTouched && isMoved` and the strip is
+            // undraggable until the component remounts. One stray drag on a
+            // photo killed the mouse for the rest of the visit.
+            //
+            // The handler goes on the slide, not on `<Swiper>`: swiper-react
+            // reads any `on[A-Z]` function prop as a *Swiper event* name, so
+            // `onDragStart` there would quietly become an event called
+            // `dragStart` and never reach the DOM. `dragstart` bubbles, so one
+            // handler per slide covers the card and the photograph both.
+            onDragStart={(event) => event.preventDefault()}
+            className={cn("select-none", slideClassName)}
             aria-hidden={slide.pass > 0 || undefined}
             // A repeat must not be a tab stop, or the keyboard walks the same
             // three links twice.
