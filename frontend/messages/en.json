@@ -235,13 +235,6 @@
       "previous": "Previous photo",
       "next": "Next photo"
     },
-    "promo": {
-      "eyebrow": "Calculation",
-      "title": "Find out the cost",
-      "description": "Configure your unit in the calculator: system, dimensions, sashes and colour. A manager works out the exact price after the survey.",
-      "cta": "Go to the calculator",
-      "imageAlt": "ROLLER production in Dushanbe"
-    },
     "contacts": {
       "title": "Get in touch",
       "description": "Still have questions about the {name} system? Leave a request — we will call back, calculate and book a survey.",

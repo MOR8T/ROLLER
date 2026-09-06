@@ -235,13 +235,6 @@
       "previous": "Önceki fotoğraf",
       "next": "Sonraki fotoğraf"
     },
-    "promo": {
-      "eyebrow": "Hesap",
-      "title": "Maliyeti öğrenin",
-      "description": "Konstrüksiyonu hesaplayıcıda kurun: sistem, ölçüler, kanatlar ve renk. Kesin fiyatı yönetici keşiften sonra hesaplar.",
-      "cta": "Hesaplayıcıya git",
-      "imageAlt": "Duşanbe'de ROLLER üretimi"
-    },
     "contacts": {
       "title": "Bize ulaşın",
       "description": "{name} sistemi hakkında sorunuz mu var? Talep bırakın — sizi arayalım, hesaplayalım ve keşif için randevu verelim.",

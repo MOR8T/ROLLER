@@ -119,7 +119,7 @@ Products live in the backend and are managed from `/admin/products`
 (`lib/products.ts` is the sole read path; nothing else may call `/api/products`).
 A product is a photo, a title and a description per locale — that is the card
 *and* the page's opening screen — plus an **ordered list of sections**, each one
-of five kinds (`finishes`, `specs`, `story`, `gallery`, `promo`) with a JSONB
+of four kinds (`finishes`, `specs`, `story`, `gallery`) with a JSONB
 payload. The order the admin puts them in is the order the page renders, a kind
 may repeat, and `components/products/page/product-page-view.tsx` loops over the
 list rather than naming the blocks.
