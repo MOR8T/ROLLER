@@ -164,19 +164,21 @@ h6 {
    --------------------------------------------------------------------------- */
 
 /* ---------------------------------------------------------------------------
-   The product gallery's pagination bar.
+   The sliders' pagination bar.
 
    The active segment fills over one autoplay beat, so the strip is both the
    pager and the clock: the deck says how long is left instead of turning
-   unannounced. Duration and play state are set inline by
-   `components/products/page/product-gallery-section.tsx` — the beat lives in
-   that file's `AUTOPLAY_MS`, and hovering the deck pauses the fill with it.
+   unannounced. Every self-playing slider on the site draws it —
+   `components/ui/slider-pager.tsx` is the one row under all of them, and it
+   sets duration and play state inline from the beat `lib/use-autoplay.ts`
+   hands it. That is the same clock that turns the deck, so hovering pauses
+   the fill and the turn together and both resume where they stopped.
 
    `forwards`, so a paused or finished bar stays full rather than snapping back
    to empty in the moment before the next slide is committed.
    --------------------------------------------------------------------------- */
 
-@keyframes gallery-beat {
+@keyframes slider-beat {
   from {
     transform: scaleX(0);
   }
