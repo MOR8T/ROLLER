@@ -8,6 +8,7 @@ import { Quote } from "lucide-react";
 import { Breadcrumbs } from "@/components/products/breadcrumbs";
 import { PageHeader } from "@/components/layout/page-header";
 import { CertificatesGallery } from "@/components/sections/certificates-gallery";
+import { CountUp } from "@/components/sections/count-up";
 import { ContactsLeadSection } from "@/components/sections/contacts-lead-section";
 import { SectionHeading } from "@/components/sections/section-heading";
 import { Container } from "@/components/ui/container";
@@ -81,18 +82,28 @@ export default async function AboutPage({ params }: PageProps<"/[locale]/about">
 
         <Container>
           {content ? (
-            <RevealGroup className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-4 lg:gap-5">
+            /* Same treatment as the homepage's `AboutStatsSection`: a rule
+               above each figure rather than a box around it, and no vertical
+               dividers — a column rule has to know where the row ends and that
+               answer changes at every breakpoint, a top rule per cell is
+               correct at two columns and at four without knowing either. Four
+               boxed figures read as a dashboard; four figures on hairlines read
+               as a claim, which is what they are. */
+            <RevealGroup className="mt-12 grid grid-cols-2 gap-x-8 gap-y-10 lg:grid-cols-4 lg:gap-x-12">
               {content.stats.map((stat) => (
-                <RevealItem key={stat.key}>
-                  <div className="h-full rounded-card border border-brand-black/10 bg-surface p-5">
-                    <p className="font-heading text-3xl font-bold text-brand-black tabular-nums">
-                      {stat.value.toLocaleString(locale)}
-                      {stat.suffix}
-                    </p>
-                    <p className="mt-2 text-sm leading-6 text-brand-black/60">
-                      {tProduction(`stats.${stat.key}`)}
-                    </p>
-                  </div>
+                <RevealItem key={stat.key} className="border-t border-brand-black/15 pt-6">
+                  {/* `tabular-nums` is load-bearing here, not typographic taste:
+                      the digits change every frame while counting, and
+                      proportional figures would make the whole row jitter
+                      sideways as they do. */}
+                  <CountUp
+                    value={stat.value}
+                    suffix={stat.suffix}
+                    className="block font-heading text-4xl font-bold tracking-tight text-brand-black tabular-nums sm:text-5xl lg:text-6xl"
+                  />
+                  <p className="mt-3 text-sm leading-6 text-brand-black/50">
+                    {tProduction(`stats.${stat.key}`)}
+                  </p>
                 </RevealItem>
               ))}
             </RevealGroup>
@@ -225,13 +236,13 @@ function HeroTextSkeleton() {
 function StatsSkeleton() {
   return (
     <div
-      className="mt-12 grid animate-pulse gap-4 sm:grid-cols-2 lg:grid-cols-4 lg:gap-5"
+      className="mt-12 grid animate-pulse grid-cols-2 gap-x-8 gap-y-10 lg:grid-cols-4 lg:gap-x-12"
       style={pulse}
     >
       {Array.from({ length: 4 }).map((_, index) => (
-        <div key={index} className="rounded-card border border-brand-black/10 bg-surface p-5">
-          <div className="h-8 w-16 rounded-control bg-brand-black/10" />
-          <div className="mt-3 h-3 w-24 rounded-control bg-brand-black/10" />
+        <div key={index} className="border-t border-brand-black/15 pt-6">
+          <div className="h-10 w-20 rounded-control bg-brand-black/10 sm:h-12 lg:h-14" />
+          <div className="mt-3 h-3 w-28 rounded-control bg-brand-black/10" />
         </div>
       ))}
     </div>
