@@ -74,7 +74,14 @@ export async function Footer() {
     <footer className="relative z-10 bg-brand-black text-brand-white">
       <div className="h-1 w-full bg-brand-red" aria-hidden />
 
-      <Container className="grid gap-10 py-14 sm:grid-cols-2 lg:grid-cols-4 lg:gap-8 lg:py-16">
+      {/* Four columns from `xl`, not `lg`. At 1024 a quarter of the container
+          is 216px, and the contacts column has to fit an address, a phone and
+          `rollerunopen2006@gmail.com` next to a 16px icon — the email broke
+          mid-word ("…@gmail.|com") and the address ran to three lines. Two
+          columns at that width give each 460px and every line fits. It is also
+          the breakpoint the header already switches on, so 1024 reads as one
+          layout rather than a desktop footer under a tablet header. */}
+      <Container className="grid gap-10 py-14 sm:grid-cols-2 lg:py-16 xl:grid-cols-4 xl:gap-8">
         <div className="max-w-xs">
           <Link
             href="/"

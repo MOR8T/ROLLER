@@ -64,7 +64,12 @@ export function CountUp({ value, suffix = "", durationMs = 1400, className }: Co
       const start = performance.now();
 
       const step = (now: number) => {
-        const progress = Math.min((now - start) / durationMs, 1);
+        // Clamped at *both* ends. `now` is the frame's start time, which the
+        // browser may date earlier than the `performance.now()` read a moment
+        // ago in `run` — a negative `progress` runs `easeOut` outside its
+        // domain and `1 - (1 - t)³` returns a negative multiplier, so the first
+        // frame painted "−271+" before the count climbed out of it.
+        const progress = Math.min(Math.max((now - start) / durationMs, 0), 1);
         setShown(Math.round(value * easeOut(progress)));
         if (progress < 1) frame = requestAnimationFrame(step);
       };

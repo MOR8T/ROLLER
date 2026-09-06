@@ -400,7 +400,14 @@ export function ProductGallerySection({
                 The active one stretches into a short bar and fills over the beat, which
                 makes it a pager *and* a clock: the deck says how long is left
                 instead of turning unannounced. */}
-            <div className="flex min-w-0 flex-wrap items-center gap-2">
+            {/* `gap-0` plus `px-1` per button: the bar and dots keep the 8px
+                air they had, but the buttons themselves touch, so the strip is
+                one 44px-tall band of targets rather than a row of 8px points.
+                The row already stands 44px tall for the arrows beside it, so
+                `h-11` changes no layout. The visual — the track that clips the
+                autoplay fill — moved to the inner span; the button is now only
+                the hit area. */}
+            <div className="-mx-1 flex min-w-0 flex-wrap items-center gap-0">
               {slides.map((slide, index) => {
                 const isActive = index === turn.active;
 
@@ -411,32 +418,37 @@ export function ProductGallerySection({
                     aria-label={`${index + 1} / ${total}`}
                     aria-current={isActive}
                     onClick={() => goTo(index, index > turn.active ? 1 : -1)}
-                    className={cn(
-                      // `transition-all`, so the dot the visitor picks is seen
-                      // growing into the bar rather than the strip re-laying
-                      // itself out in one frame.
-                      "group relative h-2 shrink-0 overflow-hidden rounded-full transition-all duration-300 focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2 focus-visible:outline-none",
-                      isActive
-                        ? // 50px flat, and `max-w-full` for the narrowest phones,
-                          // where the bar and its dots would otherwise be wider
-                          // than the gutter allows.
-                          "w-[50px] max-w-full bg-black/15"
-                        : "w-2 bg-black/20 hover:bg-black/40",
-                    )}
+                    className="group flex h-11 min-w-0 shrink-0 cursor-pointer items-center px-1 focus-visible:rounded-control focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2 focus-visible:outline-none"
                   >
-                    {isActive ? (
-                      <span
-                        aria-hidden
-                        // Keyed on the turn, so the fill restarts from zero even
-                        // when the visitor picks the slide that is already lit.
-                        key={turn.tick}
-                        style={{
-                          animationDuration: `${AUTOPLAY_MS}ms`,
-                          animationPlayState: paused || hidden || still ? "paused" : "running",
-                        }}
-                        className="absolute inset-y-0 left-0 w-full origin-left rounded-full bg-black motion-safe:animate-[gallery-beat_linear_forwards] motion-reduce:scale-x-100"
-                      />
-                    ) : null}
+                    <span
+                      aria-hidden
+                      className={cn(
+                        // `transition-all`, so the dot the visitor picks is seen
+                        // growing into the bar rather than the strip re-laying
+                        // itself out in one frame.
+                        "relative block h-2 overflow-hidden rounded-full transition-all duration-300",
+                        isActive
+                          ? // 50px flat, and `max-w-full` for the narrowest phones,
+                            // where the bar and its dots would otherwise be wider
+                            // than the gutter allows.
+                            "w-[50px] max-w-full bg-black/15"
+                          : "w-2 bg-black/20 group-hover:bg-black/40",
+                      )}
+                    >
+                      {isActive ? (
+                        <span
+                          aria-hidden
+                          // Keyed on the turn, so the fill restarts from zero even
+                          // when the visitor picks the slide that is already lit.
+                          key={turn.tick}
+                          style={{
+                            animationDuration: `${AUTOPLAY_MS}ms`,
+                            animationPlayState: paused || hidden || still ? "paused" : "running",
+                          }}
+                          className="absolute inset-y-0 left-0 w-full origin-left rounded-full bg-black motion-safe:animate-[gallery-beat_linear_forwards] motion-reduce:scale-x-100"
+                        />
+                      ) : null}
+                    </span>
                   </button>
                 );
               })}

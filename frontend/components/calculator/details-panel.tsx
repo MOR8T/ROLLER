@@ -140,14 +140,18 @@ export function DetailsPanel({
 
       {extras.length > 0 ? (
         <Field label={t("labels.accessories")}>
-          <div className="space-y-2.5">
+          {/* `space-y-0.5` against each row's `py-1`: same rhythm as the old
+              `space-y-2.5` on bare rows, but the row is 32px tall and clickable
+              across the panel rather than an 18px box with a caption beside
+              it. */}
+          <div className="space-y-0.5">
             {extras.map((accessory: AccessoryOption) => {
               const key = accessory.key;
               const checked = item.accessories.includes(key);
               return (
                 <label
                   key={key}
-                  className="flex cursor-pointer items-center gap-3 text-sm text-brand-black/80"
+                  className="flex cursor-pointer items-center gap-3 py-1 text-sm text-brand-black/80"
                 >
                   <input
                     type="checkbox"

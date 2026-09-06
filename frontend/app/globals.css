@@ -242,12 +242,21 @@ h6 {
    one is a native vertical range (`writing-mode`), not a rotated horizontal
    one — rotation breaks the hit area, arrow keys and touch dragging, and a
    size control that only responds to a mouse is not a size control.
+
+   ⚠️ The `height`/`width` below is the hit area, not the look. With
+   `appearance: none` and no size of its own an `<input type=range>` collapses
+   onto its track — 2px tall for the horizontal one — and the 15px thumb is
+   painted *outside* that box, where pointer events never reach it. Dragging
+   meant landing on a 2px line, which on a touch screen is not a target at all.
+   The track keeps its 2px and the browser centres it in the taller box, so the
+   drawing is unchanged and only the grabbable area grows.
    --------------------------------------------------------------------------- */
 .cal-range {
   -webkit-appearance: none;
   appearance: none;
   background: transparent;
   cursor: pointer;
+  height: 24px;
 }
 
 .cal-range:focus-visible {
@@ -291,7 +300,11 @@ h6 {
 .cal-range--vertical {
   writing-mode: vertical-lr;
   direction: rtl;
-  width: 15px;
+  /* The vertical twin of the note above: 15px was exactly the thumb, leaving
+     no margin either side to grab. `height` is reset because the column sizes
+     this one with `flex-1`. */
+  width: 24px;
+  height: auto;
 }
 
 .cal-range--vertical::-webkit-slider-runnable-track {

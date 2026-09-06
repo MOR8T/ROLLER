@@ -129,7 +129,9 @@ export function ContactsLeadForm({ context, interests }: ContactsLeadFormProps) 
             {t("form.interests")}
           </legend>
 
-          <div className="mt-4 grid gap-x-6 gap-y-3 sm:grid-cols-2">
+          {/* `gap-y-1`, because each row now carries `py-1` of its own — see
+              `Checkbox`. The two together reproduce the old 36px pitch. */}
+          <div className="mt-4 grid gap-x-6 gap-y-1 sm:grid-cols-2">
             {interests.map((interest) => {
               const checkboxId = `${uid}-interest-${interest.id}`;
               const checked = selectedIds.includes(interest.id);
@@ -218,7 +220,12 @@ function Checkbox({
   onChange: (checked: boolean) => void;
 }) {
   return (
-    <div className="flex items-center gap-3">
+    // The `<label>` *is* the row, not just the words: a 16px box beside a
+    // detached caption left a 12px dead gutter between them and a 24px-tall
+    // target on a phone. Wrapping the row makes the whole width of the column
+    // tappable. `py-1` against the grid's `gap-y-1` keeps the 36px pitch the
+    // list had when it was 24px rows on a 12px gap.
+    <label htmlFor={id} className="flex cursor-pointer items-center gap-3 py-1">
       <input
         id={id}
         type="checkbox"
@@ -226,10 +233,8 @@ function Checkbox({
         onChange={(event) => onChange(event.target.checked)}
         className="size-4 shrink-0 cursor-pointer accent-brand-black focus-visible:ring-2 focus-visible:ring-brand-black focus-visible:ring-offset-2 focus-visible:outline-none"
       />
-      <label htmlFor={id} className="cursor-pointer text-sm leading-6 text-brand-black/75">
-        {label}
-      </label>
-    </div>
+      <span className="text-sm leading-6 text-brand-black/75">{label}</span>
+    </label>
   );
 }
 

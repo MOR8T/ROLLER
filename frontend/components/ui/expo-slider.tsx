@@ -575,7 +575,16 @@ export function ExpoSlider({
           </div>
         ) : (
           <div className="mt-4 flex items-center justify-between gap-4">
-            <div className="flex items-center gap-2">
+            {/* `gap-0` on the row and `px-1` on each button, so the dots keep
+                the 8px air they had while the buttons themselves touch: the
+                strip becomes one continuous band of targets instead of a line
+                of 8px points with dead space between them. The row is already
+                44px tall because of the arrows beside it, so `h-11` costs no
+                layout. */}
+            {/* `min-w-0 flex-wrap` for the same reason as `home-carousel.tsx`:
+                the deck is admin-managed, so the pager is as long as the
+                client's slide list and must never be able to widen the page. */}
+            <div className="-mx-1 flex min-w-0 flex-wrap items-center gap-0">
               {slides.map((slide, index) => (
                 <button
                   key={slide.key}
@@ -583,17 +592,22 @@ export function ExpoSlider({
                   aria-label={labels.goTo?.(index + 1)}
                   aria-current={index === active}
                   onClick={() => goToSlide(index)}
-                  className={cn(
-                    // A dot, so `rounded-full` is allowed — DESIGN.md §5 rules
-                    // out pills for buttons, not for indicators. The active one
-                    // stretches rather than only changing colour, which survives
-                    // both a small screen and a colour-blind reading.
-                    "h-2 rounded-full transition-all duration-300 focus-visible:ring-2 focus-visible:ring-brand-black focus-visible:ring-offset-2 focus-visible:outline-none",
-                    index === active
-                      ? "w-8 bg-brand-black"
-                      : "w-2 bg-brand-black/20 hover:bg-brand-black/40",
-                  )}
-                />
+                  className="group flex h-11 cursor-pointer items-center px-1 focus-visible:rounded-control focus-visible:ring-2 focus-visible:ring-brand-black focus-visible:ring-offset-2 focus-visible:outline-none"
+                >
+                  <span
+                    aria-hidden
+                    className={cn(
+                      // A dot, so `rounded-full` is allowed — DESIGN.md §5 rules
+                      // out pills for buttons, not for indicators. The active one
+                      // stretches rather than only changing colour, which survives
+                      // both a small screen and a colour-blind reading.
+                      "block h-2 rounded-full transition-all duration-300",
+                      index === active
+                        ? "w-8 bg-brand-black"
+                        : "w-2 bg-brand-black/20 group-hover:bg-brand-black/40",
+                    )}
+                  />
+                </button>
               ))}
             </div>
 
