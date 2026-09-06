@@ -220,15 +220,9 @@ export async function fetchLatestNews(
   return items.filter((article) => article.slug !== excludeSlug).slice(0, count);
 }
 
-/**
- * Slugs for `generateStaticParams`. Fetches the backend once at build time;
- * an unreachable backend just means nothing is pre-rendered — `ArticlePage`
- * still serves any slug on demand since dynamic params are allowed.
- */
-export async function newsParams(): Promise<{ article: string }[]> {
-  const raw = await loadRaw();
-  return raw.map((item) => ({ article: item.slug }));
-}
+// `newsParams()` used to live here, feeding the article page's
+// `generateStaticParams`. Both are gone — see that page's comment; the sitemap
+// builds its article URLs from `fetchLatestNews` and never needed this.
 
 export function articleHref(slug: string): string {
   return `/news/${slug}`;
