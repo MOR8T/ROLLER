@@ -57,8 +57,9 @@ export async function generateMetadata({
  * sidebar and no featured article, and adding any of them would be inventing
  * a section the client did not ask for. What is ours rather than theirs: the
  * container and vertical rhythm, `rounded-card` instead of their 20px, the long
- * per-locale date instead of `06.07.2026`, and the black card panel in place of
- * the accent colour they use.
+ * per-locale date instead of `06.07.2026`, and the site's own light card in
+ * place of the accent colour they use — see `ArticleCard`, whose panel was
+ * black until 2026-09-06.
  *
  * ⚠️ What this replaced: the same grid rendering all three mock articles with
  * excerpts, on white cards with a «Читать» link. The excerpt and the link are
@@ -113,7 +114,7 @@ export default async function NewsPage({ params, searchParams }: PageProps<"/[lo
 
 /**
  * Stands in for the grid while there is nothing to show — same card frame as
- * `ArticleCard` (photo, then a black panel with a date line and a headline),
+ * `ArticleCard` (photo, then a light panel with a date line and a headline),
  * repeated six times, so the swap to real content doesn't jolt the layout.
  * Pulses as one unit rather than per-piece, same treatment as
  * `NewsSection`'s own skeleton on the homepage.
@@ -123,11 +124,14 @@ function NewsGridSkeleton() {
     <div className="mt-12 animate-pulse" style={{ animationDuration: "3.2s" }}>
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 lg:gap-5">
         {Array.from({ length: 6 }).map((_, index) => (
-          <div key={index} className="overflow-hidden rounded-card bg-brand-black">
-            <div className="aspect-5/3 bg-brand-white/10" />
+          <div
+            key={index}
+            className="overflow-hidden rounded-card border border-brand-black/10 bg-surface"
+          >
+            <div className="aspect-5/3 bg-brand-black/8" />
             <div className="space-y-3 p-5 sm:p-6">
-              <div className="h-2.5 w-20 rounded-control bg-brand-white/15" />
-              <div className="h-5 w-4/5 rounded-control bg-brand-white/15" />
+              <div className="h-2.5 w-20 rounded-control bg-brand-black/10" />
+              <div className="h-5 w-4/5 rounded-control bg-brand-black/10" />
             </div>
           </div>
         ))}

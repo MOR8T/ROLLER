@@ -73,7 +73,7 @@ export async function ContactsLeadSection({
                     href={contact.href}
                     target={contact.href.startsWith("http") ? "_blank" : undefined}
                     rel={contact.href.startsWith("http") ? "noopener noreferrer" : undefined}
-                    className="block border-t border-brand-black/12 py-5 font-heading text-lg font-semibold text-brand-black transition-colors hover:text-brand-black/55 focus-visible:ring-2 focus-visible:ring-brand-black focus-visible:ring-offset-2 focus-visible:outline-none sm:text-xl"
+                    className="block border-t border-brand-black/12 py-5 font-heading text-lg font-semibold text-brand-black transition-colors hover:text-brand-black/55 focus-visible:ring-2 focus-visible:ring-brand-black focus-visible:ring-offset-2 focus-visible:outline-none active:text-brand-black/55 sm:text-xl"
                   >
                     {contact.value}
                   </a>

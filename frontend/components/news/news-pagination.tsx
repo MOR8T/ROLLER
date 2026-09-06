@@ -48,7 +48,7 @@ export function NewsPagination({ page, pageCount }: { page: number; pageCount: n
                   cell,
                   entry === page
                     ? "border-brand-black bg-brand-black text-brand-white"
-                    : "border-brand-black/15 text-brand-black hover:border-brand-black/40",
+                    : "border-brand-black/15 text-brand-black hover:border-brand-black/40 active:border-brand-black/40",
                 )}
               >
                 {entry}

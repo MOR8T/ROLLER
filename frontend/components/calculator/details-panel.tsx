@@ -68,7 +68,7 @@ export function DetailsPanel({
                   "focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:outline-none",
                   active
                     ? "border-brand-black bg-brand-black text-brand-white"
-                    : "border-brand-black/20 bg-surface text-brand-black hover:border-brand-black/45",
+                    : "border-brand-black/20 bg-surface text-brand-black hover:border-brand-black/45 active:border-brand-black/45",
                 )}
               >
                 {t(`materials.${material}`)}
@@ -238,7 +238,7 @@ function Swatches({
               "focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:outline-none",
               active
                 ? "border-brand-black/25 ring-2 ring-brand-black ring-offset-2"
-                : "border-brand-black/20 hover:border-brand-black/45",
+                : "border-brand-black/20 hover:border-brand-black/45 active:border-brand-black/45",
             )}
             // The photograph when there is one, the flat colour when there is
             // not — the same fallback the drawing itself uses.

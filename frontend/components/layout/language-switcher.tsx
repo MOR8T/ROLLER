@@ -64,7 +64,7 @@ export function LanguageSwitcher() {
         aria-label={t("languageSwitcher")}
         disabled={isPending}
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-2 rounded-control border border-brand-black/10 px-3 py-1.5 text-xs font-semibold text-brand-black uppercase transition-colors hover:bg-brand-black/5 focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:outline-none disabled:opacity-60"
+        className="flex items-center gap-2 rounded-control border border-brand-black/10 px-3 py-1.5 text-xs font-semibold text-brand-black uppercase transition-colors hover:bg-brand-black/5 focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:outline-none active:bg-brand-black/10 disabled:opacity-60"
       >
         <span>{activeLocale.toUpperCase()}</span>
         <ChevronDown
@@ -88,7 +88,7 @@ export function LanguageSwitcher() {
                     "block w-full px-4 py-2 text-left text-sm font-medium transition-colors focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:outline-none focus-visible:ring-inset",
                     locale === activeLocale
                       ? "bg-brand-red text-brand-white"
-                      : "text-brand-black/70 hover:bg-brand-black/5 hover:text-brand-red",
+                      : "text-brand-black/70 hover:bg-brand-black/5 hover:text-brand-red active:bg-brand-black/10 active:text-brand-red",
                   )}
                 >
                   {localeLabels[locale]}

@@ -160,7 +160,7 @@ function Pin({ label, active, onClick }: { label: string; active: boolean; onCli
       aria-label={label}
       className={cn(
         "block origin-bottom cursor-pointer transition-transform duration-300 focus-visible:outline-none",
-        active ? "scale-110" : "hover:scale-105",
+        active ? "scale-110" : "hover:scale-105 active:scale-110",
       )}
     >
       <svg

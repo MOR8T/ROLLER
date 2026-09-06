@@ -55,7 +55,7 @@ export function ProductFinishesSection({
                 <li key={index} className="group relative pt-9">
                   <span
                     aria-hidden
-                    className="pointer-events-none absolute top-0 left-1/2 -translate-x-1/2 rounded-[0.5rem] bg-black px-3 py-1.5 text-sm leading-none whitespace-nowrap text-white opacity-0 transition-opacity duration-150 group-focus-within:opacity-100 group-hover:opacity-100"
+                    className="pointer-events-none absolute top-0 left-1/2 -translate-x-1/2 rounded-[0.5rem] bg-black px-3 py-1.5 text-sm leading-none whitespace-nowrap text-white opacity-0 transition-opacity duration-150 group-focus-within:opacity-100 group-hover:opacity-100 group-active:opacity-100"
                   >
                     {label}
                   </span>
@@ -75,7 +75,7 @@ export function ProductFinishesSection({
                       "block h-24 w-27 cursor-pointer rounded-[1rem] border bg-cover bg-center transition-[box-shadow,border-color] focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2 focus-visible:outline-none",
                       isActive
                         ? "border-black shadow-[0_0_0_2px_#fff,0_0_0_4px_#000]"
-                        : "border-[#85766f] hover:border-black/60",
+                        : "border-[#85766f] hover:border-black/60 active:border-black/60",
                     )}
                     style={
                       finish.kind === "texture" && finish.texture

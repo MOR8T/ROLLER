@@ -92,7 +92,9 @@ export function VariantPicker({
               className={cn(
                 "mt-3 flex h-[104px] w-[116px] items-center justify-center rounded-control border-2 bg-surface p-2 transition-colors sm:h-[120px] sm:w-[132px]",
                 "focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:outline-none",
-                active ? "border-brand-red" : "border-brand-black/15 hover:border-brand-black/40",
+                active
+                  ? "border-brand-red"
+                  : "border-brand-black/15 hover:border-brand-black/40 active:border-brand-black/40",
               )}
             >
               <SchemeThumb
@@ -125,7 +127,7 @@ export function VariantPicker({
                         "focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:outline-none",
                         variant.key === value
                           ? "border-brand-red bg-brand-red/5"
-                          : "border-brand-black/12 hover:border-brand-red/60",
+                          : "border-brand-black/12 hover:border-brand-red/60 active:border-brand-red/60",
                       )}
                     >
                       <SchemeThumb

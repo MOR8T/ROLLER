@@ -17,7 +17,7 @@ export function Card({ variant = "default", className, ...props }: CardProps) {
 
   const variantStyles: Record<CardVariant, string> = {
     default: "bg-neutral-50 border border-neutral-200",
-    elevated: "bg-brand-white shadow-md hover:shadow-lg",
+    elevated: "bg-brand-white shadow-md hover:shadow-lg active:shadow-lg",
     bordered: "bg-brand-white border-2 border-brand-black",
   };
 

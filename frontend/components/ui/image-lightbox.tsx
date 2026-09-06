@@ -109,7 +109,7 @@ export function ImageLightbox({
             type="button"
             aria-label={labels.close}
             onClick={onClose}
-            className="absolute top-4 right-4 z-10 grid size-11 place-items-center rounded-full bg-brand-white/10 text-brand-white transition-colors hover:bg-brand-white/20 focus-visible:ring-2 focus-visible:ring-brand-white focus-visible:outline-none"
+            className="absolute top-4 right-4 z-10 grid size-11 place-items-center rounded-full bg-brand-white/10 text-brand-white transition-colors hover:bg-brand-white/20 focus-visible:ring-2 focus-visible:ring-brand-white focus-visible:outline-none active:bg-brand-white/30"
           >
             <X className="size-5" />
           </button>
@@ -316,7 +316,7 @@ function ZoomablePhoto({
           aria-label={labels.zoomOut}
           disabled={view.scale <= MIN_SCALE}
           onClick={() => zoomAtCenter(view.scale - BUTTON_ZOOM_STEP)}
-          className="grid size-9 place-items-center rounded-full text-brand-white transition-colors hover:bg-brand-white/15 focus-visible:ring-2 focus-visible:ring-brand-white focus-visible:outline-none disabled:pointer-events-none disabled:opacity-40"
+          className="grid size-9 place-items-center rounded-full text-brand-white transition-colors hover:bg-brand-white/15 focus-visible:ring-2 focus-visible:ring-brand-white focus-visible:outline-none active:bg-brand-white/25 disabled:pointer-events-none disabled:opacity-40"
         >
           <ZoomOut className="size-4" />
         </button>
@@ -328,7 +328,7 @@ function ZoomablePhoto({
           aria-label={labels.zoomIn}
           disabled={view.scale >= MAX_SCALE}
           onClick={() => zoomAtCenter(view.scale + BUTTON_ZOOM_STEP)}
-          className="grid size-9 place-items-center rounded-full text-brand-white transition-colors hover:bg-brand-white/15 focus-visible:ring-2 focus-visible:ring-brand-white focus-visible:outline-none disabled:pointer-events-none disabled:opacity-40"
+          className="grid size-9 place-items-center rounded-full text-brand-white transition-colors hover:bg-brand-white/15 focus-visible:ring-2 focus-visible:ring-brand-white focus-visible:outline-none active:bg-brand-white/25 disabled:pointer-events-none disabled:opacity-40"
         >
           <ZoomIn className="size-4" />
         </button>

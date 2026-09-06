@@ -86,7 +86,7 @@ export async function Footer() {
           <Link
             href="/"
             aria-label={siteConfig.name}
-            className="inline-flex shrink-0 items-center transition-opacity hover:opacity-90"
+            className="inline-flex shrink-0 items-center transition-opacity hover:opacity-90 active:opacity-70"
           >
             <BrandLogo isDark={false} className="h-12 w-auto" />
           </Link>
@@ -107,7 +107,7 @@ export async function Footer() {
               <li key={link.href}>
                 <Link
                   href={link.href}
-                  className="inline-block rounded-control py-1.5 text-brand-white/85 transition-colors hover:text-brand-red focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:ring-offset-brand-black focus-visible:outline-none"
+                  className="inline-block rounded-control py-1.5 text-brand-white/85 transition-colors hover:text-brand-red focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:ring-offset-brand-black focus-visible:outline-none active:text-brand-red"
                 >
                   {tNav(link.key)}
                 </Link>
@@ -129,7 +129,7 @@ export async function Footer() {
                     href={contactInfo.mapUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="rounded-control transition-colors hover:text-brand-white focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:ring-offset-brand-black focus-visible:outline-none"
+                    className="rounded-control transition-colors hover:text-brand-white focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:ring-offset-brand-black focus-visible:outline-none active:text-brand-white"
                   >
                     {contactInfo.address}
                   </a>
@@ -138,7 +138,7 @@ export async function Footer() {
                   <Phone className="size-4 shrink-0 text-brand-red" aria-hidden />
                   <a
                     href={contactInfo.phoneHref}
-                    className="rounded-control py-1 transition-colors hover:text-brand-white focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:ring-offset-brand-black focus-visible:outline-none"
+                    className="rounded-control py-1 transition-colors hover:text-brand-white focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:ring-offset-brand-black focus-visible:outline-none active:text-brand-white"
                   >
                     {contactInfo.phone}
                   </a>
@@ -147,7 +147,7 @@ export async function Footer() {
                   <Mail className="size-4 shrink-0 text-brand-red" aria-hidden />
                   <a
                     href={contactInfo.emailHref}
-                    className="rounded-control py-1 break-all transition-colors hover:text-brand-white focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:ring-offset-brand-black focus-visible:outline-none"
+                    className="rounded-control py-1 break-all transition-colors hover:text-brand-white focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:ring-offset-brand-black focus-visible:outline-none active:text-brand-white"
                   >
                     {contactInfo.email}
                   </a>
@@ -176,7 +176,7 @@ export async function Footer() {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={label}
-                  className="grid size-10 place-items-center rounded-control border border-brand-white/20 text-brand-white/80 transition-colors hover:border-brand-red hover:text-brand-red focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:ring-offset-brand-black focus-visible:outline-none"
+                  className="grid size-10 place-items-center rounded-control border border-brand-white/20 text-brand-white/80 transition-colors hover:border-brand-red hover:text-brand-red focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:ring-offset-brand-black focus-visible:outline-none active:border-brand-red active:text-brand-red"
                 >
                   <Icon className="size-5" />
                 </a>
@@ -196,11 +196,11 @@ export async function Footer() {
             </p>
             <a
               href="#top"
-              className="group flex items-center gap-1.5 rounded-control py-1 transition-colors hover:text-brand-white focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:ring-offset-brand-black focus-visible:outline-none"
+              className="group flex items-center gap-1.5 rounded-control py-1 transition-colors hover:text-brand-white focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:ring-offset-brand-black focus-visible:outline-none active:text-brand-white"
             >
               <span className="tracking-wide uppercase">{t("toTop")}</span>
               <ArrowUp
-                className="size-3.5 text-brand-red transition-transform group-hover:-translate-y-0.5"
+                className="size-3.5 text-brand-red transition-transform group-hover:-translate-y-0.5 group-active:-translate-y-0.5"
                 aria-hidden
               />
             </a>

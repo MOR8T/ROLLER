@@ -111,7 +111,7 @@ export function ProductHeroSection({
                     visitor into the default locale. */}
                 <Link
                   href={data.trail.href}
-                  className="underline-offset-4 transition-colors hover:text-white hover:underline focus-visible:rounded-xs focus-visible:text-white focus-visible:underline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white"
+                  className="underline-offset-4 transition-colors hover:text-white hover:underline focus-visible:rounded-xs focus-visible:text-white focus-visible:underline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white active:text-white active:underline"
                 >
                   {localized(data.trail.category, locale)}
                 </Link>
@@ -153,7 +153,7 @@ export function ProductHeroSection({
                   <a
                     key={jump.id}
                     href={`#${jump.id}`}
-                    className="text-sm leading-none font-medium text-white/70 underline-offset-4 transition-colors hover:text-white hover:underline focus-visible:rounded-xs focus-visible:text-white focus-visible:underline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white"
+                    className="text-sm leading-none font-medium text-white/70 underline-offset-4 transition-colors hover:text-white hover:underline focus-visible:rounded-xs focus-visible:text-white focus-visible:underline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white active:text-white active:underline"
                   >
                     {localized(jump.label, locale)}
                   </a>

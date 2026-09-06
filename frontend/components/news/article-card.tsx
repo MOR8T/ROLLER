@@ -6,7 +6,7 @@ import { articleHref, type NewsArticle } from "@/lib/news";
 import { cn } from "@/lib/utils";
 
 /**
- * An article in the news grid: a photograph, and under it a black panel with
+ * An article in the news grid: a photograph, and under it a light panel with
  * the date and the headline.
  *
  * ⚠️ Rebuilt on 2026-08-17 against imzo.uz/news at the client's request. What
@@ -17,15 +17,17 @@ import { cn } from "@/lib/utils";
  *     as a wall of text. It survives on the article page and in the page
  *     `<meta description>`, which is where it does work.
  *
- *   • **The panel is `brand-black`, not white.** It is the one solid dark
- *     element on a light page, and it is what makes a row of covers read as
- *     cards rather than as a contact sheet. The photographs are the client's
- *     own and are light and busy; white text on black is the only pairing that
- *     stays readable across all fifteen of them.
- *
  *   • **`object-cover`, not `contain` on grey.** The covers stopped being
  *     product renders in the 2026-08-13 pass — see the note on the feed in
  *     `data/news/ru.json` — and a photograph is cropped, not floated.
+ *
+ * ⚠️ The panel was `brand-black` until 2026-09-06 — a solid dark block was the
+ * one thing on `/news` that read as belonging to another site, so it is now the
+ * same light card the rest of the site uses (`ProductCard`, the calculator, the
+ * showroom): `bg-surface`, a `brand-black/10` hairline that fills red on hover,
+ * black headline, muted date. `border`, not `shadow`, because on `/news` the
+ * card sits on white and needs an edge, and in the article page's related strip
+ * it sits on `surface-muted` and the same edge still holds.
  *
  * The date goes through `next-intl`'s formatter, not a module-scope
  * `Intl.DateTimeFormat("ru-RU")` — that mistake printed "12 мая 2026" on the
@@ -52,9 +54,9 @@ export function ArticleCard({
     <article className={cn("group h-full", className)}>
       <Link
         href={articleHref(article.slug)}
-        className="flex h-full flex-col overflow-hidden rounded-card bg-brand-black focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:outline-none"
+        className="flex h-full flex-col overflow-hidden rounded-card border border-brand-black/10 bg-surface transition-colors hover:border-brand-red/40 focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:outline-none active:border-brand-red/40"
       >
-        <div className="relative aspect-5/3 overflow-hidden bg-neutral-100">
+        <div className="relative aspect-5/3 overflow-hidden bg-surface-muted">
           <Image
             src={article.cover}
             alt=""
@@ -68,12 +70,12 @@ export function ArticleCard({
         <div className="flex flex-1 flex-col justify-end p-5 sm:p-6">
           <time
             dateTime={article.publishedAt}
-            className="text-xs font-semibold tracking-[0.18em] text-brand-white/55 uppercase transition-colors group-hover:text-brand-red"
+            className="text-xs font-semibold tracking-[0.18em] text-brand-black/50 uppercase transition-colors group-hover:text-brand-red group-active:text-brand-red"
           >
             {date}
           </time>
 
-          <h3 className="mt-3 font-heading text-lg leading-snug font-bold tracking-tight text-brand-white sm:text-xl">
+          <h3 className="mt-3 font-heading text-lg leading-snug font-bold tracking-tight text-brand-black sm:text-xl">
             {article.title}
           </h3>
         </div>

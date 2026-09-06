@@ -69,7 +69,7 @@ function ProductCard({
           {category.name}
         </span>
         <ArrowUpRight
-          className="size-5 shrink-0 translate-y-1 text-brand-white opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100"
+          className="size-5 shrink-0 translate-y-1 text-brand-white opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100 touch:translate-y-0 touch:opacity-100"
           aria-hidden
         />
       </span>

@@ -251,7 +251,7 @@ function SizeField({
         }}
         className={cn(
           "min-h-12 w-36 rounded-control border border-brand-black/20 bg-surface px-4 text-base text-brand-black tabular-nums",
-          "transition-colors hover:border-brand-black/45",
+          "transition-colors hover:border-brand-black/45 active:border-brand-black/45",
           "focus:border-brand-red focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:outline-none",
           "[appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none",
         )}

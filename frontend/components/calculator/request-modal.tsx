@@ -64,7 +64,7 @@ export function RequestModal({
           type="button"
           aria-label={t("request.close")}
           onClick={onClose}
-          className="absolute top-4 right-4 flex size-10 items-center justify-center rounded-control text-brand-black/50 transition-colors hover:bg-brand-black/5 hover:text-brand-black focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:outline-none"
+          className="absolute top-4 right-4 flex size-10 items-center justify-center rounded-control text-brand-black/50 transition-colors hover:bg-brand-black/5 hover:text-brand-black focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:outline-none active:bg-brand-black/10 active:text-brand-black"
         >
           <X className="size-5" aria-hidden />
         </button>

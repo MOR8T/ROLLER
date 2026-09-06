@@ -63,7 +63,7 @@ export function HeaderDesktopNav({
                 onClick={onProductsOpen}
                 onFocus={onProductsOpen}
                 className={cn(
-                  "group relative inline-flex cursor-pointer items-center gap-1 py-2 text-sm font-medium text-brand-black/80 transition-colors hover:text-brand-red focus-visible:rounded-control focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:outline-none",
+                  "group relative inline-flex cursor-pointer items-center gap-1 py-2 text-sm font-medium text-brand-black/80 transition-colors hover:text-brand-red focus-visible:rounded-control focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:outline-none active:text-brand-red",
                   productsOpen && "text-brand-red",
                 )}
               >
@@ -77,7 +77,7 @@ export function HeaderDesktopNav({
                 <span
                   className={cn(
                     "absolute bottom-0.5 left-0 h-0.5 bg-brand-red transition-all duration-300",
-                    productsOpen ? "w-full" : "w-0 group-hover:w-full",
+                    productsOpen ? "w-full" : "w-0 group-hover:w-full group-active:w-full",
                   )}
                 />
               </button>
@@ -89,10 +89,10 @@ export function HeaderDesktopNav({
           <Link
             key={link.href}
             href={link.href}
-            className="group relative inline-flex items-center py-2 text-sm font-medium text-brand-black/80 transition-colors hover:text-brand-red focus-visible:rounded-control focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:outline-none"
+            className="group relative inline-flex items-center py-2 text-sm font-medium text-brand-black/80 transition-colors hover:text-brand-red focus-visible:rounded-control focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:outline-none active:text-brand-red"
           >
             {t(link.key)}
-            <span className="absolute bottom-0.5 left-0 h-0.5 w-0 bg-brand-red transition-all duration-300 group-hover:w-full" />
+            <span className="absolute bottom-0.5 left-0 h-0.5 w-0 bg-brand-red transition-all duration-300 group-hover:w-full group-active:w-full" />
           </Link>
         );
       })}

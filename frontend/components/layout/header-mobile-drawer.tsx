@@ -164,7 +164,7 @@ export function HeaderMobileDrawer({ categories, open, onClose }: HeaderMobileDr
                 data-drawer-close
                 aria-label={t("closeMenu")}
                 onClick={close}
-                className="grid size-10 place-items-center rounded-control text-brand-black transition-colors hover:bg-brand-black/5 focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:outline-none"
+                className="grid size-10 place-items-center rounded-control text-brand-black transition-colors hover:bg-brand-black/5 focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:outline-none active:bg-brand-black/10"
               >
                 <X className="size-6" />
               </button>
@@ -186,7 +186,7 @@ export function HeaderMobileDrawer({ categories, open, onClose }: HeaderMobileDr
                         type="button"
                         aria-expanded={catalogOpen}
                         onClick={() => setCatalogOpen((v) => !v)}
-                        className="flex w-full items-center justify-between gap-3 rounded-control px-3 py-3 text-left text-base font-medium text-brand-black/80 transition-colors hover:bg-brand-black/5 hover:text-brand-red focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:outline-none"
+                        className="flex w-full items-center justify-between gap-3 rounded-control px-3 py-3 text-left text-base font-medium text-brand-black/80 transition-colors hover:bg-brand-black/5 hover:text-brand-red focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:outline-none active:bg-brand-black/10 active:text-brand-red"
                       >
                         {tNav(link.key)}
                         <ChevronDown
@@ -226,7 +226,7 @@ export function HeaderMobileDrawer({ categories, open, onClose }: HeaderMobileDr
                                       key={product.id}
                                       href={productHref(category.id, product.id)}
                                       onClick={close}
-                                      className="block rounded-control px-3 py-2.5 text-sm font-semibold text-brand-black/80 transition-colors hover:bg-brand-black/5 hover:text-brand-red focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:outline-none"
+                                      className="block rounded-control px-3 py-2.5 text-sm font-semibold text-brand-black/80 transition-colors hover:bg-brand-black/5 hover:text-brand-red focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:outline-none active:bg-brand-black/10 active:text-brand-red"
                                     >
                                       {product.title}
                                     </Link>
@@ -246,7 +246,7 @@ export function HeaderMobileDrawer({ categories, open, onClose }: HeaderMobileDr
                     <Link
                       href={link.href}
                       onClick={close}
-                      className="block rounded-control px-3 py-3 text-base font-medium text-brand-black/80 transition-colors hover:bg-brand-black/5 hover:text-brand-red focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:outline-none"
+                      className="block rounded-control px-3 py-3 text-base font-medium text-brand-black/80 transition-colors hover:bg-brand-black/5 hover:text-brand-red focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:outline-none active:bg-brand-black/10 active:text-brand-red"
                     >
                       {tNav(link.key)}
                     </Link>
@@ -270,7 +270,7 @@ export function HeaderMobileDrawer({ categories, open, onClose }: HeaderMobileDr
               <motion.a
                 variants={itemVariants}
                 href={siteConfig.phoneHref}
-                className="flex items-center gap-3 rounded-control py-1 text-base font-semibold text-brand-black transition-colors hover:text-brand-red focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:outline-none"
+                className="flex items-center gap-3 rounded-control py-1 text-base font-semibold text-brand-black transition-colors hover:text-brand-red focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:outline-none active:text-brand-red"
               >
                 <Phone className="size-5 shrink-0" />
                 <span className="flex flex-col leading-tight">

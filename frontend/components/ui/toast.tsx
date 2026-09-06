@@ -92,7 +92,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
                 type="button"
                 aria-label="Закрыть уведомление"
                 onClick={() => dismiss(toast.id)}
-                className="-m-1 shrink-0 rounded-control p-1 text-brand-black/40 transition-colors hover:bg-brand-black/5 hover:text-brand-black focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:outline-none"
+                className="-m-1 shrink-0 rounded-control p-1 text-brand-black/40 transition-colors hover:bg-brand-black/5 hover:text-brand-black focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:outline-none active:bg-brand-black/10 active:text-brand-black"
               >
                 <X className="size-4" />
               </button>

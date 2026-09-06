@@ -93,7 +93,7 @@ export function ShowroomsDirectory({ showrooms }: { showrooms: ShowroomDto[] }) 
                   "min-h-10 cursor-pointer rounded-full px-6 text-sm font-semibold transition-colors focus-visible:ring-2 focus-visible:ring-brand-black focus-visible:ring-offset-2 focus-visible:outline-none",
                   view === option
                     ? "bg-brand-white text-brand-black shadow-[0_1px_3px_rgba(0,0,0,0.12)]"
-                    : "text-brand-black/55 hover:text-brand-black",
+                    : "text-brand-black/55 hover:text-brand-black active:text-brand-black",
                 )}
               >
                 {t(`views.${option}`)}
@@ -204,7 +204,7 @@ function ShowroomCard({
             // box, so the edge reads as twice as thick without the card's contents
             // shifting a pixel when the selection moves.
             "border-brand-black shadow-[0_28px_70px_-24px_rgba(29,29,27,0.55)] ring-1 ring-brand-black"
-          : "border-brand-black/10 shadow-[0_24px_60px_-28px_rgba(29,29,27,0.45)] hover:border-brand-black/35",
+          : "border-brand-black/10 shadow-[0_24px_60px_-28px_rgba(29,29,27,0.45)] hover:border-brand-black/35 active:border-brand-black/35",
       )}
     >
       {/* First in the DOM so a keyboard reaches "select this one" before the

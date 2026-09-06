@@ -118,11 +118,12 @@ const pillBase =
   "inline-flex min-h-12 w-fit items-center justify-center gap-2 rounded-full px-7 text-sm font-semibold transition-colors focus-visible:ring-2 focus-visible:ring-brand-black focus-visible:ring-offset-2 focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50";
 
 const pillTones = {
-  dark: "bg-brand-black text-brand-white hover:bg-brand-black/85",
-  light: "border border-brand-black/15 bg-brand-white text-brand-black hover:border-brand-black/45",
+  dark: "bg-brand-black text-brand-white hover:bg-brand-black/85 active:bg-brand-black/85",
+  light:
+    "border border-brand-black/15 bg-brand-white text-brand-black hover:border-brand-black/45 active:border-brand-black/45",
   /** On a photograph — the hero deck. */
   white:
-    "bg-brand-white text-brand-black hover:bg-brand-white/85 focus-visible:ring-brand-white focus-visible:ring-offset-brand-black",
+    "bg-brand-white text-brand-black hover:bg-brand-white/85 active:bg-brand-white/85 focus-visible:ring-brand-white focus-visible:ring-offset-brand-black",
 } as const;
 
 export function pillClass(tone: keyof typeof pillTones = "dark", className?: string) {
