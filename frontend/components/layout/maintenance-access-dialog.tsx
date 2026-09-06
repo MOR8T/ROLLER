@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState, useEffect, useRef } from "react";
+import { useActionState, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { X } from "lucide-react";
@@ -32,6 +32,35 @@ export function MaintenanceAccessDialog({ onClose }: { onClose: () => void }) {
   const input = useRef<HTMLInputElement>(null);
   const [state, formAction, isPending] = useActionState(unlockMaintenancePreview, INITIAL_STATE);
 
+  /**
+   * Seconds left on the retry lock (`lib/maintenance-throttle.ts`), counted
+   * down here rather than re-asked from the server: the action already
+   * returned the figure, and a ticking number is the difference between "the
+   * form is broken" and "wait a moment".
+   *
+   * The server is still the authority — it re-checks the lock on the next
+   * submit — so a visitor who edits this number in React DevTools only gets
+   * the same `throttled` answer back a second later.
+   */
+  const [remaining, setRemaining] = useState(0);
+  const locked = remaining > 0;
+
+  // Reset during render rather than in an effect — React's own "adjusting
+  // state when props change" pattern. An effect here would paint one frame of
+  // the previous countdown before correcting it, and `react-hooks` rightly
+  // flags the cascading render.
+  const [seenState, setSeenState] = useState(state);
+  if (seenState !== state) {
+    setSeenState(state);
+    setRemaining(state.status === "throttled" ? (state.retryAfterSeconds ?? 0) : 0);
+  }
+
+  useEffect(() => {
+    if (remaining <= 0) return;
+    const timer = setTimeout(() => setRemaining((seconds) => seconds - 1), 1000);
+    return () => clearTimeout(timer);
+  }, [remaining]);
+
   // Escape to close, scroll locked while open, focus into the field — the same
   // contract `components/ui/modal.tsx` gives every other dialog on the site.
   useEffect(() => {
@@ -56,6 +85,13 @@ export function MaintenanceAccessDialog({ onClose }: { onClose: () => void }) {
   useEffect(() => {
     if (state.status === "unlocked") router.refresh();
   }, [state.status, router]);
+
+  const invalid = state.status === "invalid";
+  const message = locked
+    ? t("accessThrottled", { seconds: remaining })
+    : invalid
+      ? t("accessError")
+      : null;
 
   return (
     <div
@@ -101,17 +137,29 @@ export function MaintenanceAccessDialog({ onClose }: { onClose: () => void }) {
             required
             maxLength={64}
             className="maintenance-dialog-input"
-            aria-invalid={state.status === "invalid"}
-            aria-describedby={state.status === "invalid" ? "maintenance-code-error" : undefined}
+            aria-invalid={invalid || locked}
+            aria-describedby={message ? "maintenance-code-error" : undefined}
           />
 
-          {state.status === "invalid" ? (
-            <p id="maintenance-code-error" role="alert" className="maintenance-dialog-error">
-              {t("accessError")}
+          {message ? (
+            // `aria-live` rather than `role="alert"` while the countdown runs:
+            // an alert re-announces on every render, which would read the
+            // remaining seconds aloud once a second.
+            <p
+              id="maintenance-code-error"
+              role={locked ? undefined : "alert"}
+              aria-live={locked ? "polite" : undefined}
+              className="maintenance-dialog-error"
+            >
+              {message}
             </p>
           ) : null}
 
-          <button type="submit" className="maintenance-dialog-submit" disabled={isPending}>
+          <button
+            type="submit"
+            className="maintenance-dialog-submit"
+            disabled={isPending || locked}
+          >
             {isPending ? t("accessPending") : t("accessSubmit")}
           </button>
         </form>

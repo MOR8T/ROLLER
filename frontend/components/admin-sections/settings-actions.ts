@@ -1,7 +1,7 @@
 "use server";
 
 import { cookies } from "next/headers";
-import { revalidatePath, revalidateTag } from "next/cache";
+import { revalidatePath, revalidateTag, updateTag } from "next/cache";
 import { ADMIN_SESSION_COOKIE, BACKEND_API_URL } from "@/lib/admin-auth";
 import { describeError } from "@/components/admin-sections/utils/describe-error";
 
@@ -107,12 +107,21 @@ export async function updateMaintenanceModeAction(enabled: boolean): Promise<Act
 /**
  * Saves or clears the preview code.
  *
- * No `revalidateTag("site-settings")` for the *code* itself — the site never
- * caches it; `lib/maintenance-access.ts` re-checks the cookie against the
- * backend on every render, so a changed code takes effect on the next
- * request without anything being invalidated. The tag is still revalidated
- * because the public payload carries `preview_access_enabled`, which decides
- * whether the placeholder's plate is a button at all.
+ * The `site-settings` tag covers two reads here, and both matter. The public
+ * payload carries `preview_access_enabled`, which decides whether the
+ * placeholder's plate is a button at all — and, since 2026-09-06,
+ * `lib/maintenance-access.ts` caches the code itself under the same tag so it
+ * can compare cookies locally instead of asking the backend on every render.
+ * Without an invalidation here a cleared or changed code would keep letting
+ * old cookies through for up to 60 seconds.
+ *
+ * ⚠️ `updateTag`, not `revalidateTag(tag, "max")` like every other action in
+ * this directory, and the difference is the whole point: `"max"` is
+ * stale-while-revalidate, so the *first* render after the save would still be
+ * given the old code and would still admit a cookie the admin has just
+ * revoked. `updateTag` expires the entry outright and makes the next render
+ * wait for the new value — which is what "changing the code locks everyone
+ * out at once" has to mean. Server-Actions-only, which this is.
  */
 export async function updatePreviewCodeAction(code: string): Promise<ActionResult> {
   const trimmed = code.trim();
@@ -131,7 +140,7 @@ export async function updatePreviewCodeAction(code: string): Promise<ActionResul
 
   if (result.success) {
     revalidatePath("/admin/settings");
-    revalidateTag("site-settings", "max");
+    updateTag("site-settings");
   }
 
   return result;

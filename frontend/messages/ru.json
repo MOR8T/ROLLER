@@ -13,6 +13,7 @@
     "accessSubmit": "Открыть сайт",
     "accessPending": "Проверяем…",
     "accessError": "Неверный код",
+    "accessThrottled": "Слишком много попыток. Повторите через {seconds, plural, one {# секунду} few {# секунды} many {# секунд} other {# секунды}}.",
     "accessClose": "Закрыть"
   },
   "common": {

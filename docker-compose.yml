@@ -31,6 +31,8 @@ services:
       INITIAL_ADMIN_USERNAME: ${INITIAL_ADMIN_USERNAME}
       INITIAL_ADMIN_EMAIL: ${INITIAL_ADMIN_EMAIL}
       INITIAL_ADMIN_PASSWORD: ${INITIAL_ADMIN_PASSWORD}
+      # Must match the frontend's copy below — see .env.example.
+      INTERNAL_API_TOKEN: ${INTERNAL_API_TOKEN}
     volumes:
       - backend_uploads:/app/uploads
     depends_on:
@@ -53,6 +55,9 @@ services:
       # real deployment needs a real public backend URL (reverse proxy or
       # domain) and must set this explicitly once one exists.
       BACKEND_PUBLIC_URL: ${BACKEND_PUBLIC_URL:-http://localhost:8000}
+      # Reads the maintenance preview code off the backend. Same value as the
+      # backend's; unset on either side means preview access is off.
+      INTERNAL_API_TOKEN: ${INTERNAL_API_TOKEN}
     ports:
       - "3031:3031"
     depends_on:

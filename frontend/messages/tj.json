@@ -13,6 +13,7 @@
     "accessSubmit": "Кушодани сомона",
     "accessPending": "Санҷида истодаем…",
     "accessError": "Рамз нодуруст аст",
+    "accessThrottled": "Кӯшишҳо аз ҳад зиёданд. Пас аз {seconds, plural, one {# сония} other {# сония}} такрор кунед.",
     "accessClose": "Пӯшидан"
   },
   "common": {

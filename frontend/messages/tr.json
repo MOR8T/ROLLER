@@ -13,6 +13,7 @@
     "accessSubmit": "Siteyi aç",
     "accessPending": "Kontrol ediliyor…",
     "accessError": "Kod hatalı",
+    "accessThrottled": "Çok fazla deneme yapıldı. {seconds, plural, one {# saniye} other {# saniye}} sonra tekrar deneyin.",
     "accessClose": "Kapat"
   },
   "common": {

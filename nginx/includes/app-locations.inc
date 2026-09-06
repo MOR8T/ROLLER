@@ -33,6 +33,16 @@ proxy_set_header Upgrade           $http_upgrade;
 proxy_set_header Connection        $connection_upgrade;
 proxy_read_timeout 60s;
 
+# Service-to-service only: it answers with the maintenance preview code in
+# plain text. The frontend container reaches the backend directly over the
+# Compose network, so nothing legitimate comes through nginx for this path —
+# and an exact-match `location =` outranks the `/api/` prefix below, so this
+# denial wins. The backend also demands `X-Internal-Token`; this is the second
+# lock, not the only one.
+location = /api/site-settings/preview-code {
+    deny all;
+}
+
 location /api/ {
     set $backend_target http://backend:8000;
     proxy_pass $backend_target$request_uri;
