@@ -65,7 +65,7 @@ export function ItemCard({
           aria-controls={contentId}
           aria-label={open ? t("item.collapse") : t("item.expand")}
           onClick={() => setOpen((current) => !current)}
-          className="flex size-10 shrink-0 items-center justify-center rounded-full border border-brand-black/15 text-brand-black transition-colors hover:border-brand-black/40 focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:outline-none"
+          className="flex size-10 shrink-0 items-center justify-center rounded-full border border-brand-black/15 text-brand-black transition-colors hover:border-brand-black/40 focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:outline-none active:border-brand-black/40"
         >
           <ChevronDown
             className={cn("size-5 transition-transform", !open && "-rotate-90")}
@@ -91,7 +91,7 @@ export function ItemCard({
             type="button"
             aria-label={t("item.remove")}
             onClick={onRemove}
-            className="flex size-10 shrink-0 items-center justify-center rounded-control text-brand-black/45 transition-colors hover:bg-brand-red/10 hover:text-brand-red focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:outline-none"
+            className="flex size-10 shrink-0 items-center justify-center rounded-control text-brand-black/45 transition-colors hover:bg-brand-red/10 hover:text-brand-red focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:outline-none active:bg-brand-red/10 active:text-brand-red"
           >
             <Trash2 className="size-5" aria-hidden />
           </button>
@@ -119,7 +119,7 @@ export function ItemCard({
                     "focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:outline-none",
                     active
                       ? "border-brand-black bg-brand-black text-brand-white"
-                      : "border-brand-black/20 bg-surface text-brand-black hover:border-brand-black/45",
+                      : "border-brand-black/20 bg-surface text-brand-black hover:border-brand-black/45 active:border-brand-black/45",
                   )}
                 >
                   {t(`construction.${kind}`)}

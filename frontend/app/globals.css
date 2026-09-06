@@ -1,5 +1,12 @@
 @import "tailwindcss";
 
+/* The condition Tailwind's own `hover:` is compiled against, inverted — see the
+   press-feedback block below. `touch:` is for the handful of affordances that
+   hover *reveals* rather than merely tints (a card's arrow fading in, a
+   tooltip): a press state cannot bring those back, because they are invisible
+   until the finger is already down, so on a touch screen they are simply shown. */
+@custom-variant touch (@media (hover: none));
+
 @theme {
   /* Brand colors */
   --color-brand-black: #1d1d1b;
@@ -101,6 +108,79 @@ h4,
 h5,
 h6 {
   font-family: var(--font-heading);
+}
+
+/* ---------------------------------------------------------------------------
+   Press feedback on touch — the mobile half of `hover:`.
+
+   Tailwind v4 compiles every `hover:` and `group-hover:` utility into
+   `@media (hover: hover) { … }`. On a phone that condition is false, so none
+   of them ever fire: the ~150 hover rules across this site are desktop-only by
+   construction, and a touch visitor got no answer at all from a tap — the
+   thing they pressed looked exactly like the thing beside it, before and
+   after. Components carry `active:` / `group-active:` counterparts wherever
+   the hover affordance actually means something (a card's red hairline, a nav
+   link turning red, a photograph pushing in). This block is the floor under
+   those: a uniform press on anything tappable, so an element nobody thought to
+   style still answers a finger.
+
+   Notes on the shape of it:
+
+     - `@media (hover: none)` is Tailwind's own condition inverted, so a mouse
+       keeps the hover language and never gets the press one layered on top;
+
+     - it lives in `@layer base` on purpose. Everything else in this file is
+       unlayered, and unlayered rules beat *every* layered one no matter the
+       specificity — which would put this above the `active:` utilities it is
+       supposed to be a fallback for. In `base` the utilities layer wins, so a
+       component always overrides the floor;
+
+     - `:where()` flattens the selector to specificity 0 for the same reason;
+
+     - `scale`, not `transform: scale()` — the standalone property composes
+       with the `translate`/`transform` components already set instead of
+       clobbering them. On an inline link it does not apply at all (transforms
+       skip non-replaced inline boxes) and the opacity carries the press on its
+       own, which is the right answer for a run of text anyway;
+
+     - no `transition`. Most of these elements carry `transition-colors`, whose
+       `transition-property` longhand sits in the utilities layer and would win
+       over anything declared here, animating nothing. Instant down, instant
+       up is what the platform's own controls do, so this matches them instead
+       of fighting for a tween it cannot have.
+
+   A surface too large to press — should one appear — opts out with Tailwind's
+   own `active:scale-100`, which sits in the utilities layer and therefore wins;
+   `--press-scale` / `--press-opacity` are there to be set on a wrapper when a
+   whole region wants a different weight of press.
+
+   The native tap highlight goes at the same time: iOS's grey flash and
+   Android's are a second, differently-shaped answer to one tap, and we now
+   draw our own on both.
+   --------------------------------------------------------------------------- */
+
+@layer base {
+  :where(a[href], button, summary, label, select, [role="button"], [role="tab"], [tabindex]) {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  @media (hover: none) {
+    /* `label` only where the label *is* the control — a checkbox or radio row.
+       A caption over a text field is a label too, and pressing it to focus the
+       field should not make the field flinch. */
+    :where(
+        a[href],
+        button,
+        summary,
+        select,
+        label:has(:where(input[type="checkbox"], input[type="radio"])),
+        [role="button"],
+        [role="tab"]
+      ):not(:where([disabled], [aria-disabled="true"])):active {
+      scale: var(--press-scale, 0.97);
+      opacity: var(--press-opacity, 0.72);
+    }
+  }
 }
 
 /* ---------------------------------------------------------------------------

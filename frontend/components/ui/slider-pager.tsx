@@ -56,13 +56,13 @@ type Tone = "brand" | "black";
 
 const tones: Record<Tone, { dot: string; track: string; fill: string; ring: string }> = {
   brand: {
-    dot: "bg-brand-black/20 group-hover:bg-brand-black/40",
+    dot: "bg-brand-black/20 group-hover:bg-brand-black/40 group-active:bg-brand-black/40",
     track: "bg-brand-black/15",
     fill: "bg-brand-black",
     ring: "focus-visible:ring-brand-black",
   },
   black: {
-    dot: "bg-black/20 group-hover:bg-black/40",
+    dot: "bg-black/20 group-hover:bg-black/40 group-active:bg-black/40",
     track: "bg-black/15",
     fill: "bg-black",
     ring: "focus-visible:ring-black",

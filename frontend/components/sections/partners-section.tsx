@@ -73,7 +73,7 @@ export async function PartnersSection() {
                     // to be desaturated to keep eight brands' palettes from
                     // competing with a page reduced to black and white; the
                     // marks now carry their own colour and only lift on hover.
-                    className="h-full w-full object-contain opacity-85 transition duration-300 hover:opacity-100"
+                    className="h-full w-full object-contain opacity-85 transition duration-300 hover:opacity-100 touch:opacity-100"
                   />
                 </div>
               ),

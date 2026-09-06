@@ -40,8 +40,8 @@ export function SliderArrow({
       className={cn(
         "inline-flex items-center justify-center rounded-full transition-colors focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none disabled:cursor-default disabled:opacity-40",
         overlay
-          ? "size-12 bg-white text-black shadow-[0_4px_16px_rgba(0,0,0,0.16)] hover:bg-black hover:text-white focus-visible:ring-black"
-          : "size-11 border border-brand-black/15 bg-brand-white text-brand-black hover:border-brand-black/45 focus-visible:ring-brand-black",
+          ? "size-12 bg-white text-black shadow-[0_4px_16px_rgba(0,0,0,0.16)] hover:bg-black hover:text-white focus-visible:ring-black active:bg-black active:text-white"
+          : "size-11 border border-brand-black/15 bg-brand-white text-brand-black hover:border-brand-black/45 focus-visible:ring-brand-black active:border-brand-black/45",
       )}
     >
       <Icon aria-hidden className="size-5" />

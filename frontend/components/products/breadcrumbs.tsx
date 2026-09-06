@@ -45,7 +45,7 @@ export function Breadcrumbs({
                 {crumb.href && !isLast ? (
                   <Link
                     href={crumb.href}
-                    className="transition-colors hover:text-brand-red focus-visible:rounded-control focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:outline-none"
+                    className="transition-colors hover:text-brand-red focus-visible:rounded-control focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:outline-none active:text-brand-red"
                   >
                     {crumb.label}
                   </Link>

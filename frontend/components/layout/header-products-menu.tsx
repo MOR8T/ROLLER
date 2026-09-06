@@ -110,7 +110,7 @@ export function HeaderProductsMenu({
                         <Link
                           href={productHref(category.id, product.id)}
                           onClick={onClose}
-                          className="block rounded-control py-1.5 text-[0.9375rem] font-semibold text-brand-black transition-colors hover:text-brand-red focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:outline-none"
+                          className="block rounded-control py-1.5 text-[0.9375rem] font-semibold text-brand-black transition-colors hover:text-brand-red focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:outline-none active:text-brand-red"
                         >
                           {product.title}
                         </Link>

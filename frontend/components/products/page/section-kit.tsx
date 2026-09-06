@@ -180,11 +180,11 @@ const pillBase =
 
 const pillTones = {
   black:
-    "border-black bg-black text-white hover:bg-white hover:text-black focus-visible:ring-black",
+    "border-black bg-black text-white hover:bg-white hover:text-black active:bg-white active:text-black focus-visible:ring-black",
   white:
-    "border-white bg-white text-black hover:bg-transparent hover:text-white focus-visible:ring-white focus-visible:ring-offset-black",
+    "border-white bg-white text-black hover:bg-transparent hover:text-white active:bg-transparent active:text-white focus-visible:ring-white focus-visible:ring-offset-black",
   outline:
-    "border-black/20 bg-transparent text-black hover:border-black hover:bg-black hover:text-white focus-visible:ring-black",
+    "border-black/20 bg-transparent text-black hover:border-black hover:bg-black hover:text-white active:border-black active:bg-black active:text-white focus-visible:ring-black",
 } as const;
 
 export type PillTone = keyof typeof pillTones;

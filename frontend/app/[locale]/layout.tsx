@@ -158,6 +158,24 @@ export async function generateMetadata({
  * no language at all. Same substitution, same reason, as
  * `HREFLANG_BY_LOCALE` in `lib/seo.ts`; the URL keeps saying `tj`.
  */
+/**
+ * The one line of JavaScript behind the press states in `globals.css`.
+ *
+ * Safari on iOS does not apply `:active` to a tapped element unless the page
+ * has a touch listener somewhere — a quirk it has carried since the original
+ * iPhone, on the reasoning that a page with no touch handling probably was not
+ * written for a finger. An empty listener on `document` is the long-standing
+ * answer: it costs nothing, it is `passive` so it cannot delay a scroll, and it
+ * is what makes the press feedback — and the `active:` / `group-active:`
+ * utilities across the components — actually fire on an iPhone rather than
+ * only in Chrome's device emulation.
+ *
+ * Inline rather than a client component: it must run before hydration (the
+ * first taps happen while the bundle is still arriving) and it has no business
+ * pulling React in for one `addEventListener`.
+ */
+const TOUCH_ACTIVE_SHIM = 'document.addEventListener("touchstart",function(){},{passive:true})';
+
 function htmlLang(locale: string): string {
   return locale === "tj" ? "tg" : locale;
 }
@@ -235,6 +253,7 @@ export default async function LocaleLayout({ children, params }: LayoutProps<"/[
             googleAnalyticsId={seoConfig.analytics.googleAnalytics}
             maintenance
           />
+          <script dangerouslySetInnerHTML={{ __html: TOUCH_ACTIVE_SHIM }} />
           <NextIntlClientProvider>
             <MaintenanceScreen previewEnabled={previewAccessEnabled} />
           </NextIntlClientProvider>
@@ -273,6 +292,7 @@ export default async function LocaleLayout({ children, params }: LayoutProps<"/[
           yandexMetrikaId={seoConfig.analytics.yandexMetrika}
           googleTagManagerId={seoConfig.analytics.googleTagManager}
         />
+        <script dangerouslySetInnerHTML={{ __html: TOUCH_ACTIVE_SHIM }} />
         <JsonLd data={[organization, website]} />
         <Analytics
           yandexMetrikaId={seoConfig.analytics.yandexMetrika}

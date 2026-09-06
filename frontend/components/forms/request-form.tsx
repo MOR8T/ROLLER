@@ -182,7 +182,7 @@ export function RequestForm({
               href={whatsappUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex min-h-11 items-center justify-center gap-2 rounded-control bg-brand-red px-6 py-2.5 text-sm font-medium text-brand-white transition-colors hover:bg-brand-red/90 focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:outline-none"
+              className="inline-flex min-h-11 items-center justify-center gap-2 rounded-control bg-brand-red px-6 py-2.5 text-sm font-medium text-brand-white transition-colors hover:bg-brand-red/90 focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:outline-none active:bg-brand-red/80"
             >
               {t("success.openWhatsapp")}
             </a>
@@ -237,8 +237,8 @@ export function RequestForm({
                     active && "border-brand-red bg-brand-red text-brand-white",
                     !active &&
                       (inverse
-                        ? "border-brand-white/25 bg-transparent text-brand-white/80 hover:border-brand-white/60"
-                        : "border-brand-black/15 bg-surface text-brand-black/75 hover:border-brand-red/50 hover:text-brand-red"),
+                        ? "border-brand-white/25 bg-transparent text-brand-white/80 hover:border-brand-white/60 active:border-brand-white/60"
+                        : "border-brand-black/15 bg-surface text-brand-black/75 hover:border-brand-red/50 hover:text-brand-red active:border-brand-red/50 active:text-brand-red"),
                   )}
                 >
                   {t(`scenarios.${option}.label`)}

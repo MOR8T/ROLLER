@@ -58,7 +58,7 @@ export function ProductCard({
   return (
     <article
       className={cn(
-        "group h-full overflow-hidden rounded-card border border-brand-black/10 bg-surface transition-colors hover:border-brand-red/40",
+        "group h-full overflow-hidden rounded-card border border-brand-black/10 bg-surface transition-colors hover:border-brand-red/40 active:border-brand-red/40",
         featured ? "flex flex-col lg:grid lg:grid-cols-2 lg:items-stretch" : "flex flex-col",
       )}
     >
@@ -102,7 +102,7 @@ export function ProductCard({
             `scale-x`, not a width transition: a transform is composited and a
             width is not, and this runs on every card in a hovered grid. */}
         <span aria-hidden className="relative block h-px w-full bg-brand-black/10">
-          <span className="absolute inset-0 origin-left scale-x-0 bg-brand-red transition-transform duration-500 ease-out group-hover:scale-x-100" />
+          <span className="absolute inset-0 origin-left scale-x-0 bg-brand-red transition-transform duration-500 ease-out group-hover:scale-x-100 group-active:scale-x-100" />
         </span>
 
         <h3
@@ -125,7 +125,7 @@ export function ProductCard({
 
         <Link
           href={href}
-          className="mt-6 inline-flex w-fit items-center gap-2 text-sm font-semibold text-brand-black transition-colors group-hover:text-brand-red focus-visible:rounded-control focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:outline-none"
+          className="mt-6 inline-flex w-fit items-center gap-2 text-sm font-semibold text-brand-black transition-colors group-hover:text-brand-red group-active:text-brand-red focus-visible:rounded-control focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:outline-none"
         >
           {t("more")}
           <ArrowUpRight className="size-4 shrink-0" />

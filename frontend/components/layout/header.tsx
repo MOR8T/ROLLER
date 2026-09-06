@@ -178,7 +178,7 @@ export function Header({
         // `transform-gpu` (a bare `translateZ(0)`) still earns its place: it
         // promotes the blurred bar to its own compositor layer so the slide
         // doesn't re-rasterise the backdrop blur every frame.
-        "transition-[translate,box-shadow] will-change-[translate] transform-gpu motion-reduce:transition-none",
+        "transform-gpu transition-[translate,box-shadow] will-change-[translate] motion-reduce:transition-none",
         // Two different curves, because the two directions are not the same
         // gesture. Leaving is a long ease-in — the bar drifts off slowly at
         // first, so it never snaps out from under the pointer. Coming back is
@@ -216,7 +216,7 @@ export function Header({
 
           <a
             href={siteConfig.phoneHref}
-            className="inline-flex items-center gap-2 rounded-control py-2 text-brand-black transition-colors hover:text-brand-red focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:outline-none"
+            className="inline-flex items-center gap-2 rounded-control py-2 text-brand-black transition-colors hover:text-brand-red focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:outline-none active:text-brand-red"
           >
             <Phone className="size-4 shrink-0" />
             <span className="flex flex-col leading-tight">
@@ -233,7 +233,7 @@ export function Header({
           aria-label={open ? t("closeMenu") : t("openMenu")}
           aria-expanded={open}
           aria-controls="mobile-drawer"
-          className="grid size-10 place-items-center rounded-control text-brand-black transition-colors hover:bg-brand-black/5 focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:outline-none xl:hidden"
+          className="grid size-10 place-items-center rounded-control text-brand-black transition-colors hover:bg-brand-black/5 focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:outline-none active:bg-brand-black/10 xl:hidden"
           onClick={() => setOpen((v) => !v)}
         >
           {open ? <X className="size-6" /> : <Menu className="size-6" />}

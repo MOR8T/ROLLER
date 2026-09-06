@@ -149,7 +149,7 @@ export function Calculator({
           type="button"
           onClick={addItem}
           disabled={items.length >= MAX_ITEMS}
-          className="mt-5 flex min-h-16 w-full items-center justify-center gap-2 rounded-card border border-dashed border-brand-black/25 text-sm font-medium text-brand-black transition-colors hover:border-brand-red hover:text-brand-red focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:outline-none disabled:pointer-events-none disabled:opacity-45"
+          className="mt-5 flex min-h-16 w-full items-center justify-center gap-2 rounded-card border border-dashed border-brand-black/25 text-sm font-medium text-brand-black transition-colors hover:border-brand-red hover:text-brand-red focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:outline-none active:border-brand-red active:text-brand-red disabled:pointer-events-none disabled:opacity-45"
         >
           <Plus className="size-4 shrink-0" aria-hidden />
           {t("item.add")}
@@ -158,7 +158,7 @@ export function Calculator({
         <button
           type="button"
           onClick={() => setRequesting(true)}
-          className="mt-4 min-h-16 w-full rounded-card bg-brand-black text-base font-semibold text-brand-white transition-colors hover:bg-brand-red focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:outline-none"
+          className="mt-4 min-h-16 w-full rounded-card bg-brand-black text-base font-semibold text-brand-white transition-colors hover:bg-brand-red focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:outline-none active:bg-brand-red"
         >
           {t("submit")}
         </button>

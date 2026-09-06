@@ -62,7 +62,7 @@ function NewsCard({ article }: { article: NewsArticle }) {
       >
         {date}
       </time>
-      <h3 className="mt-3 font-heading text-xl font-bold tracking-tight text-brand-black transition-colors group-hover:text-brand-black/55">
+      <h3 className="mt-3 font-heading text-xl font-bold tracking-tight text-brand-black transition-colors group-hover:text-brand-black/55 group-active:text-brand-black/55">
         {article.title}
       </h3>
     </Link>

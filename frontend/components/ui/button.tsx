@@ -12,11 +12,12 @@ const base =
   "inline-flex items-center justify-center gap-2 rounded-control text-center font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50";
 
 const variants: Record<Variant, string> = {
-  primary: "bg-brand-red text-brand-white hover:bg-brand-red/90",
-  outline: "border border-brand-black/20 bg-transparent text-brand-black hover:bg-brand-black/5",
+  primary: "bg-brand-red text-brand-white hover:bg-brand-red/90 active:bg-brand-red/80",
+  outline:
+    "border border-brand-black/20 bg-transparent text-brand-black hover:bg-brand-black/5 active:bg-brand-black/10",
   "outline-inverse":
-    "border border-brand-white/30 bg-transparent text-brand-white hover:bg-brand-white/10 focus-visible:ring-offset-brand-black",
-  ghost: "bg-transparent text-brand-black hover:bg-brand-black/5",
+    "border border-brand-white/30 bg-transparent text-brand-white hover:bg-brand-white/10 active:bg-brand-white/20 focus-visible:ring-offset-brand-black",
+  ghost: "bg-transparent text-brand-black hover:bg-brand-black/5 active:bg-brand-black/10",
 };
 
 // `min-h`, not `h`. A fixed height clips the label the moment it wraps, and

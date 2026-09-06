@@ -41,7 +41,7 @@ export function PageHeader({
     <Container>
       <Breadcrumbs items={breadcrumbs} tone={tone} />
 
-      <Reveal className="mt-8 max-w-3xl mb-8">
+      <Reveal className="mt-8 mb-8 max-w-3xl">
         {eyebrow ? (
           <p
             className={cn(
