@@ -170,6 +170,27 @@ export async function verifyPreviewCode(code: string | undefined): Promise<boole
  * once, and so does every edit an admin makes, without another deploy. The
  * cost is bounded: the data behind those renders still comes from the tagged,
  * 60-second `fetch` cache in `lib/*.ts`, not from the backend each time.
+ *
+ * ⚠️ **"Next sees it while building" is conditional, and that condition bit
+ * once more on 2026-09-06.** Next learns a route is dynamic by *rendering* it
+ * during the build. A route with `generateStaticParams` is only rendered for
+ * the params that function returns — so when `productParams()`,
+ * `productCategoryParams()` and `newsParams()` came back empty (CI builds the
+ * image with no backend reachable, and all three fail soft to `[]`), those
+ * three routes were never rendered, this call was never observed, and they
+ * were filed as static while every other page under `app/[locale]` was
+ * correctly dynamic. In production each request then threw
+ * `DYNAMIC_SERVER_USAGE` here, and with an empty param list there was no
+ * prerendered HTML to serve instead — so `/products/[category]`,
+ * `/products/[category]/[product]` and `/news/[article]` answered a bare
+ * `Internal Server Error` while the rest of the site was fine.
+ *
+ * So: **no route under `app/[locale]` may declare `generateStaticParams`**
+ * while this call is on its path. Nothing here is prerendered anyway — that is
+ * the whole point of the paragraph above — so such a function buys nothing and
+ * silently reclassifies the route. `app/sitemap.ts` still calls the two
+ * `lib/products.ts` helpers, which is fine: it is a genuinely static route
+ * that never reaches this cookie.
  */
 export async function readMaintenancePreviewCookie(): Promise<string | undefined> {
   return (await cookies()).get(MAINTENANCE_PREVIEW_COOKIE)?.value;

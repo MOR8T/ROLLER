@@ -246,7 +246,14 @@ export async function getProductCategoryPage(
   };
 }
 
-/** Every category id, for `generateStaticParams` on the category page. */
+/**
+ * Every category id, for `app/sitemap.ts`.
+ *
+ * ⚠️ It fed the category page's `generateStaticParams` too, until that took
+ * `/products/*` down in production — see the note on the product page. The
+ * sitemap is a different case: it is a static route that may read whatever the
+ * build can reach, and it already catches this call's failure.
+ */
 export async function productCategoryParams(): Promise<{ category: string }[]> {
   const categories = await loadCategories();
   return categories.map((category) => ({ category: String(category.id) }));
@@ -541,11 +548,15 @@ export async function getProductMeta(
 }
 
 /**
- * Every `/products/[category]/[product]` pair, for `generateStaticParams`.
+ * Every `/products/[category]/[product]` pair, for `app/sitemap.ts`.
  *
- * A pair per link, not per product: a system in «Окна» and «Двери» is
- * prerendered under both. An unreachable backend at build time just means
- * nothing is prerendered — the page renders on demand instead.
+ * A pair per link, not per product: a system in «Окна» and «Двери» is listed
+ * under both, because both addresses are real.
+ *
+ * ⚠️ It fed the product page's `generateStaticParams` too, until that took
+ * `/products/*` down in production — see the note on that page. The sitemap is
+ * a different case: it is a static route that may read whatever the build can
+ * reach, and it already catches this call's failure.
  */
 export async function productParams(): Promise<{ category: string; product: string }[]> {
   const products = await loadProducts();

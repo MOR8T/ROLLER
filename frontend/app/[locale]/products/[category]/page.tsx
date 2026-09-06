@@ -8,7 +8,7 @@ import { ContactsLeadSection } from "@/components/sections/contacts-lead-section
 import { Container } from "@/components/ui/container";
 import { RevealGroup, RevealItem } from "@/components/ui/reveal";
 import { Section } from "@/components/ui/section";
-import { getProductCategoryPage, productCategoryHref, productCategoryParams } from "@/lib/products";
+import { getProductCategoryPage, productCategoryHref } from "@/lib/products";
 import { buildPageMetadata } from "@/lib/page-metadata";
 import { buildBreadcrumbJsonLd } from "@/lib/json-ld";
 import { JsonLd } from "@/components/seo/json-ld";
@@ -43,11 +43,12 @@ import { notFound } from "next/navigation";
  * homepage. The client removed it the same day: the header's «Продукция» panel
  * already carries every category on every page, and the strip repeated it
  * directly beneath itself.
+ *
+ * ⚠️ **No `generateStaticParams`, deliberately** — see the note in
+ * `lib/maintenance-access.ts`'s `readMaintenancePreviewCookie`. One that reads
+ * the backend returns `[]` in CI, and an empty list is what made this route
+ * answer 500 in production.
  */
-export async function generateStaticParams() {
-  return productCategoryParams();
-}
-
 export async function generateMetadata({
   params,
 }: PageProps<"/[locale]/products/[category]">): Promise<Metadata> {

@@ -5,7 +5,7 @@ import { ContactsLeadSection } from "@/components/sections/contacts-lead-section
 import { ProductPageView } from "@/components/products/page/product-page-view";
 import type { Locale } from "@/i18n/routing";
 import { localized } from "@/lib/localized";
-import { getProductMeta, getProductPage, productHref, productParams } from "@/lib/products";
+import { getProductMeta, getProductPage, productHref } from "@/lib/products";
 import { buildPageMetadata } from "@/lib/page-metadata";
 import { buildProductJsonLd } from "@/lib/json-ld";
 import { JsonLd } from "@/components/seo/json-ld";
@@ -20,9 +20,21 @@ import { JsonLd } from "@/components/seo/json-ld";
  * hands each block its slice, so no section knows about routes, the API or the
  * message catalogue.
  *
- * The server half stays a server component on purpose: `generateStaticParams`,
- * `generateMetadata` and the prerender are worth more than the symmetry of
- * marking the file `"use client"`.
+ * The server half stays a server component on purpose: `generateMetadata`, the
+ * JSON-LD and reading the backend without shipping `lib/products.ts` to the
+ * browser are worth more than the symmetry of marking the file `"use client"`.
+ *
+ * ⚠️ **No `generateStaticParams`, deliberately.** It used to return
+ * `productParams()`, and that is what took every `/products/*` URL down in
+ * production on 2026-09-06 — the full story is on
+ * `readMaintenancePreviewCookie` in `lib/maintenance-access.ts`. In short: the
+ * image is built where the backend does not exist, so the list came back
+ * empty, so Next never rendered the route during the build, so it never saw
+ * the `cookies()` call that is supposed to mark everything under `app/[locale]`
+ * dynamic — and filed the route as static instead. Every request then threw
+ * `DYNAMIC_SERVER_USAGE`, with no prerendered HTML to fall back to, and
+ * answered a bare 500. Nothing here is prerendered now, which is the state the
+ * rest of the public site has been in since that switch was added.
  *
  * ── The two id segments ────────────────────────────────────────────────────
  *
@@ -36,10 +48,6 @@ import { JsonLd } from "@/components/seo/json-ld";
  * followed, not what the product is. Only an unknown *product* turns the page
  * into the «Продукт не найден» section, and it does not call `notFound()`.
  */
-export async function generateStaticParams() {
-  return productParams();
-}
-
 export async function generateMetadata({
   params,
 }: PageProps<"/[locale]/products/[category]/[product]">): Promise<Metadata> {

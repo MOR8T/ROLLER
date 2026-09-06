@@ -10,15 +10,19 @@ import { SectionHeading } from "@/components/sections/section-heading";
 import { Container } from "@/components/ui/container";
 import { Reveal, RevealGroup, RevealItem } from "@/components/ui/reveal";
 import { Section } from "@/components/ui/section";
-import { articleHref, fetchArticle, fetchLatestNews, newsParams } from "@/lib/news";
+import { articleHref, fetchArticle, fetchLatestNews } from "@/lib/news";
 import { buildPageMetadata } from "@/lib/page-metadata";
 import { buildArticleJsonLd, buildBreadcrumbJsonLd } from "@/lib/json-ld";
 import { JsonLd } from "@/components/seo/json-ld";
 
-export async function generateStaticParams() {
-  return newsParams();
-}
-
+/**
+ * ⚠️ **No `generateStaticParams`, deliberately** — see the note on the product
+ * page (`app/[locale]/products/[category]/[product]/page.tsx`), which this
+ * route shared a bug with: slugs come from the backend, the backend does not
+ * exist while the image is built, and the empty list that came back made Next
+ * file the route as static, where the layout's `cookies()` read then threw
+ * `DYNAMIC_SERVER_USAGE` on every request.
+ */
 export async function generateMetadata({
   params,
 }: PageProps<"/[locale]/news/[article]">): Promise<Metadata> {
