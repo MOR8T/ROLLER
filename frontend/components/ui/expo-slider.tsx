@@ -4,7 +4,10 @@ import { useCallback, useEffect, useRef, useState, type ReactNode } from "react"
 import Image from "next/image";
 
 import { SliderArrow } from "@/components/ui/slider-arrow";
+import { SliderPager } from "@/components/ui/slider-pager";
+import { useAutoplay } from "@/lib/use-autoplay";
 import { useIsomorphicLayoutEffect } from "@/lib/use-isomorphic-layout-effect";
+import { useReducedMotion } from "@/lib/use-reduced-motion";
 import { cn } from "@/lib/utils";
 
 /**
@@ -56,6 +59,13 @@ import { cn } from "@/lib/utils";
  * on the server they would put the last slide first, and the deck would open on
  * the wrong picture for as long as hydration takes. `useIsomorphicLayoutEffect`
  * flips them on and re-parks the track in the same commit, before first paint.
+ *
+ * ── The controls ────────────────────────────────────────────────────────────
+ *
+ * The row under the deck is `ui/slider-pager.tsx`, shared with the homepage
+ * strips and the product page's showroom band, and the beat it counts down
+ * comes from `lib/use-autoplay.ts` — the same clock that turns the deck. What
+ * is left of this file is the track: the parallax, the loop and the gestures.
  */
 
 /** Frame zoom for a neighbour, matching the reference's `scale(1.25)`. */
@@ -168,8 +178,8 @@ export function ExpoSlider({
   const frame = useRef(0);
   const settle = useRef(0);
   const [active, setActive] = useState(0);
-  const [paused, setPaused] = useState(false);
   const [looped, setLooped] = useState(false);
+  const still = useReducedMotion();
 
   /**
    * How far the real slides are shifted along the track: one once the leading
@@ -438,28 +448,59 @@ export function ExpoSlider({
 
     goTo(from + (committed ? -Math.sign(travelled) : 0));
     restoreSnapAfterScroll(element);
+    restart();
   }
 
-  useEffect(() => {
-    if (!autoplayMs || paused || slides.length < 2) return;
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-
-    const timer = window.setInterval(() => {
+  /**
+   * Autoplay, and the bar in the pager that counts it down — one clock for both
+   * (`lib/use-autoplay.ts`), so the fill and the turn can never disagree.
+   *
+   * Off entirely under `prefers-reduced-motion`: this deck answers a turn by
+   * scrolling, and an unasked-for scroll is exactly the motion the setting is
+   * about. The pager sees no beat, keeps the plain dot, and the arrows still
+   * work — the deck is paged, not played.
+   */
+  const { beat, setPaused, restart } = useAutoplay({
+    delay: autoplayMs,
+    enabled: slides.length > 1 && !still,
+    onAdvance: () => {
       const element = track.current;
       if (!element) return;
 
-      // Read the position off the element rather than off `active`: the effect
-      // must not re-subscribe on every advance, or the interval restarts each
-      // time and one slide silently gets a double beat.
+      // Read the position off the element rather than off `active`: the deck
+      // may be mid-flight, and `active` only catches up once the scroll passes
+      // the halfway mark.
       //
       // One step forwards, always. With a clone in front of the last slide
       // there is somewhere to go, and `repairSeam` has already moved the deck
       // off it long before the next beat — `SETTLE_MS` against `autoplayMs`.
       goTo(positionOf(element) + 1);
-    }, autoplayMs);
+    },
+  });
 
-    return () => window.clearInterval(timer);
-  }, [autoplayMs, paused, goTo, positionOf, slides.length]);
+  /**
+   * The turns the visitor asks for, as opposed to the ones the clock takes.
+   *
+   * Both put the countdown back to the top. Without that, pressing "next" a
+   * second before a beat expires hands the new slide the last second of the old
+   * one: the bar flashes and the deck turns again immediately, which reads as a
+   * slider that has lost its place.
+   */
+  const stepBy = useCallback(
+    (direction: 1 | -1) => {
+      step(direction);
+      restart();
+    },
+    [step, restart],
+  );
+
+  const selectSlide = useCallback(
+    (real: number) => {
+      goToSlide(real);
+      restart();
+    },
+    [goToSlide, restart],
+  );
 
   const overlay = controls === "overlay";
 
@@ -482,6 +523,13 @@ export function ExpoSlider({
           onPointerMove={moveDrag}
           onPointerUp={endDrag}
           onPointerCancel={endDrag}
+          // Touch never reaches the drag handlers above — the browser's own
+          // scrolling is doing the paging — so this is the only place a swipe
+          // can say it happened. It is a turn the visitor asked for like any
+          // other, and the countdown starts again from the top; the momentum is
+          // still gliding when it does, which is what a beat on a slide that
+          // has just been chosen should look like.
+          onTouchEnd={restart}
           // The click that closes a drag has to die here, or letting go over a
           // CTA navigates away from a page the visitor was only browsing.
           // Capture phase, so it never reaches the link at all.
@@ -567,61 +615,31 @@ export function ExpoSlider({
         </div>
       </div>
 
-      {slides.length > 1 ? (
-        overlay ? (
+      {overlay ? (
+        slides.length > 1 ? (
           <div className="absolute right-5 bottom-6 z-10 flex gap-3 lg:right-10 lg:bottom-10">
-            <SliderArrow side="left" label={labels.previous} overlay onClick={() => step(-1)} />
-            <SliderArrow side="right" label={labels.next} overlay onClick={() => step(1)} />
+            {/* Stepping the *track*, not the slide list. From the last picture
+                "next" walks onto the trailing clone and the seam repair takes it
+                home — so the arrows wrap without ever scrolling backwards, same
+                as autoplay. */}
+            <SliderArrow side="left" label={labels.previous} overlay onClick={() => stepBy(-1)} />
+            <SliderArrow side="right" label={labels.next} overlay onClick={() => stepBy(1)} />
           </div>
-        ) : (
-          <div className="mt-4 flex items-center justify-between gap-4">
-            {/* `gap-0` on the row and `px-1` on each button, so the dots keep
-                the 8px air they had while the buttons themselves touch: the
-                strip becomes one continuous band of targets instead of a line
-                of 8px points with dead space between them. The row is already
-                44px tall because of the arrows beside it, so `h-11` costs no
-                layout. */}
-            {/* `min-w-0 flex-wrap` for the same reason as `home-carousel.tsx`:
-                the deck is admin-managed, so the pager is as long as the
-                client's slide list and must never be able to widen the page. */}
-            <div className="-mx-1 flex min-w-0 flex-wrap items-center gap-0">
-              {slides.map((slide, index) => (
-                <button
-                  key={slide.key}
-                  type="button"
-                  aria-label={labels.goTo?.(index + 1)}
-                  aria-current={index === active}
-                  onClick={() => goToSlide(index)}
-                  className="group flex h-11 cursor-pointer items-center px-1 focus-visible:rounded-control focus-visible:ring-2 focus-visible:ring-brand-black focus-visible:ring-offset-2 focus-visible:outline-none"
-                >
-                  <span
-                    aria-hidden
-                    className={cn(
-                      // A dot, so `rounded-full` is allowed — DESIGN.md §5 rules
-                      // out pills for buttons, not for indicators. The active one
-                      // stretches rather than only changing colour, which survives
-                      // both a small screen and a colour-blind reading.
-                      "block h-2 rounded-full transition-all duration-300",
-                      index === active
-                        ? "w-8 bg-brand-black"
-                        : "w-2 bg-brand-black/20 group-hover:bg-brand-black/40",
-                    )}
-                  />
-                </button>
-              ))}
-            </div>
-
-            <div className="flex items-center gap-2">
-              {/* Stepping the *track*, not the slide list. From the last picture
-                  "next" walks onto the trailing clone and the seam repair takes
-                  it home — so the arrows wrap without ever scrolling backwards,
-                  same as autoplay. */}
-              <SliderArrow side="left" label={labels.previous} onClick={() => step(-1)} />
-              <SliderArrow side="right" label={labels.next} onClick={() => step(1)} />
-            </div>
-          </div>
-        )
-      ) : null}
+        ) : null
+      ) : (
+        <SliderPager
+          count={slides.length}
+          active={active}
+          // A dot names a real slide; the track counts clones too, which is
+          // `goToSlide`'s whole job.
+          onSelect={selectSlide}
+          onPrevious={() => stepBy(-1)}
+          onNext={() => stepBy(1)}
+          labels={labels}
+          beat={beat}
+          className="mt-4"
+        />
+      )}
     </div>
   );
 }

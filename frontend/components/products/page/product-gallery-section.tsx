@@ -3,9 +3,11 @@
 import { useCallback, useEffect, useRef, useState, type CSSProperties } from "react";
 import Image from "next/image";
 
-import { SliderArrow } from "@/components/ui/slider-arrow";
+import { SliderPager } from "@/components/ui/slider-pager";
 import type { Locale } from "@/i18n/routing";
 import { localized } from "@/lib/localized";
+import { useAutoplay } from "@/lib/use-autoplay";
+import { useReducedMotion } from "@/lib/use-reduced-motion";
 import { cn } from "@/lib/utils";
 import { ImzoSection, ImzoSectionHeader, imzoRadius } from "./section-kit";
 import type { ProductGallerySectionData } from "@/types/product-page";
@@ -64,6 +66,13 @@ const SWIPE_PX = 48;
  * Every picture stays mounted the whole time: they are all inside the frame, so
  * the browser has already fetched them, and unmounting the ones off-screen
  * would make each turn wait on a decode.
+ *
+ * ── The pager and the clock ─────────────────────────────────────────────────
+ *
+ * This deck is where the filling pager bar started, and both halves of it now
+ * belong to the whole site: `components/ui/slider-pager.tsx` draws the row and
+ * `lib/use-autoplay.ts` runs the beat, so the homepage decks count down the
+ * same way. The transitions above are still this file's alone.
  */
 
 type Effect = {
@@ -113,8 +122,6 @@ type Turn = {
   direction: 1 | -1;
   /** Which of `EFFECTS` this turn uses. */
   effect: number;
-  /** Bumped every turn so the autoplay bar restarts even on a repeat index. */
-  tick: number;
 };
 
 export function ProductGallerySection({
@@ -137,40 +144,12 @@ export function ProductGallerySection({
     from: -1,
     direction: 1,
     effect: 0,
-    tick: 0,
   });
   const [ready, setReady] = useState(true);
-  const [paused, setPaused] = useState(false);
-  const [hidden, setHidden] = useState(false);
-  const [still, setStill] = useState(false);
-
-  /**
-   * Stop the deck while its tab is in the background.
-   *
-   * Not politeness — correctness. `setInterval` keeps firing in a hidden tab
-   * but `requestAnimationFrame` does not, so a turn taken there would park the
-   * arriving slide at its `enter` pose and stay in it: `ready` is flipped from
-   * a frame that never comes. Left running, a visitor coming back to the tab
-   * would find the gallery mid-wipe.
-   */
-  useEffect(() => {
-    const sync = () => setHidden(document.hidden);
-
-    sync();
-    document.addEventListener("visibilitychange", sync);
-    return () => document.removeEventListener("visibilitychange", sync);
-  }, []);
 
   // Scroll-linked or not, this is movement: under `prefers-reduced-motion` the
   // deck keeps paging and keeps autoplaying, it simply cuts instead of moving.
-  useEffect(() => {
-    const query = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const sync = () => setStill(query.matches);
-
-    sync();
-    query.addEventListener("change", sync);
-    return () => query.removeEventListener("change", sync);
-  }, []);
+  const still = useReducedMotion();
 
   const goTo = useCallback((next: number, direction: 1 | -1) => {
     setTurn((current) => {
@@ -182,7 +161,6 @@ export function ProductGallerySection({
         direction,
         // Next effect in the ring, so consecutive turns never repeat.
         effect: (current.effect + 1) % EFFECTS.length,
-        tick: current.tick + 1,
       };
     });
     setReady(false);
@@ -199,7 +177,6 @@ export function ProductGallerySection({
           from: current.active,
           direction,
           effect: (current.effect + 1) % EFFECTS.length,
-          tick: current.tick + 1,
         };
       });
       setReady(false);
@@ -224,21 +201,38 @@ export function ProductGallerySection({
   }, [ready]);
 
   /**
-   * Autoplay.
+   * Autoplay, and the bar under the deck that counts it down — one clock for
+   * both (`lib/use-autoplay.ts`).
    *
-   * ⚠️ `turn.tick` is in the dependency list on purpose: *every* turn restarts
-   * the clock, not only the ones this interval takes itself. Without it a visitor
-   * who pressed the arrow five seconds into a beat got the sixth second of the
-   * previous countdown — the bar under the deck would start filling and be cut
-   * off almost immediately, which reads as an animation that does not work
-   * rather than as a timer that was already nearly up.
+   * The hook holds the beat while the tab is in the background, which this deck
+   * needs for more than politeness: a timer keeps firing in a hidden tab but
+   * `requestAnimationFrame` does not, so a turn taken there would park the
+   * arriving slide at its `enter` pose and stay in it — `ready` is flipped from
+   * a frame that never comes — and a visitor coming back would find the gallery
+   * frozen mid-wipe.
    */
-  useEffect(() => {
-    if (paused || hidden || total < 2) return;
+  const { beat, setPaused, restart } = useAutoplay({
+    delay: AUTOPLAY_MS,
+    enabled: total > 1,
+    onAdvance: () => step(1),
+  });
 
-    const timer = window.setInterval(() => step(1), AUTOPLAY_MS);
-    return () => window.clearInterval(timer);
-  }, [paused, hidden, step, total, turn.tick]);
+  /**
+   * A turn the visitor asked for, as opposed to one the clock took.
+   *
+   * ⚠️ The restart is the whole point: without it, pressing the arrow five
+   * seconds into a six-second beat hands the new slide the last second of the
+   * old countdown. The bar starts filling and is cut off almost immediately,
+   * which reads as an animation that does not work rather than as a timer that
+   * was already nearly up.
+   */
+  const move = useCallback(
+    (direction: 1 | -1) => {
+      step(direction);
+      restart();
+    },
+    [step, restart],
+  );
 
   /**
    * Swipe.
@@ -259,7 +253,7 @@ export function ProductGallerySection({
     const travelled = event.clientX - start.x;
     if (Math.abs(travelled) < SWIPE_PX) return;
 
-    step(travelled < 0 ? 1 : -1);
+    move(travelled < 0 ? 1 : -1);
 
     // The cursor is still on the photograph, and being on the photograph is what
     // pauses the deck — so without this the beat the swipe just started would sit
@@ -302,8 +296,8 @@ export function ProductGallerySection({
           if (event.target === event.currentTarget) setPaused(false);
         }}
         onKeyDown={(event) => {
-          if (event.key === "ArrowLeft") step(-1);
-          else if (event.key === "ArrowRight") step(1);
+          if (event.key === "ArrowLeft") move(-1);
+          else if (event.key === "ArrowRight") move(1);
           else return;
           event.preventDefault();
         }}
@@ -392,82 +386,28 @@ export function ProductGallerySection({
           })}
         </div>
 
-        {total > 1 ? (
-          <div className="mt-5 flex items-center justify-between gap-6">
-            {/* Dots, and one bar.
-                The inactive ones are the site's own indicator — the round dot the
-                homepage decks use — so this page does not invent a third kind.
-                The active one stretches into a short bar and fills over the beat, which
-                makes it a pager *and* a clock: the deck says how long is left
-                instead of turning unannounced. */}
-            {/* `gap-0` plus `px-1` per button: the bar and dots keep the 8px
-                air they had, but the buttons themselves touch, so the strip is
-                one 44px-tall band of targets rather than a row of 8px points.
-                The row already stands 44px tall for the arrows beside it, so
-                `h-11` changes no layout. The visual — the track that clips the
-                autoplay fill — moved to the inner span; the button is now only
-                the hit area. */}
-            <div className="-mx-1 flex min-w-0 flex-wrap items-center gap-0">
-              {slides.map((slide, index) => {
-                const isActive = index === turn.active;
-
-                return (
-                  <button
-                    key={slide.key}
-                    type="button"
-                    aria-label={`${index + 1} / ${total}`}
-                    aria-current={isActive}
-                    onClick={() => goTo(index, index > turn.active ? 1 : -1)}
-                    className="group flex h-11 min-w-0 shrink-0 cursor-pointer items-center px-1 focus-visible:rounded-control focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2 focus-visible:outline-none"
-                  >
-                    <span
-                      aria-hidden
-                      className={cn(
-                        // `transition-all`, so the dot the visitor picks is seen
-                        // growing into the bar rather than the strip re-laying
-                        // itself out in one frame.
-                        "relative block h-2 overflow-hidden rounded-full transition-all duration-300",
-                        isActive
-                          ? // 50px flat, and `max-w-full` for the narrowest phones,
-                            // where the bar and its dots would otherwise be wider
-                            // than the gutter allows.
-                            "w-[50px] max-w-full bg-black/15"
-                          : "w-2 bg-black/20 group-hover:bg-black/40",
-                      )}
-                    >
-                      {isActive ? (
-                        <span
-                          aria-hidden
-                          // Keyed on the turn, so the fill restarts from zero even
-                          // when the visitor picks the slide that is already lit.
-                          key={turn.tick}
-                          style={{
-                            animationDuration: `${AUTOPLAY_MS}ms`,
-                            animationPlayState: paused || hidden || still ? "paused" : "running",
-                          }}
-                          className="absolute inset-y-0 left-0 w-full origin-left rounded-full bg-black motion-safe:animate-[gallery-beat_linear_forwards] motion-reduce:scale-x-100"
-                        />
-                      ) : null}
-                    </span>
-                  </button>
-                );
-              })}
-            </div>
-
-            <div className="flex shrink-0 items-center gap-2">
-              <SliderArrow
-                side="left"
-                label={localized(data.controls.previous, locale)}
-                onClick={() => step(-1)}
-              />
-              <SliderArrow
-                side="right"
-                label={localized(data.controls.next, locale)}
-                onClick={() => step(1)}
-              />
-            </div>
-          </div>
-        ) : null}
+        {/* Dots, a bar and the two arrows — the site's own control row
+            (`components/ui/slider-pager.tsx`), in this page's pure black rather
+            than the brandbook's off-black. The active dot stretches into a
+            track and fills over the beat, so the deck says how long is left
+            instead of turning unannounced. */}
+        <SliderPager
+          count={total}
+          active={turn.active}
+          onSelect={(index) => {
+            goTo(index, index > turn.active ? 1 : -1);
+            restart();
+          }}
+          onPrevious={() => move(-1)}
+          onNext={() => move(1)}
+          labels={{
+            previous: localized(data.controls.previous, locale),
+            next: localized(data.controls.next, locale),
+          }}
+          beat={beat}
+          tone="black"
+          className="mt-5"
+        />
       </div>
     </ImzoSection>
   );
