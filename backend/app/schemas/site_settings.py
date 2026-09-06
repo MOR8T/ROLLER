@@ -61,12 +61,19 @@ class PreviewCodeUpdate(BaseModel):
         return stripped or None
 
 
-class PreviewAccessRequest(BaseModel):
-    code: str
+class PreviewCodeOut(BaseModel):
+    """
+    The code in plain text, for the Next.js server and nothing else.
 
+    ⚠️ The only response in this app that carries a secret to an unauthenticated
+    *user* — the caller proves itself with the shared `X-Internal-Token`, not
+    with a login. It exists because the comparison lives in the frontend now:
+    Next reads this once per cache window and checks the visitor's cookie
+    locally, instead of asking this service on every render. See
+    `frontend/lib/maintenance-access.ts`.
 
-class PreviewAccessResult(BaseModel):
-    """Just the verdict. No hint about *why* a code was rejected, and no echo
-    of what was sent — the caller is anonymous."""
+    Never widen this model, never reuse it from a route without the token
+    guard, and keep the route denied at nginx (`nginx/includes/app-locations.inc`).
+    """
 
-    valid: bool
+    preview_code: str | None

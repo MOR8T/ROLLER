@@ -119,7 +119,7 @@ Products live in the backend and are managed from `/admin/products`
 (`lib/products.ts` is the sole read path; nothing else may call `/api/products`).
 A product is a photo, a title and a description per locale — that is the card
 *and* the page's opening screen — plus an **ordered list of sections**, each one
-of five kinds (`finishes`, `specs`, `story`, `gallery`, `promo`) with a JSONB
+of four kinds (`finishes`, `specs`, `story`, `gallery`) with a JSONB
 payload. The order the admin puts them in is the order the page renders, a kind
 may repeat, and `components/products/page/product-page-view.tsx` loops over the
 list rather than naming the blocks.
@@ -177,16 +177,33 @@ styled in the same `globals.css` block — *not* `components/ui/modal.tsx`,
 which is the light site-design-system dialog). A correct code goes into an
 httpOnly **session** cookie — no `maxAge`, so it dies with the browser and the
 next visit is prompted again — and `app/[locale]/layout.tsx` renders the real
-site for that visitor. Three things are load-bearing:
+site for that visitor. Four things are load-bearing:
 
 - the code is **never** in the public `/api/site-settings` payload — that
-  response carries only `preview_access_enabled`; the code is compared by
-  `POST /api/site-settings/preview-access` and read back only by the
-  authenticated `/api/site-settings/admin`;
+  response carries only `preview_access_enabled`. It leaves the backend by
+  exactly two doors: the authenticated `/api/site-settings/admin`, and
+  `GET /api/site-settings/preview-code`, which is service-to-service — it
+  demands the shared `INTERNAL_API_TOKEN` header (unset → 503, not open) and
+  is `deny all`-ed in `nginx/includes/app-locations.inc`, since only the
+  frontend container has any business calling it;
+- the **comparison happens in Next**, not FastAPI (`lib/maintenance-access.ts`
+  reads the code through the tagged, 60-second `site-settings` cache and
+  compares digests locally). It used to be a `POST .../preview-access` per
+  check — three per page view plus three per prefetch — which FastAPI's
+  attempt throttle counted, bucketed by the *frontend container's* IP, so a
+  handful of page views locked every visitor out and the placeholder then
+  rejected the correct code for five minutes. Do not move the check back;
+- the retry limit lives in `lib/maintenance-throttle.ts` and counts only real
+  submissions: 3 wrong codes → 30s, then every further miss doubles it
+  (60s, 120s, …), cleared by a correct code. Per-Node-process memory, on
+  purpose — it turns scripted guessing into human-speed typing and claims
+  nothing more;
 - `lib/maintenance-access.ts` fails **closed**, the mirror of
-  `lib/site-settings.ts`'s fail-open, and re-checks the cookie against the
-  backend every render — which is what makes changing the code revoke every
-  session at once;
+  `lib/site-settings.ts`'s fail-open, and re-checks the cookie every render —
+  which, together with `updatePreviewCodeAction` calling `updateTag`
+  (**not** `revalidateTag(…, "max")` — that is stale-while-revalidate and
+  would let the revoked code through one more render), is what makes changing
+  the code revoke every session at once;
 - the `cookies()` read (`readMaintenancePreviewCookie`) is **unconditional**,
   which is what makes every route under `app/[locale]` dynamic (ƒ in
   `next build`). Do not put it back behind `maintenanceMode` to win back
@@ -195,8 +212,8 @@ site for that visitor. Three things are load-bearing:
   pages compiled static; turning the switch on then made each regeneration
   hit `cookies()`, fail with `DYNAMIC_SERVER_USAGE` and fall back to the
   empty HTML baked at build time (and 500 on `/products/*`, which had no
-  baked copy). The *verification* POST is still guarded — only the cookie
-  read is not. `lib/page-metadata.ts` answers the same switch for the same
+  baked copy). The *comparison* is still guarded by `maintenanceMode` — only
+  the cookie read is not. `lib/page-metadata.ts` answers the same switch for the same
   reason: page metadata merges over the layout's, so without it a closed
   site kept publishing real titles and `index, follow`.
 

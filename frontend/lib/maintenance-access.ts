@@ -1,5 +1,6 @@
 import "server-only";
 
+import { createHash, timingSafeEqual } from "node:crypto";
 import { cookies } from "next/headers";
 import { BACKEND_API_URL } from "@/lib/admin-session";
 
@@ -17,12 +18,30 @@ import { BACKEND_API_URL } from "@/lib/admin-session";
  *
  * Why the cookie holds the code itself rather than a token:
  *   - it is httpOnly, so page JS never sees it, exactly like the admin JWT;
- *   - it is re-checked against the backend on every render, so an admin who
- *     changes or clears the code locks everyone out *at once* — there is no
- *     issued-token list to expire, revoke or forget to revoke;
+ *   - it is re-checked on every render against the code this module last read
+ *     from the backend, so an admin who changes or clears the code locks
+ *     everyone out *at once* — there is no issued-token list to expire, revoke
+ *     or forget to revoke;
  *   - a token would need shared signing material between Next and FastAPI,
  *     which this project does not have and would not be worth minting for a
  *     door code.
+ *
+ * ⚠️ Where the comparison happens changed on 2026-09-06, and the reason is
+ * worth keeping. It used to be a `POST /api/site-settings/preview-access` per
+ * check — three per page view (this layout's `generateMetadata`, the layout
+ * itself, and the page's own metadata through `lib/page-metadata.ts`), plus
+ * three more for every link Next prefetched. FastAPI throttled that endpoint
+ * at 10 attempts per 5 minutes, counted the *successful* re-checks too, and
+ * bucketed them by caller IP — which, for server-to-server calls, is the
+ * frontend container, i.e. one bucket shared by every visitor on the site.
+ * Three or four page views exhausted it; the 429 then read as "wrong code"
+ * (`verify` fails closed), so the placeholder came back and the *correct*
+ * code was rejected for the next five minutes.
+ *
+ * So the code now comes here once per cache window and the comparison is
+ * local: re-checks cost nothing and cannot be throttled, and the retry limit
+ * that does still matter — a human guessing at the prompt — lives in
+ * `lib/maintenance-throttle.ts`, where it counts only real attempts.
  */
 
 /**
@@ -43,40 +62,86 @@ import { BACKEND_API_URL } from "@/lib/admin-session";
  *   - "continue where you left off" (Chrome) and session restore (Firefox) put
  *     session cookies back, so a browser configured that way keeps access
  *     across a restart.
- * Neither is a hole in the gate: the code is still re-checked against the
- * backend on every render, so clearing or changing it in «Настройки сайта»
- * ends every session at once, whatever the browser is holding.
+ * Neither is a hole in the gate: the code is still re-checked on every render,
+ * so clearing or changing it in «Настройки сайта» ends every session at once,
+ * whatever the browser is holding.
  */
 export const MAINTENANCE_PREVIEW_COOKIE = "roller_preview";
 
 /**
- * Asks the backend whether `code` is the configured preview code.
+ * The shared secret that `GET /api/site-settings/preview-code` demands. Unset
+ * on either side → no preview access at all, which is the safe direction: the
+ * site stays closed rather than opening to a guess.
+ */
+const INTERNAL_API_TOKEN = process.env.INTERNAL_API_TOKEN ?? "";
+
+/**
+ * The code the admin has set, or `null` if there is none (or the backend could
+ * not be asked).
+ *
+ * Cached under the `site-settings` tag, the same tag `lib/site-settings.ts`
+ * uses and the same one `updatePreviewCodeAction` revalidates on save — so
+ * changing the code in «Настройки сайта» invalidates this copy immediately and
+ * every browser holding the old one is locked out on its next request. The 60s
+ * `revalidate` is only the backstop for a change made outside the admin panel.
+ *
+ * ⚠️ This is a secret in the server's memory, and it must not become one in the
+ * browser's: nothing here may be returned to a client component, put in a prop
+ * or logged. `server-only` at the top of this file is what enforces the first
+ * half of that; the rest is discipline.
+ */
+async function getPreviewCode(): Promise<string | null> {
+  if (!INTERNAL_API_TOKEN) return null;
+
+  try {
+    const res = await fetch(`${BACKEND_API_URL}/api/site-settings/preview-code`, {
+      headers: { "X-Internal-Token": INTERNAL_API_TOKEN },
+      next: { revalidate: 60, tags: ["site-settings"] },
+      signal: AbortSignal.timeout(5000),
+    });
+    if (!res.ok) return null;
+
+    const data = (await res.json()) as { preview_code?: string | null };
+    const code = data.preview_code?.trim();
+    return code ? code : null;
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Constant-time string comparison.
+ *
+ * `timingSafeEqual` refuses buffers of different lengths, and comparing the
+ * lengths first would leak the code's length through the error path — so both
+ * sides are hashed to a fixed 32 bytes and the digests are compared instead.
+ * The standard shape; the hash is not doing any secrecy work here.
+ */
+function constantTimeEquals(a: string, b: string): boolean {
+  const digest = (value: string) => createHash("sha256").update(value, "utf8").digest();
+  return timingSafeEqual(digest(a), digest(b));
+}
+
+/**
+ * Whether `code` is the configured preview code.
  *
  * Fails **closed**, the opposite of `lib/site-settings.ts` and for the mirror
  * of its reason: that function decides whether to close the site, so its
  * failure mode must be "leave it open"; this one decides whether to open a
- * closed site, so its failure mode must be "leave it closed". A backend that
- * cannot answer has not said yes.
+ * closed site, so its failure mode must be "leave it closed". No configured
+ * code, no token, an unreachable backend — none of those are a yes.
+ *
+ * Cheap enough to call on every render: the network side is the tagged fetch
+ * above, which answers from cache, and the rest is one SHA-256 of a few bytes.
  */
 export async function verifyPreviewCode(code: string | undefined): Promise<boolean> {
   const trimmed = code?.trim();
   if (!trimmed) return false;
 
-  try {
-    const res = await fetch(`${BACKEND_API_URL}/api/site-settings/preview-access`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ code: trimmed }),
-      cache: "no-store",
-      signal: AbortSignal.timeout(5000),
-    });
-    if (!res.ok) return false;
+  const expected = await getPreviewCode();
+  if (!expected) return false;
 
-    const data = (await res.json()) as { valid?: boolean };
-    return data.valid === true;
-  } catch {
-    return false;
-  }
+  return constantTimeEquals(trimmed, expected);
 }
 
 /**
@@ -105,9 +170,6 @@ export async function verifyPreviewCode(code: string | undefined): Promise<boole
  * once, and so does every edit an admin makes, without another deploy. The
  * cost is bounded: the data behind those renders still comes from the tagged,
  * 60-second `fetch` cache in `lib/*.ts`, not from the backend each time.
- *
- * The verification POST stays conditional — `verifyPreviewCode` is only worth
- * calling on a closed site, and only for a visitor who actually holds a code.
  */
 export async function readMaintenancePreviewCookie(): Promise<string | undefined> {
   return (await cookies()).get(MAINTENANCE_PREVIEW_COOKIE)?.value;

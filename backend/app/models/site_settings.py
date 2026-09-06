@@ -33,8 +33,9 @@ class SiteSettings(Base):
 
     # The code that lets a person through the maintenance screen — the client,
     # a contractor, anyone who has to see the real site while it is closed.
-    # Entered on the placeholder itself (`components/layout/maintenance-screen.tsx`),
-    # checked by `POST /api/site-settings/preview-access`.
+    # Entered on the placeholder itself (`components/layout/maintenance-screen.tsx`)
+    # and compared by the Next.js server, which reads this column through the
+    # token-guarded `GET /api/site-settings/preview-code`.
     #
     # ⚠️ Stored in the clear, unlike `User.hashed_password`, and that is the
     # point rather than an oversight: this is a shared door code an admin has
@@ -42,7 +43,8 @@ class SiteSettings(Base):
     # phone, not a per-person credential. It grants exactly one thing — sight
     # of a site that is public anyway a week later — and it is never accepted
     # by `/admin`, `/login` or any write route. Treat it accordingly: it must
-    # never be returned by the public GET below, only compared against.
+    # never be returned by the public GET below — only by the authenticated
+    # `/admin` read and the token-guarded service read.
     #
     # NULL (or empty) means no code is configured, which is the shipped state:
     # the placeholder then has nothing to unlock and stays inert.

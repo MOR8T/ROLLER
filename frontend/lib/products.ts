@@ -34,19 +34,13 @@ import type {
  *   2. **The API carries content, the message catalogue carries chrome.** Text
  *      the admin writes (a spec row, a paragraph, a button label) comes from
  *      the backend. Text that is the same on every product page — the
- *      calculator pitch, the gallery's arrow labels, the «Продукт не найден»
- *      block, every `alt` — stays in `messages/*.json` and is read here, once,
- *      while the page is being assembled.
+ *      gallery's arrow labels, the «Продукт не найден» block, every `alt` —
+ *      stays in `messages/*.json` and is read here, once, while the page is
+ *      being assembled.
  *   3. **A failure is an empty result, never a fabricated one.** An unreachable
  *      backend yields `[]` or a `not-found` page, and the caller decides what
  *      to show.
  */
-
-// The one calculator pitch, identical on every product page — see
-// `ProductPageData.promo`'s doc comment in `types/product-page.ts` for why
-// this is no longer admin content.
-const PROMO_IMAGE = "/product-page/calculator.webp";
-const PROMO_HREF = "/calculator";
 
 interface RawProductCategory {
   id: number;
@@ -505,17 +499,6 @@ export async function getProductPage(
       },
     },
     blocks,
-    promo: {
-      id: "promo",
-      title: localizedText("productPage.promo.title"),
-      description: localizedText("productPage.promo.description"),
-      media: [
-        { src: resolveImageSrc(PROMO_IMAGE), alt: localizedText("productPage.promo.imageAlt") },
-      ],
-      actions: [
-        { label: localizedText("productPage.promo.cta"), href: PROMO_HREF, tone: "primary" },
-      ],
-    },
     contacts: {
       id: "contacts",
       title: localizedText("productPage.contacts.title"),

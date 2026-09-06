@@ -26,9 +26,9 @@ import { uploadSectionImageAction } from "@/components/admin-sections/products-a
  * fifth kind means a payload model on the backend, a form here, and a branch in
  * `ProductPageView` — in that order, and none of the three is optional.
  *
- * There used to be a fifth, `promo`. Every product's payload was
- * byte-identical, so it moved to a block the page renders unconditionally
- * instead — see `ProductPageData.promo` in `types/product-page.ts`.
+ * There used to be a fifth, `promo` — the calculator pitch. Every product's
+ * payload was byte-identical, so it became a fixed block on the page instead
+ * of admin content, and the client then removed the block altogether.
  *
  * ── Why the forms hold state instead of posting FormData ───────────────────
  *

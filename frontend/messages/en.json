@@ -13,6 +13,7 @@
     "accessSubmit": "Open the site",
     "accessPending": "Checking…",
     "accessError": "Wrong code",
+    "accessThrottled": "Too many attempts. Try again in {seconds, plural, one {# second} other {# seconds}}.",
     "accessClose": "Close"
   },
   "common": {
@@ -234,13 +235,6 @@
       "aria": "Showroom photos",
       "previous": "Previous photo",
       "next": "Next photo"
-    },
-    "promo": {
-      "eyebrow": "Calculation",
-      "title": "Find out the cost",
-      "description": "Configure your unit in the calculator: system, dimensions, sashes and colour. A manager works out the exact price after the survey.",
-      "cta": "Go to the calculator",
-      "imageAlt": "ROLLER production in Dushanbe"
     },
     "contacts": {
       "title": "Get in touch",

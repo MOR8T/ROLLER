@@ -144,8 +144,6 @@ export interface ProductGallerySectionData extends ProductSection {
   };
 }
 
-export type ProductPromoSectionData = ProductSection;
-
 export interface ProductContactsSectionData extends ProductSection {
   /** Reaches the lead as «Система: ROLLER», so the call centre sees the page. */
   context: LocalizedText;
@@ -157,19 +155,17 @@ export type ProductNotFoundSectionData = ProductSection;
  * One block in the body of a product page, tagged with which of the five kinds
  * it is.
  *
- * ⚠️ This was a fixed object — `{ hero, finishes, specs, story, gallery, promo,
+ * ⚠️ This was a fixed object — `{ hero, finishes, specs, story, gallery,
  * contacts }` — until the page moved to the backend. It is a discriminated
  * union in an array now because the admin panel builds the page: they choose
  * which blocks a product has, they order them, and nothing stops them from
  * adding two galleries. A named slot per kind cannot express any of that.
  *
- * `hero`, `promo` and `contacts` are deliberately *not* in here. The hero is
- * the product's own photo, title and description — the fields the admin fills
- * in before there are any sections at all; the promo block is the site's one
- * calculator pitch, identical on every product and no longer admin content
- * (see `ProductPageData.promo` below); the contacts block is the site's one
- * lead form, which closes every product page. None of the three is a block
- * the admin adds, removes or moves, so none is a `ProductPageBlock`.
+ * `hero` and `contacts` are deliberately *not* in here. The hero is the
+ * product's own photo, title and description — the fields the admin fills in
+ * before there are any sections at all; the contacts block is the site's one
+ * lead form, which closes every product page. Neither is a block the admin
+ * adds, removes or moves, so neither is a `ProductPageBlock`.
  */
 export type ProductPageBlock =
   | { kind: "finishes"; section: ProductFinishesSectionData }
@@ -193,7 +189,6 @@ export type ProductPageData =
       productId: number;
       hero: ProductHeroSectionData;
       blocks: ProductPageBlock[];
-      promo: ProductPromoSectionData;
       contacts: ProductContactsSectionData;
     }
   | {

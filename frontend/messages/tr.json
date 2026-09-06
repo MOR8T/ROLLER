@@ -13,6 +13,7 @@
     "accessSubmit": "Siteyi aç",
     "accessPending": "Kontrol ediliyor…",
     "accessError": "Kod hatalı",
+    "accessThrottled": "Çok fazla deneme yapıldı. {seconds, plural, one {# saniye} other {# saniye}} sonra tekrar deneyin.",
     "accessClose": "Kapat"
   },
   "common": {
@@ -234,13 +235,6 @@
       "aria": "Showroom fotoğrafları",
       "previous": "Önceki fotoğraf",
       "next": "Sonraki fotoğraf"
-    },
-    "promo": {
-      "eyebrow": "Hesap",
-      "title": "Maliyeti öğrenin",
-      "description": "Konstrüksiyonu hesaplayıcıda kurun: sistem, ölçüler, kanatlar ve renk. Kesin fiyatı yönetici keşiften sonra hesaplar.",
-      "cta": "Hesaplayıcıya git",
-      "imageAlt": "Duşanbe'de ROLLER üretimi"
     },
     "contacts": {
       "title": "Bize ulaşın",

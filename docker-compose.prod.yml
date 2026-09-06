@@ -50,6 +50,12 @@ services:
       INITIAL_ADMIN_EMAIL: ${INITIAL_ADMIN_EMAIL}
       INITIAL_ADMIN_PASSWORD: ${INITIAL_ADMIN_PASSWORD}
       ALLOWED_ORIGINS: ${PUBLIC_ORIGIN:?set PUBLIC_ORIGIN in .env (scheme + host, no trailing slash)}
+      # Shared with the frontend service below, and with nothing else. Required
+      # rather than defaulted for the same reason IMAGE_TAG is: a default would
+      # be a publicly known token guarding the preview code. Unset → the route
+      # is off and a closed site cannot be previewed at all, which is the
+      # failure this should have.
+      INTERNAL_API_TOKEN: ${INTERNAL_API_TOKEN:?set INTERNAL_API_TOKEN in .env (openssl rand -hex 32)}
       SQL_ECHO: "false"
     volumes:
       - backend_uploads:/app/uploads
@@ -69,6 +75,10 @@ services:
       # out of the way and no `remotePatterns` entry is needed. Read at runtime,
       # so switching this to https://roller.tj later needs no rebuild.
       BACKEND_PUBLIC_URL: ${PUBLIC_ORIGIN:?set PUBLIC_ORIGIN in .env (scheme + host, no trailing slash)}
+      # The other half of the backend's INTERNAL_API_TOKEN. Read at runtime, so
+      # rotating it is an edit in .env plus `up -d` on both services — no
+      # rebuild.
+      INTERNAL_API_TOKEN: ${INTERNAL_API_TOKEN:?set INTERNAL_API_TOKEN in .env (openssl rand -hex 32)}
     volumes:
       # next/image writes optimized variants here. Without a volume the whole
       # cache is lost on every deploy, and re-encoding AVIF for the product

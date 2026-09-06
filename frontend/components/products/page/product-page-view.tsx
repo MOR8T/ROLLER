@@ -8,7 +8,6 @@ import { ProductFinishesSection } from "./product-finishes-section";
 import { ProductGallerySection } from "./product-gallery-section";
 import { ProductHeroSection } from "./product-hero-section";
 import { ProductNotFoundSection } from "./product-not-found-section";
-import { ProductPromoSection } from "./product-promo-section";
 import { ProductSpecsSection } from "./product-specs-section";
 import { ProductStorySection } from "./product-story-section";
 import type { ProductPageBlock, ProductPageData } from "@/types/product-page";
@@ -81,10 +80,6 @@ export function ProductPageView({
       {data.blocks.map((block) => (
         <ProductBlock key={block.section.id} block={block} locale={locale} />
       ))}
-
-      {/* The site's one calculator pitch — identical on every product and no
-          longer admin content, see `ProductPageData.promo`'s doc comment. */}
-      <ProductPromoSection data={data.promo} locale={locale} />
 
       {/* The site's one request block, given this page's words and told
           which system the visitor was reading — built server-side by the

@@ -1,17 +1,15 @@
 import secrets
-import time
-from collections import defaultdict, deque
 
-from fastapi import APIRouter, Depends, HTTPException, Request, status
+from fastapi import APIRouter, Depends, Header, HTTPException, status
 from sqlalchemy.orm import Session
 
+from app.config import get_settings
 from app.database import get_db
 from app.dependencies.auth import get_current_user
 from app.models.site_settings import SiteSettings
 from app.models.user import User
 from app.schemas.site_settings import (
-    PreviewAccessRequest,
-    PreviewAccessResult,
+    PreviewCodeOut,
     PreviewCodeUpdate,
     SiteSettingsAdminOut,
     SiteSettingsOut,
@@ -30,45 +28,6 @@ def _get_or_create(db: Session) -> SiteSettings:
         seed_site_settings(db)
         settings = db.query(SiteSettings).first()
     return settings
-
-
-# ── Preview-code throttle ───────────────────────────────────────────────────
-# The one unauthenticated endpoint in this app that compares a secret, and the
-# secret is short and human-typeable, so an unthrottled version is a few hours
-# of scripted guessing away from being no gate at all.
-#
-# ⚠️ Deliberately modest, and honest about it: an in-process dict is per
-# worker, so N workers allow N × the limit, and a restart forgets everything.
-# It is not a defence against a distributed attacker — it is what turns "spray
-# codes as fast as the network allows" into "a rate a person could have typed",
-# which is the whole threat model for a door code that guards a preview of a
-# site that will be public anyway. If this ever needs to be real, it belongs in
-# nginx or Redis, not here.
-_ATTEMPT_WINDOW_SECONDS = 300
-_MAX_ATTEMPTS_PER_WINDOW = 10
-_attempts: dict[str, deque[float]] = defaultdict(deque)
-
-
-def _client_key(request: Request) -> str:
-    """First hop of `X-Forwarded-For` when there is one — behind the
-    production nginx `request.client.host` is the proxy, i.e. one bucket for
-    every visitor on earth."""
-    forwarded = request.headers.get("x-forwarded-for", "")
-    if forwarded:
-        return forwarded.split(",")[0].strip()
-    return request.client.host if request.client else "unknown"
-
-
-def _too_many_attempts(request: Request) -> bool:
-    """Records this attempt and reports whether the caller is over the limit."""
-    now = time.monotonic()
-    bucket = _attempts[_client_key(request)]
-    while bucket and now - bucket[0] > _ATTEMPT_WINDOW_SECONDS:
-        bucket.popleft()
-    if len(bucket) >= _MAX_ATTEMPTS_PER_WINDOW:
-        return True
-    bucket.append(now)
-    return False
 
 
 @router.get("", response_model=SiteSettingsOut)
@@ -116,9 +75,11 @@ async def update_preview_code(
     Sets or clears the code that gets a visitor past the placeholder.
 
     Changing it revokes every browser already holding the old one: the
-    frontend keeps the code in an httpOnly cookie and re-checks it here on
-    each render, so there is no session list to invalidate — the next request
-    from an old cookie simply fails this comparison.
+    frontend keeps the code in an httpOnly cookie and re-checks it on every
+    render against what it last read from `GET /preview-code` below, so there
+    is no session list to invalidate. `updatePreviewCodeAction` revalidates
+    the `site-settings` tag on save, which is what drops the frontend's cached
+    copy of the old code immediately rather than up to 60s later.
     """
     settings = _get_or_create(db)
     settings.preview_code = payload.preview_code
@@ -127,31 +88,40 @@ async def update_preview_code(
     return settings
 
 
-@router.post("/preview-access", response_model=PreviewAccessResult)
-async def check_preview_access(
-    payload: PreviewAccessRequest,
-    request: Request,
+@router.get("/preview-code", response_model=PreviewCodeOut)
+async def read_preview_code(
+    x_internal_token: str | None = Header(default=None),
     db: Session = Depends(get_db),
 ):
     """
-    Public: the placeholder's code prompt, and the per-render re-check of the
-    cookie that prompt sets. Answers `{"valid": bool}` and nothing else.
+    Hands the preview code to the Next.js server, which is the only caller.
 
-    POST rather than GET even though it reads: the code would otherwise sit in
-    the URL, i.e. in the access log and in every proxy along the way — the
-    same reason `login-actions.ts` is a Server Action.
+    ⚠️ Service-to-service, and the only route here that returns a secret to a
+    caller with no login. Two things keep it that way and both have to stay:
+
+      * `X-Internal-Token` — a shared secret set on both containers. Unset on
+        this side means the route is *off* (503), not open; a wrong value is
+        401. Compared with `compare_digest` like every other secret here.
+      * `nginx/includes/app-locations.inc` denies this exact path, so even a
+        leaked token is not reachable from outside the Compose network.
+
+    Why the code leaves at all: the check used to live here, and every render
+    of the previewed site posted to it — which the old attempt throttle
+    counted, so a visitor holding a *valid* code locked themselves (and
+    everyone else, since the caller was the frontend container's single IP)
+    out within a handful of page views. The comparison and the retry limit are
+    the frontend's now (`frontend/lib/maintenance-access.ts`,
+    `frontend/lib/maintenance-throttle.ts`), and this route is read once per
+    cache window instead of three times per page.
     """
-    if _too_many_attempts(request):
+    expected_token = (get_settings().internal_api_token or "").strip()
+    if not expected_token:
         raise HTTPException(
-            status_code=status.HTTP_429_TOO_MANY_REQUESTS,
-            detail="Слишком много попыток. Попробуйте позже.",
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail="INTERNAL_API_TOKEN is not configured.",
         )
+    if not x_internal_token or not secrets.compare_digest(x_internal_token, expected_token):
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Not authorized")
 
     settings = _get_or_create(db)
-    expected = (settings.preview_code or "").strip()
-    if not expected:
-        return PreviewAccessResult(valid=False)
-
-    # `compare_digest`, not `==`: constant-time, so the response time cannot be
-    # used to learn the code prefix by prefix.
-    return PreviewAccessResult(valid=secrets.compare_digest(payload.code.strip(), expected))
+    return PreviewCodeOut(preview_code=(settings.preview_code or "").strip() or None)

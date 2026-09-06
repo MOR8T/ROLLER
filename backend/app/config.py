@@ -13,6 +13,18 @@ class Settings(BaseSettings):
     # this volume of noise evicts real errors within minutes.
     sql_echo: bool = False
 
+    # Shared secret the Next.js server presents on `X-Internal-Token` to read
+    # the maintenance preview code (`GET /api/site-settings/preview-code`).
+    #
+    # That endpoint hands out a secret in plain text, and `/api/` is proxied to
+    # the public internet by nginx, so it is the one route here that must never
+    # answer an anonymous caller. Unset → the route is disabled outright (503)
+    # rather than open: preview access simply does not work until both sides
+    # are configured, which is the safe direction to fail in.
+    #
+    # Generate with: openssl rand -hex 32
+    internal_api_token: str | None = None
+
     # Comma-separated origins allowed to call this API cross-origin.
     # In production nginx serves the site, /api and /uploads off one host,
     # so the browser never makes a cross-origin request and this can stay

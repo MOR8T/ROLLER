@@ -103,13 +103,13 @@ class ProductSection(Base):
     assembles all four locales into one value and each section picks its own,
     so the API hands it exactly that shape.
 
-    ⚠️ There used to be a fifth type, `promo`. Every product's payload was
-    byte-identical (same text, same image, same «/calculator» link), so it was
-    never really per-product content — it moved to a block the product page
-    renders unconditionally, the same way it already renders the contacts
-    block (`frontend/lib/products.ts`'s `getProductPage`, the `promo` field),
-    and is no longer one of `SECTION_TYPES`. A migration deleted the leftover
-    `type = 'promo'` rows this table held from before the change.
+    ⚠️ There used to be a fifth type, `promo` — the calculator pitch. Every
+    product's payload was byte-identical (same text, same image, same
+    «/calculator» link), so it was never really per-product content: it first
+    became a fixed block the product page rendered unconditionally, and the
+    client then dropped the block from the page entirely. It is no longer one
+    of `SECTION_TYPES`, and a migration deleted the leftover `type = 'promo'`
+    rows this table held from before the change.
 
     ── Why a type may repeat ─────────────────────────────────────────────────
 
