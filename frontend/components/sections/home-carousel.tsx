@@ -180,7 +180,18 @@ export function HomeCarousel({
 
       {slides.length > 1 ? (
         <div className="mt-6 flex items-center justify-between gap-4">
-          <div className="flex items-center gap-2">
+          {/* Padded hit areas, exactly as in `expo-slider.tsx` — see the note
+              there. The dots' own geometry is unchanged.
+
+              ⚠️ `min-w-0 flex-wrap` is what stops a long pager from widening
+              the page: the strips take as many dots as the admin has rows, and
+              `/about`'s fourteen certificates need 248px next to a 96px pair of
+              arrows — more than the 328px gutter-to-gutter of a 360px phone,
+              which is most Android screens here. Without it the row could not
+              shrink below its content and `<html>` grew to 368px, so the whole
+              page scrolled sideways. Wrapping is the same answer
+              `product-gallery-section.tsx` already gives its own pager. */}
+          <div className="-mx-1 flex min-w-0 flex-wrap items-center gap-0">
             {slides.map((slide, index) => (
               <button
                 key={slide.key}
@@ -191,17 +202,22 @@ export function HomeCarousel({
                 // it is nearest, so a dot stays one short hop away even on a
                 // strip whose list is repeated.
                 onClick={() => swiper?.slideToLoop(index)}
-                className={cn(
-                  // A dot, so `rounded-full` is allowed — DESIGN.md §5 rules out
-                  // pills for buttons, not for indicators. The current one
-                  // stretches rather than only changing colour, which survives
-                  // both a small screen and a colour-blind reading.
-                  "h-2 cursor-pointer rounded-full transition-all duration-300 focus-visible:ring-2 focus-visible:ring-brand-black focus-visible:ring-offset-2 focus-visible:outline-none",
-                  index === active
-                    ? "w-8 bg-brand-black"
-                    : "w-2 bg-brand-black/20 hover:bg-brand-black/40",
-                )}
-              />
+                className="group flex h-11 cursor-pointer items-center px-1 focus-visible:rounded-control focus-visible:ring-2 focus-visible:ring-brand-black focus-visible:ring-offset-2 focus-visible:outline-none"
+              >
+                <span
+                  aria-hidden
+                  className={cn(
+                    // A dot, so `rounded-full` is allowed — DESIGN.md §5 rules out
+                    // pills for buttons, not for indicators. The current one
+                    // stretches rather than only changing colour, which survives
+                    // both a small screen and a colour-blind reading.
+                    "block h-2 rounded-full transition-all duration-300",
+                    index === active
+                      ? "w-8 bg-brand-black"
+                      : "w-2 bg-brand-black/20 group-hover:bg-brand-black/40",
+                  )}
+                />
+              </button>
             ))}
           </div>
 

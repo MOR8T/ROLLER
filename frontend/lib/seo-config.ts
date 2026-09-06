@@ -78,7 +78,23 @@ interface SeoConfig {
   analytics: {
     /** Yandex.Metrika counter number, e.g. `"98765432"`. */
     yandexMetrika: string;
-    /** GA4 measurement id, e.g. `"G-XXXXXXXXXX"`. */
+    /**
+     * Google Tag Manager container id, e.g. `"GTM-XXXXXXX"`.
+     *
+     * GTM is a container, not a counter: whatever tags the client adds inside
+     * it — GA4, Ads, a pixel — load through this one id, and adding another tag
+     * later needs no code change here.
+     *
+     * ⚠️ Which is why `googleAnalytics` below should stay blank while this is
+     * set, unless GA4 is deliberately *not* configured inside the container.
+     * Loading GA4 both ways sends every pageview twice, and the inflated
+     * numbers look like real traffic rather than like a misconfiguration.
+     */
+    googleTagManager: string;
+    /**
+     * GA4 measurement id, e.g. `"G-XXXXXXXXXX"` — for wiring GA4 directly,
+     * without Tag Manager. See the warning above before filling both.
+     */
     googleAnalytics: string;
   };
 
@@ -144,6 +160,9 @@ export const seoConfig: SeoConfig = {
 
   analytics: {
     yandexMetrika: "",
+    googleTagManager: "GTM-T9M25WW9",
+    // Intentionally blank: GA4 is expected to be configured inside the Tag
+    // Manager container above. Filling this in as well would double-count.
     googleAnalytics: "",
   },
 

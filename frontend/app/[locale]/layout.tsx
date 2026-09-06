@@ -16,7 +16,7 @@ import { seoConfig } from "@/lib/seo-config";
 import { siteUrl } from "@/lib/seo";
 import { buildOrganizationJsonLd, buildWebSiteJsonLd } from "@/lib/json-ld";
 import { JsonLd } from "@/components/seo/json-ld";
-import { Analytics } from "@/components/seo/analytics";
+import { Analytics, AnalyticsNoScript } from "@/components/seo/analytics";
 
 /**
  * Fonts.
@@ -207,6 +207,17 @@ export default async function LocaleLayout({ children, params }: LayoutProps<"/[
   // The chrome (header, footer, WhatsApp button) and `children` are all
   // dropped: the placeholder replaces the site, it does not overlay it, so
   // there is nothing left to navigate to or scroll past.
+  //
+  // The counters are the one thing that survives. Somebody arriving at a closed
+  // site is precisely the number worth having while it is closed — how much
+  // traffic the domain already gets, and where from — and dropping it would
+  // mean the whole closed period is simply missing from the reports afterwards.
+  // `maintenance` labels those visits so they can be told apart from visits to
+  // the real site later; see `Analytics`.
+  //
+  // No JSON-LD here, unlike the branch below: the placeholder is `noindex` and
+  // describes no business. Structured data on a page a crawler is told to
+  // ignore is markup with no reader.
   if (maintenanceMode && !previewing) {
     return (
       <html
@@ -214,6 +225,16 @@ export default async function LocaleLayout({ children, params }: LayoutProps<"/[
         className={`${montserrat.variable} ${chakraPetch.variable} h-full antialiased`}
       >
         <body className="min-h-full">
+          <AnalyticsNoScript
+            yandexMetrikaId={seoConfig.analytics.yandexMetrika}
+            googleTagManagerId={seoConfig.analytics.googleTagManager}
+          />
+          <Analytics
+            yandexMetrikaId={seoConfig.analytics.yandexMetrika}
+            googleTagManagerId={seoConfig.analytics.googleTagManager}
+            googleAnalyticsId={seoConfig.analytics.googleAnalytics}
+            maintenance
+          />
           <NextIntlClientProvider>
             <MaintenanceScreen previewEnabled={previewAccessEnabled} />
           </NextIntlClientProvider>
@@ -246,9 +267,16 @@ export default async function LocaleLayout({ children, params }: LayoutProps<"/[
       className={`${montserrat.variable} ${chakraPetch.variable} h-full antialiased`}
     >
       <body className="flex min-h-full flex-col overflow-x-hidden bg-background text-foreground">
+        {/* First child of <body>, where Google Tag Manager's fallback frame
+            has to live — see `AnalyticsNoScript`. */}
+        <AnalyticsNoScript
+          yandexMetrikaId={seoConfig.analytics.yandexMetrika}
+          googleTagManagerId={seoConfig.analytics.googleTagManager}
+        />
         <JsonLd data={[organization, website]} />
         <Analytics
           yandexMetrikaId={seoConfig.analytics.yandexMetrika}
+          googleTagManagerId={seoConfig.analytics.googleTagManager}
           googleAnalyticsId={seoConfig.analytics.googleAnalytics}
         />
         <NextIntlClientProvider>

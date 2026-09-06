@@ -31,6 +31,7 @@ export function ProductFinishesSection({
 }) {
   const [selected, setSelected] = useState(0);
   const active = data.finishes[selected] ?? data.finishes[0];
+  const activeLabel = active ? localized(active.label, locale) : "";
   const note = localized(data.note, locale);
 
   return (
@@ -89,10 +90,23 @@ export function ProductFinishesSection({
             })}
           </ul>
 
-          {/* No caption under the row: the hover tooltip names the lamination,
-              and the render beside it shows the choice. A line repeating the
-              name a third time was the one thing on this block the reference
-              does not have. */}
+          {/* No caption under the row on a pointer device: the hover tooltip
+              names the lamination, and the render beside it shows the choice. A
+              line repeating the name a third time was the one thing on this
+              block the reference does not have.
+
+              ⚠️ Below `lg` that leaves the seven swatches unnamed, because a
+              touch screen has no hover and the tooltip above never opens — the
+              colours were reachable but anonymous on every phone. The name of
+              the *selected* one is shown there instead, which is one line
+              rather than seven and disappears again at `lg`, where the tooltip
+              takes over and the reference layout is restored. */}
+          {activeLabel ? (
+            <p className="mt-6 text-base leading-[1.4] font-medium text-black lg:hidden">
+              {activeLabel}
+            </p>
+          ) : null}
+
           {note ? (
             <p className={cn("mt-7 max-w-[32rem] text-base leading-[1.4]", imzoMuted)}>{note}</p>
           ) : null}
